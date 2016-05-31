@@ -1,6 +1,6 @@
 package by.post.ui;
 
-import by.post.control.AboutDialogController;
+import by.post.control.ui.AboutDialogController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

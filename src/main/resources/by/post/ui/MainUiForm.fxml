@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.MainUiController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -30,7 +30,7 @@
       </MenuBar>
    </top>
    <left>
-      <TreeView prefHeight="375.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
+      <TreeView fx:id="tableTree" prefHeight="375.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
    </left>
    <center>
       <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />

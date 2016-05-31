@@ -3,4 +3,4 @@
 <?import javafx.scene.control.DialogPane?>
 
 
-<DialogPane prefHeight="250.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.AboutDialogController" />
+<DialogPane prefHeight="250.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.AboutDialogController" />

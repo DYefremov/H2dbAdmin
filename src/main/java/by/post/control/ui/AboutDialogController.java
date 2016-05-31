@@ -1,4 +1,4 @@
-package by.post.control;
+package by.post.control.ui;
 
 import by.post.ui.AboutDialog;
 

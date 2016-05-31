@@ -1,6 +1,6 @@
 package by.post.ui;
 
-import by.post.control.MainUiController;
+import by.post.control.ui.MainUiController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -44,7 +44,7 @@ public class MainUiForm extends Application {
       try {
         initApp();
       } catch (Exception e) {
-//        logger.error(e);
+        logger.error(e);
       }
     }
 
