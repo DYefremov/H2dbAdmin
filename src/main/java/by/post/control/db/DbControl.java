@@ -1,7 +1,5 @@
 package by.post.control.db;
 
-import by.post.data.Column;
-import by.post.data.Row;
 import by.post.data.Table;
 
 import java.util.List;
@@ -11,26 +9,27 @@ import java.util.List;
  */
 public interface DbControl {
 
-  /**
-   * @param path
-   * @param user
-   * @param password
-   */
-  void connect(String path, String user, String password);
+    /**
+     * @param path
+     * @param db
+     * @param user
+     * @param password
+     */
+    void connect(String path, String db, String user, String password);
 
-  /**
-   * @return table names list
-   */
-  List<String> getTablesList();
+    /**
+     * @return table names list
+     */
+    List<String> getTablesList();
 
-  /**
-   * @param name
-   * @return table by name
-   */
-  Table getTable(String name);
+    /**
+     * @param name
+     * @return table by name
+     */
+    Table getTable(String name);
 
-  /**
-   * @param table
-   */
-  void update(Table table);
+    /**
+     * @param table
+     */
+    void update(Table table);
 }

@@ -10,22 +10,22 @@ import java.sql.SQLException;
  */
 public class TableBuilder {
 
-  /**
-   * @param name
-   * @param connection
-   * @return
-   */
-  public Table getTable(String name, Connection connection) throws SQLException {
-    Table table = new Table(name);
-    table.setRows(new RowBuilder().getRows(name, connection));
-    return table;
-  }
+    /**
+     * @param name
+     * @param connection
+     * @return
+     */
+    public Table getTable(String name, Connection connection) throws SQLException {
+        Table table = new Table(name);
+        table.setRows(new RowBuilder().getRows(name, connection));
+        return table;
+    }
 
-  /**
-   * @param table
-   * @param connection
-   */
-  public void update(Table table, Connection connection) {
+    /**
+     * @param table
+     * @param connection
+     */
+    public void update(Table table, Connection connection) {
 
-  }
+    }
 }

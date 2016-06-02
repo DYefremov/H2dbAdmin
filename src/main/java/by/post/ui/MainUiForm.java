@@ -21,14 +21,14 @@ import java.io.IOException;
  */
 public class MainUiForm extends Application {
 
-  private MainUiController controller;
-  private Stage mainStage;
-  private Scene mainScene;
-  private BorderPane mainPane;
+    private MainUiController controller;
+    private Stage mainStage;
+    private Scene mainScene;
+    private BorderPane mainPane;
 
-  private static final Logger logger = LogManager.getLogger(MainUiForm.class);
+    private static final Logger logger = LogManager.getLogger(MainUiForm.class);
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
 
@@ -38,37 +38,37 @@ public class MainUiForm extends Application {
      */
     @Override
     public void start(Stage stage) {
-      this.mainStage = stage;
-      this.mainStage.setTitle("H2dbAdmin");
+        this.mainStage = stage;
+        this.mainStage.setTitle("H2dbAdmin");
 
-      try {
-        initApp();
-      } catch (Exception e) {
-        logger.error(e);
-      }
+        try {
+            initApp();
+        } catch (Exception e) {
+            logger.error(e);
+        }
     }
 
     /**
      * Initialize main ui elements
      */
-    private void initApp() throws Exception{
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(MainUiForm.class.getResource("MainUiForm.fxml"));
+    private void initApp() throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainUiForm.class.getResource("MainUiForm.fxml"));
 
-      mainPane = loader.load();
-      controller = loader.getController();
-      controller.setMainUiForm(this);
-      mainScene = new Scene(mainPane, 700, 500);
-      mainStage.setScene(mainScene);
-      //Override closing program
-      mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-        @Override
-        public void handle(WindowEvent event) {
-          Platform.exit();
-          System.exit(0);
-        }
-      });
-      mainStage.show();
+        mainPane = loader.load();
+        controller = loader.getController();
+        controller.setMainUiForm(this);
+        mainScene = new Scene(mainPane, 700, 500);
+        mainStage.setScene(mainScene);
+        //Override closing program
+        mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+        mainStage.show();
     }
 
     //****** Getters and setters :) *****

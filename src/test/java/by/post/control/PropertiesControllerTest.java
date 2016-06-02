@@ -11,14 +11,14 @@ import static org.junit.Assert.*;
  */
 public class PropertiesControllerTest {
 
-  @Before
-  public void setProperties() throws Exception {
-    PropertiesController.setProperties("test", "sa" , "");
-  }
+    @Before
+    public void setProperties() throws Exception {
+        PropertiesController.setProperties("~/", "test", "sa", "");
+    }
 
-  @Test
-  public void getProperties() throws Exception {
-    Assert.assertEquals(PropertiesController.getProperties().getProperty("db"), "test");
-  }
+    @Test
+    public void getProperties() throws Exception {
+        Assert.assertEquals(PropertiesController.getProperties().getProperty("db"), "test");
+    }
 
 }

@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -13,14 +14,20 @@ import java.util.List;
 public class DbControllerTest {
     @Test
     public void connect() throws Exception {
-      DbControl control = new DbController();
-      control.connect("~/test", "sa", "");
+        Properties properties = PropertiesController.getProperties();
+        String user = properties.getProperty("user");
+        String password = properties.getProperty("password");
+        String path = properties.getProperty("path");
+        String db = properties.getProperty("db");
 
-      // Проверяем наличие таблиц
-      Assert.assertFalse(control.getTablesList().isEmpty());
+        DbControl control = new DbController();
+        control.connect(path, db, user, password);
 
-      List<String> tabNames = control.getTablesList();
-      System.out.println(tabNames);
+        // Проверяем наличие таблиц
+        Assert.assertFalse(control.getTablesList().isEmpty());
+
+        List<String> tabNames = control.getTablesList();
+        System.out.println(tabNames);
     }
 
 }

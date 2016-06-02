@@ -1,28 +1,28 @@
 package by.post.control.ui;
 
+import by.post.control.PropertiesController;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
+import by.post.data.Cell;
+import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.AboutDialog;
 import by.post.ui.MainUiForm;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Controller class for main ui form
@@ -31,93 +31,131 @@ import java.util.List;
  */
 public class MainUiController {
 
-  @FXML
-  private MenuItem itemAbout;
-  @FXML
-  private MenuItem itemClose;
-  @FXML
-  private Menu menuSettings;
-  @FXML
-  private TreeView tableTree;
+    @FXML
+    private MenuItem itemAbout;
+    @FXML
+    private MenuItem itemClose;
+    @FXML
+    private Menu menuSettings;
+    @FXML
+    private TreeView tableTree;
+    @FXML
+    private BorderPane pane;
+    //Main table view
+    private TableView mainTable;
 
-  private MainUiForm mainUiForm;
+    private MainUiForm mainUiForm;
 
-  private static final Logger logger = LogManager.getLogger(MainUiController.class);
+    private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
-  public MainUiController() {
+    public MainUiController() {
 
-  }
-
-  public void setMainUiForm(MainUiForm mainUiForm) {
-    this.mainUiForm = mainUiForm;
-  }
-
-  /**
-   * add action at the start
-   */
-  @FXML
-  private void initialize() {
-    System.out.println("Starting application...");
-
-    DbControl dbControl = new DbController();
-    dbControl.connect("~/test", "sa", "");
-
-    List<TreeItem> tables = new ArrayList<>();
-
-    dbControl.getTablesList().stream().forEach(t -> {
-      tables.add(new TreeItem(t));
-    });
-
-    //Корневой элемент
-    TreeItem root = new TreeItem("test");
-
-    ObservableList<TreeItem> list = FXCollections.observableList(tables);
-    //Сортируем по алфавиту
-//    FXCollections.sort(list);
-
-    root.getChildren().addAll(list);
-    tableTree.setRoot(root);
-
-    tableTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-      @Override
-      public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-        TreeItem<String> item = (TreeItem<String>) newValue;
-        selectTable(dbControl.getTable(item.getValue()));
-      }
-    });
-  }
-  /**
-   * Action for "close" menu item
-   */
-  @FXML
-  public void onItemClose(ActionEvent event) {
-    try {
-      mainUiForm.getMainStage().close();
-    } catch (Exception e) {
-      logger.error("MainUiController error: " + e);
     }
-  }
 
-  /**
-   * Action for "About" menu item
-   */
-  @FXML
-  public void onItemAbout(ActionEvent event) {
-    try {
-      new AboutDialog().start(new Stage());
-    } catch (Exception e) {
-      logger.error("MainUiController error: " + e);
+    public void setMainUiForm(MainUiForm mainUiForm) {
+        this.mainUiForm = mainUiForm;
     }
-  }
 
+    /**
+     * add action at the start
+     */
+    @FXML
+    private void initialize() {
+        System.out.println("Starting application...");
+        init();
+    }
 
-  /**
-   * Select and display the selected table
-   * @param table
-   */
-  private void selectTable(Table table) {
-    System.out.println(table.getName());
-   table.getRows().stream().forEach(r -> System.out.println(r.toString()));
-  }
+    /**
+     * Action for "close" menu item
+     */
+    @FXML
+    public void onItemClose(ActionEvent event) {
+        try {
+            mainUiForm.getMainStage().close();
+        } catch (Exception e) {
+            logger.error("MainUiController error: " + e);
+        }
+    }
+
+    /**
+     * Action for "About" menu item
+     */
+    @FXML
+    public void onItemAbout(ActionEvent event) {
+        try {
+           new AboutDialog().start();
+        } catch (Exception e) {
+            logger.error("MainUiController error: " + e);
+        }
+    }
+
+    /**
+     * init data on startup
+     */
+    private void init() {
+        Properties properties = PropertiesController.getProperties();
+        String user = properties.getProperty("user");
+        String password = properties.getProperty("password");
+        String path = properties.getProperty("path");
+        String db = properties.getProperty("db");
+
+        DbControl dbControl = new DbController();
+        dbControl.connect(path, db, user, password);
+
+        List<TreeItem> tables = new ArrayList<>();
+
+        dbControl.getTablesList().stream().forEach(t -> {
+            tables.add(new TreeItem(t));
+        });
+        //Корневой элемент
+        TreeItem root = new TreeItem("test");
+
+        ObservableList<TreeItem> list = FXCollections.observableList(tables);
+
+        root.getChildren().addAll(list);
+        tableTree.setRoot(root);
+
+        tableTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                TreeItem<String> item = (TreeItem<String>) newValue;
+                selectTable(dbControl.getTable(item.getValue()));
+            }
+        });
+        //Добавляем корневую таблицу в центр
+        mainTable = new TableView<>();
+        pane.setCenter(mainTable);
+    }
+
+    /**
+     * Select and display the selected table
+     *
+     * @param table
+     */
+    private void selectTable(Table table) {
+
+        System.out.println(table.getName());
+
+        if (!mainTable.getColumns().isEmpty()) {
+            mainTable.getColumns().clear();
+            mainTable.getItems().clear();
+        }
+
+        List<Row> rows = table.getRows();
+        List<String> values = new ArrayList<>();
+
+        if (rows != null && !rows.isEmpty()) {
+            List<Cell> cells = rows.get(0).getCells();
+            List<TableColumn> tableColumns = new ArrayList<>();
+            cells.forEach(cell -> {
+                tableColumns.add(new TableColumn(cell.getName()));
+                values.add((String)cell.getValue());
+                System.out.println(cell.toString());
+            });
+            mainTable.getColumns().addAll(tableColumns);
+
+        }
+
+    }
 
 }

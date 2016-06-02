@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
 
 
-<DialogPane prefHeight="250.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.AboutDialogController" />
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="297.0" prefWidth="416.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="149.0" layoutY="266.0" text="Dmitriy Yfremov  2016" />
+      <Label layoutX="149.0" layoutY="14.0" prefHeight="17.0" prefWidth="118.0" text="H2dbAdmin ver. 0.0.0" />
+   </children>
+</Pane>

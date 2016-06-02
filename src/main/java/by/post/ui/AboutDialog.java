@@ -14,20 +14,27 @@ import javafx.stage.Stage;
  * @author Dmitriy V.Yefremov
  */
 public class AboutDialog extends Application {
-  private AboutDialogController controller;
-  private Parent parent;
+    private AboutDialogController controller;
+    private Parent parent;
 
-  @Override
-  public void start(Stage stage) throws Exception{
-    FXMLLoader loader = new FXMLLoader();
-    loader.setLocation(AboutDialog.class.getResource("AboutDialog.fxml"));
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(AboutDialog.class.getResource("AboutDialog.fxml"));
 
-    parent = loader.load();
-    controller = loader.getController();
-    controller.setAboutDialog(this);
+        parent = loader.load();
+//        controller = loader.getController();
+//        controller.setAboutDialog(this);
 
-    stage.setScene(new Scene(parent));
-    stage.initModality(Modality.APPLICATION_MODAL);
-    stage.showAndWait();
+        stage.setScene(new Scene(parent));
+        stage.setTitle("H2dbAdmin");
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+    }
+
+    public void start() throws Exception{
+        Stage stage = new Stage();
+        start(stage);
     }
 }
