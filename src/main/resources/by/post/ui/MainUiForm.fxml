@@ -3,9 +3,9 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
 
 <BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
    <top>
@@ -33,6 +33,6 @@
       <TreeView fx:id="tableTree" prefHeight="375.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
    </left>
    <bottom>
-      <Pane prefHeight="20.0" prefWidth="650.0" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="console" prefHeight="80.0" prefWidth="650.0" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>

@@ -7,6 +7,8 @@ import by.post.data.Cell;
 import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.AboutDialog;
+import by.post.ui.ConsoleArea;
+import by.post.ui.LogArea;
 import by.post.ui.MainUiForm;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,10 +18,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -41,6 +45,8 @@ public class MainUiController {
     private TreeView tableTree;
     @FXML
     private BorderPane pane;
+    @FXML
+    private TextArea console;
     //Main table view
     private TableView mainTable;
 
@@ -61,6 +67,8 @@ public class MainUiController {
      */
     @FXML
     private void initialize() {
+        setLogOutput();
+        LogArea.setArea(console);
         System.out.println("Starting application...");
         init();
     }
@@ -156,6 +164,16 @@ public class MainUiController {
 
         }
 
+    }
+
+    /**
+     * Set console messages output to text area
+     */
+    private void setLogOutput() {
+        ConsoleArea area = new ConsoleArea(console);
+        PrintStream printStream = new PrintStream(area, true);
+        System.setOut(printStream);
+        System.setErr(printStream);
     }
 
 }

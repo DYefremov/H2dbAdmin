@@ -1,5 +1,6 @@
 package by.post.control;
 
+
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import org.junit.Assert;

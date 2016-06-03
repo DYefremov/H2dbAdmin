@@ -20,6 +20,8 @@ public class DbController implements DbControl {
 
     private String driver = "org.h2.Driver";
     private String db;
+    //The connection only succeeds when the database already exists
+    private String exists = ";IFEXISTS=TRUE";
 
     private Connection connection = null;
 
@@ -57,7 +59,7 @@ public class DbController implements DbControl {
     public void connect(String path, String db, String user, String password) {
 
         this.db = db;
-        String url = "jdbc:h2:" + path + db;
+        String url = "jdbc:h2:" + path + db + exists;
 
         if (connection == null) {
             try {

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration status="WARN" packages="by.post.ui">
 	<Appenders>
 		<Console name="CONSOLE" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
+		<!--<LogArea name="AREA">-->
+			<!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />-->
+		<!--</LogArea>-->
 	</Appenders>
 	<Loggers>
-		<Root level="error">
-			<AppenderRef ref="Console" />
-		</Root>
-		<logger name="javabeat.net.util" level="TRACE" />
 		<Root level="ERROR">
+			<AppenderRef ref="CONSOLE" />
+			<!--<AppenderRef ref="AREA" />-->
+		</Root>
+		<Root level="DEBUG">
 			<AppenderRef ref="CONSOLE"/>
+			<!--<AppenderRef ref="AREA"/>-->
 		</Root>
 	</Loggers>
 </Configuration>
