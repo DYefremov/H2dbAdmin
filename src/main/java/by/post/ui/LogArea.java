@@ -51,7 +51,7 @@ public class LogArea extends AbstractAppender {
         if (layout == null) {
             layout = PatternLayout.createDefaultLayout();
         }
-
+        
         return new LogArea(name, filter, layout);
     }
 
