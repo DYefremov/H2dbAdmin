@@ -67,9 +67,9 @@ public class MainUiController {
      */
     @FXML
     private void initialize() {
-        setLogOutput();
+        // Set log messages output to the text area
         LogArea.setArea(console);
-        System.out.println("Starting application...");
+        logger.info("Starting application...");
         init();
     }
 
@@ -142,7 +142,7 @@ public class MainUiController {
      */
     private void selectTable(Table table) {
 
-        System.out.println(table.getName());
+        logger.info(table.getName());
 
         if (!mainTable.getColumns().isEmpty()) {
             mainTable.getColumns().clear();
@@ -160,20 +160,10 @@ public class MainUiController {
                 values.add((String)cell.getValue());
                 System.out.println(cell.toString());
             });
-            mainTable.getColumns().addAll(tableColumns);
 
+            mainTable.getColumns().addAll(tableColumns);
         }
 
-    }
-
-    /**
-     * Set console messages output to text area
-     */
-    private void setLogOutput() {
-        ConsoleArea area = new ConsoleArea(console);
-        PrintStream printStream = new PrintStream(area, true);
-        System.setOut(printStream);
-        System.setErr(printStream);
     }
 
 }

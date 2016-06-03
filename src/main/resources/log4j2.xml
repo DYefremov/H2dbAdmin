@@ -4,18 +4,18 @@
 		<Console name="CONSOLE" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
-		<!--<LogArea name="AREA">-->
-			<!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />-->
-		<!--</LogArea>-->
+		<LogArea name="LogArea">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</LogArea>
 	</Appenders>
 	<Loggers>
 		<Root level="ERROR">
 			<AppenderRef ref="CONSOLE" />
-			<!--<AppenderRef ref="AREA" />-->
+			<AppenderRef ref="LogArea" />
 		</Root>
 		<Root level="DEBUG">
 			<AppenderRef ref="CONSOLE"/>
-			<!--<AppenderRef ref="AREA"/>-->
+			<AppenderRef ref="LogArea"/>
 		</Root>
 	</Loggers>
 </Configuration>

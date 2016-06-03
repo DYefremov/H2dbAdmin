@@ -16,7 +16,6 @@ public class ConsoleArea extends OutputStream{
     }
 
     public ConsoleArea(TextArea out) {
-
         this.out = out;
     }
 
@@ -26,12 +25,10 @@ public class ConsoleArea extends OutputStream{
     }
 
     public TextArea getOut() {
-
         return out;
     }
 
     public void setOut(TextArea out) {
-
         this.out = out;
     }
 }

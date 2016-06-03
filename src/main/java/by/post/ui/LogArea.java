@@ -6,10 +6,7 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
-import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
-import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
-import org.apache.logging.log4j.core.config.plugins.PluginElement;
+import org.apache.logging.log4j.core.config.plugins.*;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import java.io.Serializable;
@@ -36,13 +33,13 @@ public class LogArea extends AbstractAppender {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                area.appendText(String.valueOf(getLayout().toByteArray(event)));
+                area.appendText(event.getMessage().getFormattedMessage() + "\n");
             }
         });
 
     }
 
-    @PluginBuilderFactory
+    @PluginFactory
     public static LogArea create(@PluginAttribute("name") String name,
                                  @PluginElement("Filter") Filter filter,
                                  @PluginElement("Layout") Layout<? extends Serializable> layout){
