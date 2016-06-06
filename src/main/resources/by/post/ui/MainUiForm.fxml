@@ -13,14 +13,15 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+                  <MenuItem mnemonicParsing="false" text="Open" />
               <MenuItem fx:id="itemClose" mnemonicParsing="false" onAction="#onItemClose" text="Close" />
             </items>
           </Menu>
-          <Menu fx:id="menuSettings" mnemonicParsing="false" text="Settings">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
+          <Menu fx:id="menuSettings" mnemonicParsing="false" text="Settings" />
+            <Menu mnemonicParsing="false" text="Tools">
+               <items>
+                  <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onItemRecovery" text="Recovery" />
+               </items></Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onItemAbout" text="About" />

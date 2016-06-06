@@ -7,9 +7,9 @@ import by.post.data.Cell;
 import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.AboutDialog;
-import by.post.ui.ConsoleArea;
 import by.post.ui.LogArea;
 import by.post.ui.MainUiForm;
+import by.post.ui.RecoveryDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,12 +18,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -35,12 +32,6 @@ import java.util.Properties;
  */
 public class MainUiController {
 
-    @FXML
-    private MenuItem itemAbout;
-    @FXML
-    private MenuItem itemClose;
-    @FXML
-    private Menu menuSettings;
     @FXML
     private TreeView tableTree;
     @FXML
@@ -63,7 +54,7 @@ public class MainUiController {
     }
 
     /**
-     * add action at the start
+     * Add action at the start
      */
     @FXML
     private void initialize() {
@@ -92,6 +83,18 @@ public class MainUiController {
     public void onItemAbout(ActionEvent event) {
         try {
            new AboutDialog().start();
+        } catch (Exception e) {
+            logger.error("MainUiController error: " + e);
+        }
+    }
+
+    /**
+     * Action for "Tools\Recovery" menu item
+     */
+    @FXML
+    public void onItemRecovery(ActionEvent event) {
+        try {
+            new RecoveryDialog().start();
         } catch (Exception e) {
             logger.error("MainUiController error: " + e);
         }

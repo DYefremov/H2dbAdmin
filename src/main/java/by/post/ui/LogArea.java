@@ -12,6 +12,8 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import java.io.Serializable;
 
 /**
+ * Text Area implementation for logging output
+ *
  * @author Dmitriy V.Yefremov
  */
 @Plugin(name="LogArea", category = "Core", elementType = "appender", printObject = true)
@@ -23,6 +25,9 @@ public class LogArea extends AbstractAppender {
         super(name, filter, layout);
     }
 
+    /**
+     * @param area
+     */
     public static void setArea(TextArea area) {
         LogArea.area = area;
     }
@@ -30,15 +35,23 @@ public class LogArea extends AbstractAppender {
     @Override
     public void append(LogEvent event) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                area.appendText(event.getMessage().getFormattedMessage() + "\n");
-            }
-        });
+        if (Platform.isFxApplicationThread() && area != null) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    area.appendText(event.getMessage().getFormattedMessage() + "\n");
+                }
+            });
+        }
 
     }
 
+    /**
+     * @param name
+     * @param filter
+     * @param layout
+     * @return object of LogArea
+     */
     @PluginFactory
     public static LogArea create(@PluginAttribute("name") String name,
                                  @PluginElement("Filter") Filter filter,
@@ -51,7 +64,7 @@ public class LogArea extends AbstractAppender {
         if (layout == null) {
             layout = PatternLayout.createDefaultLayout();
         }
-        
+
         return new LogArea(name, filter, layout);
     }
 
