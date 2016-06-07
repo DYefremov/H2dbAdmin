@@ -65,14 +65,14 @@ public class DbController implements DbControl {
             try {
                 connection = DriverManager.getConnection(url, user, password);
             } catch (SQLException e) {
-                logger.error("DbController error: " + e);
+                logger.error("DbController connect error: " + e);
             }
         } else {
             try {
                 connection.close();
                 connection = DriverManager.getConnection(url, user, password);
             } catch (SQLException e) {
-                logger.error("DbController error in connect: " + e);
+                logger.error("DbController connect error: " + e);
             }
         }
 

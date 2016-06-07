@@ -24,7 +24,6 @@ public class AboutDialogController {
     @FXML
     private void initialize(){
 
-
     }
 
 }

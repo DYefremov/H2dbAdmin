@@ -6,10 +6,7 @@ import by.post.control.db.DbController;
 import by.post.data.Cell;
 import by.post.data.Row;
 import by.post.data.Table;
-import by.post.ui.AboutDialog;
-import by.post.ui.LogArea;
-import by.post.ui.MainUiForm;
-import by.post.ui.RecoveryDialog;
+import by.post.ui.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,9 +15,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -64,6 +63,19 @@ public class MainUiController {
         init();
     }
 
+    @FXML
+    public void onItemOpen(ActionEvent event) {
+        
+        File file = new OpenFileDialogProvider().getFileDialog("Open db file.", false);
+
+        if (file != null) {
+            String dbName = file.getName();
+            dbName = dbName.substring(0,dbName.indexOf("."));
+            String path = file.getParent() + File.separator;
+            PropertiesController.setProperties(path, dbName, null, null);
+        }
+    }
+
     /**
      * Action for "close" menu item
      */
@@ -104,18 +116,11 @@ public class MainUiController {
      * init data on startup
      */
     private void init() {
-        Properties properties = PropertiesController.getProperties();
-        String user = properties.getProperty("user");
-        String password = properties.getProperty("password");
-        String path = properties.getProperty("path");
-        String db = properties.getProperty("db");
-
-        DbControl dbControl = new DbController();
-        dbControl.connect(path, db, user, password);
-
+        //TODO переработать метод и DbControl
         List<TreeItem> tables = new ArrayList<>();
+        DbControl dbControl = new DbController();
 
-        dbControl.getTablesList().stream().forEach(t -> {
+        getDbTablesList(dbControl).stream().forEach(t -> {
             tables.add(new TreeItem(t));
         });
         //Корневой элемент
@@ -167,6 +172,21 @@ public class MainUiController {
             mainTable.getColumns().addAll(tableColumns);
         }
 
+    }
+
+    /**
+     * @return list of db tables
+     */
+    private List<String> getDbTablesList(DbControl dbControl) {
+
+        Properties properties = PropertiesController.getProperties();
+        String user = properties.getProperty("user");
+        String password = properties.getProperty("password");
+        String path = properties.getProperty("path");
+        String db = properties.getProperty("db");
+
+        dbControl.connect(path, db, user, password);
+        return dbControl.getTablesList() != null ? dbControl.getTablesList() : new ArrayList<>();
     }
 
 }
