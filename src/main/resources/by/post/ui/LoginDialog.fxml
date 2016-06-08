@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<DialogPane prefHeight="130.0" prefWidth="225.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.LoginDialogController">
+   <header>
+      <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" prefHeight="20.0" prefWidth="340.0" text="Set login and password for database"/>
+   </header>
+   <content>
+      <VBox prefHeight="50.0" prefWidth="225.0">
+         <children>
+            <TextField fx:id="login" />
+            <PasswordField fx:id="password">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin></PasswordField>
+         </children>
+      </VBox>
+   </content>
+</DialogPane>
