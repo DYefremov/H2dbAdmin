@@ -19,6 +19,7 @@ import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -67,18 +68,20 @@ public class MainUiController {
     public void onItemOpen(ActionEvent event) {
 
         try {
-            Optional<Pair<String, String>> data = new LoginDialog().showAndWait();
-            logger.info("Entered user data : login = " + data.get().getKey() + " password: " + data.get().getValue());
-             /*
-        File file = new OpenFileDialogProvider().getFileDialog("Open db file.", false);
+            File file = new OpenFileDialogProvider().getFileDialog("Open db file.", false);
 
-        if (file != null) {
-            String dbName = file.getName();
-            dbName = dbName.substring(0,dbName.indexOf("."));
-            String path = file.getParent() + File.separator;
-            PropertiesController.setProperties(path, dbName, null, null);
-        }
-        */
+            if (file != null) {
+                String dbName = file.getName();
+                dbName = dbName.substring(0, dbName.indexOf("."));
+                String path = file.getParent() + File.separator;
+                Optional<Pair<String, String>> data = new LoginDialog().showAndWait();
+                String user = data.get().getKey();
+                String password = data.get().getValue();
+                logger.info("Entered user data : user = " + user + ", password = " + password);
+                PropertiesController.setProperties(path, dbName, user, password);
+                init();
+            }
+
         } catch (Exception e) {
             logger.error("MainUiController error: " + e);
         }
