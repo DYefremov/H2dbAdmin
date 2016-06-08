@@ -41,6 +41,8 @@ public class MainUiController {
     //Main table view
     private TableView mainTable;
 
+    private String dbName;
+
     private MainUiForm mainUiForm;
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
@@ -71,7 +73,7 @@ public class MainUiController {
             File file = new OpenFileDialogProvider().getFileDialog("Open db file.", false);
 
             if (file != null) {
-                String dbName = file.getName();
+                dbName = file.getName();
                 dbName = dbName.substring(0, dbName.indexOf("."));
                 String path = file.getParent() + File.separator;
                 Optional<Pair<String, String>> data = new LoginDialog().showAndWait();
@@ -136,7 +138,7 @@ public class MainUiController {
             tables.add(new TreeItem(t));
         });
         //Корневой элемент
-        TreeItem root = new TreeItem("test");
+        TreeItem root = new TreeItem(dbName);
 
         ObservableList<TreeItem> list = FXCollections.observableList(tables);
 
@@ -146,8 +148,16 @@ public class MainUiController {
         tableTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                if (newValue == null) {
+                    return;
+                }
+
                 TreeItem<String> item = (TreeItem<String>) newValue;
-                selectTable(dbControl.getTable(item.getValue()));
+
+                if (item.isLeaf()) {
+                    Table table= dbControl.getTable(item.getValue());
+                    selectTable(table);
+                }
             }
         });
         //Добавляем корневую таблицу в центр
@@ -196,6 +206,7 @@ public class MainUiController {
         String password = properties.getProperty("password");
         String path = properties.getProperty("path");
         String db = properties.getProperty("db");
+        dbName = db;
 
         dbControl.connect(path, db, user, password);
         return dbControl.getTablesList() != null ? dbControl.getTablesList() : new ArrayList<>();

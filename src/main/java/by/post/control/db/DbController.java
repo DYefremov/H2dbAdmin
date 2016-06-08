@@ -107,7 +107,7 @@ public class DbController implements DbControl {
     @Override
     public Table getTable(String name) {
 
-        if (name.equals(db)) {
+        if (connection == null || name.equals(db)) {
             return new Table(name);
         }
 
@@ -125,6 +125,10 @@ public class DbController implements DbControl {
      */
     @Override
     public void update(Table table) {
+        if (connection == null) {
+            return;
+        }
+
         TableBuilder builder = new TableBuilder();
         builder.update(table, connection);
     }
