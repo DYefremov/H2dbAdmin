@@ -15,13 +15,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
+import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -65,7 +65,11 @@ public class MainUiController {
 
     @FXML
     public void onItemOpen(ActionEvent event) {
-        
+
+        try {
+            Optional<Pair<String, String>> data = new LoginDialog().showAndWait();
+            logger.info("Entered user data : login = " + data.get().getKey() + " password: " + data.get().getValue());
+             /*
         File file = new OpenFileDialogProvider().getFileDialog("Open db file.", false);
 
         if (file != null) {
@@ -74,6 +78,11 @@ public class MainUiController {
             String path = file.getParent() + File.separator;
             PropertiesController.setProperties(path, dbName, null, null);
         }
+        */
+        } catch (Exception e) {
+            logger.error("MainUiController error: " + e);
+        }
+
     }
 
     /**
@@ -94,7 +103,7 @@ public class MainUiController {
     @FXML
     public void onItemAbout(ActionEvent event) {
         try {
-           new AboutDialog().start();
+            new AboutDialog().start();
         } catch (Exception e) {
             logger.error("MainUiController error: " + e);
         }
@@ -165,7 +174,7 @@ public class MainUiController {
             List<TableColumn> tableColumns = new ArrayList<>();
             cells.forEach(cell -> {
                 tableColumns.add(new TableColumn(cell.getName()));
-                values.add((String)cell.getValue());
+                values.add((String) cell.getValue());
                 System.out.println(cell.toString());
             });
 

@@ -1,12 +1,8 @@
 package by.post.control.ui;
 
-import by.post.ui.LoginDialog;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.util.Pair;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -14,37 +10,19 @@ import javafx.util.Pair;
 public class LoginDialogController {
 
     @FXML
-    private TextField loginField;
+    private TextField login;
     @FXML
-    private PasswordField passwordField;
-
-    private LoginDialog loginDialog;
+    private PasswordField password;
 
     public LoginDialogController() {
 
     }
 
-    /**
-     * @param loginDialog
-     */
-    public void setLoginDialog(LoginDialog loginDialog) {
-        this.loginDialog = loginDialog;
+    public String getLogin() {
+        return login.getText();
     }
 
-    @FXML
-    public void onOkButton(ActionEvent event){
-//        new Alert(Alert.AlertType.CONFIRMATION, loginField.getText() + " " + passwordField).show();
-
+    public String getPassword() {
+        return password.getText();
     }
-
-    public void onCancelButton(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void initialize() {
-
-    }
-
-
 }

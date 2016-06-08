@@ -1,41 +1,44 @@
 package by.post.ui;
 
-import javafx.application.Application;
-import javafx.fxml.FXML;
+import by.post.control.ui.LoginDialogController;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.util.Pair;
 
 /**
+ * Custom dialog for entering login and password
+ *
  * @author Dmitriy V.Yefremov
  */
-public class LoginDialog extends GridPane implements Initializable{
+public class LoginDialog extends Dialog<Pair<String, String>> {
+
     private FXMLLoader loader;
     private Parent parent;
+    private LoginDialogController controller;
 
-    public LoginDialog() {
+    public LoginDialog() throws Exception{
+        init();
+    }
+
+
+    private void init() throws Exception{
         loader = new FXMLLoader(LoginDialog.class.getResource("LoginDialog.fxml"));
-        loader.setController(this);
-        loader.setRoot(this);
-        try {
-            loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        parent = loader.<DialogPane>load();
+        controller = loader.getController();
 
+        this.setDialogPane((DialogPane) parent);
+        ((DialogPane) parent).getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        setResultConverter((dialogButton) -> {
+            String login = controller.getLogin();
+            String password = controller.getPassword();
+            ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
+            return data == ButtonBar.ButtonData.OK_DONE ? new Pair(login, password) : null;
+        });
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 }
