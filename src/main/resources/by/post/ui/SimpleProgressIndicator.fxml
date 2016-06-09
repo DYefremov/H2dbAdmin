@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ProgressIndicator?>
+
+<ProgressIndicator prefHeight="40.0" prefWidth="60.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <cursor>
+      <Cursor fx:constant="N_RESIZE" />
+   </cursor>
+</ProgressIndicator>

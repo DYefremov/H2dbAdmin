@@ -3,12 +3,13 @@ package by.post.control.ui;
 import by.post.control.db.Recovery;
 import by.post.control.db.RecoveryManager;
 import by.post.ui.RecoveryDialog;
+import by.post.ui.SimpleProgressIndicator;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +24,9 @@ public class RecoveryDialogController {
     private TextField inFileTextField;
     @FXML
     private TextField outFileTextField;
+
+    private File dbFile;
+    private File saveDir;
 
     private Recovery recovery;
 
@@ -45,11 +49,34 @@ public class RecoveryDialogController {
 
     @FXML
     public void onRunClick(ActionEvent event) {
-        recovery.recover("", "");
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                SimpleProgressIndicator pi = new SimpleProgressIndicator();
+                pi.show();
+
+                boolean done = recovery.recover(dbFile, saveDir, new Callback<Boolean, Boolean>() {
+                    @Override
+                    public Boolean call(Boolean param) {
+                        if (param) {
+                            inFileTextField.setText("Recovery done!");
+                            logger.info("Recovery done!");
+                        }
+                        pi.close();
+                        return param;
+                    }
+                });
+
+            }
+        });
+
     }
 
     /**
      * Close window
+     *
      * @param event
      * @throws Exception
      */
@@ -61,14 +88,14 @@ public class RecoveryDialogController {
     @FXML
     public void onInTextFieldClick(MouseEvent event) {
         if (event.getClickCount() == 2) {
-            new OpenFileDialogProvider().getFileDialog("Select db file...", false);
+            dbFile = new OpenFileDialogProvider().getFileDialog("Select db file...", false);
         }
     }
 
     @FXML
-    public  void onOutTextFieldClick(MouseEvent event) {
+    public void onOutTextFieldClick(MouseEvent event) {
         if (event.getClickCount() == 2) {
-            new OpenFileDialogProvider().getFileDialog("Select folder for save...", false);
+            saveDir = new OpenFileDialogProvider().getFileDialog("Select folder for save...", true);
         }
     }
 
