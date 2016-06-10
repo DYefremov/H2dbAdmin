@@ -4,9 +4,9 @@ import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.tools.Recover;
+import org.h2.tools.RunScript;
 
 import java.io.File;
-import java.sql.SQLException;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -16,6 +16,8 @@ public class RecoveryManager implements Recovery {
     private String openPath;
     private String savePath;
     private String db;
+    String user;
+    String password;
 
     private static final Logger logger = LogManager.getLogger(RecoveryManager.class);
 
@@ -61,7 +63,10 @@ public class RecoveryManager implements Recovery {
     private boolean recover() {
         try {
             Recover.execute(openPath, db);
-        } catch (SQLException e) {
+            String url = "jdbc:h2:" + openPath + "recovered";
+            String scriptFile = openPath + db + ".h2.sql";
+//            RunScript.execute(url, user, password, scriptFile, null, true);
+        } catch (Exception e) {
             logger.error("RecoveryManager error: " + e);
             return false;
         }

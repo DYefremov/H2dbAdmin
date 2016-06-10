@@ -14,7 +14,6 @@ public class RowBuilder {
     public List<Row> getRows(String table, Connection connection) throws SQLException {
 
         List<Row> rows = new ArrayList<>();
-
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM " + table);
 
@@ -54,6 +53,7 @@ public class RowBuilder {
         cell.setName(metaData.getColumnName(num));
         cell.setType(metaData.getColumnTypeName(num));
         cell.setValue(rs.getNString(num));
+
         return cell;
     }
 }

@@ -22,9 +22,8 @@ public class DbControllerTest {
         String path = properties.getProperty("path");
         String db = properties.getProperty("db");
 
-        DbControl control = new DbController();
+        DbControl control = DbController.getInstance();
         control.connect(path, db, user, password);
-
         // Проверяем наличие таблиц
         Assert.assertFalse(control.getTablesList().isEmpty());
 

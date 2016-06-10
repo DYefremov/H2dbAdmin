@@ -20,10 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Controller class for main ui form
@@ -132,16 +129,14 @@ public class MainUiController {
     private void init() {
         //TODO переработать метод и DbControl
         List<TreeItem> tables = new ArrayList<>();
-        DbControl dbControl = new DbController();
+        DbControl dbControl = DbController.getInstance();
 
         getDbTablesList(dbControl).stream().forEach(t -> {
             tables.add(new TreeItem(t));
         });
         //Корневой элемент
         TreeItem root = new TreeItem(dbName);
-
         ObservableList<TreeItem> list = FXCollections.observableList(tables);
-
         root.getChildren().addAll(list);
         tableTree.setRoot(root);
 
@@ -153,9 +148,9 @@ public class MainUiController {
                 }
 
                 TreeItem<String> item = (TreeItem<String>) newValue;
-
+                // A TreeItem is a leaf if it has no children
                 if (item.isLeaf()) {
-                    Table table= dbControl.getTable(item.getValue());
+                    Table table = dbControl.getTable(item.getValue());
                     selectTable(table);
                 }
             }
@@ -179,21 +174,13 @@ public class MainUiController {
             mainTable.getItems().clear();
         }
 
-        List<Row> rows = table.getRows();
-        List<String> values = new ArrayList<>();
+        TableDataResolver resolver = new TableDataResolver(table);
 
-        if (rows != null && !rows.isEmpty()) {
-            List<Cell> cells = rows.get(0).getCells();
-            List<TableColumn> tableColumns = new ArrayList<>();
-            cells.forEach(cell -> {
-                tableColumns.add(new TableColumn(cell.getName()));
-                values.add((String) cell.getValue());
-                System.out.println(cell.toString());
-            });
-
-            mainTable.getColumns().addAll(tableColumns);
+        if (!resolver.getTableColumns().isEmpty()) {
+            mainTable.refresh();
+            mainTable.getColumns().addAll(resolver.getTableColumns());
+            mainTable.setItems(resolver.getItems());
         }
-
     }
 
     /**

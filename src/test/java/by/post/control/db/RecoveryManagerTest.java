@@ -14,7 +14,6 @@ public class RecoveryManagerTest {
         String savePath = "~/recovered";
 
         Recovery recovery = new RecoveryManager(openPath, savePath);
-        recovery.recover();
     }
 
 }

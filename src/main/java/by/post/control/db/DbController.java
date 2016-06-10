@@ -1,5 +1,6 @@
 package by.post.control.db;
 
+import by.post.control.PropertiesController;
 import by.post.data.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,33 +19,28 @@ import java.util.List;
  */
 public class DbController implements DbControl {
 
-    private String driver = "org.h2.Driver";
     private String db;
     //The connection only succeeds when the database already exists
     private String exists = ";IFEXISTS=TRUE";
-
     private Connection connection = null;
+
+    private static DbControl instance = new DbController();
 
     private static final Logger logger = LogManager.getLogger(DbControl.class);
 
-    public DbController() {
+    private DbController() {
         try {
-            Class.forName(driver);
+            Class.forName(PropertiesController.getProperties().getProperty("driver"));
         } catch (ClassNotFoundException e) {
             logger.error("DbController error: " + e);
         }
     }
 
     /**
-     * @param driver
+     * @return instance for DbControl
      */
-    public DbController(String driver) {
-        this.driver = driver;
-        try {
-            Class.forName(driver);
-        } catch (ClassNotFoundException e) {
-            logger.error("DbController error: " + e);
-        }
+    public static DbControl getInstance() {
+        return instance;
     }
 
     /**
@@ -76,6 +72,19 @@ public class DbController implements DbControl {
             }
         }
 
+    }
+
+    /**
+     * @param path
+     * @param db
+     * @param user
+     * @param password
+     * @return connection
+     */
+    @Override
+    public Connection getConnection(String path, String db, String user, String password) {
+        connect(path, db, user, password);
+        return connection;
     }
 
     /**
