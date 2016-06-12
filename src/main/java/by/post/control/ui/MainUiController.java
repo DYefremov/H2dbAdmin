@@ -167,8 +167,6 @@ public class MainUiController {
      */
     private void selectTable(Table table) {
 
-        logger.info(table.getName());
-
         if (!mainTable.getColumns().isEmpty()) {
             mainTable.getColumns().clear();
             mainTable.getItems().clear();

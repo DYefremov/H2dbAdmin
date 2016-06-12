@@ -17,7 +17,7 @@ import java.util.List;
 public class TableDataResolver {
 
     private Table table;
-    private List<TableColumn> tableColumns;
+    private ObservableList tableColumns;
     private ObservableList<Cell> items;
 
     public TableDataResolver() {
@@ -32,7 +32,7 @@ public class TableDataResolver {
         this.table = table;
     }
 
-    public List<TableColumn> getTableColumns() {
+    public ObservableList getTableColumns() {
         return tableColumns;
     }
 
@@ -43,13 +43,13 @@ public class TableDataResolver {
     private void resolve() {
         List<Row> rows = table.getRows();
         List<Cell> values;
-        tableColumns = new ArrayList<>();
+        tableColumns = FXCollections.observableArrayList();
 
         if (rows != null && !rows.isEmpty()) {
             values = rows.get(0).getCells();
             values.forEach(cell -> {
-                TableColumn<Object, Object> column = new TableColumn(cell.getName());
-
+                TableColumn<Cell, Object> column = new TableColumn(cell.getName());
+//                System.out.println(cell);
                 column.setCellValueFactory(c -> {
                     return new SimpleObjectProperty<>(cell.getValue());
                 });

@@ -33,7 +33,6 @@ public class Cell implements Data {
     }
 
     public void setName(String name) {
-        System.out.println(name == null);
         this.name.set(name != null ? name : "");
     }
 
@@ -59,5 +58,35 @@ public class Cell implements Data {
 
     public void setValue(Object value) {
         this.value.set(value);
+    }
+
+    @Override
+    public String toString() {
+        return "Cell{" +
+                "name=" + name +
+                ", type=" + type +
+                ", value=" + value +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cell cell = (Cell) o;
+
+        if (name != null ? !name.equals(cell.name) : cell.name != null) return false;
+        if (type != null ? !type.equals(cell.type) : cell.type != null) return false;
+        return value != null ? value.equals(cell.value) : cell.value == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
     }
 }
