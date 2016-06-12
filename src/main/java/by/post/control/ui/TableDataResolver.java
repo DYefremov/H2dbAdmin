@@ -5,10 +5,12 @@ import by.post.data.Row;
 import by.post.data.Table;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +23,7 @@ public class TableDataResolver {
 
     private Table table;
     private ObservableList tableColumns;
-    private ObservableList<Cell> items;
+    private ObservableList<ObservableList> items;
 
     public TableDataResolver() {
     }
@@ -47,27 +49,36 @@ public class TableDataResolver {
         List<Row> rows = table.getRows();
         List<Cell> values;
         tableColumns = FXCollections.observableArrayList();
+        items = FXCollections.observableArrayList();
 
         if (rows != null && !rows.isEmpty()) {
             values = rows.get(0).getCells();
-//            values.forEach(cell -> {
-//                TableColumn<Cell, Object> column = new TableColumn(cell.getName());
-//                column.setCellValueFactory(new PropertyValueFactory<Cell, Object>(cell.getValue().toString()));
-//                column.setCellValueFactory(c -> {
-//                    return new SimpleObjectProperty<>(cell.getValue());
-//                });
-//                tableColumns.add(column);
-//            });
-
-            List<Cell> cells = Arrays.asList(new Cell("NAME1","STRING", "VALUE 1"),new Cell("NAME2","STRING", "VALUE 2"));
-            TableColumn col1 = new TableColumn<>("FIRST");
-            col1.setCellValueFactory(new PropertyValueFactory<String, String>("name"));
-            TableColumn col2 = new TableColumn<>("SECOND");
-            col2.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
-            tableColumns.addAll(col1,col2);
-
-            items = FXCollections.observableArrayList(cells);
+            doRow(values);
         }
+    }
+
+    /**
+     * @param values
+     */
+    private void doRow(List<Cell> values) {
+        // *** Row!!!! ***
+        ObservableList<String> row = FXCollections.observableArrayList();
+
+        for (Cell cell: values) {
+            final int index = values.indexOf(cell);
+            TableColumn column = new TableColumn(cell.getName());
+
+            column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                    return new SimpleStringProperty(param.getValue().get(index).toString());
+                }
+            });
+
+            tableColumns.addAll(column);
+            // null поля будем выводить как пустые ("")
+            row.add(cell.getValue() != null ? cell.getValue().toString() : "");
+        }
+        items.add(row);
     }
 
 }
