@@ -2,6 +2,7 @@ package by.post.control.db;
 
 import by.post.control.PropertiesController;
 import by.post.data.Table;
+import by.post.ui.Resources;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +31,8 @@ public class DbController implements DbControl {
 
     private DbController() {
         try {
-            Class.forName(PropertiesController.getProperties().getProperty("driver"));
+            String driver = PropertiesController.getProperties().getProperty("driver");
+            Class.forName(driver != null ? driver : Resources.DEFAULT_DRIVER);
         } catch (ClassNotFoundException e) {
             logger.error("DbController error: " + e);
         }
