@@ -3,17 +3,13 @@ package by.post.control.ui;
 import by.post.data.Cell;
 import by.post.data.Row;
 import by.post.data.Table;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,40 +41,47 @@ public class TableDataResolver {
         return items;
     }
 
+    /**
+     * Resolve data from table
+     */
     private void resolve() {
         List<Row> rows = table.getRows();
-        List<Cell> values;
         tableColumns = FXCollections.observableArrayList();
         items = FXCollections.observableArrayList();
 
         if (rows != null && !rows.isEmpty()) {
-            values = rows.get(0).getCells();
-            doRow(values);
+            // Add columns by first row in table
+            doColumns(rows.get(0).getCells());
+            // Add data
+            rows.stream().forEach(row -> {
+                ObservableList<String> newRow = FXCollections.observableArrayList();
+                row.getCells().forEach(cell-> {
+                    newRow.add(cell.getValue() != null ? cell.getValue().toString() : "");
+                });
+                items.add(newRow);
+            });
         }
     }
 
     /**
+     * Add columns by first row in table
+     *
      * @param values
      */
-    private void doRow(List<Cell> values) {
-        // *** Row!!!! ***
-        ObservableList<String> row = FXCollections.observableArrayList();
+    private void doColumns(List<Cell> values) {
 
-        for (Cell cell: values) {
+        values.forEach(cell -> {
             final int index = values.indexOf(cell);
             TableColumn column = new TableColumn(cell.getName());
 
             column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                    return new SimpleStringProperty(param.getValue().get(index).toString());
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> cell) {
+                    return new SimpleStringProperty(cell.getValue().get(index).toString());
                 }
             });
 
             tableColumns.addAll(column);
-            // null поля будем выводить как пустые ("")
-            row.add(cell.getValue() != null ? cell.getValue().toString() : "");
-        }
-        items.add(row);
+        });
     }
 
 }
