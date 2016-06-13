@@ -7,6 +7,8 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
 /**
@@ -39,6 +41,9 @@ public class LoginDialog extends Dialog<Pair<String, String>> {
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
             return data == ButtonBar.ButtonData.OK_DONE ? new Pair(login, password) : null;
         });
+
+        Stage stage =  (Stage) getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Resources.ICON_PATH));
     }
 
 }

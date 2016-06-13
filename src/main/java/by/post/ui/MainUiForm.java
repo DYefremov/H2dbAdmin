@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -40,6 +41,7 @@ public class MainUiForm extends Application {
     public void start(Stage stage) {
         this.mainStage = stage;
         this.mainStage.setTitle("H2dbAdmin");
+        this.mainStage.getIcons().add(new Image(Resources.ICON_PATH));
 
         try {
             initApp();

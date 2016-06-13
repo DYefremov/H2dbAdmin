@@ -1,12 +1,15 @@
 package by.post.ui;
 
-import by.post.control.ui.AboutDialogController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Shows info about application
@@ -14,7 +17,7 @@ import javafx.stage.Stage;
  * @author Dmitriy V.Yefremov
  */
 public class AboutDialog extends Application {
-    private AboutDialogController controller;
+//    private AboutDialogController controller;
     private Parent parent;
 
     @Override
@@ -23,13 +26,21 @@ public class AboutDialog extends Application {
         loader.setLocation(AboutDialog.class.getResource("AboutDialog.fxml"));
 
         parent = loader.load();
+        // Close dialog by mouse click
+        parent.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.close();
+            }
+        });
 //        controller = loader.getController();
 //        controller.setAboutDialog(this);
-
         stage.setScene(new Scene(parent));
         stage.setTitle("H2dbAdmin");
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNIFIED);
+        stage.getIcons().add(new Image(Resources.ICON_PATH));
         stage.showAndWait();
     }
 

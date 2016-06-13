@@ -33,7 +33,7 @@ public class MainUiController {
     private BorderPane pane;
     @FXML
     private TextArea console;
-    //Main table view
+    @FXML
     private TableView mainTable;
 
     private String dbName;
@@ -153,9 +153,6 @@ public class MainUiController {
                 }
             }
         });
-        //Добавляем корневую таблицу в центр
-        mainTable = new TableView<>();
-        pane.setCenter(mainTable);
     }
 
     /**

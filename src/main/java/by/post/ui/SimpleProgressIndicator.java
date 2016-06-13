@@ -24,20 +24,19 @@ public class SimpleProgressIndicator extends Stage {
         FXMLLoader loader = new FXMLLoader(SimpleProgressIndicator.class.getResource("SimpleProgressIndicator.fxml"));
         try {
             stage = this;
-            parent = loader.load();
+            stage.setScene(new Scene(parent));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.centerOnScreen();
 
+            parent = loader.load();
             parent.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
                     stage.close();
                 }
             });
-
-            stage.setScene(new Scene(parent));
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.centerOnScreen();
 
         } catch (IOException e) {
             e.printStackTrace();

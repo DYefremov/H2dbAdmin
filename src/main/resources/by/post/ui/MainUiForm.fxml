@@ -4,11 +4,12 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.91" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
+<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -31,14 +32,15 @@
         </menus>
       </MenuBar>
    </top>
-   <left>
-      <SplitPane BorderPane.alignment="CENTER">
-         <items>
-            <TreeView fx:id="tableTree" prefHeight="324.0" prefWidth="255.0" />
-         </items>
-      </SplitPane>
-   </left>
    <bottom>
       <TextArea fx:id="console" prefHeight="80.0" prefWidth="650.0" BorderPane.alignment="CENTER" />
    </bottom>
+   <center>
+      <SplitPane dividerPositions="0.3" prefHeight="330.0" prefWidth="40.0" BorderPane.alignment="CENTER">
+         <items>
+            <TreeView fx:id="tableTree" minWidth="-Infinity" prefHeight="330.0" prefWidth="100.0" />
+            <TableView fx:id="mainTable" minWidth="-Infinity" prefHeight="330.0" prefWidth="400.0" />
+         </items>
+      </SplitPane>
+   </center>
 </BorderPane>
