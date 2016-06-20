@@ -27,12 +27,11 @@ public class DbController implements DbControl {
 
     private static DbControl instance = new DbController();
 
-    private static final Logger logger = LogManager.getLogger(DbControl.class);
+    private static final Logger logger = LogManager.getLogger(DbController.class);
 
     private DbController() {
         try {
-            String driver = PropertiesController.getProperties().getProperty("driver");
-            Class.forName(driver != null ? driver : Resources.DEFAULT_DRIVER);
+            Class.forName(PropertiesController.getProperties().getProperty("driver"));
         } catch (ClassNotFoundException e) {
             logger.error("DbController error: " + e);
         }

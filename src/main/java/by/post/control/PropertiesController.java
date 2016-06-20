@@ -64,6 +64,12 @@ public class PropertiesController {
         Properties properties = new Properties();
 
         try {
+            File file = new File("config.properties");
+
+            if (!file.exists()) {
+                setProperties(PATH, DB, USER, PASSWORD);
+            }
+
             in = new FileInputStream("config.properties");
             properties.load(in);
         } catch (IOException e) {
@@ -79,4 +85,5 @@ public class PropertiesController {
         }
         return properties;
     }
+
 }

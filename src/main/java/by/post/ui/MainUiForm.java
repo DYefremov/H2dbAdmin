@@ -73,28 +73,8 @@ public class MainUiForm extends Application {
         mainStage.show();
     }
 
-    //****** Getters and setters :) *****
     public Stage getMainStage() {
         return mainStage;
     }
 
-    public void setMainStage(Stage mainStage) {
-        this.mainStage = mainStage;
-    }
-
-    public Scene getMainScene() {
-        return mainScene;
-    }
-
-    public void setMainScene(Scene mainScene) {
-        this.mainScene = mainScene;
-    }
-
-    public BorderPane getMainPane() {
-        return mainPane;
-    }
-
-    public void setMainPane(BorderPane mainPane) {
-        this.mainPane = mainPane;
-    }
 }

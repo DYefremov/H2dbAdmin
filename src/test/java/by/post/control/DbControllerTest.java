@@ -6,7 +6,6 @@ import by.post.control.db.DbController;
 import org.junit.Assert;
 import org.junit.Test;
 
-
 import java.util.List;
 import java.util.Properties;
 
@@ -24,11 +23,11 @@ public class DbControllerTest {
 
         DbControl control = DbController.getInstance();
         control.connect(path, db, user, password);
+
         // Проверяем наличие таблиц
         Assert.assertFalse(control.getTablesList().isEmpty());
 
         List<String> tabNames = control.getTablesList();
         System.out.println(tabNames);
     }
-
 }

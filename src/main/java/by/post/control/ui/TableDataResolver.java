@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 
 import java.util.List;
@@ -79,6 +80,10 @@ public class TableDataResolver {
                     return new SimpleStringProperty(cell.getValue().get(index).toString());
                 }
             });
+
+            // Add for enable editing
+            column.setCellFactory(TextFieldTableCell.forTableColumn());
+
 
             tableColumns.addAll(column);
         });

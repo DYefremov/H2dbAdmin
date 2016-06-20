@@ -43,7 +43,6 @@ public class MainUiController {
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
     public MainUiController() {
-
     }
 
     public void setMainUiForm(MainUiForm mainUiForm) {
@@ -80,7 +79,7 @@ public class MainUiController {
             }
 
         } catch (Exception e) {
-            logger.error("MainUiController error: " + e);
+            logger.error("MainUiController error onItemOpen: " + e);
         }
 
     }
@@ -93,7 +92,7 @@ public class MainUiController {
         try {
             mainUiForm.getMainStage().close();
         } catch (Exception e) {
-            logger.error("MainUiController error: " + e);
+            logger.error("MainUiController error onItemClose: " + e);
         }
     }
 
@@ -105,7 +104,7 @@ public class MainUiController {
         try {
             new AboutDialog().start();
         } catch (Exception e) {
-            logger.error("MainUiController error: " + e);
+            logger.error("MainUiController error onItemAbout: " + e);
         }
     }
 
@@ -117,8 +116,17 @@ public class MainUiController {
         try {
             new RecoveryDialog().start();
         } catch (Exception e) {
-            logger.error("MainUiController error: " + e);
+            logger.error("MainUiController error onItemRecovery: " + e);
         }
+    }
+
+    /**
+     * Action for table context menu "Delete" item
+     */
+    @FXML
+    public void onTableItemDelete() {
+        String message = "";
+        new Alert(Alert.AlertType.INFORMATION, message).show();
     }
 
     /**
@@ -132,7 +140,7 @@ public class MainUiController {
         getDbTablesList(dbControl).stream().forEach(t -> {
             tables.add(new TreeItem(t));
         });
-        //Корневой элемент
+
         TreeItem root = new TreeItem(dbName);
         ObservableList<TreeItem> list = FXCollections.observableList(tables);
         root.getChildren().addAll(list);

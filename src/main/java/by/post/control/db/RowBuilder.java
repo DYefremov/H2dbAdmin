@@ -36,7 +36,7 @@ public class RowBuilder {
         int count = resultSet.getMetaData().getColumnCount();
 
         for (int i = 1; i < count; i++) {
-            cells.add(getColumn(i, resultSet));
+            cells.add(getCell(i, resultSet));
         }
 
         row.setCells(cells);
@@ -47,7 +47,7 @@ public class RowBuilder {
     /**
      * @return
      */
-    private Cell getColumn(int num, ResultSet rs) throws SQLException {
+    private Cell getCell(int num, ResultSet rs) throws SQLException {
         Cell cell = new Cell();
         ResultSetMetaData metaData = rs.getMetaData();
         cell.setName(metaData.getColumnName(num));
