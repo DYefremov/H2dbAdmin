@@ -88,7 +88,7 @@ public class MainUiController {
      * Action for "close" menu item
      */
     @FXML
-    public void onItemClose(ActionEvent event) {
+    public void onItemExit(ActionEvent event) {
         try {
             mainUiForm.getMainStage().close();
         } catch (Exception e) {

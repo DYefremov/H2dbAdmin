@@ -80,10 +80,8 @@ public class TableDataResolver {
                     return new SimpleStringProperty(cell.getValue().get(index).toString());
                 }
             });
-
             // Add for enable editing
             column.setCellFactory(TextFieldTableCell.forTableColumn());
-
 
             tableColumns.addAll(column);
         });
