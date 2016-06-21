@@ -16,6 +16,7 @@ public class PropertiesController {
     private static final String USER = "sa";
     private static final String PASSWORD = "";
     private static final String DRIVER = "org.h2.Driver";
+    private static Properties properties = new Properties();
 
     private static final Logger logger = LogManager.getLogger(PropertiesController.class);
 
@@ -29,7 +30,6 @@ public class PropertiesController {
      */
     public static void setProperties(String path, String dbName, String user, String password) {
 
-        Properties properties = new Properties();
         properties.put("driver", DRIVER);
         properties.put("path", path != null ? path : PATH);
         properties.put("db", dbName != null ? dbName : DB);
@@ -60,8 +60,11 @@ public class PropertiesController {
      */
     public static Properties getProperties() {
 
+        if (!properties.isEmpty()) {
+            return properties;
+        }
+
         InputStream in = null;
-        Properties properties = new Properties();
 
         try {
             File file = new File("config.properties");
