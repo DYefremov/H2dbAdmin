@@ -65,17 +65,17 @@
                <bottom>
                   <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" BorderPane.alignment="CENTER">
                     <items>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="+">
+                        <Button mnemonicParsing="false" onAction="#onAddButton" prefHeight="25.0" prefWidth="25.0" text="+">
                            <tooltip>
                               <Tooltip text="Add row." />
                            </tooltip>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" textAlignment="CENTER">
+                        <Button mnemonicParsing="false" onAction="#onRemoveButton" prefHeight="25.0" prefWidth="25.0" text="-" textAlignment="CENTER">
                            <tooltip>
                               <Tooltip text="Delete row." />
                            </tooltip>
                         </Button>
-                      <Button mnemonicParsing="false" text="Save" textAlignment="RIGHT">
+                      <Button mnemonicParsing="false" onAction="#onSaveButton" text="Save" textAlignment="RIGHT">
                            <tooltip>
                               <Tooltip text="Save changes." />
                            </tooltip>

@@ -98,7 +98,7 @@ public class DbController implements DbControl {
 
         if (connection != null) {
             try {
-                ResultSet rs = connection.getMetaData().getTables(null, null, "%", new String[]{"TABLE"});
+                ResultSet rs = connection.getMetaData().getTables(null, null, "%", new String[]{"TABLE", "VIEW"});
                 while (rs.next()) {
                     tables.add(rs.getString("TABLE_NAME"));
                 }

@@ -16,8 +16,8 @@ public class RecoveryManager implements Recovery {
     private String openPath;
     private String savePath;
     private String db;
-    String user;
-    String password;
+    private String user;
+    private String password;
 
     private static final Logger logger = LogManager.getLogger(RecoveryManager.class);
 

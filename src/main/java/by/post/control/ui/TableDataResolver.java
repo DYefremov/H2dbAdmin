@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
@@ -56,7 +57,7 @@ public class TableDataResolver {
             // Add data
             rows.stream().forEach(row -> {
                 ObservableList<String> newRow = FXCollections.observableArrayList();
-                row.getCells().forEach(cell-> {
+                row.getCells().forEach(cell -> {
                     newRow.add(cell.getValue() != null ? cell.getValue().toString() : "");
                 });
                 items.add(newRow);
@@ -75,13 +76,22 @@ public class TableDataResolver {
             final int index = values.indexOf(cell);
             TableColumn column = new TableColumn(cell.getName());
 
-            column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> cell) {
-                    return new SimpleStringProperty(cell.getValue().get(index).toString());
+            column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                    return new SimpleStringProperty(param.getValue().get(index).toString());
                 }
             });
             // Add for enable editing
             column.setCellFactory(TextFieldTableCell.forTableColumn());
+            column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ObservableList, String>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<ObservableList, String> event) {
+                    int rowPos = event.getTablePosition().getRow();
+                    int colPos = event.getTablePosition().getColumn();
+                    event.getTableView().getItems().get(rowPos).set(colPos, event.getNewValue());
+                }
+            });
 
             tableColumns.addAll(column);
         });

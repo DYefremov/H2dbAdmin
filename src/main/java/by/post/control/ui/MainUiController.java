@@ -61,7 +61,7 @@ public class MainUiController {
     }
 
     @FXML
-    public void onItemOpen(ActionEvent event) {
+    public void onItemOpen() {
 
         try {
             File file = new OpenFileDialogProvider().getFileDialog("Open db file.", false);
@@ -88,7 +88,7 @@ public class MainUiController {
      * Action for "close" menu item
      */
     @FXML
-    public void onItemExit(ActionEvent event) {
+    public void onItemExit() {
         try {
             mainUiForm.getMainStage().close();
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class MainUiController {
      * Action for "About" menu item
      */
     @FXML
-    public void onItemAbout(ActionEvent event) {
+    public void onItemAbout() {
         try {
             new AboutDialog().start();
         } catch (Exception e) {
@@ -125,8 +125,25 @@ public class MainUiController {
      */
     @FXML
     public void onTableItemDelete() {
-        String message = "";
-        new Alert(Alert.AlertType.INFORMATION, message).show();
+        TableEditor.removeRow(mainTable);
+    }
+
+    /**
+     * Actions for tool bar buttons
+      */
+    @FXML
+    public void onAddButton(){
+        TableEditor.addRow(mainTable);
+    }
+
+    @FXML
+    public void onRemoveButton(){
+        TableEditor.removeRow(mainTable);
+    }
+
+    @FXML
+    public void onSaveButton(){
+        TableEditor.save(mainTable);
     }
 
     /**
