@@ -49,7 +49,15 @@
    <center>
       <SplitPane dividerPositions="0.3" prefHeight="330.0" prefWidth="40.0" BorderPane.alignment="CENTER">
          <items>
-            <TreeView fx:id="tableTree" minWidth="-Infinity" prefHeight="330.0" prefWidth="100.0" />
+            <TreeView fx:id="tableTree" minWidth="-Infinity" prefHeight="330.0" prefWidth="100.0">
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#onTreeContextAdd" text="Add" />
+                        <MenuItem mnemonicParsing="false" onAction="#onTreeContextDelete" text="Delete" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu></TreeView>
             <BorderPane>
                <center>
                   <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" prefHeight="330.0" prefWidth="400.0">

@@ -147,6 +147,20 @@ public class MainUiController {
     }
 
     /**
+     * Actions for tree context menu
+     */
+    @FXML
+    public void onTreeContextAdd() {
+        TableEditor.addTable(tableTree);
+    }
+
+    @FXML
+    public void onTreeContextDelete() {
+       TableEditor.deleteTable(tableTree);
+    }
+
+
+    /**
      * init data on startup
      */
     private void init() {
