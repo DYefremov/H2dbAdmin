@@ -1,10 +1,14 @@
 package by.post.control.ui;
 
+import by.post.control.db.DbControl;
+import by.post.control.db.DbController;
+import by.post.control.db.Queries;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
 import java.util.Collections;
@@ -14,6 +18,7 @@ import java.util.Optional;
  * @author Dmitriy V.Yefremov
  */
 public class TableEditor {
+    private static  DbControl dbControl = null;
 
     /**
      * Add new row to the table
@@ -64,7 +69,8 @@ public class TableEditor {
         Optional<String> result = new InputDialog().showAndWait();
 
         if (result.isPresent()){
-            System.out.println(result.get());
+            dbControl = DbController.getInstance();
+            dbControl.update(Queries.createTable(result.get()));
         }
     }
 
@@ -78,7 +84,10 @@ public class TableEditor {
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK){
-            System.out.println("ok");
+            TreeItem item = (TreeItem) tableTree.getSelectionModel().getSelectedItem();
+            String table = item.getValue().toString();
+            dbControl = DbController.getInstance();
+            dbControl.update(Queries.deleteTable(table));
         }
     }
 

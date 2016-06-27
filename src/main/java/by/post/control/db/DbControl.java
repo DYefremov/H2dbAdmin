@@ -42,4 +42,16 @@ public interface DbControl {
      * @param table
      */
     void update(Table table);
+
+    /**
+     * @param sql
+     */
+    void update(String sql);
+
+    /**
+     * Execute custom sql query
+     *
+     * @param sql
+     */
+    void execute(String sql);
 }

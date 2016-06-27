@@ -6,10 +6,7 @@ import by.post.ui.Resources;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,6 +138,22 @@ public class DbController implements DbControl {
 
         TableBuilder builder = new TableBuilder();
         builder.update(table, connection);
+    }
+
+    @Override
+    public void update(String sql) {
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            logger.error("DbController error in update[sql]: " + e);
+        }
+    }
+
+    @Override
+    public void execute(String sql) {
+
     }
 
 }
