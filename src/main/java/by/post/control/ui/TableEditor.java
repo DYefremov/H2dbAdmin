@@ -6,10 +6,10 @@ import by.post.control.db.Queries;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
 import javafx.collections.FXCollections;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -18,7 +18,10 @@ import java.util.Optional;
  * @author Dmitriy V.Yefremov
  */
 public class TableEditor {
+
     private static  DbControl dbControl = null;
+
+    private static final Logger logger = LogManager.getLogger(TableEditor.class);
 
     /**
      * Add new row to the table
@@ -28,10 +31,16 @@ public class TableEditor {
     public static void addRow(TableView table) {
 
         int size = table.getColumns().size();
-        int selectedIndex = table.getSelectionModel().getSelectedIndex();
 
-        table.getItems().add(++selectedIndex, FXCollections.observableArrayList(Collections.nCopies(size, "New value.")));
-        table.getSelectionModel().select(selectedIndex, null);
+        if (size > 0) {
+            int selectedIndex = table.getSelectionModel().getSelectedIndex();
+
+            table.getItems().add(++selectedIndex, FXCollections.observableArrayList(Collections.nCopies(size, "New value.")));
+            table.getSelectionModel().select(selectedIndex, null);
+        } else {
+            new Alert(Alert.AlertType.WARNING, "Add row!").show();
+        }
+
         table.refresh();
     }
 
@@ -50,12 +59,16 @@ public class TableEditor {
      *
      * @param table
      */
-    public static void save(TableView table) {
+    public static void save(TableView table, String name) {
+
+        if (name.equals("")) {
+            return;
+        }
 
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK){
-            System.out.println("ok");
+            logger.log(Level.INFO, "Save changes for  table: " + name);
         }
     }
 
@@ -69,8 +82,15 @@ public class TableEditor {
         Optional<String> result = new InputDialog().showAndWait();
 
         if (result.isPresent()){
+            String name = result.get();
+
             dbControl = DbController.getInstance();
-            dbControl.update(Queries.createTable(result.get()));
+            dbControl.update(Queries.createTable(name));
+
+            tableTree.getRoot().getChildren().add(new TreeItem<>(name));
+            tableTree.refresh();
+
+            logger.log(Level.INFO, "Added new  table: " + name);
         }
     }
 
@@ -85,9 +105,15 @@ public class TableEditor {
 
         if (result.get() == ButtonType.OK){
             TreeItem item = (TreeItem) tableTree.getSelectionModel().getSelectedItem();
-            String table = item.getValue().toString();
+            String name = item.getValue().toString();
+
             dbControl = DbController.getInstance();
-            dbControl.update(Queries.deleteTable(table));
+            dbControl.update(Queries.deleteTable(name));
+
+            tableTree.getRoot().getChildren().remove(item);
+            tableTree.refresh();
+
+            logger.log(Level.INFO, "Deleted table: " + name);
         }
     }
 

@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="407.0" styleClass="about-area" stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.AboutDialogController">
    <children>
-      <Label layoutX="149.0" layoutY="266.0" text="Dmitriy Yefremov  2016" />
-      <Label layoutX="149.0" layoutY="14.0" prefHeight="17.0" prefWidth="118.0" text="H2dbAdmin ver. 0.0.0" />
-      <ImageView fitHeight="199.0" fitWidth="227.0" layoutX="121.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+      <TextArea fx:id="textArea" editable="false" layoutX="5.0" layoutY="190.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="407.0" stylesheets="@Ui.css" wrapText="true">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></TextArea>
+      <Label fx:id="versionLabel" layoutX="149.0" layoutY="14.0" prefHeight="17.0" prefWidth="118.0" text="H2dbAdmin ver. 0.0.0" />
+      <ImageView fitHeight="150.0" fitWidth="117.0" layoutX="143.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../img/icon.jpg" />
          </image>
       </ImageView>
+      <Hyperlink layoutX="153.0" layoutY="278.0" text="Mail: my@mail" />
    </children>
 </Pane>

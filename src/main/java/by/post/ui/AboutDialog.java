@@ -2,9 +2,11 @@ package by.post.ui;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -33,8 +35,7 @@ public class AboutDialog extends Application {
                 stage.close();
             }
         });
-//        controller = loader.getController();
-//        controller.setAboutDialog(this);
+
         stage.setScene(new Scene(parent));
         stage.setTitle("H2dbAdmin");
         stage.setResizable(false);

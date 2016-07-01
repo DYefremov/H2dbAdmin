@@ -35,6 +35,8 @@ public class MainUiController {
     private TextArea console;
     @FXML
     private TableView mainTable;
+    @FXML
+    private Label currentTableName;
 
     private String dbName;
 
@@ -69,11 +71,14 @@ public class MainUiController {
             if (file != null) {
                 dbName = file.getName();
                 dbName = dbName.substring(0, dbName.indexOf("."));
+
                 String path = file.getParent() + File.separator;
                 Optional<Pair<String, String>> data = new LoginDialog().showAndWait();
                 String user = data.get().getKey();
                 String password = data.get().getValue();
+
                 logger.info("Entered user data : user = " + user + ", password = " + password);
+
                 PropertiesController.setProperties(path, dbName, user, password);
                 init();
             }
@@ -112,7 +117,7 @@ public class MainUiController {
      * Action for "Tools\Recovery" menu item
      */
     @FXML
-    public void onItemRecovery(ActionEvent event) {
+    public void onItemRecovery() {
         try {
             new RecoveryDialog().start();
         } catch (Exception e) {
@@ -143,7 +148,7 @@ public class MainUiController {
 
     @FXML
     public void onSaveButton(){
-        TableEditor.save(mainTable);
+        TableEditor.save(mainTable, currentTableName.getText());
     }
 
     /**
@@ -156,7 +161,7 @@ public class MainUiController {
 
     @FXML
     public void onTreeContextDelete() {
-       TableEditor.deleteTable(tableTree);
+        TableEditor.deleteTable(tableTree);
     }
 
 
@@ -207,6 +212,10 @@ public class MainUiController {
         }
 
         TableDataResolver resolver = new TableDataResolver(table);
+        // Set text for current table name label by selected tree item.
+        TreeItem item = (TreeItem) tableTree.getSelectionModel().getSelectedItem();
+        String name = item.getValue() != null ? item.getValue().toString() : "";
+        currentTableName.setText(name);
 
         if (!resolver.getTableColumns().isEmpty()) {
             mainTable.refresh();
