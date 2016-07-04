@@ -36,7 +36,7 @@ public class TableDataResolver {
     }
 
     public ObservableList getTableColumns() {
-        return tableColumns;
+        return tableColumns == null ? FXCollections.emptyObservableList() : tableColumns;
     }
 
     public ObservableList getItems() {
@@ -47,13 +47,13 @@ public class TableDataResolver {
      * Resolve data from table
      */
     private void resolve() {
+
         List<Row> rows = table.getRows();
-        tableColumns = FXCollections.observableArrayList();
         items = FXCollections.observableArrayList();
 
         if (rows != null && !rows.isEmpty()) {
             // Add columns by first row in table
-            doColumns(rows.get(0).getCells());
+            tableColumns = getColumns(rows.get(0).getCells());
             // Add data
             rows.stream().forEach(row -> {
                 ObservableList<String> newRow = FXCollections.observableArrayList();
@@ -70,7 +70,9 @@ public class TableDataResolver {
      *
      * @param values
      */
-    private void doColumns(List<Cell> values) {
+    public ObservableList getColumns(List<Cell> values) {
+
+        ObservableList columns = FXCollections.observableArrayList();
 
         values.forEach(cell -> {
             final int index = values.indexOf(cell);
@@ -92,9 +94,8 @@ public class TableDataResolver {
                     event.getTableView().getItems().get(rowPos).set(colPos, event.getNewValue());
                 }
             });
-
-            tableColumns.addAll(column);
+            columns.addAll(column);
         });
+        return columns;
     }
-
 }

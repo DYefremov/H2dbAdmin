@@ -9,19 +9,35 @@ import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * @author Dmitriy V.Yefremov
  */
-public class RecoveryDialog extends Application{
+public class RecoveryDialog{
 
     private RecoveryDialogController controller;
     private Parent parent;
     private Stage stage;
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        this.stage = stage;
-        this.stage.getIcons().add(new Image(Resources.ICON_PATH));
+    public RecoveryDialog() throws IOException {
+        init();
+    }
+
+    public void show() {
+        stage.show();
+    }
+
+    public void showAndWait(){
+        stage.showAndWait();
+    }
+
+    public void close() {
+        stage.close();
+    }
+
+    private void init() throws IOException {
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(AboutDialog.class.getResource("RecoveryDialog.fxml"));
 
@@ -29,27 +45,11 @@ public class RecoveryDialog extends Application{
         controller = loader.getController();
         controller.setRecoveryDialog(this);
 
+        stage = new Stage();
         stage.setScene(new Scene(parent));
         stage.setTitle("H2dbAdmin recovery tool");
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+        stage.getIcons().add(new Image(Resources.LOGO_PATH));
     }
-
-    /**
-     * Start (show) window
-     * @throws Exception
-     */
-    public void start() throws Exception{
-        Stage stage = new Stage();
-        start(stage);
-    }
-
-    /**
-     * Close window
-     */
-    public void close() {
-        stage.close();
-    }
-
 }

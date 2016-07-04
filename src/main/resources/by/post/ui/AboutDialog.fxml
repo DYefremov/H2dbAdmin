@@ -6,20 +6,36 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="407.0" styleClass="about-area" stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.AboutDialogController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" styleClass="about-area" stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.AboutDialogController">
    <children>
-      <TextArea fx:id="textArea" editable="false" layoutX="5.0" layoutY="190.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="407.0" stylesheets="@Ui.css" wrapText="true">
+      <Label fx:id="versionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="149.0" layoutY="14.0" prefHeight="17.0" prefWidth="401.0" text="H2dbAdmin ver. 0.0.0">
+         <VBox.margin>
+            <Insets bottom="5.0" top="5.0" />
+         </VBox.margin></Label>
+      <AnchorPane>
+         <children>
+            <Pane />
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="127.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/logo.jpg" />
+               </image>
+            </ImageView>
+         </children>
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </AnchorPane>
+      <TextArea fx:id="textArea" editable="false" layoutX="5.0" layoutY="190.0" prefHeight="90.0" prefWidth="400.0" stylesheets="@Ui.css" wrapText="true">
          <opaqueInsets>
             <Insets />
-         </opaqueInsets></TextArea>
-      <Label fx:id="versionLabel" layoutX="149.0" layoutY="14.0" prefHeight="17.0" prefWidth="118.0" text="H2dbAdmin ver. 0.0.0" />
-      <ImageView fitHeight="150.0" fitWidth="117.0" layoutX="143.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../img/icon.jpg" />
-         </image>
-      </ImageView>
-      <Hyperlink layoutX="153.0" layoutY="278.0" text="Mail: my@mail" />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin></TextArea>
+      <Hyperlink alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="153.0" layoutY="278.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="400.0" text="Mail: my@mail" />
    </children>
-</Pane>
+</VBox>

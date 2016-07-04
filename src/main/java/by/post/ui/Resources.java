@@ -6,6 +6,6 @@ package by.post.ui;
  * @author Dmitriy V.Yefremov
  */
 public class Resources {
-    // Path for main icon
-    public static final String ICON_PATH ="/img/icon.jpg";
+    // Path for main logo image
+    public static final String LOGO_PATH ="/img/logo.jpg";
 }

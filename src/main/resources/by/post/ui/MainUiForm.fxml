@@ -66,6 +66,7 @@
                      <contextMenu>
                         <ContextMenu>
                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#onTableItemAdd" text="Add" />
                               <MenuItem mnemonicParsing="false" onAction="#onTableItemDelete" text="Delete" />
                           </items>
                         </ContextMenu>

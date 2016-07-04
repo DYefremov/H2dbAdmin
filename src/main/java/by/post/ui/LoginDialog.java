@@ -43,7 +43,7 @@ public class LoginDialog extends Dialog<Pair<String, String>> {
         });
 
         Stage stage =  (Stage) getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image(Resources.ICON_PATH));
+        stage.getIcons().add(new Image(Resources.LOGO_PATH));
     }
 
 }

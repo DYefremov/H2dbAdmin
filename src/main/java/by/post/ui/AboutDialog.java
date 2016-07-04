@@ -1,29 +1,40 @@
 package by.post.ui;
 
-import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
+
 /**
  * Shows info about application
  *
  * @author Dmitriy V.Yefremov
  */
-public class AboutDialog extends Application {
-//    private AboutDialogController controller;
-    private Parent parent;
+public class AboutDialog {
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    private Parent parent;
+    private Stage stage;
+
+    public AboutDialog() throws IOException {
+       init();
+    }
+
+    public void show() {
+        stage.show();
+    }
+
+    public void showAndWait(){
+        stage.showAndWait();
+    }
+
+    private void init() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(AboutDialog.class.getResource("AboutDialog.fxml"));
 
@@ -36,17 +47,12 @@ public class AboutDialog extends Application {
             }
         });
 
+        stage = new Stage();
         stage.setScene(new Scene(parent));
         stage.setTitle("H2dbAdmin");
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UNIFIED);
-        stage.getIcons().add(new Image(Resources.ICON_PATH));
-        stage.showAndWait();
-    }
-
-    public void start() throws Exception{
-        Stage stage = new Stage();
-        start(stage);
+        stage.getIcons().add(new Image(Resources.LOGO_PATH));
     }
 }

@@ -41,7 +41,7 @@ public class MainUiForm extends Application {
     public void start(Stage stage) {
         this.mainStage = stage;
         this.mainStage.setTitle("H2dbAdmin");
-        this.mainStage.getIcons().add(new Image(Resources.ICON_PATH));
+        this.mainStage.getIcons().add(new Image(Resources.LOGO_PATH));
 
         try {
             initApp();

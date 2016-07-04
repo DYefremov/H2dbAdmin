@@ -9,7 +9,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +17,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Controller class for main ui form
@@ -107,7 +110,7 @@ public class MainUiController {
     @FXML
     public void onItemAbout() {
         try {
-            new AboutDialog().start();
+            new AboutDialog().showAndWait();
         } catch (Exception e) {
             logger.error("MainUiController error onItemAbout: " + e);
         }
@@ -119,15 +122,24 @@ public class MainUiController {
     @FXML
     public void onItemRecovery() {
         try {
-            new RecoveryDialog().start();
+            new RecoveryDialog().showAndWait();
         } catch (Exception e) {
             logger.error("MainUiController error onItemRecovery: " + e);
         }
     }
 
     /**
-     * Action for table context menu "Delete" item
+     * Actions for table context menu
      */
+    @FXML
+    public void onTableItemAdd() {
+        try {
+            TableEditor.addRow(mainTable);
+        } catch (IOException e) {
+            logger.error("MainUiController error onTableItemAdd: " + e);
+        }
+    }
+
     @FXML
     public void onTableItemDelete() {
         TableEditor.removeRow(mainTable);
@@ -135,20 +147,28 @@ public class MainUiController {
 
     /**
      * Actions for tool bar buttons
-      */
+     */
     @FXML
-    public void onAddButton(){
-        TableEditor.addRow(mainTable);
+    public void onAddButton() {
+        if (!currentTableName.getText().equals("")) {
+            try {
+                TableEditor.addRow(mainTable);
+            } catch (IOException e) {
+                logger.error("MainUiController error onAddButton: " + e);
+            }
+        }
     }
 
     @FXML
-    public void onRemoveButton(){
+    public void onRemoveButton() {
         TableEditor.removeRow(mainTable);
     }
 
     @FXML
-    public void onSaveButton(){
-        TableEditor.save(mainTable, currentTableName.getText());
+    public void onSaveButton() {
+        if (!currentTableName.getText().equals("")) {
+            TableEditor.save(mainTable, currentTableName.getText());
+        }
     }
 
     /**
@@ -163,7 +183,6 @@ public class MainUiController {
     public void onTreeContextDelete() {
         TableEditor.deleteTable(tableTree);
     }
-
 
     /**
      * init data on startup
@@ -210,12 +229,12 @@ public class MainUiController {
             mainTable.getColumns().clear();
             mainTable.getItems().clear();
         }
-
-        TableDataResolver resolver = new TableDataResolver(table);
         // Set text for current table name label by selected tree item.
         TreeItem item = (TreeItem) tableTree.getSelectionModel().getSelectedItem();
         String name = item.getValue() != null ? item.getValue().toString() : "";
         currentTableName.setText(name);
+
+        TableDataResolver resolver = new TableDataResolver(table);
 
         if (!resolver.getTableColumns().isEmpty()) {
             mainTable.refresh();
@@ -239,5 +258,4 @@ public class MainUiController {
         dbControl.connect(path, db, user, password);
         return dbControl.getTablesList() != null ? dbControl.getTablesList() : new ArrayList<>();
     }
-
 }
