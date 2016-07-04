@@ -76,7 +76,14 @@ public class TableDataResolver {
 
         values.forEach(cell -> {
             final int index = values.indexOf(cell);
-            TableColumn column = new TableColumn(cell.getName());
+            String colName = cell.getName();
+            String pk = table.getPrimaryKey();
+
+            TableColumn column = new TableColumn(colName);
+            //Set style for primary key column
+            if (pk !=null && pk.equals(colName)) {
+                column.setStyle("-fx-background-color: yellow");
+            }
 
             column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
                 @Override

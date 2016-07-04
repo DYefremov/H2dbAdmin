@@ -11,6 +11,7 @@ import java.util.List;
  * @author Dmitriy V.Yefremov
  */
 public class RowBuilder {
+
     public List<Row> getRows(String table, Connection connection) throws SQLException {
 
         List<Row> rows = new ArrayList<>();
@@ -20,6 +21,9 @@ public class RowBuilder {
         while (rs.next()) {
             rows.add(getRow(rs.getRow(), rs));
         }
+
+        rs.close();
+        st.close();
 
         return rows;
     }

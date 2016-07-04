@@ -225,6 +225,8 @@ public class MainUiController {
      */
     private void selectTable(Table table) {
 
+        logger.info("Select table: " + table.getName() + " with primary key = " + table.getPrimaryKey());
+
         if (!mainTable.getColumns().isEmpty()) {
             mainTable.getColumns().clear();
             mainTable.getItems().clear();

@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class Table implements Data {
     private String name;
+    private String primaryKey;
     private List<Row> rows;
 
     public Table() {
@@ -22,6 +23,14 @@ public class Table implements Data {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(String primaryKey) {
+        this.primaryKey = primaryKey;
     }
 
     public List<Row> getRows() {

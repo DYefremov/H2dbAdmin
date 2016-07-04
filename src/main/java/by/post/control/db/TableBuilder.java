@@ -3,6 +3,8 @@ package by.post.control.db;
 import by.post.data.Table;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -18,6 +20,17 @@ public class TableBuilder {
     public Table getTable(String name, Connection connection) throws SQLException {
         Table table = new Table(name);
         table.setRows(new RowBuilder().getRows(name, connection));
+
+        DatabaseMetaData dm = connection.getMetaData( );
+        ResultSet keys = dm.getPrimaryKeys( "" , "" , name);
+
+        while(keys.next( ))
+        {
+            String pk = keys.getString("COLUMN_NAME");
+            table.setPrimaryKey(pk);
+        }
+        keys.close();
+
         return table;
     }
 
