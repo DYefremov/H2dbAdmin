@@ -6,4 +6,5 @@ package by.post.data;
  * @author Dmitriy V.Yefremov
  */
 public interface Data {
+    Object getData();
 }

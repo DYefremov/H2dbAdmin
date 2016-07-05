@@ -35,4 +35,9 @@ public class Row implements Data {
                 ", cells=" + cells +
                 '}';
     }
+
+    @Override
+    public Object getData() {
+        return cells;
+    }
 }

@@ -1,6 +1,6 @@
 package by.post.control.ui;
 
-import by.post.data.Cell;
+import by.post.data.Column;
 import by.post.data.Row;
 import by.post.data.Table;
 import javafx.beans.property.SimpleStringProperty;
@@ -47,13 +47,13 @@ public class TableDataResolver {
      * Resolve data from table
      */
     private void resolve() {
+        // Add columns
+        tableColumns = getColumns(table.getColumns());
 
         List<Row> rows = table.getRows();
         items = FXCollections.observableArrayList();
 
         if (rows != null && !rows.isEmpty()) {
-            // Add columns by first row in table
-            tableColumns = getColumns(rows.get(0).getCells());
             // Add data
             rows.stream().forEach(row -> {
                 ObservableList<String> newRow = FXCollections.observableArrayList();
@@ -70,13 +70,13 @@ public class TableDataResolver {
      *
      * @param values
      */
-    public ObservableList getColumns(List<Cell> values) {
+    public ObservableList getColumns(List<Column> values) {
 
         ObservableList columns = FXCollections.observableArrayList();
 
-        values.forEach(cell -> {
-            final int index = values.indexOf(cell);
-            String colName = cell.getName();
+        values.forEach(col -> {
+            final int index = values.indexOf(col);
+            String colName = col.getName();
             String pk = table.getPrimaryKey();
 
             TableColumn column = new TableColumn(colName);
@@ -101,8 +101,10 @@ public class TableDataResolver {
                     event.getTableView().getItems().get(rowPos).set(colPos, event.getNewValue());
                 }
             });
-            columns.addAll(column);
+
+            columns.add(column);
         });
+
         return columns;
     }
 }
