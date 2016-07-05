@@ -1,3 +1,9 @@
 .about-area *.text {
     -fx-text-alignment: center;
 }
+
+.table-view .column-header.key .label {
+   -fx-background-image: url(/img/key.png);
+   -fx-background-repeat: stretch;
+   -fx-background-position: center center;
+}

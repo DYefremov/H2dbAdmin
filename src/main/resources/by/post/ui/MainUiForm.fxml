@@ -62,7 +62,7 @@
                </contextMenu></TreeView>
             <BorderPane>
                <center>
-                  <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" prefHeight="330.0" prefWidth="400.0">
+                  <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" prefHeight="330.0" prefWidth="400.0" stylesheets="@Ui.css">
                      <contextMenu>
                         <ContextMenu>
                           <items>

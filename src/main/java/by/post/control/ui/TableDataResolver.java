@@ -82,7 +82,7 @@ public class TableDataResolver {
             TableColumn column = new TableColumn(colName);
             //Set style for primary key column
             if (pk !=null && pk.equals(colName)) {
-                column.setStyle("-fx-background-color: yellow");
+                column.getStyleClass().add("key");
             }
 
             column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
