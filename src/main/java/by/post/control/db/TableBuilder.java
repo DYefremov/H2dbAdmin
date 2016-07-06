@@ -41,6 +41,11 @@ public class TableBuilder {
         return table;
     }
 
+    /**
+     * @param rsMetaData
+     * @return columns list for table
+     * @throws SQLException
+     */
     private List<Column> getColumns(ResultSetMetaData rsMetaData) throws SQLException {
 
         List<Column> columns = new ArrayList<>();
@@ -48,7 +53,7 @@ public class TableBuilder {
         int count = rsMetaData.getColumnCount();
 
         for (int i = 1; i < count; i++) {
-           Column column = new Column(rsMetaData.getColumnName(i), rsMetaData.getColumnType(i));
+            Column column = new Column(rsMetaData.getColumnName(i), rsMetaData.getColumnType(i));
             columns.add(column);
         }
 

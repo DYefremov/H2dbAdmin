@@ -3,6 +3,7 @@ package by.post.control.ui;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import by.post.control.db.Queries;
+import by.post.data.Column;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
 import javafx.collections.FXCollections;
@@ -15,7 +16,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,10 +47,9 @@ public class TableEditor {
             Optional<String> result = new InputDialog("\tPlease, specify\n the number of columns!", "1", true).showAndWait();
 
             if (result.isPresent()) {
-//                Integer num = Integer.valueOf(result.get());
-//                List<Cell> cells = new ArrayList<>(Collections.nCopies(num, new Cell("new", "", "")));
-//                table.getColumns().addAll(new TableDataResolver().getColumns(cells));
-//                addRow(table);
+                Integer num = Integer.valueOf(result.get());
+                List<Column> columns = new ArrayList<>(Collections.nCopies(num, new Column("NEW", 0)));
+                table.getColumns().addAll(new TableDataResolver().getColumns(columns));
             }
         }
 

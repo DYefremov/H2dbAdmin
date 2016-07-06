@@ -1,7 +1,5 @@
 package by.post.data;
 
-import java.sql.Types;
-
 /**
  * @author Dmitriy V.Yefremov
  */

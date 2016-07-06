@@ -10,8 +10,6 @@ import java.util.Map;
 public class ColumnDataType {
 
     private static Map<Integer, String> types;
-    private static final int UNDEFINED =  -1;
-    private static final String UNDEFINED_STR =  "UNDEFINED";
 
     static {
 
@@ -63,7 +61,7 @@ public class ColumnDataType {
      * @return data type of column
      */
     public static String getType(int colType) {
-        return types.containsKey(colType) ? types.get(colType) : UNDEFINED_STR;
+        return types.containsKey(colType) ? types.get(colType) : types.get(Types.NULL);
     }
 
     /**
@@ -71,7 +69,7 @@ public class ColumnDataType {
      */
     public static int getNumType(String name) {
 
-        int type = UNDEFINED;
+        int type = Types.NULL;
 
         for (Map.Entry<Integer, String> entry : types.entrySet()) {
             if (entry.getValue().equals(name)) {

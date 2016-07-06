@@ -78,7 +78,7 @@ public class TableDataResolver {
         values.forEach(col -> {
             final int index = values.indexOf(col);
             String colName = col.getName();
-            String pk = table.getPrimaryKey();
+            String pk = table!= null && table.getPrimaryKey() != null ? table.getPrimaryKey() : null;
 
             TableColumn column = new TableColumn(colName);
             //Set style for primary key column
