@@ -26,8 +26,8 @@ public class LoginDialog extends Dialog<Pair<String, String>> {
         init();
     }
 
-
     private void init() throws Exception{
+
         loader = new FXMLLoader(LoginDialog.class.getResource("LoginDialog.fxml"));
         parent = loader.<DialogPane>load();
         controller = loader.getController();

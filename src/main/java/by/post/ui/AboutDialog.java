@@ -35,6 +35,7 @@ public class AboutDialog {
     }
 
     private void init() throws IOException {
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(AboutDialog.class.getResource("AboutDialog.fxml"));
 
@@ -55,4 +56,5 @@ public class AboutDialog {
         stage.initStyle(StageStyle.UNIFIED);
         stage.getIcons().add(new Image(Resources.LOGO_PATH));
     }
+
 }

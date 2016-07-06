@@ -8,6 +8,7 @@ import javafx.stage.Stage;
  * @author Dmitriy V.Yefremov
  */
 public class ConfirmationDialog extends Alert {
+
     public ConfirmationDialog() {
         super(AlertType.CONFIRMATION);
         init();
@@ -25,4 +26,5 @@ public class ConfirmationDialog extends Alert {
         Stage stage = (Stage) getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(Resources.LOGO_PATH));
     }
+
 }

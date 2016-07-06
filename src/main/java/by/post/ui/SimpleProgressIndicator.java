@@ -17,11 +17,14 @@ import java.io.IOException;
  * @author Dmitriy V.Yefremov
  */
 public class SimpleProgressIndicator extends Stage {
+
     private ProgressIndicator parent;
     private Stage stage;
 
     public SimpleProgressIndicator() {
+
         FXMLLoader loader = new FXMLLoader(SimpleProgressIndicator.class.getResource("SimpleProgressIndicator.fxml"));
+
         try {
             stage = this;
             stage.setScene(new Scene(parent));
@@ -42,4 +45,5 @@ public class SimpleProgressIndicator extends Stage {
             e.printStackTrace();
         }
     }
+
 }

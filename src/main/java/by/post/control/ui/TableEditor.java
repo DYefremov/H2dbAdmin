@@ -38,11 +38,9 @@ public class TableEditor {
 
         if (size > 0) {
             int selectedIndex = table.getSelectionModel().getSelectedIndex();
-
             table.getItems().add(++selectedIndex, FXCollections.observableArrayList(Collections.nCopies(size, "New value.")));
             table.getSelectionModel().select(selectedIndex, null);
         } else {
-
             Optional<String> result = new InputDialog("\tPlease, specify\n the number of columns!", "1", true).showAndWait();
 
             if (result.isPresent()) {
@@ -52,6 +50,7 @@ public class TableEditor {
 //                addRow(table);
             }
         }
+
         table.refresh();
     }
 

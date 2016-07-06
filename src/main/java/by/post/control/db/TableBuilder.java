@@ -20,7 +20,7 @@ public class TableBuilder {
 
         Statement st = connection.createStatement();
         DatabaseMetaData dbMetaData = connection.getMetaData();
-        ResultSet rs = st.executeQuery("SELECT * FROM " + name);
+        ResultSet rs = st.executeQuery(Queries.getTable(name));
         ResultSetMetaData rsMetaData = rs.getMetaData();
 
         Table table = new Table(name);

@@ -39,6 +39,7 @@ public class MainUiForm extends Application {
      */
     @Override
     public void start(Stage stage) {
+
         this.mainStage = stage;
         this.mainStage.setTitle("H2dbAdmin");
         this.mainStage.getIcons().add(new Image(Resources.LOGO_PATH));
@@ -54,6 +55,7 @@ public class MainUiForm extends Application {
      * Initialize main ui elements
      */
     private void initApp() throws Exception {
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainUiForm.class.getResource("MainUiForm.fxml"));
 
@@ -70,6 +72,7 @@ public class MainUiForm extends Application {
                 System.exit(0);
             }
         });
+
         mainStage.show();
     }
 

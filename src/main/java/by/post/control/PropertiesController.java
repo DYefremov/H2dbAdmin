@@ -86,6 +86,7 @@ public class PropertiesController {
                 }
             }
         }
+
         return properties;
     }
 

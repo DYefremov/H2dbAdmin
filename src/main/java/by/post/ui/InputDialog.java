@@ -43,7 +43,9 @@ public class InputDialog extends TextInputDialog {
      * Set filter for text input (only digits). Button "OK" will not send action.
      */
     public void setFiltered() {
+
         Button okButton = (Button) getDialogPane().lookupButton(ButtonType.OK);
+
         okButton.addEventFilter(ActionEvent.ACTION, ae -> {
             if (!getEditor().getCharacters().toString().matches("\\d+")) {
                 getEditor().setText("Please, set valid value!");
@@ -51,4 +53,5 @@ public class InputDialog extends TextInputDialog {
             }
         });
     }
+
 }

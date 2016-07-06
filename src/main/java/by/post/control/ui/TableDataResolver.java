@@ -12,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class TableDataResolver {
      */
     private void resolve() {
         // Add columns
-        tableColumns = getColumns(table.getColumns());
+        tableColumns = getColumns(table.getColumns() != null ? table.getColumns() : new ArrayList<Column>());
 
         List<Row> rows = table.getRows();
         items = FXCollections.observableArrayList();

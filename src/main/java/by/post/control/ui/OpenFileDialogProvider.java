@@ -22,11 +22,14 @@ public class OpenFileDialogProvider {
     }
 
     public File getFileDialog(String title, boolean dir) {
+
         File file = getFileChooser("Select db file...").showOpenDialog(getFileOpenStage());
+
         if (file != null) {
             String path = file.getPath();
             logger.info(title + path);
         }
+
         return file;
     }
 
@@ -34,8 +37,10 @@ public class OpenFileDialogProvider {
      * @return stage for open file dialog
      */
     private Stage getFileOpenStage() {
+
         Stage stage = new Stage();
         stage.centerOnScreen();
+
         return stage;
     }
 
@@ -44,10 +49,12 @@ public class OpenFileDialogProvider {
      * @return file chooser with filtered selection
      */
     private FileChooser getFileChooser(String title) {
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         //Add filter for open only ".db" files
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("DB","*.db"));
+
         return fileChooser;
     }
 }

@@ -40,6 +40,7 @@ public class RecoveryManager implements Recovery {
     public boolean recover(String openPath, String savePath, Callback<Boolean, Boolean> done) {
         this.openPath = openPath;
         this.savePath = savePath;
+
         return done.call( recover());
     }
 
@@ -51,16 +52,18 @@ public class RecoveryManager implements Recovery {
      */
     @Override
     public boolean recover(File openFile, File saveDir, Callback<Boolean, Boolean> done) {
+
         logger.info("Starting recovery...");
+
         db = openFile.getName();
         db = db.substring(0, db.indexOf("."));
         openPath = openFile.getParent() + File.separator;
-        System.out.println(openPath);
-//        savePath = saveDir.getPath();
+
         return done.call( recover());
     }
 
     private boolean recover() {
+
         try {
             Recover.execute(openPath, db);
             String url = "jdbc:h2:" + openPath + "recovered";
@@ -70,6 +73,7 @@ public class RecoveryManager implements Recovery {
             logger.error("RecoveryManager error: " + e);
             return false;
         }
+
         return true;
     }
 }

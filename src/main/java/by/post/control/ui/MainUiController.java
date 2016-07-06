@@ -97,6 +97,7 @@ public class MainUiController {
      */
     @FXML
     public void onItemExit() {
+
         try {
             mainUiForm.getMainStage().close();
         } catch (Exception e) {
@@ -109,6 +110,7 @@ public class MainUiController {
      */
     @FXML
     public void onItemAbout() {
+
         try {
             new AboutDialog().showAndWait();
         } catch (Exception e) {
@@ -121,6 +123,7 @@ public class MainUiController {
      */
     @FXML
     public void onItemRecovery() {
+
         try {
             new RecoveryDialog().showAndWait();
         } catch (Exception e) {
@@ -133,6 +136,7 @@ public class MainUiController {
      */
     @FXML
     public void onTableItemAdd() {
+
         try {
             TableEditor.addRow(mainTable);
         } catch (IOException e) {
@@ -142,6 +146,7 @@ public class MainUiController {
 
     @FXML
     public void onTableItemDelete() {
+
         TableEditor.removeRow(mainTable);
     }
 
@@ -150,6 +155,7 @@ public class MainUiController {
      */
     @FXML
     public void onAddButton() {
+
         if (!currentTableName.getText().equals("")) {
             try {
                 TableEditor.addRow(mainTable);
@@ -161,11 +167,13 @@ public class MainUiController {
 
     @FXML
     public void onRemoveButton() {
+
         TableEditor.removeRow(mainTable);
     }
 
     @FXML
     public void onSaveButton() {
+
         if (!currentTableName.getText().equals("")) {
             TableEditor.save(mainTable, currentTableName.getText());
         }
@@ -258,6 +266,7 @@ public class MainUiController {
         dbName = db;
 
         dbControl.connect(path, db, user, password);
+
         return dbControl.getTablesList() != null ? dbControl.getTablesList() : new ArrayList<>();
     }
 }

@@ -87,6 +87,7 @@ public class RecoveryDialogController {
 
     @FXML
     public void onInTextFieldClick(MouseEvent event) {
+
         if (event.getClickCount() == 2) {
             dbFile = new OpenFileDialogProvider().getFileDialog("Select db file...", false);
         }
@@ -94,6 +95,7 @@ public class RecoveryDialogController {
 
     @FXML
     public void onOutTextFieldClick(MouseEvent event) {
+
         if (event.getClickCount() == 2) {
             saveDir = new OpenFileDialogProvider().getFileDialog("Select folder for save...", true);
         }

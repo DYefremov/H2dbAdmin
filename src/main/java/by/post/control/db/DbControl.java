@@ -3,6 +3,7 @@ package by.post.control.db;
 import by.post.data.Table;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public interface DbControl {
      * @param user
      * @param password
      */
-    void connect(String path, String db, String user, String password);
+    void connect(String path, String db, String user, String password) ;
 
     /**
      * @param path

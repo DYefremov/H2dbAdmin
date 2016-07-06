@@ -43,7 +43,6 @@ public class LogArea extends AbstractAppender {
                 }
             });
         }
-
     }
 
     /**

@@ -18,20 +18,15 @@ import java.util.List;
 public class DbController implements DbControl {
 
     private String db;
-    //The connection only succeeds when the database already exists
-    private String exists = ";IFEXISTS=TRUE";
     private Connection connection = null;
 
-    private static DbControl instance = new DbController();
-
+    private static final DbControl instance = new DbController();
+    //The connection only succeeds when the database already exists
+    private static final String EXISTS_FLAG = ";IFEXISTS=TRUE";
     private static final Logger logger = LogManager.getLogger(DbController.class);
 
     private DbController() {
-        try {
-            Class.forName(PropertiesController.getProperties().getProperty("driver"));
-        } catch (ClassNotFoundException e) {
-            logger.error("DbController error: " + e);
-        }
+
     }
 
     /**
@@ -53,23 +48,25 @@ public class DbController implements DbControl {
     public void connect(String path, String db, String user, String password) {
 
         this.db = db;
-        String url = "jdbc:h2:" + path + db + exists;
+        String url = "jdbc:h2:" + path + db + EXISTS_FLAG;
 
         if (connection == null) {
             try {
+                Class.forName(PropertiesController.getProperties().getProperty("driver"));
                 connection = DriverManager.getConnection(url, user, password);
+            } catch (ClassNotFoundException e) {
+                logger.error("DbController error in connect: " + e);
             } catch (SQLException e) {
-                logger.error("DbController connect error: " + e);
+                logger.error("DbController error in connect: " + e);
             }
         } else {
             try {
                 connection.close();
                 connection = DriverManager.getConnection(url, user, password);
             } catch (SQLException e) {
-                logger.error("DbController connect error: " + e);
+                logger.error("DbController error in connect: " + e);
             }
         }
-
     }
 
     /**
@@ -81,7 +78,9 @@ public class DbController implements DbControl {
      */
     @Override
     public Connection getConnection(String path, String db, String user, String password) {
+
         connect(path, db, user, password);
+
         return connection;
     }
 
@@ -102,8 +101,8 @@ public class DbController implements DbControl {
             } catch (SQLException e) {
                 logger.error("DbController error in getTablesList: " + e);
             }
-
         }
+
         return tables;
     }
 
@@ -119,11 +118,13 @@ public class DbController implements DbControl {
         }
 
         Table table = null;
+
         try {
             table = new TableBuilder().getTable(name, connection);
         } catch (SQLException e) {
             logger.error("DbController error in getTable: " + e);
         }
+
         return table != null ? table : new Table(name);
     }
 
@@ -132,6 +133,7 @@ public class DbController implements DbControl {
      */
     @Override
     public void update(Table table) {
+
         if (connection == null) {
             return;
         }
@@ -142,7 +144,9 @@ public class DbController implements DbControl {
 
     @Override
     public void update(String sql) {
+
         Statement statement = null;
+
         try {
             statement = connection.createStatement();
             statement.executeUpdate(sql);
