@@ -58,7 +58,12 @@ public class TableEditor {
 
             if (result.isPresent()) {
                 Integer num = Integer.valueOf(result.get());
-                List<Column> columns = new ArrayList<>(Collections.nCopies(num, new Column("NEW", 0)));
+                List<Column> columns = new ArrayList<>(num);
+
+                for (int i = 0; i < num; i++) {
+                    columns.add(new Column("NEW", 0));
+                }
+                
                 mainTable.getColumns().addAll(new TableDataResolver().getColumns(columns));
             }
         }
