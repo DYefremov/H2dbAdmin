@@ -3,13 +3,12 @@ package by.post.control.ui;
 import by.post.data.Column;
 import by.post.data.Row;
 import by.post.data.Table;
+import by.post.ui.ColumnEditContextMenu;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
@@ -83,8 +82,8 @@ public class TableDataResolver {
             String pk = table!= null && table.getPrimaryKey() != null ? table.getPrimaryKey() : null;
 
             TableColumn column = new TableColumn(colName);
-            // Set custom context menu for column properties edit
-            column.setContextMenu(new ColumnEditContextMenu());
+            // Set custom context menu for column properties edit with id as column index
+            column.setContextMenu(new ColumnEditContextMenu(index + ""));
             //Set style for primary key column
             if (pk !=null && pk.equals(colName)) {
                 column.getStyleClass().add("key");

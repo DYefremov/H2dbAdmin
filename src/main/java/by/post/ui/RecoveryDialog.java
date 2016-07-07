@@ -47,7 +47,7 @@ public class RecoveryDialog{
 
         stage = new Stage();
         stage.setScene(new Scene(parent));
-        stage.setTitle("H2dbAdmin recovery tool");
+        stage.setTitle(Resources.TITLE + " recovery tool");
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.getIcons().add(new Image(Resources.LOGO_PATH));

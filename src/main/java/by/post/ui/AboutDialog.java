@@ -50,7 +50,7 @@ public class AboutDialog {
 
         stage = new Stage();
         stage.setScene(new Scene(parent));
-        stage.setTitle("H2dbAdmin");
+        stage.setTitle(Resources.TITLE);
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UNIFIED);

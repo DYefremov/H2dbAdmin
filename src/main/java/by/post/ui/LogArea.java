@@ -34,7 +34,6 @@ public class LogArea extends AbstractAppender {
 
     @Override
     public void append(LogEvent event) {
-
         if (Platform.isFxApplicationThread() && area != null) {
             Platform.runLater(new Runnable() {
                 @Override

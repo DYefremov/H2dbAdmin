@@ -80,4 +80,10 @@ public class ColumnDataType {
         return type;
     }
 
+    /**
+     * @return types map
+     */
+    public static Map<Integer, String> getTypes() {
+        return types;
+    }
 }

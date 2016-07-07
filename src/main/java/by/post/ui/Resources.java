@@ -8,4 +8,6 @@ package by.post.ui;
 public class Resources {
     // Path for main logo image
     public static final String LOGO_PATH ="/img/logo.jpg";
+    // Title for window
+    public static final String TITLE = "H2dbAdmin";
 }

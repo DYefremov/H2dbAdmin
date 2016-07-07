@@ -45,6 +45,8 @@ public class MainUiController {
 
     private MainUiForm mainUiForm;
 
+    private TableEditor tableEditor;
+
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
     public MainUiController() {
@@ -67,7 +69,6 @@ public class MainUiController {
 
     @FXML
     public void onItemOpen() {
-
         try {
             File file = new OpenFileDialogProvider().getFileDialog("Open db file.", false);
 
@@ -97,7 +98,6 @@ public class MainUiController {
      */
     @FXML
     public void onItemExit() {
-
         try {
             mainUiForm.getMainStage().close();
         } catch (Exception e) {
@@ -110,7 +110,6 @@ public class MainUiController {
      */
     @FXML
     public void onItemAbout() {
-
         try {
             new AboutDialog().showAndWait();
         } catch (Exception e) {
@@ -123,7 +122,6 @@ public class MainUiController {
      */
     @FXML
     public void onItemRecovery() {
-
         try {
             new RecoveryDialog().showAndWait();
         } catch (Exception e) {
@@ -136,9 +134,8 @@ public class MainUiController {
      */
     @FXML
     public void onTableItemAdd() {
-
         try {
-            TableEditor.addRow(mainTable);
+            tableEditor.addRow();
         } catch (IOException e) {
             logger.error("MainUiController error onTableItemAdd: " + e);
         }
@@ -146,8 +143,7 @@ public class MainUiController {
 
     @FXML
     public void onTableItemDelete() {
-
-        TableEditor.removeRow(mainTable);
+        tableEditor.removeRow();
     }
 
     /**
@@ -155,10 +151,9 @@ public class MainUiController {
      */
     @FXML
     public void onAddButton() {
-
         if (!currentTableName.getText().equals("")) {
             try {
-                TableEditor.addRow(mainTable);
+                tableEditor.addRow();
             } catch (IOException e) {
                 logger.error("MainUiController error onAddButton: " + e);
             }
@@ -167,15 +162,13 @@ public class MainUiController {
 
     @FXML
     public void onRemoveButton() {
-
-        TableEditor.removeRow(mainTable);
+        tableEditor.removeRow();
     }
 
     @FXML
     public void onSaveButton() {
-
         if (!currentTableName.getText().equals("")) {
-            TableEditor.save(mainTable, currentTableName.getText());
+            tableEditor.save(currentTableName.getText());
         }
     }
 
@@ -184,12 +177,12 @@ public class MainUiController {
      */
     @FXML
     public void onTreeContextAdd() {
-        TableEditor.addTable(tableTree);
+        tableEditor.addTable(tableTree);
     }
 
     @FXML
     public void onTreeContextDelete() {
-        TableEditor.deleteTable(tableTree);
+        tableEditor.deleteTable(tableTree);
     }
 
     /**
@@ -199,6 +192,8 @@ public class MainUiController {
         //TODO переработать метод и DbControl
         List<TreeItem> tables = new ArrayList<>();
         DbControl dbControl = DbController.getInstance();
+        tableEditor = TableEditor.getInstance();
+        tableEditor.setTable(mainTable);
 
         getDbTablesList(dbControl).stream().forEach(t -> {
             tables.add(new TreeItem(t));

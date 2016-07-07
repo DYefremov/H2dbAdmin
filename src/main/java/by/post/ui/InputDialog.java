@@ -12,8 +12,6 @@ import javafx.stage.Stage;
  */
 public class InputDialog extends TextInputDialog {
 
-    private final String TITLE = "H2dbAdmin";
-
     public InputDialog(){
         init();
     }
@@ -34,7 +32,7 @@ public class InputDialog extends TextInputDialog {
     }
 
     private void init() {
-        setTitle(TITLE);
+        setTitle(Resources.TITLE);
         Stage stage =  (Stage) getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(Resources.LOGO_PATH));
     }
