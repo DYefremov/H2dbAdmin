@@ -138,13 +138,8 @@ public class MainUiController {
      */
     @FXML
     public void onItemSqlConsole() throws IOException {
-
         if (pane.getChildren().contains(mainSplitPane)) {
-            pane.getChildren().remove(mainSplitPane);
-            Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource("SqlConsole.fxml"));
-            pane.setCenter(node);
-            node.prefWidth(pane.getWidth());
-            node.prefHeight(pane.getHeight());
+           setCenter("SqlConsole.fxml");
         } else {
             pane.getChildren().remove(pane.getCenter());
             pane.setCenter(mainSplitPane);
@@ -156,29 +151,24 @@ public class MainUiController {
      */
     @FXML
     public void onBarExplorer() {
-        if (!pane.getChildren().contains(mainSplitPane)) {
-            pane.getChildren().remove(pane.getCenter());
-            pane.setCenter(mainSplitPane);
-        }
+        pane.getChildren().remove(pane.getCenter());
+        pane.setCenter(mainSplitPane);
+
     }
 
     @FXML
     public void onBarConsole() throws IOException {
-        if (pane.getChildren().contains(mainSplitPane)) {
-            pane.getChildren().remove(mainSplitPane);
-            Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource("SqlConsole.fxml"));
-            pane.setCenter(node);
-        }
+        setCenter("SqlConsole.fxml");
     }
 
     @FXML
-    public void onBarSettings() {
-
+    public void onBarSettings() throws IOException {
+        setCenter("Settings.fxml");
     }
 
     @FXML
     public void onBarExit() {
-
+        mainUiForm.getMainStage().close();
     }
 
     /**
@@ -315,5 +305,16 @@ public class MainUiController {
         dbControl.connect(path, db, user, password);
 
         return dbControl.getTablesList() != null ? dbControl.getTablesList() : new ArrayList<>();
+    }
+
+    /**
+     * Set center node in main border pane
+     *
+     * @param fxml
+     */
+    private void setCenter(String fxml) throws IOException {
+        pane.getChildren().remove(pane.getCenter());
+        Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource(fxml));
+        pane.setCenter(node);
     }
 }
