@@ -10,6 +10,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Pair;
@@ -40,6 +42,8 @@ public class MainUiController {
     private TableView mainTable;
     @FXML
     private Label currentTableName;
+    @FXML
+    private SplitPane mainSplitPane;
 
     private String dbName;
 
@@ -127,6 +131,54 @@ public class MainUiController {
         } catch (Exception e) {
             logger.error("MainUiController error onItemRecovery: " + e);
         }
+    }
+
+    /**
+     * Action for "Tools\SQL console" menu item
+     */
+    @FXML
+    public void onItemSqlConsole() throws IOException {
+
+        if (pane.getChildren().contains(mainSplitPane)) {
+            pane.getChildren().remove(mainSplitPane);
+            Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource("SqlConsole.fxml"));
+            pane.setCenter(node);
+            node.prefWidth(pane.getWidth());
+            node.prefHeight(pane.getHeight());
+        } else {
+            pane.getChildren().remove(pane.getCenter());
+            pane.setCenter(mainSplitPane);
+        }
+    }
+
+    /**
+     * Actions for menu bar
+     */
+    @FXML
+    public void onBarExplorer() {
+        if (!pane.getChildren().contains(mainSplitPane)) {
+            pane.getChildren().remove(pane.getCenter());
+            pane.setCenter(mainSplitPane);
+        }
+    }
+
+    @FXML
+    public void onBarConsole() throws IOException {
+        if (pane.getChildren().contains(mainSplitPane)) {
+            pane.getChildren().remove(mainSplitPane);
+            Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource("SqlConsole.fxml"));
+            pane.setCenter(node);
+        }
+    }
+
+    @FXML
+    public void onBarSettings() {
+
+    }
+
+    @FXML
+    public void onBarExit() {
+
     }
 
     /**

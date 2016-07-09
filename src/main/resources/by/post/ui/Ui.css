@@ -7,3 +7,18 @@
    -fx-background-repeat: stretch;
    -fx-background-position: center center;
 }
+
+.console {
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+}
+
+.console .content {
+	-fx-background-color: black;
+}
+
+.button {
+    -fx-background-color: transparent, transparent, transparent, transparent;
+}
+
+

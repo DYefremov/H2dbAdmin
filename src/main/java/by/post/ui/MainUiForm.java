@@ -57,7 +57,7 @@ public class MainUiForm extends Application {
     private void initApp() throws Exception {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainUiForm.class.getResource("MainUiForm.fxml"));
+        loader.setLocation(getClass().getResource("MainUiForm.fxml"));
 
         mainPane = loader.load();
         controller = loader.getController();

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
@@ -15,41 +17,66 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-                  <MenuItem mnemonicParsing="false" onAction="#onItemOpen" text="Open" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem mnemonicParsing="false" onAction="#onItemExit" text="Exit" />
-            </items>
-          </Menu>
-          <Menu fx:id="menuSettings" mnemonicParsing="false" text="Settings" />
-            <Menu mnemonicParsing="false" text="Tools">
+      <VBox>
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onItemOpen" text="Open" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#onItemExit" text="Exit" />
+                  </items>
+                </Menu>
+                <Menu fx:id="menuSettings" mnemonicParsing="false" text="Settings" />
+                  <Menu mnemonicParsing="false" text="Tools">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onItemSqlConsole" text="SQL console" />
+                        <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onItemRecovery" text="Recovery" />
+                     </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onItemAbout" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <ToolBar prefHeight="25.0" prefWidth="650.0">
                <items>
-                  <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onItemRecovery" text="Recovery" />
-               </items></Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onItemAbout" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
+                  <Button mnemonicParsing="false" onAction="#onBarExplorer" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/manager.png);" stylesheets="@Ui.css" />
+                  <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                  <Button mnemonicParsing="false" onAction="#onBarConsole" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/terminal.png);" stylesheets="@Ui.css" />
+                  <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                  <Button mnemonicParsing="false" onAction="#onBarSettings" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/preferences.png);" stylesheets="@Ui.css" />
+                  <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                  <Button mnemonicParsing="false" onAction="#onBarExit" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/exit.png);" stylesheets="@Ui.css" />
+                  <Separator layoutX="114.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+               </items>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </ToolBar>
+         </children>
+      </VBox>
    </top>
    <bottom>
-      <TitledPane expanded="false" text="More info." BorderPane.alignment="CENTER">
+      <TitledPane expanded="false" text="More info.">
          <content>
-            <TextArea fx:id="console" editable="false" prefHeight="150.0" prefWidth="650.0" />
+            <TextArea fx:id="console" editable="false" prefWidth="650.0" styleClass="console" stylesheets="@Ui.css" />
          </content>
       </TitledPane>
    </bottom>
    <center>
-      <SplitPane dividerPositions="0.3" prefHeight="330.0" prefWidth="40.0" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="mainSplitPane" dividerPositions="0.3" prefHeight="330.0" BorderPane.alignment="CENTER">
          <items>
             <TreeView fx:id="tableTree" minWidth="-Infinity" prefHeight="330.0" prefWidth="100.0">
                <contextMenu>

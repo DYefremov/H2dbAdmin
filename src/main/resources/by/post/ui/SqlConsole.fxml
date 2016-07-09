@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+
+
+<TextArea prefHeight="200.0" prefWidth="400.0" styleClass="console" stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" />

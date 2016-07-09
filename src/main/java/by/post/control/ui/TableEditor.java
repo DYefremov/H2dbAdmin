@@ -63,7 +63,7 @@ public class TableEditor {
                 for (int i = 0; i < num; i++) {
                     columns.add(new Column("NEW", 0));
                 }
-                
+
                 mainTable.getColumns().addAll(new TableDataResolver().getColumns(columns));
             }
         }
