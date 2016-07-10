@@ -64,6 +64,8 @@ public class MainUiForm extends Application {
         controller.setMainUiForm(this);
         mainScene = new Scene(mainPane, 700, 500);
         mainStage.setScene(mainScene);
+        mainStage.setMinHeight(500);
+        mainStage.setMinWidth(700);
         //Override closing program
         mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

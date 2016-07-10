@@ -163,7 +163,7 @@ public class MainUiController {
 
     @FXML
     public void onBarSettings() throws IOException {
-        setCenter("Settings.fxml");
+        setCenter("SettingsPane.fxml");
     }
 
     @FXML
