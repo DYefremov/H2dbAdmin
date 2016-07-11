@@ -1,13 +1,15 @@
 package by.post.control.ui;
 
 import by.post.control.PropertiesController;
+import by.post.ui.ConfirmationDialog;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.AccessibleRole;
+import javafx.scene.control.*;
+import org.apache.logging.log4j.Level;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Properties;
 
 
@@ -19,13 +21,19 @@ public class SettingsPaneController {
     @FXML
     private TextField path;
     @FXML
+    private TextField dbName;
+    @FXML
     private TextField login;
     @FXML
     private TextField password;
     @FXML
+    private PasswordField maskedPassword;
+    @FXML
     private CheckBox showPassword;
     @FXML
     private ComboBox driver;
+
+    private Properties properties;
 
     public SettingsPaneController() {
 
@@ -33,31 +41,54 @@ public class SettingsPaneController {
 
     @FXML
     public void onSaveAction() {
-        System.out.println("save");
-    }
 
-    @FXML
-    public void onCancelAction() {
-        System.out.println("Cancel");
+        Optional result = new ConfirmationDialog("").showAndWait();
+
+        if (result.get() == ButtonType.OK && properties != null) {
+            properties.setProperty("path", path.getText());
+            properties.setProperty("user", login.getText());
+            properties.setProperty("password", showPassword.isSelected() ? password.getText() : maskedPassword.getText());
+            properties.setProperty("driver", driver.getSelectionModel().getSelectedItem().toString());
+
+            PropertiesController.setProperties(properties);
+        }
     }
 
     @FXML
     public void onShowChange() {
-        System.out.println(password.getText());
-//        password.getStyleClass().add("password-field");
-//        password.setAccessibleRole(AccessibleRole.PASSWORD_FIELD);
+
+        passwordFieldsReverse();
     }
 
     @FXML
     private void initialize() {
 
-        Properties properties = PropertiesController.getProperties();
+        properties = PropertiesController.getProperties();
         path.setText(properties.getProperty("path"));
+        dbName.setText(properties.getProperty("db"));
         login.setText(properties.getProperty("user"));
         password.setText(properties.getProperty("password"));
-        showPassword.setSelected(true);
 
-        driver.setItems(FXCollections.observableArrayList(Arrays.asList("H2", "MySQL")));
+        passwordFieldsReverse();
+
+        driver.setItems(FXCollections.observableArrayList(Arrays.asList("org.h2.Driver", "com.mysql.jdbc.Driver")));
         driver.getSelectionModel().selectFirst();
+    }
+
+    /**
+     * Reverse fields for password
+     */
+    private void passwordFieldsReverse() {
+
+        if (showPassword.isSelected()) {
+            password.setText(maskedPassword.getText());
+        } else {
+            maskedPassword.setText(password.getText());
+        }
+
+        password.managedProperty().bind(showPassword.selectedProperty());
+        password.visibleProperty().bind(showPassword.selectedProperty());
+        maskedPassword.managedProperty().bind(showPassword.selectedProperty().not());
+        maskedPassword.visibleProperty().bind(showPassword.selectedProperty().not());
     }
 }

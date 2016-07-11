@@ -4,6 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -36,23 +39,22 @@ public class PropertiesController {
         properties.put("user", user != null ? user : USER);
         properties.put("password", password != null ? password : PASSWORD);
 
-        OutputStream out = null;
+        save();
+    }
 
-        try {
-            out = new FileOutputStream("config.properties");
-            properties.store(out, null);
-        } catch (IOException e) {
-            logger.error("PropertiesController error: " + e);
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    logger.error("PropertiesController error: " + e);
-                }
-            }
+    /**
+     * @param properties
+     */
+    public static void setProperties(Properties properties) {
+
+        Enumeration<String> keys = (Enumeration<String>) properties.propertyNames();
+
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            properties.put(key, properties.getProperty(key));
         }
 
+        save();
     }
 
     /**
@@ -88,6 +90,30 @@ public class PropertiesController {
         }
 
         return properties;
+    }
+
+    /**
+     * Save to file
+     */
+    private static void save() {
+
+        OutputStream out = null;
+
+        try {
+            out = new FileOutputStream("config.properties");
+            properties.store(out, null);
+            logger.info("Saving settings.");
+        } catch (IOException e) {
+            logger.error("PropertiesController error: " + e);
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    logger.error("PropertiesController error: " + e);
+                }
+            }
+        }
     }
 
 }
