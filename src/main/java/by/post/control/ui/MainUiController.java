@@ -35,7 +35,7 @@ public class MainUiController {
     @FXML
     private TreeView tableTree;
     @FXML
-    private BorderPane pane;
+    private BorderPane mainPane;
     @FXML
     private TextArea console;
     @FXML
@@ -44,6 +44,8 @@ public class MainUiController {
     private Label currentTableName;
     @FXML
     private SplitPane mainSplitPane;
+    @FXML
+    private TitledPane infoPane;
 
     private String dbName;
 
@@ -138,11 +140,10 @@ public class MainUiController {
      */
     @FXML
     public void onItemSqlConsole() throws IOException {
-        if (pane.getChildren().contains(mainSplitPane)) {
-           setCenter("SqlConsole.fxml");
+        if (mainPane.getChildren().contains(mainSplitPane)) {
+            setCenter("SqlConsole.fxml");
         } else {
-            pane.getChildren().remove(pane.getCenter());
-            pane.setCenter(mainSplitPane);
+            mainPane.setCenter(mainSplitPane);
         }
     }
 
@@ -151,8 +152,8 @@ public class MainUiController {
      */
     @FXML
     public void onBarExplorer() {
-        pane.getChildren().remove(pane.getCenter());
-        pane.setCenter(mainSplitPane);
+        mainPane.getChildren().remove(mainPane.getCenter());
+        mainPane.setCenter(mainSplitPane);
 
     }
 
@@ -313,8 +314,8 @@ public class MainUiController {
      * @param fxml
      */
     private void setCenter(String fxml) throws IOException {
-        pane.getChildren().remove(pane.getCenter());
+        mainPane.getChildren().remove(mainPane.getCenter());
         Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource(fxml));
-        pane.setCenter(node);
+        mainPane.setCenter(node);
     }
 }

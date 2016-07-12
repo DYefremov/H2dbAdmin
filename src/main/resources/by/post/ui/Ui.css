@@ -2,12 +2,14 @@
     -fx-text-alignment: center;
 }
 
+/* Style column header. Adds key icon. */
 .table-view .column-header.key .label {
    -fx-background-image: url(/img/key.png);
    -fx-background-repeat: stretch;
    -fx-background-position: center center;
 }
 
+/* Styles for SqlConsole input. */
 .console {
     -fx-text-fill: white;
     -fx-font-size: 14;
@@ -17,6 +19,17 @@
 	-fx-background-color: black;
 }
 
+/* Styles for SqlConsole output. */
+.console-out {
+    -fx-text-fill: green;
+    -fx-font-size: 14;
+}
+
+.console-out .content {
+	-fx-background-color: black;
+}
+
+/* Style for buttons styled as icons.*/
 .button {
     -fx-background-color: transparent, transparent, transparent, transparent;
 }
