@@ -2,7 +2,6 @@ package by.post.control.db;
 
 import by.post.control.PropertiesController;
 import by.post.data.Table;
-import by.post.ui.Resources;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +19,7 @@ public class DbController implements DbControl {
     private String db;
     private Connection connection = null;
 
-    private static final DbControl instance = new DbController();
+    private static final DbController instance = new DbController();
     //The connection only succeeds when the database already exists
     private static final String EXISTS_FLAG = ";IFEXISTS=TRUE";
     private static final Logger logger = LogManager.getLogger(DbController.class);
@@ -156,8 +155,18 @@ public class DbController implements DbControl {
     }
 
     @Override
-    public void execute(String sql) {
+    public Statement execute(String sql) {
 
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            logger.error("DbController error in execute[sql]: " + e);
+        }
+
+        return statement;
     }
 
 }

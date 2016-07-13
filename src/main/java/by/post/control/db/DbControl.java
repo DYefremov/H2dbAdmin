@@ -3,7 +3,9 @@ package by.post.control.db;
 import by.post.data.Table;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 /**
@@ -54,5 +56,5 @@ public interface DbControl {
      *
      * @param sql
      */
-    void execute(String sql);
+    Statement execute(String sql);
 }
