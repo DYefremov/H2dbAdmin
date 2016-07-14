@@ -90,15 +90,24 @@ public class DbController implements DbControl {
     public List<String> getTablesList() {
 
         List<String> tables = new ArrayList<>();
+        ResultSet rs =null;
 
         if (connection != null) {
             try {
-                ResultSet rs = connection.getMetaData().getTables(null, null, "%", new String[]{"TABLE", "VIEW"});
+                rs = connection.getMetaData().getTables(null, null, "%", new String[]{"TABLE", "VIEW"});
                 while (rs.next()) {
                     tables.add(rs.getString("TABLE_NAME"));
                 }
             } catch (SQLException e) {
                 logger.error("DbController error in getTablesList: " + e);
+            } finally {
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException e) {
+                        logger.error("DbController error in getTablesList[finally]: " + e);
+                    }
+                }
             }
         }
 
@@ -116,13 +125,7 @@ public class DbController implements DbControl {
             return new Table(name);
         }
 
-        Table table = null;
-
-        try {
-            table = new TableBuilder().getTable(name, connection);
-        } catch (SQLException e) {
-            logger.error("DbController error in getTable: " + e);
-        }
+        Table table = table = new TableBuilder().getTable(name, connection);
 
         return table != null ? table : new Table(name);
     }

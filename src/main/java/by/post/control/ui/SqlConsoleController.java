@@ -54,11 +54,7 @@ public class SqlConsoleController {
                 return;
             }
 
-            try {
-                consoleOut.appendText(executeQuery(query) + SEP);
-            } catch (SQLException e) {
-                logger.error("SqlConsoleController error in onExecuteAction:" + e);
-            }
+            consoleOut.appendText(executeQuery(query) + SEP);
 
             logger.info("Execute query: \n" + query + SEP);
             console.clear();
@@ -86,17 +82,38 @@ public class SqlConsoleController {
      * @return result as string
      * @throws SQLException
      */
-    private String executeQuery(String query) throws SQLException {
+    private String executeQuery(String query) {
 
-        Statement statement = dbControl.execute(query);
-        ResultSet resultSet = statement.getResultSet();
+        String result = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
 
-        String result = getFormattedOut(resultSet);
+        try {
+            statement = dbControl.execute(query);
+            resultSet = statement.getResultSet();
 
-        resultSet.close();
-        statement.close();
+            if (statement == null || (!statement.getMoreResults() && statement.getUpdateCount() == -1)) {
+                return "No data! Please, check your request!";
+            }
 
-        return result;
+            result = getFormattedOut(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                logger.error("SqlConsoleController error in executeQuery: " + e);
+            }
+        }
+
+        return  result != null ? result : "No data or error!";
     }
 
     /**
@@ -107,11 +124,6 @@ public class SqlConsoleController {
 
         StringBuilder stringBuilder = new StringBuilder();
         String format = "%20s|";
-
-        if (resultSet == null) {
-            return stringBuilder.append("No data! Please, check your request!").toString();
-        }
-
         ResultSetMetaData metaData = resultSet.getMetaData();
 
         int columnsCounter = metaData.getColumnCount();
@@ -121,11 +133,14 @@ public class SqlConsoleController {
         }
 
         int len = stringBuilder.toString().length();
-        // Add  separator for the header
-        stringBuilder.append("\n" + String.format("%" + len + "s", " ").replace(' ', '-') + "\n");
+
+        if (len > 0) {
+            // Add  separator for the header
+            stringBuilder.append("\n" + String.format("%" + len + "s", " ").replace(' ', '-') + "\n");
+        }
 
         while (resultSet.next()) {
-            for (int i = 1; i < columnsCounter; i++) {
+            for (int i = 1; i <= columnsCounter; i++) {
                 stringBuilder.append(String.format(format, resultSet.getString(i)));
             }
             stringBuilder.append("\n");

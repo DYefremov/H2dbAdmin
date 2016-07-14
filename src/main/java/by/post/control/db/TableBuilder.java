@@ -1,6 +1,8 @@
 package by.post.control.db;
 
 import by.post.data.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,32 +13,57 @@ import java.util.List;
  */
 public class TableBuilder {
 
+    private static final Logger logger = LogManager.getLogger(TableBuilder.class);
+
     /**
      * @param name
      * @param connection
      * @return constructed table
      */
-    public Table getTable(String name, Connection connection) throws SQLException {
-
-        Statement st = connection.createStatement();
-        DatabaseMetaData dbMetaData = connection.getMetaData();
-        ResultSet rs = st.executeQuery(Queries.getTable(name));
-        ResultSetMetaData rsMetaData = rs.getMetaData();
+    public Table getTable(String name, Connection connection) {
 
         Table table = new Table(name);
-        table.setRows(getRows(rs));
-        table.setColumns(getColumns(rsMetaData));
 
-        ResultSet keys = dbMetaData.getPrimaryKeys("", "", name);
+        Statement st = null;
+        DatabaseMetaData dbMetaData = null;
+        ResultSet rs = null;
+        ResultSetMetaData rsMetaData = null;
+        ResultSet keys = null;
 
-        while (keys.next()) {
-            String pk = keys.getString("COLUMN_NAME");
-            table.setPrimaryKey(pk);
+        try {
+            st = connection.createStatement();
+            dbMetaData = connection.getMetaData();
+            st.executeQuery(Queries.getTable(name));
+            rs = st.getResultSet();
+            rsMetaData = rs.getMetaData();
+            keys = dbMetaData.getPrimaryKeys("", "", name);
+
+            while (keys.next()) {
+                String pk = keys.getString("COLUMN_NAME");
+                table.setPrimaryKey(pk);
+            }
+
+            table.setRows(getRows(rs));
+            table.setColumns(getColumns(rsMetaData));
+        } catch (SQLException e) {
+            logger.error("TableBuilder error in getTable: " + e);
+        } finally {
+            try {
+                if (keys != null) {
+                    keys.close();
+                }
+
+                if (rs != null) {
+                    rs.close();
+                }
+
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException e) {
+                logger.error("TableBuilder error in getTable[finally]: " + e);
+            }
         }
-
-        keys.close();
-        rs.close();
-        st.close();
 
         return table;
     }
@@ -52,7 +79,7 @@ public class TableBuilder {
 
         int count = rsMetaData.getColumnCount();
 
-        for (int i = 1; i < count; i++) {
+        for (int i = 1; i <= count; i++) {
             Column column = new Column(rsMetaData.getColumnName(i), rsMetaData.getColumnType(i));
             columns.add(column);
         }
@@ -100,7 +127,7 @@ public class TableBuilder {
 
         int count = metaData.getColumnCount();
 
-        for (int i = 1; i < count; i++) {
+        for (int i = 1; i <= count; i++) {
             cells.add(getCell(i, rs));
         }
 
