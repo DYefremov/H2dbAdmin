@@ -12,7 +12,8 @@
 /* Styles for SqlConsole input. */
 .console {
     -fx-text-fill: white;
-    -fx-font-size: 14;
+    -fx-font-size: 16;
+    -fx-font-family: monospace;
 }
 
 .console .content {
@@ -22,7 +23,9 @@
 /* Styles for SqlConsole output. */
 .console-out {
     -fx-text-fill: green;
-    -fx-font-size: 14;
+    -fx-font-size: 16;
+    /* set for formatted output*/
+    -fx-font-family: monospace;
 }
 
 .console-out .content {

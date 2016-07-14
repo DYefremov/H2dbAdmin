@@ -2,6 +2,8 @@ package by.post.control.ui;
 
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
+import by.post.control.db.TableBuilder;
+import by.post.data.ColumnDataType;
 import by.post.ui.ConfirmationDialog;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
@@ -13,6 +15,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -36,6 +40,9 @@ public class SqlConsoleController {
     }
 
     //TODO add icons for buttons and small query validation !!!
+    /**
+     * Actions for buttons
+     */
     @FXML
     public void onExecuteAction() {
 
@@ -69,6 +76,7 @@ public class SqlConsoleController {
 
         if (result.get() == ButtonType.OK) {
             console.clear();
+            consoleOut.clear();
         }
     }
 
@@ -84,10 +92,25 @@ public class SqlConsoleController {
      */
     private String executeQuery(String query) throws SQLException {
 
-        StringBuilder stringBuilder = new StringBuilder();
-
         Statement statement = dbControl.execute(query);
         ResultSet resultSet = statement.getResultSet();
+
+        String result = getFormattedOut(resultSet);
+
+        resultSet.close();
+        statement.close();
+
+        return result;
+    }
+
+    /**
+     * @param resultSet
+     * @return formatted output
+     */
+    private String getFormattedOut(ResultSet resultSet) throws SQLException {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        String format = "%20s|";
 
         if (resultSet == null) {
             return stringBuilder.append("No data! Please, check your request!").toString();
@@ -96,22 +119,21 @@ public class SqlConsoleController {
         ResultSetMetaData metaData = resultSet.getMetaData();
 
         int columnsCounter = metaData.getColumnCount();
-
+        //TODO think about using for resolve data with TableBuilder class
         for (int i = 1; i < columnsCounter; i++) {
-            stringBuilder.append(metaData.getColumnName(i) + " | ");
+            stringBuilder.append(String.format(format, metaData.getColumnName(i)));
         }
 
-        stringBuilder.append("\n");
+        int len = stringBuilder.toString().length();
+        // Add  separator for the header
+        stringBuilder.append("\n" + String.format("%" + len + "s", " ").replace(' ', '-') + "\n");
 
         while (resultSet.next()) {
             for (int i = 1; i < columnsCounter; i++) {
-                stringBuilder.append( resultSet.getString(i) + " | ");
+                stringBuilder.append(String.format(format, resultSet.getString(i)));
             }
             stringBuilder.append("\n");
         }
-
-        resultSet.close();
-        statement.close();
 
         return stringBuilder.toString();
     }
