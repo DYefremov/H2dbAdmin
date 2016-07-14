@@ -2,8 +2,6 @@ package by.post.control.ui;
 
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
-import by.post.control.db.TableBuilder;
-import by.post.data.ColumnDataType;
 import by.post.ui.ConfirmationDialog;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
@@ -15,8 +13,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 /**
