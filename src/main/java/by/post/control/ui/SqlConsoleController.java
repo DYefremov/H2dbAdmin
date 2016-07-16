@@ -2,6 +2,10 @@ package by.post.control.ui;
 
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
+import by.post.control.db.TableBuilder;
+import by.post.control.db.UpdateCommands;
+import by.post.data.Cell;
+import by.post.data.Column;
 import by.post.ui.ConfirmationDialog;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
@@ -13,6 +17,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -89,23 +96,27 @@ public class SqlConsoleController {
         ResultSet resultSet = null;
 
         try {
-            statement = dbControl.execute(query);
-            resultSet = statement.getResultSet();
+            if (isUpdateQuery(query)) {
+                return "Update query. Not implemented!!!";
+            }
 
-            if (statement == null || (!statement.getMoreResults() && statement.getUpdateCount() == -1)) {
+            statement = dbControl.execute(query);
+
+            if (statement == null || statement.getResultSet() == null) {
                 return "No data! Please, check your request!";
             }
 
+            resultSet = statement.getResultSet();
             result = getFormattedOut(resultSet);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("SqlConsoleController error in executeQuery: " + e);
         } finally {
             try {
-                if (statement != null) {
+                if (statement != null && !statement.isClosed()) {
                     statement.close();
                 }
 
-                if (resultSet != null) {
+                if (resultSet != null && !resultSet.isClosed()) {
                     resultSet.close();
                 }
             } catch (SQLException e) {
@@ -122,14 +133,95 @@ public class SqlConsoleController {
      */
     private String getFormattedOut(ResultSet resultSet) throws SQLException {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        String format = "%20s|";
-        ResultSetMetaData metaData = resultSet.getMetaData();
+        TableBuilder tableBuilder = new TableBuilder();
 
-        int columnsCounter = metaData.getColumnCount();
-        //TODO think about using for resolve data with TableBuilder class
-        for (int i = 1; i < columnsCounter; i++) {
-            stringBuilder.append(String.format(format, metaData.getColumnName(i)));
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        List<Column> columnsHeader = tableBuilder.getColumns(metaData);
+        List<List<Cell>> columnsData = new ArrayList<>();
+
+        if (columnsHeader != null || !columnsHeader.isEmpty()) {
+            columnsHeader.forEach(column -> {
+                List<Cell> headerCells = new ArrayList<>();
+                String name = column.getName();
+                headerCells.add(new Cell(name, name, name));
+                columnsData.add(headerCells);
+            });
+        }
+
+        while (resultSet.next()) {
+            List<Cell> cells = tableBuilder.getCells(resultSet);
+
+            if (cells != null || cells.isEmpty()) {
+                int headerSize = columnsHeader.size();
+                cells.forEach(cell -> {
+                    int columnIndex = cells.indexOf(cell);
+
+                    if (!columnsData.isEmpty() && columnsData.size() == headerSize) {
+                        columnsData.get(columnIndex).add(cell);
+                    } else {
+                        List<Cell> column = new ArrayList<Cell>();
+                        column.add(cell);
+                        columnsData.add(columnIndex, column);
+                    }
+                });
+            }
+        }
+
+        return resolveDataOutput(columnsData);
+    }
+
+    /**
+     * @param query
+     * @return true if query has update command
+     */
+    private boolean isUpdateQuery(String query) {
+
+        UpdateCommands[] commands = UpdateCommands.values();
+
+        for (int i = 0; i < commands.length; i++) {
+            if (query.contains(commands[i].name())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param values
+     * @return max length of value for cell
+     */
+    private List<Integer> getMaxCellValuesLengths(List<List<Cell>> values) {
+
+        List<Integer> lengths = new ArrayList<>();
+
+        values.forEach(column -> {
+            Cell max  = column.parallelStream().max(Comparator.comparing(item -> item.getValue().toString().length())).get();
+            lengths.add(String.valueOf(max.getValue()).length());
+        });
+
+        return lengths;
+    }
+
+    /**
+     * @return prepared output string
+     */
+    private String resolveDataOutput(List<List<Cell>> columnsData) {
+
+        List<Integer> maxLengths = getMaxCellValuesLengths(columnsData);
+
+        StringBuilder stringBuilder = new StringBuilder();
+//        String format = "%20s|";
+
+        List<String> cellsFormats = new ArrayList<>();
+        maxLengths.forEach(value -> cellsFormats.add("%" + value + "s|"));
+
+
+        for (List<Cell> cells : columnsData) {
+            int rowIndex = columnsData.indexOf(cells);
+            System.out.println(rowIndex + "= row " + cells.size() + " cells" );
+            System.out.println(cells);
+//            stringBuilder.append(String.format(cellsFormats.get(columnIndex), cells.get(columnIndex).getValue()));
+//            stringBuilder.append("\n");
         }
 
         int len = stringBuilder.toString().length();
@@ -139,14 +231,7 @@ public class SqlConsoleController {
             stringBuilder.append("\n" + String.format("%" + len + "s", " ").replace(' ', '-') + "\n");
         }
 
-        while (resultSet.next()) {
-            for (int i = 1; i <= columnsCounter; i++) {
-                stringBuilder.append(String.format(format, resultSet.getString(i)));
-            }
-            stringBuilder.append("\n");
-        }
-
+//        stringBuilder.append(columnIndex  %  headerSize != 0 ? val : val +"\n");
         return stringBuilder.toString();
     }
-
 }

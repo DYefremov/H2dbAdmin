@@ -73,7 +73,7 @@ public class TableBuilder {
      * @return columns list for table
      * @throws SQLException
      */
-    private List<Column> getColumns(ResultSetMetaData rsMetaData) throws SQLException {
+    public List<Column> getColumns(ResultSetMetaData rsMetaData) throws SQLException {
 
         List<Column> columns = new ArrayList<>();
 
@@ -92,7 +92,7 @@ public class TableBuilder {
      * @return rows list for table
      * @throws SQLException
      */
-    private List<Row> getRows(ResultSet rs) throws SQLException {
+    public List<Row> getRows(ResultSet rs) throws SQLException {
 
         List<Row> rows = new ArrayList<>();
 
@@ -120,7 +120,7 @@ public class TableBuilder {
      * @return cells list
      * @throws SQLException
      */
-    private List<Cell> getCells(ResultSet rs) throws SQLException {
+    public List<Cell> getCells(ResultSet rs) throws SQLException {
 
         List<Cell> cells = new ArrayList<>();
         ResultSetMetaData metaData = rs.getMetaData();
