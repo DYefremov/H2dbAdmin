@@ -34,7 +34,7 @@ public class SqlConsoleController {
 
     private DbControl dbControl;
 
-    private static final String SEP = "\n------------------- End query ------------------------------\n";
+    private static final String SEP = "\n---- End query ----\n\n";
 
     private static final Logger logger = LogManager.getLogger(SqlConsoleController.class);
 
@@ -207,31 +207,40 @@ public class SqlConsoleController {
      */
     private String resolveDataOutput(List<List<Cell>> columnsData) {
 
-        List<Integer> maxLengths = getMaxCellValuesLengths(columnsData);
-
         StringBuilder stringBuilder = new StringBuilder();
-//        String format = "%20s|";
 
+        List<Integer> maxLengths = getMaxCellValuesLengths(columnsData);
         List<String> cellsFormats = new ArrayList<>();
-        maxLengths.forEach(value -> cellsFormats.add("%" + value + "s|"));
+        maxLengths.forEach(value -> cellsFormats.add("%" + ++value + "s|"));
 
+        List<Cell> cells = columnsData.get(0);
+        int headerSize = columnsData.size();
 
-        for (List<Cell> cells : columnsData) {
-            int rowIndex = columnsData.indexOf(cells);
-            System.out.println(rowIndex + "= row " + cells.size() + " cells" );
-            System.out.println(cells);
-//            stringBuilder.append(String.format(cellsFormats.get(columnIndex), cells.get(columnIndex).getValue()));
-//            stringBuilder.append("\n");
-        }
+        String separator = "";
+        int maxRows = cells.size() - 1;
 
-        int len = stringBuilder.toString().length();
+        for (Cell cell : cells) {
+            int rowIndex = cells.indexOf(cell);
 
-        if (len > 0) {
+            for (List<Cell> row : columnsData) {
+                int columnIndex = columnsData.indexOf(row);
+                String val = String.format(cellsFormats.get(columnIndex), String.valueOf(row.get(rowIndex).getValue()));
+                stringBuilder.append(++columnIndex  !=  headerSize  ? val : val +"\n");
+            }
             // Add  separator for the header
-            stringBuilder.append("\n" + String.format("%" + len + "s", " ").replace(' ', '-') + "\n");
+            if (rowIndex == 0) {
+                int sepLength = stringBuilder.length();
+
+                if (sepLength > 0) {
+                    // Build separator for the header and bottom
+                    separator = String.format("%" + --sepLength + "s", " ").replace(' ', '-') + "\n";
+                    stringBuilder.append(separator);
+                }
+            } else if (rowIndex == maxRows) {
+                stringBuilder.append(separator);
+            }
         }
 
-//        stringBuilder.append(columnIndex  %  headerSize != 0 ? val : val +"\n");
         return stringBuilder.toString();
     }
 }
