@@ -154,7 +154,6 @@ public class MainUiController {
     public void onBarExplorer() {
         mainPane.getChildren().remove(mainPane.getCenter());
         mainPane.setCenter(mainSplitPane);
-
     }
 
     @FXML

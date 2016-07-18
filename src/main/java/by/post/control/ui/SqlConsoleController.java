@@ -96,7 +96,7 @@ public class SqlConsoleController {
         ResultSet resultSet = null;
 
         try {
-            if (isUpdateQuery(query)) {
+            if (isUpdateQuery(query.toUpperCase())) {
                 return "Update query. Not implemented!!!";
             }
 
@@ -206,6 +206,10 @@ public class SqlConsoleController {
      * @return prepared output string
      */
     private String resolveDataOutput(List<List<Cell>> columnsData) {
+
+        if (columnsData == null || columnsData.isEmpty()) {
+            return "No data for output!";
+        }
 
         StringBuilder stringBuilder = new StringBuilder();
 
