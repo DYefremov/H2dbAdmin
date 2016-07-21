@@ -34,7 +34,8 @@ public class SqlConsoleController {
 
     private DbControl dbControl;
 
-    private static final String SEP = "\n---- End query ----\n\n";
+    private static final String DONE_MESSAGE = "\n---- Done! ----\n\n";
+    private static final String ERROR_MESSAGE = "Error.See \"More info.\" for details!";
 
     private static final Logger logger = LogManager.getLogger(SqlConsoleController.class);
 
@@ -42,7 +43,7 @@ public class SqlConsoleController {
 
     }
 
-    //TODO add icons for buttons and small query validation !!!
+    //TODO add small query validation !!!
     /**
      * Actions for buttons
      */
@@ -51,7 +52,7 @@ public class SqlConsoleController {
 
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
-        String query = console.getText();
+        String query = console.getText().toUpperCase();
 
         if (result.get() == ButtonType.OK) {
             if (query.isEmpty()) {
@@ -61,9 +62,8 @@ public class SqlConsoleController {
                 return;
             }
 
-            consoleOut.appendText(executeQuery(query) + SEP);
-
-            logger.info("Execute query: \n" + query + SEP);
+            logger.info("Execute query: \n" + query);
+            consoleOut.appendText(executeQuery(query));
             console.clear();
         }
     }
@@ -96,14 +96,15 @@ public class SqlConsoleController {
         ResultSet resultSet = null;
 
         try {
-            if (isUpdateQuery(query.toUpperCase())) {
-                return "Update query. Not implemented!!!";
+            if (isUpdateQuery(query)) {
+                statement = dbControl.update(query);
+                return statement.getUpdateCount() != -1 ? DONE_MESSAGE :  ERROR_MESSAGE;
             }
 
             statement = dbControl.execute(query);
 
             if (statement == null || statement.getResultSet() == null) {
-                return "No data! Please, check your request!";
+                return ERROR_MESSAGE;
             }
 
             resultSet = statement.getResultSet();

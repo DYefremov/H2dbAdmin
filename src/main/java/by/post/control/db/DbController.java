@@ -145,7 +145,7 @@ public class DbController implements DbControl {
     }
 
     @Override
-    public void update(String sql) {
+    public Statement update(String sql) {
 
         Statement statement = null;
 
@@ -155,6 +155,8 @@ public class DbController implements DbControl {
         } catch (SQLException e) {
             logger.error("DbController error in update[sql]: " + e);
         }
+
+        return statement;
     }
 
     @Override

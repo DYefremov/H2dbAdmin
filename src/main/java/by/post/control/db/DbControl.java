@@ -49,7 +49,7 @@ public interface DbControl {
     /**
      * @param sql
      */
-    void update(String sql);
+    Statement update(String sql);
 
     /**
      * Execute custom sql query
