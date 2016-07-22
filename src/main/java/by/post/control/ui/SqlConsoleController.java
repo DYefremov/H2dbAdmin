@@ -13,10 +13,7 @@ import javafx.scene.control.TextArea;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -42,8 +39,7 @@ public class SqlConsoleController {
     public SqlConsoleController() {
 
     }
-
-    //TODO add small query validation !!!
+    
     /**
      * Actions for buttons
      */
@@ -55,13 +51,6 @@ public class SqlConsoleController {
         String query = console.getText().toUpperCase();
 
         if (result.get() == ButtonType.OK) {
-            if (query.isEmpty()) {
-                String info = "The query is empty. Please, repeat.\n";
-                logger.info(info);
-                consoleOut.appendText(info);
-                return;
-            }
-
             logger.info("Execute query: \n" + query);
             consoleOut.appendText(executeQuery(query));
             console.clear();
@@ -248,4 +237,5 @@ public class SqlConsoleController {
 
         return stringBuilder.toString();
     }
+
 }

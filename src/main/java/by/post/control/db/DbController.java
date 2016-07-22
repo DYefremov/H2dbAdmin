@@ -83,6 +83,11 @@ public class DbController implements DbControl {
         return connection;
     }
 
+    @Override
+    public Connection getCurrentConnection() {
+        return connection;
+    }
+
     /**
      * @return table names list
      */
@@ -150,8 +155,10 @@ public class DbController implements DbControl {
         Statement statement = null;
 
         try {
-            statement = connection.createStatement();
-            statement.executeUpdate(sql);
+            if (connection != null) {
+                statement = connection.createStatement();
+                statement.executeUpdate(sql);
+            }
         } catch (SQLException e) {
             logger.error("DbController error in update[sql]: " + e);
         }
@@ -165,8 +172,10 @@ public class DbController implements DbControl {
         Statement statement = null;
 
         try {
-            statement = connection.createStatement();
-            statement.execute(sql);
+            if (connection != null) {
+                statement = connection.createStatement();
+                statement.execute(sql);
+            }
         } catch (SQLException e) {
             logger.error("DbController error in execute[sql]: " + e);
         }

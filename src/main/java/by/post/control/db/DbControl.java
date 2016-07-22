@@ -31,6 +31,11 @@ public interface DbControl {
     Connection getConnection(String path, String db, String user, String password);
 
     /**
+     * @return current connection
+     */
+    Connection getCurrentConnection();
+
+    /**
      * @return table names list
      */
     List<String> getTablesList();
