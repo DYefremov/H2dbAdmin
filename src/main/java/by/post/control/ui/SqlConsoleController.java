@@ -42,7 +42,7 @@ public class SqlConsoleController {
     public SqlConsoleController() {
 
     }
-    
+
     /**
      * Actions for buttons
      */
