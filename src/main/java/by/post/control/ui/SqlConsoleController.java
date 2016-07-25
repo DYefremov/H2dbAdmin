@@ -13,7 +13,10 @@ import javafx.scene.control.TextArea;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -39,7 +42,7 @@ public class SqlConsoleController {
     public SqlConsoleController() {
 
     }
-    
+
     /**
      * Actions for buttons
      */
@@ -237,5 +240,4 @@ public class SqlConsoleController {
 
         return stringBuilder.toString();
     }
-
 }
