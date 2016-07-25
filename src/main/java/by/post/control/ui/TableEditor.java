@@ -137,6 +137,8 @@ public class TableEditor {
     }
 
     /**
+     * Change column name in the table
+     *
      * @param id
      */
     public void changeColumnName(String id) {
@@ -150,6 +152,8 @@ public class TableEditor {
     }
 
     /**
+     * Change column type in the table
+     *
      * @param id
      */
     public void changeColumnType(String id) {
@@ -160,4 +164,31 @@ public class TableEditor {
             System.out.println(result.get());
         }
     }
+
+    /**
+     * Delete column from the table
+     *
+     * @param id
+     */
+    public void deleteColumn(String id) {
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            logger.info("Delete column with id = " +  id);
+        }
+    }
+
+
+    /**
+     * Add new column in the table
+     */
+    public void addColumn() {
+
+        Optional<String> result = new InputDialog("Please, write column name!", "New column", false).showAndWait();
+
+        if (result.isPresent()) {
+            logger.info("Add column in table.");
+        }
+    }
+
 }

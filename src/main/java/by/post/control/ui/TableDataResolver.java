@@ -3,7 +3,7 @@ package by.post.control.ui;
 import by.post.data.Column;
 import by.post.data.Row;
 import by.post.data.Table;
-import by.post.ui.ColumnEditContextMenu;
+import by.post.ui.ColumnContextMenu;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -12,6 +12,8 @@ import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,8 @@ public class TableDataResolver {
     private Table table;
     private ObservableList tableColumns;
     private ObservableList<ObservableList> items;
+
+    private static final Logger logger = LogManager.getLogger(TableDataResolver.class);
 
     public TableDataResolver() {
     }
@@ -51,12 +55,11 @@ public class TableDataResolver {
     private void resolve() {
         // Add columns
         tableColumns = getColumns(table.getColumns() != null ? table.getColumns() : new ArrayList<Column>());
-
-        List<Row> rows = table.getRows();
+        // Add data
         items = FXCollections.observableArrayList();
+        List<Row> rows = table.getRows();
 
         if (rows != null && !rows.isEmpty()) {
-            // Add data
             rows.stream().forEach(row -> {
                 ObservableList<String> newRow = FXCollections.observableArrayList();
                 row.getCells().forEach(cell -> {
@@ -74,41 +77,52 @@ public class TableDataResolver {
      */
     public ObservableList getColumns(List<Column> values) {
 
+        String pk = table!= null ? table.getPrimaryKey() : null;
         ObservableList columns = FXCollections.observableArrayList();
 
         values.forEach(col -> {
             final int index = values.indexOf(col);
-            String colName = col.getName();
-            String pk = table!= null && table.getPrimaryKey() != null ? table.getPrimaryKey() : null;
-
-            TableColumn column = new TableColumn(colName);
-            // Set custom context menu for column properties edit with id as column index
-            column.setContextMenu(new ColumnEditContextMenu(index + ""));
-            //Set style for primary key column
-            if (pk !=null && pk.equals(colName)) {
-                column.getStyleClass().add("key");
-            }
-
-            column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                    return new SimpleStringProperty(param.getValue().get(index).toString());
-                }
-            });
-            // Add for enable editing
-            column.setCellFactory(TextFieldTableCell.forTableColumn());
-            column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ObservableList, String>>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent<ObservableList, String> event) {
-                    int rowPos = event.getTablePosition().getRow();
-                    int colPos = event.getTablePosition().getColumn();
-                    event.getTableView().getItems().get(rowPos).set(colPos, event.getNewValue());
-                }
-            });
-
-            columns.add(column);
+            String name = col.getName();
+            columns.add(getColumn(name, index, pk !=null && pk.equals(name)));
         });
 
         return columns;
+    }
+
+    /**
+     * Construct table column
+     *
+     * @param name
+     * @param index
+     * @return
+     */
+    public TableColumn getColumn(String name, int index, boolean isKey) {
+
+        TableColumn column = new TableColumn(name);
+        // Set custom context menu for column properties edit with id as column index
+        column.setContextMenu(new ColumnContextMenu(index + ""));
+        //Set style for primary key column
+        if (isKey) {
+            column.getStyleClass().add("key");
+        }
+
+        column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                return new SimpleStringProperty(param.getValue().get(index).toString());
+            }
+        });
+        // Add for enable editing
+        column.setCellFactory(TextFieldTableCell.forTableColumn());
+        column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ObservableList, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ObservableList, String> event) {
+                int rowPos = event.getTablePosition().getRow();
+                int colPos = event.getTablePosition().getColumn();
+                event.getTableView().getItems().get(rowPos).set(colPos, event.getNewValue());
+            }
+        });
+
+        return column;
     }
 }
