@@ -9,6 +9,11 @@
    -fx-background-position: center center;
 }
 
+/* Style for table cell */
+.table-view .table-cell {
+    -fx-alignment: CENTER-RIGHT;
+}
+
 /* Styles for SqlConsole input. */
 .console {
     -fx-text-fill: white;
@@ -36,5 +41,3 @@
 .button {
     -fx-background-color: transparent, transparent, transparent, transparent;
 }
-
-

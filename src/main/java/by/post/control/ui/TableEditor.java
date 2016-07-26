@@ -8,6 +8,7 @@ import by.post.ui.ChoiceColumnTypeDialog;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -80,7 +81,7 @@ public class TableEditor {
     /**
      * Save changes after table editing
      *
-     *@param name
+     * @param name
      */
     public void save(String name) {
 
@@ -174,19 +175,31 @@ public class TableEditor {
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            logger.info("Delete column with id = " +  id);
+            logger.info("Delete column with id = " + id);
         }
     }
-
 
     /**
      * Add new column in the table
      */
     public void addColumn() {
 
-        Optional<String> result = new InputDialog("Please, write column name!", "New column", false).showAndWait();
+        Optional<String> result = new InputDialog("Please, write column name!", "NEW", false).showAndWait();
 
         if (result.isPresent()) {
+            int index = 0;
+            ObservableList<ObservableList> items = mainTable.getItems();
+            if (items != null && !items.isEmpty()) {
+                ObservableList row = items.get(0);
+                index = row.size();
+                // Fill in the data.
+                items.parallelStream().forEach(item -> item.add("New value."));
+                mainTable.setItems(items);
+            }
+            // Create column
+            TableColumn column = new TableDataResolver().getColumn(result.get(), index, false);
+            mainTable.getColumns().add(column);
+
             logger.info("Add column in table.");
         }
     }
