@@ -183,5 +183,16 @@ public class DbController implements DbControl {
         return statement;
     }
 
+    @Override
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                logger.error("DbController error in closeConnection: " + e);
+            }
+        }
+    }
+
 }
 

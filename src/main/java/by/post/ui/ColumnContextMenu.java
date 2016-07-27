@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableColumn;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -19,14 +20,23 @@ public class ColumnContextMenu extends ContextMenu {
     private SeparatorMenuItem separator;
     private SeparatorMenuItem separator2;
     private TableEditor tableEditor;
+    private TableColumn tableColumn;
 
     public ColumnContextMenu() {
         init();
     }
 
-    public ColumnContextMenu(String id) {
-        setId(id);
+    public ColumnContextMenu(TableColumn tableColumn) {
+        this.tableColumn = tableColumn;
         init();
+    }
+
+    public TableColumn getTableColumn() {
+        return tableColumn;
+    }
+
+    public void setTableColumn(TableColumn tableColumn) {
+        this.tableColumn = tableColumn;
     }
 
     private void init() {
@@ -43,14 +53,14 @@ public class ColumnContextMenu extends ContextMenu {
         changeName.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                tableEditor.changeColumnName(getId());
+                tableEditor.changeColumnName(tableColumn);
             }
         });
 
         changeType.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                tableEditor.changeColumnType(getId());
+                tableEditor.changeColumnType(tableColumn);
             }
         });
 
@@ -64,10 +74,11 @@ public class ColumnContextMenu extends ContextMenu {
         delColumn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                tableEditor.deleteColumn(getId());
+                tableEditor.deleteColumn(tableColumn);
             }
         });
 
         this.getItems().addAll(addColumn, separator, changeName, changeType, separator2, delColumn);
     }
+
 }

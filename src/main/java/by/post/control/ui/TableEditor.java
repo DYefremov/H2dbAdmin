@@ -4,6 +4,7 @@ import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import by.post.control.db.Queries;
 import by.post.data.Column;
+import by.post.data.ColumnDataType;
 import by.post.ui.ChoiceColumnTypeDialog;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
@@ -140,11 +141,10 @@ public class TableEditor {
     /**
      * Change column name in the table
      *
-     * @param id
+     * @param column
      */
-    public void changeColumnName(String id) {
+    public void changeColumnName(TableColumn column) {
 
-        TableColumn column = (TableColumn) mainTable.getColumns().get(Integer.valueOf(id));
         Optional<String> result = new InputDialog("Set new name of column", "New", false).showAndWait();
 
         if (result.isPresent()) {
@@ -155,27 +155,30 @@ public class TableEditor {
     /**
      * Change column type in the table
      *
-     * @param id
+     * @param column
      */
-    public void changeColumnType(String id) {
+    public void changeColumnType(TableColumn column) {
 
         Optional<String> result = new ChoiceColumnTypeDialog().showAndWait();
 
-        if (result.isPresent()) {
-            System.out.println(result.get());
+        if (result.isPresent() && column.getUserData() != null) {
+            Column data = (Column) column.getUserData();
+            data.setType(ColumnDataType.getNumType(result.get()));
+            column.setUserData(data);
         }
     }
 
     /**
      * Delete column from the table
      *
-     * @param id
+     * @param column
      */
-    public void deleteColumn(String id) {
+    public void deleteColumn(TableColumn column) {
+
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            logger.info("Delete column with id = " + id);
+            mainTable.getColumns().remove(column);
         }
     }
 
@@ -197,7 +200,9 @@ public class TableEditor {
                 mainTable.setItems(items);
             }
             // Create column
-            TableColumn column = new TableDataResolver().getColumn(result.get(), index, false);
+            String name = result.get();
+            int type = ColumnDataType.getNumType(ColumnDataType.VARCHAR.name());
+            TableColumn column = new TableDataResolver().getColumn(new Column(name, type), index, false);
             mainTable.getColumns().add(column);
 
             logger.info("Add column in table.");

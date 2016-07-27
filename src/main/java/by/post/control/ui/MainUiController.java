@@ -14,6 +14,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -104,11 +106,7 @@ public class MainUiController {
      */
     @FXML
     public void onItemExit() {
-        try {
-            mainUiForm.getMainStage().close();
-        } catch (Exception e) {
-            logger.error("MainUiController error onItemClose: " + e);
-        }
+        closeProgram();
     }
 
     /**
@@ -168,7 +166,7 @@ public class MainUiController {
 
     @FXML
     public void onBarExit() {
-        mainUiForm.getMainStage().close();
+        closeProgram();
     }
 
     /**
@@ -231,7 +229,7 @@ public class MainUiController {
      * init data on startup
      */
     private void init() {
-        //TODO переработать метод и DbControl
+
         List<TreeItem> tables = new ArrayList<>();
         DbControl dbControl = DbController.getInstance();
         tableEditor = TableEditor.getInstance();
@@ -241,8 +239,8 @@ public class MainUiController {
             tables.add(new TreeItem(t));
         });
 
-        TreeItem root = new TreeItem(dbName);
         ObservableList<TreeItem> list = FXCollections.observableList(tables);
+        TreeItem root = new TreeItem(dbName);
         root.getChildren().addAll(list);
         tableTree.setRoot(root);
 
@@ -316,5 +314,13 @@ public class MainUiController {
         mainPane.getChildren().remove(mainPane.getCenter());
         Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource(fxml));
         mainPane.setCenter(node);
+    }
+
+    /**
+     * Close and exit the program.
+     */
+    private void closeProgram() {
+        Stage mainStage =  mainUiForm.getMainStage();
+        mainStage.fireEvent(new WindowEvent(mainStage, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 }

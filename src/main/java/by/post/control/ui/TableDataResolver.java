@@ -83,7 +83,7 @@ public class TableDataResolver {
         values.forEach(col -> {
             final int index = values.indexOf(col);
             String name = col.getName();
-            columns.add(getColumn(name, index, pk !=null && pk.equals(name)));
+            columns.add(getColumn(col, index, pk !=null && pk.equals(name)));
         });
 
         return columns;
@@ -92,29 +92,30 @@ public class TableDataResolver {
     /**
      * Construct table column
      *
-     * @param name
+     * @param column
      * @param index
      * @return
      */
-    public TableColumn getColumn(String name, int index, boolean isKey) {
+    public TableColumn getColumn(Column column, int index, boolean isKey) {
 
-        TableColumn column = new TableColumn(name);
-        // Set custom context menu for column properties edit with id as column index
-        column.setContextMenu(new ColumnContextMenu(index + ""));
-        //Set style for primary key column
+        TableColumn tableColumn = new TableColumn(column.getName());
+        tableColumn.setUserData(column);
+        // Set custom context menu for tableColumn properties edit with id as tableColumn index
+        tableColumn.setContextMenu(new ColumnContextMenu(tableColumn));
+        //Set style for primary key tableColumn
         if (isKey) {
-            column.getStyleClass().add("key");
+            tableColumn.getStyleClass().add("key");
         }
 
-        column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+        tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
                 return new SimpleStringProperty(param.getValue().get(index).toString());
             }
         });
         // Add for enable editing
-        column.setCellFactory(TextFieldTableCell.forTableColumn());
-        column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ObservableList, String>>() {
+        tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ObservableList, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<ObservableList, String> event) {
                 int rowPos = event.getTablePosition().getRow();
@@ -123,6 +124,6 @@ public class TableDataResolver {
             }
         });
 
-        return column;
+        return tableColumn;
     }
 }

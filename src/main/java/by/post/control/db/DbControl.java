@@ -62,4 +62,9 @@ public interface DbControl {
      * @param sql
      */
     Statement execute(String sql);
+
+    /**
+     * Close opened connection
+     */
+    void closeConnection();
 }

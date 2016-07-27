@@ -1,11 +1,15 @@
 package by.post.ui;
 
+import by.post.control.db.DbControl;
+import by.post.control.db.DbController;
 import by.post.control.ui.MainUiController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -14,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Main class for Ui
@@ -67,12 +72,15 @@ public class MainUiForm extends Application {
         mainStage.setMinHeight(500);
         mainStage.setMinWidth(700);
         //Override closing program
-        mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
+        mainStage.setOnCloseRequest(event -> {
+            Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+            if (result.get() == ButtonType.OK) {
+                closeConnection();
                 Platform.exit();
                 System.exit(0);
             }
+            event.consume();
         });
 
         mainStage.show();
@@ -80,6 +88,11 @@ public class MainUiForm extends Application {
 
     public Stage getMainStage() {
         return mainStage;
+    }
+
+    private void closeConnection() {
+        DbControl dbControl = DbController.getInstance();
+        dbControl.closeConnection();
     }
 
 }
