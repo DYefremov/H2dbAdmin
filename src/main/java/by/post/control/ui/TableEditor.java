@@ -5,7 +5,6 @@ import by.post.control.db.DbController;
 import by.post.control.db.Queries;
 import by.post.data.Column;
 import by.post.data.ColumnDataType;
-import by.post.ui.ChoiceColumnTypeDialog;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
 import javafx.collections.FXCollections;
@@ -168,7 +167,24 @@ public class TableEditor {
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
+            int index = mainTable.getColumns().indexOf(column);
+
+            if (index == -1) {
+                return;
+            }
+
             mainTable.getColumns().remove(column);
+            /*
+            ObservableList<ObservableList> items = mainTable.getItems();
+
+            if (items != null && !items.isEmpty()) {
+                System.out.println("Row size before = " + items.get(0).size());
+                // Remove cell from rows by index.
+                items.parallelStream().forEach(item -> item.remove(index));
+                mainTable.setItems(items);
+                System.out.println("Row size after = " + items.get(0).size());
+            }
+            */
         }
     }
 
