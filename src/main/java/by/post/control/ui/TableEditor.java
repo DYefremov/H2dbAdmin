@@ -143,13 +143,9 @@ public class TableEditor {
      *
      * @param column
      */
-    public void changeColumnName(TableColumn column) {
-
-        Optional<String> result = new InputDialog("Set new name of column", "New", false).showAndWait();
-
-        if (result.isPresent()) {
-            column.setText(result.get());
-        }
+    public void renameColumn(TableColumn column) {
+        Column col = (Column) column.getUserData();
+        System.out.println(col.toString());
     }
 
     /**
@@ -158,14 +154,8 @@ public class TableEditor {
      * @param column
      */
     public void changeColumnType(TableColumn column) {
-
-        Optional<String> result = new ChoiceColumnTypeDialog().showAndWait();
-
-        if (result.isPresent() && column.getUserData() != null) {
-            Column data = (Column) column.getUserData();
-            data.setType(ColumnDataType.getNumType(result.get()));
-            column.setUserData(data);
-        }
+        Column col = (Column) column.getUserData();
+        System.out.println(col.toString());
     }
 
     /**

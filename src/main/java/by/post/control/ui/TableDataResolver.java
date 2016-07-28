@@ -1,20 +1,23 @@
 package by.post.control.ui;
 
 import by.post.data.Column;
+import by.post.data.ColumnDataType;
 import by.post.data.Row;
 import by.post.data.Table;
-import by.post.ui.ColumnContextMenu;
+import by.post.ui.MainUiForm;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,13 +80,13 @@ public class TableDataResolver {
      */
     public ObservableList getColumns(List<Column> values) {
 
-        String pk = table!= null ? table.getPrimaryKey() : null;
+        String pk = table != null ? table.getPrimaryKey() : null;
         ObservableList columns = FXCollections.observableArrayList();
 
         values.forEach(col -> {
             final int index = values.indexOf(col);
             String name = col.getName();
-            columns.add(getColumn(col, index, pk !=null && pk.equals(name)));
+            columns.add(getColumn(col, index, pk != null && pk.equals(name)));
         });
 
         return columns;
@@ -98,10 +101,7 @@ public class TableDataResolver {
      */
     public TableColumn getColumn(Column column, int index, boolean isKey) {
 
-        TableColumn tableColumn = new TableColumn(column.getName());
-        tableColumn.setUserData(column);
-        // Set custom context menu for tableColumn properties edit with id as tableColumn index
-        tableColumn.setContextMenu(new ColumnContextMenu(tableColumn));
+        TableColumn tableColumn = getTableColumn(column);
         //Set style for primary key tableColumn
         if (isKey) {
             tableColumn.getStyleClass().add("key");
@@ -123,6 +123,30 @@ public class TableDataResolver {
                 event.getTableView().getItems().get(rowPos).set(colPos, event.getNewValue());
             }
         });
+
+        return tableColumn;
+    }
+
+    /**
+     * Get custom table column from fxml
+     *
+     * @param column
+     * @return
+     */
+    private TableColumn getTableColumn(Column column) {
+        TableColumn tableColumn = null;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainUiForm.class.getResource("MultipleTableColumn.fxml"));
+            tableColumn = (TableColumn) loader.load();
+            MultipleTableColumnController columnController = loader.getController();
+            tableColumn.setUserData(column);
+            columnController.setName(column.getName());
+            columnController.setType(ColumnDataType.getType(column.getType()));
+            columnController.setTableColumn(tableColumn);
+        } catch (IOException e) {
+            logger.error("TableDataResolver error in getColumn: " + e);
+        }
 
         return tableColumn;
     }

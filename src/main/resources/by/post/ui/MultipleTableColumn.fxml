@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<TableColumn minWidth="80" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MultipleTableColumnController">
+    <graphic>
+        <VBox alignment="CENTER">
+            <children>
+                <Label fx:id="name" contentDisplay="CENTER" text="New column" textAlignment="CENTER" />
+                <Label fx:id="type" contentDisplay="CENTER" text="VARCHAR">
+                    <font>
+                        <Font size="10.0" />
+                    </font></Label>
+            </children>
+        </VBox>
+    </graphic>
+   <contextMenu>
+      <ContextMenu>
+        <items>
+          <MenuItem mnemonicParsing="false" onAction="#onAdd" text="Add new" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#onRename" text="Rename" />
+            <MenuItem mnemonicParsing="false" onAction="#onChangeType" text="Change type" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#onDelete" text="Delete" />
+        </items>
+      </ContextMenu>
+   </contextMenu>
+</TableColumn>
