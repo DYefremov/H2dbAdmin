@@ -15,9 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,6 +27,10 @@ public class TableEditor {
     private TableView mainTable;
 
     private static TableEditor instance = new TableEditor();
+
+    private static final String DEFAULT_COLUMN_NAME = "New column";
+    private static final String DEFAULT_COLUMN_TYPE = ColumnDataType.VARCHAR.name();
+    private static final String DEFAULT_CELL_VALUE = "New value";
 
     private static final Logger logger = LogManager.getLogger(TableEditor.class);
 
@@ -52,20 +54,17 @@ public class TableEditor {
 
         if (size > 0) {
             int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-            mainTable.getItems().add(++selectedIndex, FXCollections.observableArrayList(Collections.nCopies(size, "New value.")));
+            mainTable.getItems().add(++selectedIndex, FXCollections.observableArrayList(Collections.nCopies(size, DEFAULT_CELL_VALUE)));
             mainTable.getSelectionModel().select(selectedIndex, null);
         } else {
             Optional<String> result = new InputDialog("\tPlease, specify\n the number of columns!", "1", true).showAndWait();
 
             if (result.isPresent()) {
                 Integer num = Integer.valueOf(result.get());
-                List<Column> columns = new ArrayList<>(num);
 
                 for (int i = 0; i < num; i++) {
-                    columns.add(new Column("NEW", 0));
+                   createNewColumn(DEFAULT_COLUMN_NAME, DEFAULT_COLUMN_TYPE);
                 }
-
-                mainTable.getColumns().addAll(new TableDataResolver().getColumns(columns));
             }
         }
         mainTable.refresh();
@@ -173,18 +172,13 @@ public class TableEditor {
                 return;
             }
 
-            mainTable.getColumns().remove(column);
-            /*
+            mainTable.getColumns().remove(index);
             ObservableList<ObservableList> items = mainTable.getItems();
 
             if (items != null && !items.isEmpty()) {
-                System.out.println("Row size before = " + items.get(0).size());
                 // Remove cell from rows by index.
                 items.parallelStream().forEach(item -> item.remove(index));
-                mainTable.setItems(items);
-                System.out.println("Row size after = " + items.get(0).size());
             }
-            */
         }
     }
 
@@ -193,25 +187,34 @@ public class TableEditor {
      */
     public void addColumn() {
 
-        Optional<String> result = new InputDialog("Please, write column name!", "NEW", false).showAndWait();
+        Optional<String> result = new InputDialog("Please, write column name!", DEFAULT_COLUMN_NAME, false).showAndWait();
 
         if (result.isPresent()) {
-            int index = 0;
-            ObservableList<ObservableList> items = mainTable.getItems();
-            if (items != null && !items.isEmpty()) {
-                ObservableList row = items.get(0);
-                index = row.size();
-                // Fill in the data.
-                items.parallelStream().forEach(item -> item.add("New value."));
-                mainTable.setItems(items);
-            }
             // Create column
             String name = result.get();
-            int type = ColumnDataType.getNumType(ColumnDataType.VARCHAR.name());
-            TableColumn column = new TableDataResolver().getColumn(new Column(name, type), index, false);
-            mainTable.getColumns().add(column);
+            createNewColumn(name, DEFAULT_COLUMN_TYPE);
 
             logger.info("Add column in table.");
+        }
+    }
+
+    /**
+     * Create new column
+     *
+     * @param name
+     * @param type
+     */
+    private void createNewColumn(String name, String type){
+
+        int colType = ColumnDataType.getNumType(type);
+        TableColumn column = new TableDataResolver().getColumn(new Column(name, colType), false);
+        mainTable.getColumns().add(column);
+
+        ObservableList<ObservableList> items = mainTable.getItems();
+        if (items != null && !items.isEmpty()) {
+            // Fill in the data.
+            items.parallelStream().forEach(item -> item.add(DEFAULT_CELL_VALUE));
+            mainTable.setItems(items);
         }
     }
 

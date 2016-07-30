@@ -84,9 +84,8 @@ public class TableDataResolver {
         ObservableList columns = FXCollections.observableArrayList();
 
         values.forEach(col -> {
-            final int index = values.indexOf(col);
             String name = col.getName();
-            columns.add(getColumn(col, index, pk != null && pk.equals(name)));
+            columns.add(getColumn(col, pk != null && pk.equals(name)));
         });
 
         return columns;
@@ -96,10 +95,9 @@ public class TableDataResolver {
      * Construct table column
      *
      * @param column
-     * @param index
      * @return
      */
-    public TableColumn getColumn(Column column, int index, boolean isKey) {
+    public TableColumn getColumn(Column column, boolean isKey) {
 
         TableColumn tableColumn = getTableColumn(column);
         //Set style for primary key tableColumn
@@ -110,6 +108,7 @@ public class TableDataResolver {
         tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                int index = tableColumn.getTableView().getColumns().indexOf(tableColumn);
                 return new SimpleStringProperty(param.getValue().get(index).toString());
             }
         });
