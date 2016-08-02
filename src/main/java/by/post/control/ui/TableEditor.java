@@ -143,7 +143,6 @@ public class TableEditor {
      */
     public void renameColumn(TableColumn column) {
         Column col = (Column) column.getUserData();
-        System.out.println(col.toString());
     }
 
     /**
@@ -153,7 +152,6 @@ public class TableEditor {
      */
     public void changeColumnType(TableColumn column) {
         Column col = (Column) column.getUserData();
-        System.out.println(col.toString());
     }
 
     /**
@@ -185,17 +183,10 @@ public class TableEditor {
     /**
      * Add new column in the table
      */
-    public void addColumn() {
+    public void addColumn(String name, String type) {
 
-        Optional<String> result = new InputDialog("Please, write column name!", DEFAULT_COLUMN_NAME, false).showAndWait();
-
-        if (result.isPresent()) {
-            // Create column
-            String name = result.get();
-            createNewColumn(name, DEFAULT_COLUMN_TYPE);
-
-            logger.info("Add column in table.");
-        }
+        createNewColumn(name, type);
+        logger.info("Add column in table.");
     }
 
     /**

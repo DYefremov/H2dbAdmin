@@ -2,11 +2,13 @@ package by.post.control.ui;
 
 import by.post.data.Column;
 import by.post.data.ColumnDataType;
+import by.post.ui.AddColumnDialog;
 import by.post.ui.ChoiceColumnTypeDialog;
 import by.post.ui.InputDialog;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.util.Pair;
 
 import java.util.Optional;
 
@@ -14,9 +16,9 @@ import java.util.Optional;
  * @author Dmitriy V.Yefremov
  */
 public class MultipleTableColumnController {
+
     @FXML
     Label name;
-
     @FXML
     Label type;
 
@@ -32,7 +34,14 @@ public class MultipleTableColumnController {
      */
     @FXML
     public void onAdd() {
-        tableEditor.addColumn();
+
+        Optional<Pair<String, String>> result = new AddColumnDialog().showAndWait();
+
+        if (result.isPresent()) {
+            String name = result.get().getKey();
+            String type = result.get().getValue();
+            tableEditor.addColumn(name, type);
+        }
     }
 
     @FXML
@@ -41,7 +50,7 @@ public class MultipleTableColumnController {
         Optional<String> result = new InputDialog("Set new name of column", "New", false).showAndWait();
 
         if (result.isPresent() && tableColumn.getUserData() != null) {
-            String newName =  result.get();
+            String newName = result.get();
             Column data = (Column) tableColumn.getUserData();
             data.setName(newName);
             name.setText(newName);

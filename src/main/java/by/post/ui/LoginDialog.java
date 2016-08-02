@@ -22,11 +22,11 @@ public class LoginDialog extends Dialog<Pair<String, String>> {
     private Parent parent;
     private LoginDialogController controller;
 
-    public LoginDialog() throws Exception{
+    public LoginDialog() throws Exception {
         init();
     }
 
-    private void init() throws Exception{
+    private void init() throws Exception {
 
         loader = new FXMLLoader(LoginDialog.class.getResource("LoginDialog.fxml"));
         parent = loader.<DialogPane>load();
@@ -42,7 +42,7 @@ public class LoginDialog extends Dialog<Pair<String, String>> {
             return data == ButtonBar.ButtonData.OK_DONE ? new Pair(login, password) : null;
         });
 
-        Stage stage =  (Stage) getDialogPane().getScene().getWindow();
+        Stage stage = (Stage) getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(Resources.LOGO_PATH));
     }
 
