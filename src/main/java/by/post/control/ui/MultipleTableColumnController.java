@@ -35,12 +35,10 @@ public class MultipleTableColumnController {
     @FXML
     public void onAdd() {
 
-        Optional<Pair<String, String>> result = new AddColumnDialog().showAndWait();
+        Optional<Column> result = new AddColumnDialog().showAndWait();
 
         if (result.isPresent()) {
-            String name = result.get().getKey();
-            String type = result.get().getValue();
-            tableEditor.addColumn(name, type);
+            tableEditor.addColumn(result.get());
         }
     }
 

@@ -6,6 +6,7 @@ import java.util.List;
  * @author Dmitriy V.Yefremov
  */
 public class Table implements Data {
+
     private String name;
     private String primaryKey;
     private List<Column> columns;

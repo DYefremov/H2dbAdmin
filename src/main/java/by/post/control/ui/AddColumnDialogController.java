@@ -3,6 +3,7 @@ package by.post.control.ui;
 import by.post.data.ColumnDataType;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -15,6 +16,10 @@ public class AddColumnDialogController {
     private TextField name;
     @FXML
     private ComboBox type;
+    @FXML
+    private CheckBox primaryKey;
+    @FXML
+    private CheckBox notNull;
 
     public AddColumnDialogController() {
 
@@ -26,6 +31,14 @@ public class AddColumnDialogController {
 
     public String getType() {
         return String.valueOf(type.getSelectionModel().getSelectedItem());
+    }
+
+    public boolean getPrimaryKey() {
+        return primaryKey.isSelected();
+    }
+
+    public boolean getNotNull() {
+        return notNull.isSelected();
     }
 
     @FXML

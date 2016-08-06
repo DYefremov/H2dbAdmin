@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
@@ -18,12 +20,25 @@
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <ComboBox fx:id="type" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="name" GridPane.columnIndex="1" />
-            <Label alignment="CENTER_RIGHT" text="Column name:" textAlignment="CENTER" />
-            <Label alignment="BOTTOM_RIGHT" text="Column type:" GridPane.rowIndex="1" />
+            <Label alignment="CENTER_RIGHT" text="Column name:" textAlignment="CENTER" GridPane.halignment="RIGHT">
+               <GridPane.margin>
+                  <Insets right="5.0" />
+               </GridPane.margin></Label>
+            <Label alignment="BOTTOM_RIGHT" text="Column type:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets right="5.0" />
+               </GridPane.margin></Label>
+            <CheckBox fx:id="primaryKey" mnemonicParsing="false" text="Primary key" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <CheckBox fx:id="notNull" mnemonicParsing="false" text="Not null" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </CheckBox>
          </children>
       </GridPane>
    </content>

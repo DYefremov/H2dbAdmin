@@ -1,6 +1,8 @@
 package by.post.ui;
 
 import by.post.control.ui.AddColumnDialogController;
+import by.post.data.Column;
+import by.post.data.ColumnDataType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -8,7 +10,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
 /**
  * @author Dmitriy V.Yefremov
  */
-public class AddColumnDialog extends Dialog<Pair<String, String>> {
+public class AddColumnDialog extends Dialog<Column> {
 
     private FXMLLoader loader;
     private DialogPane parent;
@@ -44,10 +45,15 @@ public class AddColumnDialog extends Dialog<Pair<String, String>> {
         setDialogPane(parent);
 
         setResultConverter((dialogButton) -> {
+
             String name = controller.getName();
             String type = controller.getType();
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
-            return data == ButtonBar.ButtonData.OK_DONE ? new Pair(name, type) : null;
+            Column column = new Column(name, ColumnDataType.getNumType(type));
+            column.setPrimaryKey(controller.getPrimaryKey());
+            column.setNotNull(controller.getNotNull());
+
+            return data == ButtonBar.ButtonData.OK_DONE ? column : null;
         });
 
         Stage stage = (Stage) getDialogPane().getScene().getWindow();

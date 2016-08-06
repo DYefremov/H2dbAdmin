@@ -6,6 +6,7 @@ import java.util.List;
  * @author Dmitriy V.Yefremov
  */
 public class Row implements Data {
+
     private int num;
     private List<Cell> cells;
 

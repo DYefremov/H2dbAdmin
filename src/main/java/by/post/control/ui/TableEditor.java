@@ -28,9 +28,9 @@ public class TableEditor {
 
     private static TableEditor instance = new TableEditor();
 
-    private static final String DEFAULT_COLUMN_NAME = "New column";
-    private static final String DEFAULT_COLUMN_TYPE = ColumnDataType.VARCHAR.name();
     private static final String DEFAULT_CELL_VALUE = "New value";
+    private static final String DEFAULT_COLUMN_NAME = "New column";
+    private static final int DEFAULT_COLUMN_TYPE = ColumnDataType.getNumType(ColumnDataType.VARCHAR.name());
 
     private static final Logger logger = LogManager.getLogger(TableEditor.class);
 
@@ -63,7 +63,7 @@ public class TableEditor {
                 Integer num = Integer.valueOf(result.get());
 
                 for (int i = 0; i < num; i++) {
-                   createNewColumn(DEFAULT_COLUMN_NAME, DEFAULT_COLUMN_TYPE);
+                   createNewColumn(new Column(DEFAULT_COLUMN_NAME, DEFAULT_COLUMN_TYPE));
                 }
             }
         }
@@ -183,23 +183,20 @@ public class TableEditor {
     /**
      * Add new column in the table
      */
-    public void addColumn(String name, String type) {
-
-        createNewColumn(name, type);
-        logger.info("Add column in table.");
+    public void addColumn(Column column) {
+        createNewColumn(column);
+        logger.info("Add column in table: " + column.getName());
     }
 
     /**
      * Create new column
      *
-     * @param name
-     * @param type
+     * @param column
      */
-    private void createNewColumn(String name, String type){
+    private void createNewColumn(Column column){
 
-        int colType = ColumnDataType.getNumType(type);
-        TableColumn column = new TableDataResolver().getColumn(new Column(name, colType), false);
-        mainTable.getColumns().add(column);
+        TableColumn tableColumn = new TableDataResolver().getColumn(column, false);
+        mainTable.getColumns().add(tableColumn);
 
         ObservableList<ObservableList> items = mainTable.getItems();
         if (items != null && !items.isEmpty()) {
