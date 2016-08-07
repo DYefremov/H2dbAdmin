@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
+<BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
    <top>
       <VBox>
          <children>
@@ -82,8 +82,8 @@
                <contextMenu>
                   <ContextMenu>
                     <items>
-                      <MenuItem mnemonicParsing="false" onAction="#onTreeContextAdd" text="Add" />
-                        <MenuItem mnemonicParsing="false" onAction="#onTreeContextDelete" text="Delete" />
+                      <MenuItem mnemonicParsing="false" onAction="#onTreeContextAdd" text="Add table" />
+                        <MenuItem mnemonicParsing="false" onAction="#onTreeContextDelete" text="Delete table" />
                     </items>
                   </ContextMenu>
                </contextMenu></TreeView>

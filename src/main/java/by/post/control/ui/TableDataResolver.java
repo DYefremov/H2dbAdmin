@@ -142,7 +142,6 @@ public class TableDataResolver {
             tableColumn.setUserData(column);
             columnController.setName(column.getName());
             columnController.setType(ColumnDataType.getType(column.getType()));
-            columnController.setTableColumn(tableColumn);
         } catch (IOException e) {
             logger.error("TableDataResolver error in getColumn: " + e);
         }

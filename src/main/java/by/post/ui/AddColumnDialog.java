@@ -43,9 +43,9 @@ public class AddColumnDialog extends Dialog<Column> {
         parent.setHeaderText("Please, set name and type of column!");
         parent.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         setDialogPane(parent);
+        setTitle(Resources.TITLE);
 
         setResultConverter((dialogButton) -> {
-
             String name = controller.getName();
             String type = controller.getType();
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();

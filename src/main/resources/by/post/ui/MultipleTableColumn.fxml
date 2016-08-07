@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<TableColumn minWidth="80" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MultipleTableColumnController">
+<TableColumn fx:id="tableColumn" maxWidth="1.7976931348623157E308" minWidth="80" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MultipleTableColumnController">
     <graphic>
         <VBox alignment="CENTER">
             <children>

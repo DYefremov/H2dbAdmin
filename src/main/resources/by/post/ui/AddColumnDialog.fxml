@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<DialogPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.AddColumnDialogController">
+<DialogPane xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.AddColumnDialogController">
    <content>
-      <GridPane prefWidth="300.0">
+      <GridPane>
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -23,7 +23,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ComboBox fx:id="type" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="type" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="name" GridPane.columnIndex="1" />
             <Label alignment="CENTER_RIGHT" text="Column name:" textAlignment="CENTER" GridPane.halignment="RIGHT">
                <GridPane.margin>

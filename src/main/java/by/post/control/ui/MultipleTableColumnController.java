@@ -8,7 +8,6 @@ import by.post.ui.InputDialog;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.util.Pair;
 
 import java.util.Optional;
 
@@ -18,10 +17,10 @@ import java.util.Optional;
 public class MultipleTableColumnController {
 
     @FXML
-    Label name;
+    private Label name;
     @FXML
-    Label type;
-
+    private Label type;
+    @FXML
     private TableColumn tableColumn;
     private TableEditor tableEditor;
 
@@ -51,7 +50,7 @@ public class MultipleTableColumnController {
             String newName = result.get();
             Column data = (Column) tableColumn.getUserData();
             data.setName(newName);
-            name.setText(newName);
+            setName(newName);
             tableEditor.renameColumn(tableColumn);
         }
     }
@@ -59,14 +58,15 @@ public class MultipleTableColumnController {
     @FXML
     public void onChangeType() {
 
-        Optional<String> result = new ChoiceColumnTypeDialog().showAndWait();
+        Column data = (Column) tableColumn.getUserData();
 
-        if (result.isPresent() && tableColumn.getUserData() != null) {
-            Column data = (Column) tableColumn.getUserData();
-            String newType = result.get();
-            data.setType(ColumnDataType.getNumType(newType));
-            type.setText(newType);
-            tableEditor.changeColumnType(tableColumn);
+        if (data != null) {
+            Optional<Column> result = new ChoiceColumnTypeDialog(data).showAndWait();
+
+            if (result.isPresent()) {
+                setType(ColumnDataType.getType(data.getType()));
+                tableEditor.changeColumnType(tableColumn);
+            }
         }
     }
 
@@ -80,14 +80,6 @@ public class MultipleTableColumnController {
 
     public void setType(String type) {
         this.type.setText(type);
-    }
-
-    public TableColumn getTableColumn() {
-        return tableColumn;
-    }
-
-    public void setTableColumn(TableColumn tableColumn) {
-        this.tableColumn = tableColumn;
     }
 
     @FXML
