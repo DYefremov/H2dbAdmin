@@ -3,6 +3,8 @@ package by.post.control.ui;
 import by.post.control.PropertiesController;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
+import by.post.control.db.TableDataResolver;
+import by.post.control.db.TableEditor;
 import by.post.data.Table;
 import by.post.ui.*;
 import javafx.beans.value.ChangeListener;

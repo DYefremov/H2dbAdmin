@@ -1,5 +1,6 @@
-package by.post.control.ui;
+package by.post.control.db;
 
+import by.post.control.ui.MultipleTableColumnController;
 import by.post.data.Column;
 import by.post.data.ColumnDataType;
 import by.post.data.Row;

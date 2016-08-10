@@ -1,5 +1,6 @@
 package by.post.control.ui;
 
+import by.post.control.db.TableEditor;
 import by.post.data.Column;
 import by.post.data.ColumnDataType;
 import by.post.ui.AddColumnDialog;

@@ -22,8 +22,8 @@
          <children>
             <ChoiceBox fx:id="type" GridPane.columnIndex="1" />
             <Label text="Column type" />
-            <CheckBox fx:id="isKey" mnemonicParsing="false" onAction="#onIsKey" text="Primary key" GridPane.rowIndex="1" />
-            <CheckBox fx:id="isNotNull" mnemonicParsing="false" onAction="#onIsNotNull" text="Not null" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <CheckBox fx:id="isKey" mnemonicParsing="false" text="Primary key" GridPane.rowIndex="1" />
+            <CheckBox fx:id="isNotNull" mnemonicParsing="false" text="Not null" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </content>

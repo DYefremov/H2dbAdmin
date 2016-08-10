@@ -1,8 +1,5 @@
-package by.post.control.ui;
+package by.post.control.db;
 
-import by.post.control.db.DbControl;
-import by.post.control.db.DbController;
-import by.post.control.db.Queries;
 import by.post.data.Column;
 import by.post.data.ColumnDataType;
 import by.post.ui.ConfirmationDialog;
