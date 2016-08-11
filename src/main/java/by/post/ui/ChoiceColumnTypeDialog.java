@@ -28,7 +28,7 @@ public class ChoiceColumnTypeDialog extends Dialog<Column> {
     private static final Logger logger = LogManager.getLogger(ChoiceColumnTypeDialog.class);
 
     public ChoiceColumnTypeDialog() {
-        column = new Column("New column", ColumnDataType.getNumType(ColumnDataType.VARCHAR.name()));
+        column = new Column("New column", ColumnDataType.VARCHAR.name());
         init();
     }
 

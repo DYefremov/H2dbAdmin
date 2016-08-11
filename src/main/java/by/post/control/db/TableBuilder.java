@@ -82,8 +82,7 @@ public class TableBuilder {
         int count = rsMetaData.getColumnCount();
 
         for (int i = 1; i <= count; i++) {
-            Column column = new Column(rsMetaData.getColumnName(i), rsMetaData.getColumnType(i));
-            columns.add(column);
+            columns.add(getColumn(rsMetaData, i));
         }
 
         return columns;
@@ -106,18 +105,6 @@ public class TableBuilder {
     }
 
     /**
-     * @return row
-     */
-    private Row getRow(int index, ResultSet rs) throws SQLException {
-
-        Row row = new Row();
-        row.setNum(index);
-        row.setCells(getCells(rs));
-
-        return row;
-    }
-
-    /**
      * @param rs
      * @return cells list
      * @throws SQLException
@@ -137,6 +124,48 @@ public class TableBuilder {
     }
 
     /**
+     * @param table
+     * @param connection
+     */
+    public void update(Table table, Connection connection) {
+
+    }
+
+    /**
+     * @param rsMetaData
+     * @param index
+     * @return one column
+     * @throws SQLException
+     */
+    private Column getColumn(ResultSetMetaData rsMetaData, int index) throws SQLException {
+
+        Column column = new Column();
+        column.setName(rsMetaData.getColumnName(index));
+        column.setType(rsMetaData.getColumnTypeName(index));
+        column.setNotNull(rsMetaData.isNullable(index) == 1);
+        column.setAutoIncrement(rsMetaData.isAutoIncrement(index));
+        column.setReadOnly(rsMetaData.isReadOnly(index));
+        column.setCaseSensitive(rsMetaData.isCaseSensitive(index));
+        column.setSearchable(rsMetaData.isSearchable(index));
+        column.setWritable(rsMetaData.isWritable(index));
+        column.setSigned(rsMetaData.isSigned(index));
+
+        return column;
+    }
+
+    /**
+     * @return row
+     */
+    private Row getRow(int index, ResultSet rs) throws SQLException {
+
+        Row row = new Row();
+        row.setNum(index);
+        row.setCells(getCells(rs));
+
+        return row;
+    }
+
+    /**
      * @return one cell
      */
     private Cell getCell(int num, ResultSet rs) throws SQLException {
@@ -145,13 +174,5 @@ public class TableBuilder {
         cell.setValue(rs.getNString(num));
 
         return cell;
-    }
-
-    /**
-     * @param table
-     * @param connection
-     */
-    public void update(Table table, Connection connection) {
-
     }
 }

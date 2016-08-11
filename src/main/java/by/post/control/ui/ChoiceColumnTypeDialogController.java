@@ -33,15 +33,15 @@ public class ChoiceColumnTypeDialogController {
         return isNotNull.isSelected();
     }
 
-    public int getType() {
-        return ColumnDataType.getNumType(String.valueOf(type.getSelectionModel().getSelectedItem()));
+    public String getType() {
+        return String.valueOf(type.getSelectionModel().getSelectedItem());
     }
 
     public void setColumn(Column column) {
         this.column = column;
         isKey.setSelected(column.isPrimaryKey());
         isNotNull.setSelected(column.isNotNull());
-        type.getSelectionModel().select(column != null ? ColumnDataType.getType(column.getType()) : ColumnDataType.VARCHAR.name());
+        type.getSelectionModel().select(column != null ? column.getType() : ColumnDataType.VARCHAR.name());
     }
 
     @FXML

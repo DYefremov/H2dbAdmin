@@ -2,7 +2,6 @@ package by.post.control.db;
 
 import by.post.control.ui.MultipleTableColumnController;
 import by.post.data.Column;
-import by.post.data.ColumnDataType;
 import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.MainUiForm;
@@ -142,7 +141,7 @@ public class TableDataResolver {
             MultipleTableColumnController columnController = loader.getController();
             tableColumn.setUserData(column);
             columnController.setName(column.getName());
-            columnController.setType(ColumnDataType.getType(column.getType()));
+            columnController.setType(column.getType());
         } catch (IOException e) {
             logger.error("TableDataResolver error in getColumn: " + e);
         }

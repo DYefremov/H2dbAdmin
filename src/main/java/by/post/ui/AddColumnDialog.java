@@ -2,7 +2,6 @@ package by.post.ui;
 
 import by.post.control.ui.AddColumnDialogController;
 import by.post.data.Column;
-import by.post.data.ColumnDataType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -49,7 +48,7 @@ public class AddColumnDialog extends Dialog<Column> {
             String name = controller.getName();
             String type = controller.getType();
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
-            Column column = new Column(name, ColumnDataType.getNumType(type));
+            Column column = new Column(name, type);
             column.setPrimaryKey(controller.getPrimaryKey());
             column.setNotNull(controller.getNotNull());
 

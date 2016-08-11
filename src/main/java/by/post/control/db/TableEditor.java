@@ -27,7 +27,7 @@ public class TableEditor {
 
     private static final String DEFAULT_CELL_VALUE = "New value";
     private static final String DEFAULT_COLUMN_NAME = "New column";
-    private static final int DEFAULT_COLUMN_TYPE = ColumnDataType.getNumType(ColumnDataType.VARCHAR.name());
+    private static final String DEFAULT_COLUMN_TYPE = ColumnDataType.VARCHAR.name();
 
     private static final Logger logger = LogManager.getLogger(TableEditor.class);
 

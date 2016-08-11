@@ -2,7 +2,6 @@ package by.post.control.ui;
 
 import by.post.control.db.TableEditor;
 import by.post.data.Column;
-import by.post.data.ColumnDataType;
 import by.post.ui.AddColumnDialog;
 import by.post.ui.ChoiceColumnTypeDialog;
 import by.post.ui.InputDialog;
@@ -65,7 +64,7 @@ public class MultipleTableColumnController {
             Optional<Column> result = new ChoiceColumnTypeDialog(data).showAndWait();
 
             if (result.isPresent()) {
-                setType(ColumnDataType.getType(data.getType()));
+                setType(data.getType());
                 tableEditor.changeColumnType(tableColumn);
             }
         }
