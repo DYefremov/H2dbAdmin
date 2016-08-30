@@ -103,7 +103,10 @@ public class TableEditor {
             dbControl = DbController.getInstance();
             dbControl.update(Queries.createTable(name));
 
-            tableTree.getRoot().getChildren().add(new TreeItem<>(name));
+            TreeItem treeItem = new TreeItem<>(name);
+            tableTree.getRoot().getChildren().add(treeItem);
+            tableTree.getSelectionModel().select(treeItem);
+            tableTree.scrollTo(tableTree.getSelectionModel().getSelectedIndex());
             tableTree.refresh();
 
             logger.log(Level.INFO, "Added new  table: " + name);
@@ -134,21 +137,13 @@ public class TableEditor {
     }
 
     /**
-     * Change column name in the table
+     * Change column properties in the table
      *
      * @param column
      */
-    public void renameColumn(TableColumn column) {
+    public void changeColumnProperties(TableColumn column) {
         Column col = (Column) column.getUserData();
-    }
-
-    /**
-     * Change column type in the table
-     *
-     * @param column
-     */
-    public void changeColumnType(TableColumn column) {
-        Column col = (Column) column.getUserData();
+        logger.log(Level.INFO, "Modified column in the table.");
     }
 
     /**

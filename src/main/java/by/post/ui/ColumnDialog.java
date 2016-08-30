@@ -1,6 +1,6 @@
 package by.post.ui;
 
-import by.post.control.ui.ChoiceColumnTypeDialogController;
+import by.post.control.ui.ColumnDialogController;
 import by.post.data.Column;
 import by.post.data.ColumnDataType;
 import javafx.fxml.FXMLLoader;
@@ -14,40 +14,44 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
+ * Column dialog for add and edit
+ *
  * @author Dmitriy V.Yefremov
  */
-public class ChoiceColumnTypeDialog extends Dialog<Column> {
+public class ColumnDialog extends Dialog<Column> {
 
     private FXMLLoader loader;
     private DialogPane parent;
-    private ChoiceColumnTypeDialogController controller;
+    private ColumnDialogController controller;
     private Column column;
 
-    private static final Logger logger = LogManager.getLogger(ChoiceColumnTypeDialog.class);
+    private static final Logger logger = LogManager.getLogger(ColumnDialog.class);
 
-    public ChoiceColumnTypeDialog() {
+    public ColumnDialog() {
         column = new Column("New column", ColumnDataType.VARCHAR.name());
         init();
     }
 
-    public ChoiceColumnTypeDialog(Column column) {
+    public ColumnDialog(Column column) {
         this.column = column;
         init();
     }
 
     private void init() {
+
         try {
-            loader = new FXMLLoader(AddColumnDialog.class.getResource("ChoiceColumnTypeDialog.fxml"));
+            loader = new FXMLLoader(ColumnDialog.class.getResource("ColumnDialog.fxml"));
             parent = loader.<DialogPane>load();
             controller = loader.getController();
             controller.setColumn(column);
         } catch (IOException e) {
-            logger.error("AddColumnDialog create error: " + e);
+            logger.error("ColumnDialog create error: " + e);
         }
 
-        parent.setHeaderText("Please, set type of column!");
+        parent.setHeaderText("Please, set properties of column!");
         parent.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         setDialogPane(parent);
         setTitle(Resources.TITLE);
@@ -57,16 +61,21 @@ public class ChoiceColumnTypeDialog extends Dialog<Column> {
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
 
             if (data == ButtonBar.ButtonData.OK_DONE) {
-                column.setType(controller.getType());
-                column.setPrimaryKey(controller.isKey());
-                column.setNotNull(controller.isNotNull());
-                return column;
+                Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+                if (result.get() == ButtonType.OK) {
+                    column.setName(controller.getName());
+                    column.setType(controller.getType());
+                    column.setPrimaryKey(controller.isKey());
+                    column.setNotNull(controller.isNotNull());
+                }
             }
 
-            return null;
+            return data == ButtonBar.ButtonData.OK_DONE ? column : null;
         });
 
         Stage stage = (Stage) getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(Resources.LOGO_PATH));
     }
+
 }

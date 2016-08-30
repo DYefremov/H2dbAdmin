@@ -2,9 +2,7 @@ package by.post.control.ui;
 
 import by.post.control.db.TableEditor;
 import by.post.data.Column;
-import by.post.ui.AddColumnDialog;
-import by.post.ui.ChoiceColumnTypeDialog;
-import by.post.ui.InputDialog;
+import by.post.ui.ColumnDialog;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -34,7 +32,7 @@ public class MultipleTableColumnController {
     @FXML
     public void onAdd() {
 
-        Optional<Column> result = new AddColumnDialog().showAndWait();
+        Optional<Column> result = new ColumnDialog().showAndWait();
 
         if (result.isPresent()) {
             tableEditor.addColumn(result.get());
@@ -42,30 +40,17 @@ public class MultipleTableColumnController {
     }
 
     @FXML
-    public void onRename() {
-
-        Optional<String> result = new InputDialog("Set new name of column", "New", false).showAndWait();
-
-        if (result.isPresent() && tableColumn.getUserData() != null) {
-            String newName = result.get();
-            Column data = (Column) tableColumn.getUserData();
-            data.setName(newName);
-            setName(newName);
-            tableEditor.renameColumn(tableColumn);
-        }
-    }
-
-    @FXML
-    public void onChangeType() {
+    public void onChange() {
 
         Column data = (Column) tableColumn.getUserData();
 
         if (data != null) {
-            Optional<Column> result = new ChoiceColumnTypeDialog(data).showAndWait();
+            Optional<Column> result = new ColumnDialog(data).showAndWait();
 
             if (result.isPresent()) {
                 setType(data.getType());
-                tableEditor.changeColumnType(tableColumn);
+                setName(data.getName());
+                tableEditor.changeColumnProperties(tableColumn);
             }
         }
     }

@@ -24,10 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Controller class for main ui form
@@ -228,7 +225,7 @@ public class MainUiController {
     }
 
     /**
-     * init data on startup
+     * Init data on startup
      */
     private void init() {
 
@@ -241,6 +238,8 @@ public class MainUiController {
             tables.add(new TreeItem(t));
         });
 
+        // Sorting
+//        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
         ObservableList<TreeItem> list = FXCollections.observableList(tables);
         TreeItem root = new TreeItem(dbName);
         root.getChildren().addAll(list);

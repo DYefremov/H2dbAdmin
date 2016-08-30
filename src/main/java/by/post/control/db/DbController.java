@@ -95,7 +95,7 @@ public class DbController implements DbControl {
     public List<String> getTablesList() {
 
         List<String> tables = new ArrayList<>();
-        ResultSet rs =null;
+        ResultSet rs = null;
 
         if (connection != null) {
             try {

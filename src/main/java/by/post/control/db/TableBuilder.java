@@ -22,8 +22,6 @@ public class TableBuilder {
      */
     public Table getTable(String name, Connection connection) {
 
-        //TODO add primary key and not null properties in to column
-
         Table table = new Table(name);
 
         Statement st = null;

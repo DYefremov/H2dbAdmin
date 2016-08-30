@@ -5,15 +5,18 @@ import by.post.data.ColumnDataType;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
 /**
  * @author Dmitriy V.Yefremov
  */
-public class ChoiceColumnTypeDialogController {
+public class ColumnDialogController {
 
     @FXML
-    private ChoiceBox type;
+    private TextField name;
+    @FXML
+    private ComboBox type;
     @FXML
     private CheckBox isKey;
     @FXML
@@ -21,24 +24,33 @@ public class ChoiceColumnTypeDialogController {
 
     private Column column;
 
-    public ChoiceColumnTypeDialogController() {
+    public ColumnDialogController() {
 
     }
 
-    public boolean isKey() {
-       return isKey.isSelected();
-    }
-
-    public boolean isNotNull() {
-        return isNotNull.isSelected();
+    public String getName() {
+        return name.getText();
     }
 
     public String getType() {
         return String.valueOf(type.getSelectionModel().getSelectedItem());
     }
 
+    public boolean isKey() {
+        return isKey.isSelected();
+    }
+
+    public boolean isNotNull() {
+        return isNotNull.isSelected();
+    }
+
+    public Column getColumn() {
+        return column;
+    }
+
     public void setColumn(Column column) {
         this.column = column;
+        name.setText(column.getName());
         isKey.setSelected(column.isPrimaryKey());
         isNotNull.setSelected(column.isNotNull());
         type.getSelectionModel().select(column != null ? column.getType() : ColumnDataType.VARCHAR.name());
