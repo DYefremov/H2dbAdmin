@@ -50,7 +50,7 @@ public class ColumnDialogController {
 
     public void setColumn(Column column) {
         this.column = column;
-        name.setText(column.getName());
+        name.setText(column.getColumnName());
         isKey.setSelected(column.isPrimaryKey());
         isNotNull.setSelected(column.isNotNull());
         type.getSelectionModel().select(column != null ? column.getType() : ColumnDataType.VARCHAR.name());

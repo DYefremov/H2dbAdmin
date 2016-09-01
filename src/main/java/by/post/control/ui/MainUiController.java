@@ -279,6 +279,7 @@ public class MainUiController {
         TreeItem item = (TreeItem) tableTree.getSelectionModel().getSelectedItem();
         String name = item.getValue() != null ? item.getValue().toString() : "";
         currentTableName.setText(name);
+        mainTable.setId(name);
 
         TableDataResolver resolver = new TableDataResolver(table);
 

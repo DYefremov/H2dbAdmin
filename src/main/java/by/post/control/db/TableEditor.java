@@ -1,7 +1,7 @@
 package by.post.control.db;
 
 import by.post.data.Column;
-import by.post.data.ColumnDataType;
+import by.post.ui.ColumnDialog;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
 import javafx.collections.FXCollections;
@@ -25,13 +25,12 @@ public class TableEditor {
 
     private static TableEditor instance = new TableEditor();
 
-    private static final String DEFAULT_CELL_VALUE = "New value";
-    private static final String DEFAULT_COLUMN_NAME = "New column";
-    private static final String DEFAULT_COLUMN_TYPE = ColumnDataType.VARCHAR.name();
+    private static final String DEFAULT_CELL_VALUE = "value";
 
     private static final Logger logger = LogManager.getLogger(TableEditor.class);
 
     private TableEditor() {
+       dbControl = DbController.getInstance();
     }
 
     public static TableEditor getInstance() {
@@ -54,14 +53,10 @@ public class TableEditor {
             mainTable.getItems().add(++selectedIndex, FXCollections.observableArrayList(Collections.nCopies(size, DEFAULT_CELL_VALUE)));
             mainTable.getSelectionModel().select(selectedIndex, null);
         } else {
-            Optional<String> result = new InputDialog("\tPlease, specify\n the number of columns!", "1", true).showAndWait();
+            Optional<Column> result = new ColumnDialog().showAndWait();
 
             if (result.isPresent()) {
-                Integer num = Integer.valueOf(result.get());
-
-                for (int i = 0; i < num; i++) {
-                   createNewColumn(new Column(DEFAULT_COLUMN_NAME, DEFAULT_COLUMN_TYPE));
-                }
+                addColumn(result.get());
             }
         }
         mainTable.refresh();
@@ -98,18 +93,21 @@ public class TableEditor {
         Optional<String> result = new InputDialog("Please, write table name!", "New table", false).showAndWait();
 
         if (result.isPresent()) {
-            String name = result.get();
+            try {
+                String name = result.get();
+                dbControl.update(Queries.createTable(name));
 
-            dbControl = DbController.getInstance();
-            dbControl.update(Queries.createTable(name));
+                TreeItem treeItem = new TreeItem<>(name);
+                tableTree.getRoot().getChildren().add(treeItem);
+                tableTree.getSelectionModel().select(treeItem);
+                tableTree.scrollTo(tableTree.getSelectionModel().getSelectedIndex());
+                tableTree.refresh();
 
-            TreeItem treeItem = new TreeItem<>(name);
-            tableTree.getRoot().getChildren().add(treeItem);
-            tableTree.getSelectionModel().select(treeItem);
-            tableTree.scrollTo(tableTree.getSelectionModel().getSelectedIndex());
-            tableTree.refresh();
-
-            logger.log(Level.INFO, "Added new  table: " + name);
+                logger.log(Level.INFO, "Added new  table: " + name);
+            } catch (Exception e) {
+                logger.log(Level.ERROR, "Table editor error: " + e);
+                new Alert(Alert.AlertType.ERROR, "Failure to add  the table.\nSee more in console!").showAndWait();
+            }
         }
     }
 
@@ -123,16 +121,20 @@ public class TableEditor {
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            TreeItem item = (TreeItem) tableTree.getSelectionModel().getSelectedItem();
-            String name = item.getValue().toString();
+            try {
+                TreeItem item = (TreeItem) tableTree.getSelectionModel().getSelectedItem();
+                String name = item.getValue().toString();
 
-            dbControl = DbController.getInstance();
-            dbControl.update(Queries.deleteTable(name));
+                dbControl.update(Queries.deleteTable(name));
 
-            tableTree.getRoot().getChildren().remove(item);
-            tableTree.refresh();
+                tableTree.getRoot().getChildren().remove(item);
+                tableTree.refresh();
 
-            logger.log(Level.INFO, "Deleted table: " + name);
+                logger.log(Level.INFO, "Deleted table: " + name);
+            } catch (Exception e) {
+                logger.log(Level.ERROR, "Table editor error: " + e);
+                new Alert(Alert.AlertType.ERROR, "Failure to remove the table.\nSee more in console!").showAndWait();
+            }
         }
     }
 
@@ -141,8 +143,8 @@ public class TableEditor {
      *
      * @param column
      */
-    public void changeColumnProperties(TableColumn column) {
-        Column col = (Column) column.getUserData();
+    public void changeColumnProperties(Column column) {
+
         logger.log(Level.INFO, "Modified column in the table.");
     }
 
@@ -156,18 +158,27 @@ public class TableEditor {
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            int index = mainTable.getColumns().indexOf(column);
+            try {
+                dbControl.update(Queries.deleteColumn((Column) column.getUserData()));
 
-            if (index == -1) {
-                return;
-            }
+                int index = mainTable.getColumns().indexOf(column);
 
-            mainTable.getColumns().remove(index);
-            ObservableList<ObservableList> items = mainTable.getItems();
+                if (index == -1) {
+                    return;
+                }
 
-            if (items != null && !items.isEmpty()) {
-                // Remove cell from rows by index.
-                items.parallelStream().forEach(item -> item.remove(index));
+                mainTable.getColumns().remove(index);
+                ObservableList<ObservableList> items = mainTable.getItems();
+
+                if (items != null && !items.isEmpty()) {
+                    // Remove cell from rows by index.
+                    items.parallelStream().forEach(item -> item.remove(index));
+                }
+
+                logger.log(Level.INFO, "Column deleted.");
+            } catch (Exception e) {
+                logger.log(Level.ERROR, "Table editor error: " + e);
+                new Alert(Alert.AlertType.ERROR, "Failure to remove the column.\nSee more in console!").showAndWait();
             }
         }
     }
@@ -177,7 +188,7 @@ public class TableEditor {
      */
     public void addColumn(Column column) {
         createNewColumn(column);
-        logger.info("Add column in table: " + column.getName());
+        logger.info("Add column in table: " + column.getColumnName());
     }
 
     /**
@@ -187,14 +198,23 @@ public class TableEditor {
      */
     private void createNewColumn(Column column){
 
-        TableColumn tableColumn = new TableDataResolver().getColumn(column, false);
-        mainTable.getColumns().add(tableColumn);
+        try {
+            column.setTableName(mainTable.getId());
 
-        ObservableList<ObservableList> items = mainTable.getItems();
-        if (items != null && !items.isEmpty()) {
-            // Fill in the data.
-            items.parallelStream().forEach(item -> item.add(DEFAULT_CELL_VALUE));
-            mainTable.setItems(items);
+            dbControl.update(Queries.addColumn(column));
+
+            TableColumn tableColumn = new TableDataResolver().getColumn(column, false);
+            mainTable.getColumns().add(tableColumn);
+
+            ObservableList<ObservableList> items = mainTable.getItems();
+            if (items != null && !items.isEmpty()) {
+                // Fill in the data.
+                items.parallelStream().forEach(item -> item.add(""));
+                mainTable.setItems(items);
+            }
+        } catch (Exception e) {
+            logger.log(Level.ERROR, "Table editor error: " + e);
+            new Alert(Alert.AlertType.ERROR, "Failure to create the column.\nSee more in console!").showAndWait();
         }
     }
 

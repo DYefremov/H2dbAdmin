@@ -3,7 +3,9 @@ package by.post.control.ui;
 import by.post.control.db.TableEditor;
 import by.post.data.Column;
 import by.post.ui.ColumnDialog;
+import by.post.ui.Resources;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 
@@ -15,7 +17,7 @@ import java.util.Optional;
 public class MultipleTableColumnController {
 
     @FXML
-    private Label name;
+    private Label columnName;
     @FXML
     private Label type;
     @FXML
@@ -40,6 +42,24 @@ public class MultipleTableColumnController {
     }
 
     @FXML
+    public void onShowProperties() {
+
+        //TODO add extra dialog
+        Column column = (Column) tableColumn.getUserData();
+        StringBuilder sb = new StringBuilder();
+        sb.append("TABLE NAME:     " + column.getTableName() +"\n");
+        sb.append("NAME:           " + column.getColumnName() + "\n");
+        sb.append("TYPE:           " + column.getType() + "\n");
+        sb.append("AUTO_INCREMENT: " + column.isAutoIncrement() + "\n");
+        sb.append("NOT NULL:       " + column.isNotNull() + "\n");
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, sb.toString());
+        alert.setTitle(Resources.TITLE);
+        alert.setHeaderText("Column: " + column.getColumnName());
+        alert.showAndWait();
+    }
+
+    @FXML
     public void onChange() {
 
         Column data = (Column) tableColumn.getUserData();
@@ -49,8 +69,8 @@ public class MultipleTableColumnController {
 
             if (result.isPresent()) {
                 setType(data.getType());
-                setName(data.getName());
-                tableEditor.changeColumnProperties(tableColumn);
+                setName(data.getColumnName());
+                tableEditor.changeColumnProperties(data);
             }
         }
     }
@@ -60,7 +80,7 @@ public class MultipleTableColumnController {
     }
 
     public void setName(String name) {
-        this.name.setText(name);
+        this.columnName.setText(name);
     }
 
     public void setType(String type) {

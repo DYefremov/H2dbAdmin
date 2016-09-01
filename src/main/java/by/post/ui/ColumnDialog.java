@@ -31,7 +31,7 @@ public class ColumnDialog extends Dialog<Column> {
     private static final Logger logger = LogManager.getLogger(ColumnDialog.class);
 
     public ColumnDialog() {
-        column = new Column("New column", ColumnDataType.VARCHAR.name());
+        column = new Column("","New", ColumnDataType.VARCHAR.name());
         init();
     }
 
@@ -64,7 +64,7 @@ public class ColumnDialog extends Dialog<Column> {
                 Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
                 if (result.get() == ButtonType.OK) {
-                    column.setName(controller.getName());
+                    column.setColumnName(controller.getName());
                     column.setType(controller.getType());
                     column.setPrimaryKey(controller.isKey());
                     column.setNotNull(controller.isNotNull());

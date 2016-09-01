@@ -25,7 +25,7 @@
          <children>
             <ComboBox fx:id="type" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="name" GridPane.columnIndex="1" />
-            <Label alignment="CENTER_RIGHT" text="Column name:" textAlignment="CENTER" GridPane.halignment="RIGHT">
+            <Label alignment="CENTER_RIGHT" text="Column columnName:" textAlignment="CENTER" GridPane.halignment="RIGHT">
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin></Label>

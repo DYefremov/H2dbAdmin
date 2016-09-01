@@ -138,7 +138,8 @@ public class TableBuilder {
     private Column getColumn(ResultSetMetaData rsMetaData, int index) throws SQLException {
 
         Column column = new Column();
-        column.setName(rsMetaData.getColumnName(index));
+        column.setTableName(rsMetaData.getTableName(index));
+        column.setColumnName(rsMetaData.getColumnName(index));
         column.setType(rsMetaData.getColumnTypeName(index));
         column.setNotNull(rsMetaData.isNullable(index) == 1);
         column.setAutoIncrement(rsMetaData.isAutoIncrement(index));

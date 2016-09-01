@@ -12,7 +12,7 @@
     <graphic>
         <VBox alignment="CENTER">
             <children>
-                <Label fx:id="name" contentDisplay="CENTER" text="New column" textAlignment="CENTER" />
+                <Label fx:id="columnName" contentDisplay="CENTER" text="New column" textAlignment="CENTER" />
                 <Label fx:id="type" contentDisplay="CENTER" text="VARCHAR">
                     <font>
                         <Font size="10.0" />
@@ -25,6 +25,7 @@
         <items>
           <MenuItem mnemonicParsing="false" onAction="#onAdd" text="Add new" />
             <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#onShowProperties" text="Show properties" />
             <MenuItem mnemonicParsing="false" onAction="#onChange" text="Change" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#onDelete" text="Delete" />

@@ -130,7 +130,7 @@ public class DbController implements DbControl {
             return new Table(name);
         }
 
-        Table table = table = new TableBuilder().getTable(name, connection);
+        Table table = new TableBuilder().getTable(name, connection);
 
         return table != null ? table : new Table(name);
     }
@@ -150,35 +150,19 @@ public class DbController implements DbControl {
     }
 
     @Override
-    public Statement update(String sql) {
+    public Statement update(String sql) throws SQLException {
 
-        Statement statement = null;
-
-        try {
-            if (connection != null) {
-                statement = connection.createStatement();
-                statement.executeUpdate(sql);
-            }
-        } catch (SQLException e) {
-            logger.error("DbController error in update[sql]: " + e);
-        }
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
 
         return statement;
     }
 
     @Override
-    public Statement execute(String sql) {
+    public Statement execute(String sql) throws SQLException {
 
-        Statement statement = null;
-
-        try {
-            if (connection != null) {
-                statement = connection.createStatement();
-                statement.execute(sql);
-            }
-        } catch (SQLException e) {
-            logger.error("DbController error in execute[sql]: " + e);
-        }
+        Statement  statement = connection.createStatement();
+        statement.execute(sql);
 
         return statement;
     }

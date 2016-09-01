@@ -123,9 +123,6 @@
                </bottom>
                <top>
                   <Label fx:id="currentTableName" textAlignment="CENTER" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
                   </Label>
                </top>
             </BorderPane>

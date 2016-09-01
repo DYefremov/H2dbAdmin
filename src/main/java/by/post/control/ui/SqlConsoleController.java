@@ -135,7 +135,7 @@ public class SqlConsoleController {
         if (columnsHeader != null || !columnsHeader.isEmpty()) {
             columnsHeader.forEach(column -> {
                 List<Cell> headerCells = new ArrayList<>();
-                String name = column.getName();
+                String name = column.getColumnName();
                 headerCells.add(new Cell(name, name, name));
                 columnsData.add(headerCells);
             });

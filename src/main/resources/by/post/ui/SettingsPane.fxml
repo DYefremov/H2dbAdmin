@@ -61,7 +61,7 @@
       </Button>
       <ComboBox fx:id="driver" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       <PasswordField fx:id="maskedPassword" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <Label text="Database name:" GridPane.rowIndex="1">
+      <Label text="Database columnName:" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>

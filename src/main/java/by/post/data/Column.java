@@ -5,7 +5,8 @@ package by.post.data;
  */
 public class Column {
 
-    private String name;
+    private String tableName;
+    private String columnName;
     private String type;
     private boolean primaryKey;
     private boolean notNull;
@@ -20,17 +21,26 @@ public class Column {
 
     }
 
-    public Column(String name, String type) {
-        this.name = name;
+    public Column(String tableName, String columnName, String type) {
+        this.tableName = tableName;
+        this.columnName = columnName;
         this.type = type;
     }
 
-    public String getName() {
-        return name;
+    public String getTableName() {
+        return tableName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getColumnName() {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
     }
 
     public String getType() {
@@ -108,7 +118,8 @@ public class Column {
     @Override
     public String toString() {
         return "Column{" +
-                "name='" + name + '\'' +
+                "tableName='" + tableName + '\'' +
+                ", columnName='" + columnName + '\'' +
                 ", type='" + type + '\'' +
                 ", primaryKey=" + primaryKey +
                 ", notNull=" + notNull +
@@ -137,16 +148,18 @@ public class Column {
         if (searchable != column.searchable) return false;
         if (writable != column.writable) return false;
         if (signed != column.signed) return false;
-        if (name != null ? !name.equals(column.name) : column.name != null)
+        if (tableName != null ? !tableName.equals(column.tableName) : column.tableName != null)
+            return false;
+        if (columnName != null ? !columnName.equals(column.columnName) : column.columnName != null)
             return false;
         return type != null ? type.equals(column.type) : column.type == null;
-
     }
 
     @Override
     public int hashCode() {
 
-        int result = name != null ? name.hashCode() : 0;
+        int result = tableName != null ? tableName.hashCode() : 0;
+        result = 31 * result + (columnName != null ? columnName.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (primaryKey ? 1 : 0);
         result = 31 * result + (notNull ? 1 : 0);

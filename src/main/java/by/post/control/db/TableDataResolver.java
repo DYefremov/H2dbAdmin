@@ -84,7 +84,7 @@ public class TableDataResolver {
         ObservableList columns = FXCollections.observableArrayList();
 
         values.forEach(col -> {
-            String name = col.getName();
+            String name = col.getColumnName();
             columns.add(getColumn(col, pk != null && pk.equals(name)));
         });
 
@@ -140,7 +140,7 @@ public class TableDataResolver {
             tableColumn = (TableColumn) loader.load();
             MultipleTableColumnController columnController = loader.getController();
             tableColumn.setUserData(column);
-            columnController.setName(column.getName());
+            columnController.setName(column.getColumnName());
             columnController.setType(column.getType());
         } catch (IOException e) {
             logger.error("TableDataResolver error in getColumn: " + e);
