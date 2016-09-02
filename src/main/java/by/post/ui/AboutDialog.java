@@ -1,5 +1,7 @@
 package by.post.ui;
 
+import by.post.control.ui.AboutDialogController;
+import javafx.application.HostServices;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,9 +23,12 @@ public class AboutDialog {
 
     private Parent parent;
     private Stage stage;
+    private AboutDialogController controller;
+    private HostServices hostServices;
 
-    public AboutDialog() throws IOException {
-       init();
+    public AboutDialog(HostServices hostServices) throws IOException {
+        this.hostServices = hostServices;
+        init();
     }
 
     public void show() {
@@ -38,7 +43,6 @@ public class AboutDialog {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(AboutDialog.class.getResource("AboutDialog.fxml"));
-
         parent = loader.load();
         // Close dialog by mouse click
         parent.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -47,6 +51,9 @@ public class AboutDialog {
                 stage.close();
             }
         });
+
+        controller = loader.getController();
+        controller.setHostServices(hostServices);
 
         stage = new Stage();
         stage.setScene(new Scene(parent));

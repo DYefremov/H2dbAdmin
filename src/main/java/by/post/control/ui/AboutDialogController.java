@@ -1,7 +1,9 @@
 package by.post.control.ui;
 
-import by.post.ui.AboutDialog;
+import by.post.ui.Resources;
+import javafx.application.HostServices;
 import javafx.fxml.FXML;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
@@ -16,10 +18,10 @@ public class AboutDialogController {
     private TextArea textArea;
     @FXML
     private Label versionLabel;
+    @FXML
+    private Hyperlink hyperlink;
 
-    private AboutDialog aboutDialog;
-
-    private final static String VERSION = "0.0.0";
+    private HostServices hostServices;
 
     private final static String ABOUT_TEXT = "This program is free software and " +
             "distributed in the hope that it will be useful, but WITHOUT ANY " +
@@ -29,14 +31,21 @@ public class AboutDialogController {
 
     }
 
-    public void setAboutDialog(AboutDialog aboutDialog) {
-        this.aboutDialog = aboutDialog;
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
+
+    @FXML
+    public void onHyperlink() {
+        if (hostServices != null) {
+            hostServices.showDocument("mailto:" + hyperlink.getText());
+        }
     }
 
     @FXML
     private void initialize(){
         textArea.setText(ABOUT_TEXT);
-        versionLabel.setText("H2dbAdmin ver: " + VERSION);
+        versionLabel.setText("H2dbAdmin ver: " + Resources.PROGRAM_VERSION);
     }
 
 }

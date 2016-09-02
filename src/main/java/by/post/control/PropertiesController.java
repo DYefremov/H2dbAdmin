@@ -5,8 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 
 /**

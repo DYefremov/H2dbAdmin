@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" styleClass="about-area" stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.AboutDialogController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" styleClass="about-area" stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.AboutDialogController">
    <children>
       <Label fx:id="versionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="149.0" layoutY="14.0" prefHeight="17.0" prefWidth="401.0" text="H2dbAdmin ver. 0.0.0">
          <VBox.margin>
@@ -36,6 +36,6 @@
          <VBox.margin>
             <Insets />
          </VBox.margin></TextArea>
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="153.0" layoutY="278.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="400.0" text="Mail: my@mail" />
+      <Hyperlink fx:id="hyperlink" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="153.0" layoutY="278.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#onHyperlink" prefHeight="40.0" prefWidth="400.0" text="Dmitry.V.Yefremov" />
    </children>
 </VBox>

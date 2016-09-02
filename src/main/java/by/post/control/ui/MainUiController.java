@@ -114,7 +114,7 @@ public class MainUiController {
     @FXML
     public void onItemAbout() {
         try {
-            new AboutDialog().showAndWait();
+            new AboutDialog(mainUiForm.getHostServices()).showAndWait();
         } catch (Exception e) {
             logger.error("MainUiController error onItemAbout: " + e);
         }

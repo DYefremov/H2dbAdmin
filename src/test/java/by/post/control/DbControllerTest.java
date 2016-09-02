@@ -4,6 +4,7 @@ package by.post.control;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Properties;
  * @author Dmitriy V.Yefremov
  */
 public class DbControllerTest {
+    @Ignore
     @Test
     public void connect() throws Exception {
         Properties properties = PropertiesController.getProperties();
