@@ -12,4 +12,8 @@ public class Resources {
     public static final String TITLE = "H2dbAdmin";
     // Program version
     public final static String PROGRAM_VERSION = "0.0.1 Pre-alpha";
+    // Text about program
+    public final static String ABOUT_TEXT = "This program is free software and " +
+            "distributed in the hope that it will be useful, but WITHOUT ANY " +
+            "WARRANTY! \n  Dmitriy Yefremov  2016";
 }

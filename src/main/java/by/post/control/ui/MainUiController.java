@@ -24,7 +24,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Controller class for main ui form
@@ -173,16 +176,26 @@ public class MainUiController {
      */
     @FXML
     public void onTableItemAdd() {
-        try {
-            tableEditor.addRow();
-        } catch (IOException e) {
-            logger.error("MainUiController error onTableItemAdd: " + e);
+
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            try {
+                tableEditor.addRow();
+            } catch (IOException e) {
+                logger.error("MainUiController error onTableItemAdd: " + e);
+            }
         }
     }
 
     @FXML
     public void onTableItemDelete() {
-        tableEditor.removeRow();
+
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            tableEditor.deleteRow();
+        }
     }
 
     /**
@@ -190,24 +203,41 @@ public class MainUiController {
      */
     @FXML
     public void onAddButton() {
+
         if (!currentTableName.getText().equals("")) {
-            try {
-                tableEditor.addRow();
-            } catch (IOException e) {
-                logger.error("MainUiController error onAddButton: " + e);
+            Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+            if (result.get() == ButtonType.OK) {
+                try {
+                    tableEditor.addRow();
+                } catch (IOException e) {
+                    logger.error("MainUiController error onAddButton: " + e);
+                }
             }
         }
     }
 
     @FXML
     public void onRemoveButton() {
-        tableEditor.removeRow();
+
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            tableEditor.deleteRow();
+        }
     }
 
     @FXML
     public void onSaveButton() {
-        if (!currentTableName.getText().equals("")) {
-            tableEditor.save(currentTableName.getText());
+
+        String name = currentTableName.getText();
+
+        if (!name.equals("")) {
+            Optional<ButtonType> result = new ConfirmationDialog("Save changes for table: " + name).showAndWait();
+
+            if (result.get() == ButtonType.OK) {
+                tableEditor.save(currentTableName.getText());
+            }
         }
     }
 
@@ -216,12 +246,21 @@ public class MainUiController {
      */
     @FXML
     public void onTreeContextAdd() {
-        tableEditor.addTable(tableTree);
+        Optional<String> result = new InputDialog("Please, write table name!", "New table", false).showAndWait();
+
+        if (result.isPresent()) {
+            tableEditor.addTable(tableTree, result.get());
+        }
     }
 
     @FXML
     public void onTreeContextDelete() {
-        tableEditor.deleteTable(tableTree);
+
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            tableEditor.deleteTable(tableTree);
+        }
     }
 
     /**
@@ -237,7 +276,6 @@ public class MainUiController {
         getDbTablesList(dbControl).stream().forEach(t -> {
             tables.add(new TreeItem(t));
         });
-
         // Sorting
 //        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
         ObservableList<TreeItem> list = FXCollections.observableList(tables);

@@ -23,10 +23,6 @@ public class AboutDialogController {
 
     private HostServices hostServices;
 
-    private final static String ABOUT_TEXT = "This program is free software and " +
-            "distributed in the hope that it will be useful, but WITHOUT ANY " +
-            "WARRANTY! \n  Dmitriy Yefremov  2016";
-
     public AboutDialogController() {
 
     }
@@ -44,7 +40,7 @@ public class AboutDialogController {
 
     @FXML
     private void initialize(){
-        textArea.setText(ABOUT_TEXT);
+        textArea.setText(Resources.ABOUT_TEXT);
         versionLabel.setText("H2dbAdmin ver: " + Resources.PROGRAM_VERSION);
     }
 

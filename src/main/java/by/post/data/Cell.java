@@ -9,15 +9,18 @@ import javafx.beans.property.SimpleStringProperty;
 public class Cell implements Data {
 
     private SimpleStringProperty name;
+    private SimpleStringProperty type;
     private SimpleObjectProperty value;
 
     public Cell() {
         this.name = new SimpleStringProperty();
+        this.type = new SimpleStringProperty();
         this.value = new SimpleObjectProperty();
     }
 
     public Cell(String name, String type, Object value) {
         this.name = new SimpleStringProperty(name);
+        this.type = new SimpleStringProperty(type);
         this.value = new SimpleObjectProperty(value);
     }
 
@@ -25,21 +28,22 @@ public class Cell implements Data {
         return name.get();
     }
 
-    public SimpleStringProperty nameProperty() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name.set(name != null ? name : "");
+    }
+
+    public String getType() {
+        return type.get();
+    }
+
+    public void setType(String type) {
+        this.type.set(type);
     }
 
     public Object getValue() {
         return value.get();
     }
 
-    public SimpleObjectProperty valueProperty() {
-        return value;
-    }
 
     public void setValue(Object value) {
         this.value.set(value);
@@ -52,6 +56,7 @@ public class Cell implements Data {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -59,14 +64,18 @@ public class Cell implements Data {
 
         if (name != null ? !name.equals(cell.name) : cell.name != null)
             return false;
+        if (type != null ? !type.equals(cell.type) : cell.type != null)
+            return false;
         return value != null ? value.equals(cell.value) : cell.value == null;
-
     }
 
     @Override
     public int hashCode() {
+
         int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
+
         return result;
     }
 
@@ -74,6 +83,7 @@ public class Cell implements Data {
     public String toString() {
         return "Cell{" +
                 "name=" + name +
+                ", type=" + type +
                 ", value=" + value +
                 '}';
     }
