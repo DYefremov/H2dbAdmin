@@ -3,9 +3,12 @@ package by.post.control.ui;
 import by.post.control.db.TableEditor;
 import by.post.data.Column;
 import by.post.ui.ColumnDialog;
+import by.post.ui.ConfirmationDialog;
 import by.post.ui.Resources;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 
@@ -73,6 +76,26 @@ public class MultipleTableColumnController {
                 tableEditor.changeColumnProperties(data);
             }
         }
+    }
+
+    /**
+     * Called while maintaining the cell changes.
+     */
+    @FXML
+    public void onEditCommit(TableColumn.CellEditEvent<ObservableList, String> event) {
+
+        int rowPos = event.getTablePosition().getRow();
+        int colPos = event.getTablePosition().getColumn();
+
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            tableEditor.changeRow();
+            event.getTableView().getItems().get(rowPos).set(colPos, event.getNewValue());
+        }
+
+        event.getTableView().refresh();
+        event.consume();
     }
 
     public void onDelete() {

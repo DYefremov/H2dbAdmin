@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -114,14 +113,6 @@ public class TableDataResolver {
         });
         // Add for enable editing
         tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ObservableList, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<ObservableList, String> event) {
-                int rowPos = event.getTablePosition().getRow();
-                int colPos = event.getTablePosition().getColumn();
-                event.getTableView().getItems().get(rowPos).set(colPos, event.getNewValue());
-            }
-        });
 
         return tableColumn;
     }

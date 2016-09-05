@@ -44,7 +44,6 @@ public class TableEditor {
         this.mainTable = mainTable;
     }
 
-
     /**
      * Save changes after table editing
      *
@@ -207,6 +206,13 @@ public class TableEditor {
             logger.log(Level.ERROR, "Table editor error: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to delete the row.\nSee more info in console!").showAndWait();
         }
+    }
+
+    /**
+     * Changing the row when editing cells.
+     */
+    public void changeRow() {
+
     }
 
     /**
