@@ -1,6 +1,7 @@
 package by.post.control.ui;
 
 import by.post.control.db.TableEditor;
+import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.ui.ColumnDialog;
 import by.post.ui.ConfirmationDialog;
@@ -90,8 +91,13 @@ public class MultipleTableColumnController {
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            tableEditor.changeRow();
-            event.getTableView().getItems().get(rowPos).set(colPos, event.getNewValue());
+            Column column = (Column) tableColumn.getUserData();
+            Cell cell = new Cell(column.getColumnName(), column.getType(), event.getNewValue());
+            ObservableList<String> rowValues = event.getTableView().getItems().get(rowPos);
+
+            if (tableEditor.changeRow(cell, rowValues)) {
+                rowValues.set(colPos, event.getNewValue());
+            }
         }
 
         event.getTableView().refresh();

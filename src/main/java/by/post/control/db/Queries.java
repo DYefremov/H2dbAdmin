@@ -124,4 +124,26 @@ public class Queries {
 
         return sb.toString();
     }
+
+    public static String changeRow(Row row, Cell changedCell) {
+
+        List<Cell> cells = row.getCells();
+
+        if (cells == null || cells.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder("UPDATE " + row.getTableName() + "\nSET ");
+        sb.append(changedCell.getName() + "=" + changedCell.getValue() + "\nWHERE ");
+
+        int lastIndex = cells.size() - 1;
+
+        cells.forEach(c -> {
+            String value = c.getName() + "='" + c.getValue() + "'";
+            sb.append(cells.indexOf(c) != lastIndex ? value + " AND " : value + ";");
+        });
+
+        return sb.toString();
+    }
+
 }

@@ -192,7 +192,7 @@ public class TableEditor {
      */
     public void deleteRow() {
 
-        Row row = getRow(false);
+        Row row = getRow(false, null);
         int selectedIndex = row.getNum();
 
         if (selectedIndex == -1) {
@@ -200,7 +200,7 @@ public class TableEditor {
         }
 
         try {
-            dbControl.update(Queries.deleteRow(getRow(false)));
+            dbControl.update(Queries.deleteRow(row));
             mainTable.getItems().remove(selectedIndex);
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Table editor error: " + e);
@@ -211,8 +211,16 @@ public class TableEditor {
     /**
      * Changing the row when editing cells.
      */
-    public void changeRow() {
+    public boolean changeRow(Cell changedCell, List<String> rowValues) {
+        try {
+            dbControl.update(Queries.changeRow(getRow(false, rowValues), changedCell));
+            return true;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Table editor error: " + e);
+            new Alert(Alert.AlertType.ERROR, "Failure to change the row.\nSee more info in console!").showAndWait();
+        }
 
+        return false;
     }
 
     /**
@@ -220,7 +228,7 @@ public class TableEditor {
      */
     private void createNewRow() {
 
-        Row row = getRow(true);
+        Row row = getRow(true, null);
         int selectedIndex = row.getNum();
 
         try {
@@ -236,12 +244,12 @@ public class TableEditor {
     }
 
     /**
-     *Generating row during the addition or removal of the table.
+     *Generating row object during the addition, removal or editing row of the table.
      *
      * @param addRow
      * @return needed row
      */
-    private Row getRow(boolean addRow) {
+    private Row getRow(boolean addRow, List<String> rowValues) {
 
         Row row = new Row();
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
@@ -255,8 +263,10 @@ public class TableEditor {
         List<Cell> cells = new ArrayList<>();
 
         columns.forEach(c -> {
+            int index = columns.indexOf(c);
             Column column = (Column) c.getUserData();
-            cells.add(new Cell(column.getColumnName(), column.getType(), DEFAULT_CELL_VALUE));
+            String value = rowValues == null && columns.size() != rowValues.size() ? DEFAULT_CELL_VALUE : rowValues.get(index);
+            cells.add(new Cell(column.getColumnName(), column.getType(), value));
         });
 
         row.setCells(cells);
