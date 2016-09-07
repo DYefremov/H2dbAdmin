@@ -19,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -73,7 +74,7 @@ public class MainUiController {
     private void initialize() {
         // Set log messages output to the text area
         LogArea.setArea(console);
-        logger.info("Starting application...");
+        logger.log(Level.INFO, "Starting application...");
         init();
     }
 
@@ -98,7 +99,7 @@ public class MainUiController {
             }
 
         } catch (Exception e) {
-            logger.error("MainUiController error onItemOpen: " + e);
+            logger.log(Level.ERROR, "MainUiController error onItemOpen: " + e);
         }
 
     }
@@ -119,7 +120,7 @@ public class MainUiController {
         try {
             new AboutDialog(mainUiForm.getHostServices()).showAndWait();
         } catch (Exception e) {
-            logger.error("MainUiController error onItemAbout: " + e);
+            logger.log(Level.ERROR, "MainUiController error onItemAbout: " + e);
         }
     }
 
@@ -131,7 +132,7 @@ public class MainUiController {
         try {
             new RecoveryDialog().showAndWait();
         } catch (Exception e) {
-            logger.error("MainUiController error onItemRecovery: " + e);
+            logger.log(Level.ERROR, "MainUiController error onItemRecovery: " + e);
         }
     }
 
@@ -183,7 +184,7 @@ public class MainUiController {
             try {
                 tableEditor.addRow();
             } catch (IOException e) {
-                logger.error("MainUiController error onTableItemAdd: " + e);
+                logger.log(Level.ERROR, "MainUiController error onTableItemAdd: " + e);
             }
         }
     }
@@ -211,7 +212,7 @@ public class MainUiController {
                 try {
                     tableEditor.addRow();
                 } catch (IOException e) {
-                    logger.error("MainUiController error onAddButton: " + e);
+                    logger.log(Level.ERROR, "MainUiController error onAddButton: " + e);
                 }
             }
         }

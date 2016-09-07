@@ -71,7 +71,7 @@ public class TableEditor {
 
             logger.log(Level.INFO, "Added new  table: " + name);
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error: " + e);
+            logger.log(Level.ERROR, "Table editor error[addTable]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to add  the table.\nSee more info in console!").showAndWait();
         }
     }
@@ -94,7 +94,7 @@ public class TableEditor {
 
             logger.log(Level.INFO, "Deleted table: " + name);
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error: " + e);
+            logger.log(Level.ERROR, "Table editor error[deleteTable]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to remove the table.\nSee more info in console!").showAndWait();
         }
     }
@@ -129,7 +129,7 @@ public class TableEditor {
                 mainTable.setItems(items);
             }
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error: " + e);
+            logger.log(Level.ERROR, "Table editor error[addColumn]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to create the column.\nSee more info in console!").showAndWait();
         }
 
@@ -162,7 +162,7 @@ public class TableEditor {
 
             logger.log(Level.INFO, "Column deleted.");
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error: " + e);
+            logger.log(Level.ERROR, "Table editor error[deleteColumn]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to remove the column.\nSee more info in console!").showAndWait();
         }
     }
@@ -203,7 +203,7 @@ public class TableEditor {
             dbControl.update(Queries.deleteRow(row));
             mainTable.getItems().remove(selectedIndex);
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Table editor error: " + e);
+            logger.log(Level.ERROR, "Table editor error[deleteRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to delete the row.\nSee more info in console!").showAndWait();
         }
     }
@@ -216,7 +216,7 @@ public class TableEditor {
             dbControl.update(Queries.changeRow(getRow(false, rowValues), changedCell));
             return true;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Table editor error: " + e);
+            logger.log(Level.ERROR, "Table editor error[changeRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to change the row.\nSee more info in console!").showAndWait();
         }
 
@@ -228,17 +228,17 @@ public class TableEditor {
      */
     private void createNewRow() {
 
-        Row row = getRow(true, null);
-        int selectedIndex = row.getNum();
-
         try {
+            Row row = getRow(true, null);
+            int selectedIndex = row.getNum();
             int columnCount = row.getCells().size();
+
             dbControl.update(Queries.addRow(row));
 
             mainTable.getItems().add(selectedIndex, FXCollections.observableArrayList(Collections.nCopies(columnCount, DEFAULT_CELL_VALUE)));
             mainTable.getSelectionModel().select(selectedIndex, null);
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error: " + e);
+            logger.log(Level.ERROR, "Table editor error[createNewRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to create the row.\nSee more info in console!").showAndWait();
         }
     }
@@ -265,7 +265,7 @@ public class TableEditor {
         columns.forEach(c -> {
             int index = columns.indexOf(c);
             Column column = (Column) c.getUserData();
-            String value = rowValues == null && columns.size() != rowValues.size() ? DEFAULT_CELL_VALUE : rowValues.get(index);
+            String value = rowValues == null ? DEFAULT_CELL_VALUE : rowValues.get(index);
             cells.add(new Cell(column.getColumnName(), column.getType(), value));
         });
 
