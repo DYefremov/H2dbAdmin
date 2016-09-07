@@ -32,6 +32,7 @@ public class TableDataResolver {
     private static final Logger logger = LogManager.getLogger(TableDataResolver.class);
 
     public TableDataResolver() {
+
     }
 
     public TableDataResolver(Table table) {
@@ -84,7 +85,9 @@ public class TableDataResolver {
 
         values.forEach(col -> {
             String name = col.getColumnName();
-            columns.add(getColumn(col, pk != null && pk.equals(name)));
+            // Set primary key
+            col.setPrimaryKey(pk != null && pk.equals(name));
+            columns.add(getColumn(col));
         });
 
         return columns;
@@ -96,13 +99,9 @@ public class TableDataResolver {
      * @param column
      * @return
      */
-    public TableColumn getColumn(Column column, boolean isKey) {
+    public TableColumn getColumn(Column column) {
 
         TableColumn tableColumn = getTableColumn(column);
-        //Set style for primary key tableColumn
-        if (isKey) {
-            tableColumn.getStyleClass().add("key");
-        }
 
         tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
             @Override
@@ -124,7 +123,9 @@ public class TableDataResolver {
      * @return
      */
     private TableColumn getTableColumn(Column column) {
+
         TableColumn tableColumn = null;
+
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainUiForm.class.getResource("MultipleTableColumn.fxml"));
@@ -133,6 +134,7 @@ public class TableDataResolver {
             tableColumn.setUserData(column);
             columnController.setName(column.getColumnName());
             columnController.setType(column.getType());
+            columnController.setIsKey(column.isPrimaryKey());
         } catch (IOException e) {
             logger.error("TableDataResolver error in getColumn: " + e);
         }

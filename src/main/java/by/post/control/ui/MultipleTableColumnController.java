@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.image.ImageView;
 
 import java.util.Optional;
 
@@ -114,6 +115,12 @@ public class MultipleTableColumnController {
 
     public void setType(String type) {
         this.type.setText(type);
+    }
+
+    public void setIsKey(boolean isKey) {
+        if (isKey) {
+            this.type.getStyleClass().add("key");
+        }
     }
 
     @FXML
