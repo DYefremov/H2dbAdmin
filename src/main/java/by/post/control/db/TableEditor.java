@@ -50,7 +50,7 @@ public class TableEditor {
      * @param name
      */
     public void save(String name) {
-        logger.log(Level.INFO, "Save changes for  table: " + name);
+        logger.info("Save changes for  table: " + name);
     }
 
     /**
@@ -69,9 +69,9 @@ public class TableEditor {
             tableTree.scrollTo(tableTree.getSelectionModel().getSelectedIndex());
             tableTree.refresh();
 
-            logger.log(Level.INFO, "Added new  table: " + name);
+            logger.info("Added new  table: " + name);
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error[addTable]: " + e);
+            logger.error("Table editor error[addTable]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to add  the table.\nSee more info in console!").showAndWait();
         }
     }
@@ -92,9 +92,9 @@ public class TableEditor {
             tableTree.getRoot().getChildren().remove(item);
             tableTree.refresh();
 
-            logger.log(Level.INFO, "Deleted table: " + name);
+            logger.info("Deleted table: " + name);
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error[deleteTable]: " + e);
+            logger.error("Table editor error[deleteTable]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to remove the table.\nSee more info in console!").showAndWait();
         }
     }
@@ -106,7 +106,7 @@ public class TableEditor {
      */
     public void changeColumnProperties(Column column) {
 
-        logger.log(Level.INFO, "Modified column in the table.");
+        logger.info("Modified column in the table.");
     }
 
     /**
@@ -129,7 +129,7 @@ public class TableEditor {
                 mainTable.setItems(items);
             }
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error[addColumn]: " + e);
+            logger.error("Table editor error[addColumn]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to create the column.\nSee more info in console!").showAndWait();
         }
 
@@ -160,9 +160,9 @@ public class TableEditor {
                 items.parallelStream().forEach(item -> item.remove(index));
             }
 
-            logger.log(Level.INFO, "Column deleted.");
+            logger.info("Column deleted.");
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error[deleteColumn]: " + e);
+            logger.error("Table editor error[deleteColumn]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to remove the column.\nSee more info in console!").showAndWait();
         }
     }
@@ -203,7 +203,7 @@ public class TableEditor {
             dbControl.update(Queries.deleteRow(row));
             mainTable.getItems().remove(selectedIndex);
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Table editor error[deleteRow]: " + e);
+            logger.error("Table editor error[deleteRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to delete the row.\nSee more info in console!").showAndWait();
         }
     }
@@ -212,11 +212,12 @@ public class TableEditor {
      * Changing the row when editing cells.
      */
     public boolean changeRow(Cell changedCell, List<String> rowValues) {
+
         try {
             dbControl.update(Queries.changeRow(getRow(false, rowValues), changedCell));
             return true;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Table editor error[changeRow]: " + e);
+            logger.error("Table editor error[changeRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to change the row.\nSee more info in console!").showAndWait();
         }
 
@@ -238,7 +239,7 @@ public class TableEditor {
             mainTable.getItems().add(selectedIndex, FXCollections.observableArrayList(Collections.nCopies(columnCount, DEFAULT_CELL_VALUE)));
             mainTable.getSelectionModel().select(selectedIndex, null);
         } catch (Exception e) {
-            logger.log(Level.ERROR, "Table editor error[createNewRow]: " + e);
+            logger.error("Table editor error[createNewRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to create the row.\nSee more info in console!").showAndWait();
         }
     }

@@ -74,7 +74,7 @@ public class MainUiController {
     private void initialize() {
         // Set log messages output to the text area
         LogArea.setArea(console);
-        logger.log(Level.INFO, "Starting application...");
+        logger.info("Starting application...");
         init();
     }
 
@@ -99,7 +99,7 @@ public class MainUiController {
             }
 
         } catch (Exception e) {
-            logger.log(Level.ERROR, "MainUiController error onItemOpen: " + e);
+            logger.error("MainUiController error onItemOpen: " + e);
         }
 
     }
@@ -120,7 +120,7 @@ public class MainUiController {
         try {
             new AboutDialog(mainUiForm.getHostServices()).showAndWait();
         } catch (Exception e) {
-            logger.log(Level.ERROR, "MainUiController error onItemAbout: " + e);
+            logger.error("MainUiController error onItemAbout: " + e);
         }
     }
 
@@ -132,7 +132,7 @@ public class MainUiController {
         try {
             new RecoveryDialog().showAndWait();
         } catch (Exception e) {
-            logger.log(Level.ERROR, "MainUiController error onItemRecovery: " + e);
+            logger.error("MainUiController error onItemRecovery: " + e);
         }
     }
 
@@ -184,7 +184,7 @@ public class MainUiController {
             try {
                 tableEditor.addRow();
             } catch (IOException e) {
-                logger.log(Level.ERROR, "MainUiController error onTableItemAdd: " + e);
+                logger.error("MainUiController error onTableItemAdd: " + e);
             }
         }
     }
@@ -212,7 +212,7 @@ public class MainUiController {
                 try {
                     tableEditor.addRow();
                 } catch (IOException e) {
-                    logger.log(Level.ERROR, "MainUiController error onAddButton: " + e);
+                    logger.error("MainUiController error onAddButton: " + e);
                 }
             }
         }
