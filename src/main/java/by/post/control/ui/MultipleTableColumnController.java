@@ -89,17 +89,8 @@ public class MultipleTableColumnController {
         int rowPos = event.getTablePosition().getRow();
         int colPos = event.getTablePosition().getColumn();
 
-        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
-
-        if (result.get() == ButtonType.OK) {
-            Column column = (Column) tableColumn.getUserData();
-            Cell cell = new Cell(column.getColumnName(), column.getType(), event.getNewValue());
-            ObservableList<String> rowValues = event.getTableView().getItems().get(rowPos);
-
-            if (tableEditor.changeRow(cell, rowValues)) {
-                rowValues.set(colPos, event.getNewValue());
-            }
-        }
+        ObservableList<String> rowValues = event.getTableView().getItems().get(rowPos);
+        rowValues.set(colPos, event.getNewValue());
 
         event.getTableView().refresh();
         event.consume();

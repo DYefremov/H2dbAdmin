@@ -11,7 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +34,7 @@ public class TableEditor {
     private static final Logger logger = LogManager.getLogger(TableEditor.class);
 
     private TableEditor() {
-       dbControl = DbController.getInstance();
+        dbControl = DbController.getInstance();
     }
 
     public static TableEditor getInstance() {
@@ -44,12 +46,22 @@ public class TableEditor {
     }
 
     /**
-     * Save changes after table editing
+     * Save changes after row editing
      *
-     * @param name
+     * @param rowIndex
      */
-    public void save(String name) {
-        logger.info("Save changes for  table: " + name);
+    public void saveRow(int rowIndex) {
+
+        try {
+            if (mainTable.getItems().size() == getDbRowsCount()) {
+                changeRow();
+            } else {
+                dbControl.update(Queries.addRow(getRow(Commands.ADD, rowIndex)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        logger.info("Save changes for row to database.");
     }
 
     /**
@@ -169,7 +181,7 @@ public class TableEditor {
     /**
      * Add new row to the table
      */
-    public void addRow() throws IOException {
+    public void addRow() throws IOException, SQLException {
 
         int size = mainTable.getColumns().size();
 
@@ -191,12 +203,13 @@ public class TableEditor {
      */
     public void deleteRow() {
 
-        Row row = getRow(false, null);
-        int selectedIndex = row.getNum();
+        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex == -1) {
             return;
         }
+
+        Row row = getRow(Commands.DELETE, selectedIndex);
 
         try {
             dbControl.update(Queries.deleteRow(row));
@@ -210,55 +223,57 @@ public class TableEditor {
     /**
      * Changing the row when editing cells.
      */
-    public boolean changeRow(Cell changedCell, List<String> rowValues) {
+    public void changeRow() {
 
+        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            return;
+        }
+
+        /*
         try {
-            dbControl.update(Queries.changeRow(getRow(false, rowValues), changedCell));
-            return true;
+            dbControl.update(Queries.changeRow(getRow(Commands.CHANGE, selectedIndex)));
         } catch (SQLException e) {
             logger.error("Table editor error[changeRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to change the row.\nSee more info in console!").showAndWait();
         }
-
-        return false;
+        */
     }
 
     /**
      * Create new row
      */
-    private void createNewRow() {
+    private void createNewRow() throws SQLException {
 
-        try {
-            Row row = getRow(true, null);
-            int selectedIndex = row.getNum();
-            int columnCount = row.getCells().size();
+        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
 
-            dbControl.update(Queries.addRow(row));
 
-            mainTable.getItems().add(selectedIndex, FXCollections.observableArrayList(Collections.nCopies(columnCount, DEFAULT_CELL_VALUE)));
-            mainTable.getSelectionModel().select(selectedIndex, null);
-        } catch (Exception e) {
-            logger.error("Table editor error[createNewRow]: " + e);
-            new Alert(Alert.AlertType.ERROR, "Failure to create the row.\nSee more info in console!").showAndWait();
+        if (mainTable.getItems().size() != getDbRowsCount()) {
+            new Alert(Alert.AlertType.ERROR, "Please, save previous row!").showAndWait();
+            return;
         }
+
+        Row row = getRow(Commands.ADD, selectedIndex);
+        int columnCount = row.getCells().size();
+
+        selectedIndex = selectedIndex == -1 ? ++selectedIndex : selectedIndex;
+
+        mainTable.getItems().add(selectedIndex, FXCollections.observableArrayList(Collections.nCopies(columnCount, DEFAULT_CELL_VALUE)));
+        mainTable.getSelectionModel().select(selectedIndex, null);
     }
 
     /**
-     *Generating row object during the addition, removal or editing row of the table.
+     * Generating row object during the addition, removal or editing row of the table.
      *
-     * @param addRow
+     * @param command
      * @return needed row
      */
-    private Row getRow(boolean addRow, List<String> rowValues) {
+    private Row getRow(Commands command, int selectedIndex) {
 
-        Row row = new Row();
-        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
+        boolean add = command.equals(Commands.ADD);
 
-        if (selectedIndex == -1 && !addRow) {
-            row.setNum(selectedIndex);
-            return row;
-        }
-
+        List<String> rowValues = selectedIndex != -1 ? (List<String>) mainTable.getItems().get(selectedIndex) : null;
         List<TableColumn> columns = mainTable.getColumns();
         List<Cell> cells = new ArrayList<>();
 
@@ -269,10 +284,35 @@ public class TableEditor {
             cells.add(new Cell(column.getColumnName(), column.getType(), value));
         });
 
+        Row row = new Row();
         row.setCells(cells);
-        row.setNum(addRow ? ++selectedIndex : selectedIndex);
+        row.setNum(add ? ++selectedIndex : selectedIndex);
         row.setTableName(mainTable.getId());
 
         return row;
+    }
+
+    /**
+     * Get record count in database.
+     *
+     * @return
+     */
+    private int getDbRowsCount() throws SQLException {
+
+        Statement statement = dbControl.execute(Queries.getRecordsCount(mainTable.getId()));
+        ResultSet resultSet = statement.getResultSet();
+        resultSet.next();
+
+        int count = resultSet.getInt(1);
+
+        if (statement != null) {
+            statement.close();
+        }
+
+        if (resultSet != null) {
+            resultSet.close();
+        }
+
+        return count;
     }
 }

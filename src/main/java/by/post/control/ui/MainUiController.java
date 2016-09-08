@@ -24,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -182,7 +183,7 @@ public class MainUiController {
         if (result.get() == ButtonType.OK) {
             try {
                 tableEditor.addRow();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.error("MainUiController error onTableItemAdd: " + e);
             }
         }
@@ -210,7 +211,7 @@ public class MainUiController {
             if (result.get() == ButtonType.OK) {
                 try {
                     tableEditor.addRow();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     logger.error("MainUiController error onAddButton: " + e);
                 }
             }
@@ -230,13 +231,13 @@ public class MainUiController {
     @FXML
     public void onSaveButton() {
 
-        String name = currentTableName.getText();
+        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
 
-        if (!name.equals("")) {
-            Optional<ButtonType> result = new ConfirmationDialog("Save changes for table: " + name).showAndWait();
+        if (selectedIndex != -1) {
+            Optional<ButtonType> result = new ConfirmationDialog("Save current row to database?").showAndWait();
 
             if (result.get() == ButtonType.OK) {
-                tableEditor.save(currentTableName.getText());
+                tableEditor.saveRow(selectedIndex);
             }
         }
     }

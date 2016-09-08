@@ -12,27 +12,31 @@ import java.util.List;
 public class Queries {
 
     /**
-     * @param name
+     * @param tableName
      * @return
      */
-    public static String getTable(String name) {
-        return "SELECT * FROM " + name.toUpperCase();
+    public static String getTable(String tableName) {
+        return "SELECT * FROM " + tableName.toUpperCase();
     }
 
     /**
-     * @param name
+     * @param tableName
      * @return
      */
-    public static String createTable(String name) {
-        return "CREATE TABLE " + name.toUpperCase();
+    public static String createTable(String tableName) {
+        return "CREATE TABLE " + tableName.toUpperCase();
     }
 
     /**
-     * @param name
+     * @param tableName
      * @return
      */
-    public static String deleteTable(String name){
-        return "DROP TABLE " + name.toUpperCase();
+    public static String deleteTable(String tableName){
+        return "DROP TABLE " + tableName.toUpperCase();
+    }
+
+    public static String getRecordsCount(String tableName) {
+        return "SELECT COUNT(*) FROM " + tableName;
     }
 
     /**
