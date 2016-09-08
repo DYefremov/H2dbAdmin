@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -262,6 +263,18 @@ public class MainUiController {
         if (result.get() == ButtonType.OK) {
             tableEditor.deleteTable(tableTree);
         }
+    }
+
+    /**
+     * Actions for selections in the table
+     */
+    @FXML
+    public void onMouseClicked() {
+        tableEditor.saveCurrentRow();
+    }
+
+    public void onKeyReleased() {
+        tableEditor.saveCurrentRow();
     }
 
     /**

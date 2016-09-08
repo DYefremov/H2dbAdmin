@@ -26,6 +26,7 @@ public class TableEditor {
 
     private DbControl dbControl = null;
     private TableView mainTable;
+    private Row lastSelectedRow;
 
     private static TableEditor instance = new TableEditor();
 
@@ -62,6 +63,18 @@ public class TableEditor {
             e.printStackTrace();
         }
         logger.info("Save changes for row to database.");
+    }
+
+    /**
+     * Save the currently selected row.
+     */
+    public void saveCurrentRow() {
+
+        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex != -1) {
+            lastSelectedRow = getRow(Commands.CHANGE, selectedIndex);
+        }
     }
 
     /**
@@ -221,7 +234,7 @@ public class TableEditor {
     }
 
     /**
-     * Changing the row when editing cells.
+     * Changing the row.
      */
     public void changeRow() {
 

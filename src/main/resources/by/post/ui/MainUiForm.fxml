@@ -18,9 +18,8 @@
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
+<BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
    <top>
       <VBox>
          <children>
@@ -89,7 +88,7 @@
                </contextMenu></TreeView>
             <BorderPane>
                <center>
-                  <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" prefHeight="330.0" prefWidth="400.0" stylesheets="@Ui.css">
+                  <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked" prefHeight="330.0" prefWidth="400.0" stylesheets="@Ui.css">
                      <contextMenu>
                         <ContextMenu>
                           <items>
