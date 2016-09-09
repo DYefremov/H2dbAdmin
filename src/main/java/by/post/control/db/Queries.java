@@ -129,22 +129,36 @@ public class Queries {
         return sb.toString();
     }
 
-    public static String changeRow(Row row, Cell changedCell) {
+    /**
+     * @param oldRow
+     * @param changedRow
+     * @return
+     */
+    public static String changeRow(Row oldRow, Row changedRow) {
 
-        List<Cell> cells = row.getCells();
+        List<Cell> oldCells = oldRow.getCells();
+        List<Cell> changedCells = changedRow.getCells();
 
-        if (cells == null || cells.isEmpty()) {
+        if (oldCells == null || changedCells == null) {
             return "";
         }
+        // Removing all equals cells.
+        changedCells.removeAll(oldCells);
 
-        StringBuilder sb = new StringBuilder("UPDATE " + row.getTableName() + "\nSET ");
-        sb.append(changedCell.getName() + "=" + changedCell.getValue() + "\nWHERE ");
+        StringBuilder sb = new StringBuilder("UPDATE " + oldRow.getTableName() + "\nSET ");
 
-        int lastIndex = cells.size() - 1;
+        int lastChangedIndex = changedCells.size() - 1;
 
-        cells.forEach(c -> {
+        changedCells.forEach(cc -> {
+            String value = cc.getName() + "='" + cc.getValue() +"'";
+            sb.append(changedCells.indexOf(cc) != lastChangedIndex ? value +"," : value + " \nWHERE ");
+        });
+
+        int lastOldIndex = oldCells.size() - 1;
+
+        oldCells.forEach(c -> {
             String value = c.getName() + "='" + c.getValue() + "'";
-            sb.append(cells.indexOf(c) != lastIndex ? value + " AND " : value + ";");
+            sb.append(oldCells.indexOf(c) != lastOldIndex ? value + " AND " : value + ";");
         });
 
         return sb.toString();

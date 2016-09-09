@@ -60,7 +60,8 @@ public class TableEditor {
                 dbControl.update(Queries.addRow(getRow(Commands.ADD, rowIndex)));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Table editor error[saveRow]: " + e);
+            new Alert(Alert.AlertType.ERROR, "Failed to save the row..\nSee more info in console!").showAndWait();
         }
         logger.info("Save changes for row to database.");
     }
@@ -73,7 +74,9 @@ public class TableEditor {
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex != -1) {
-            lastSelectedRow = getRow(Commands.CHANGE, selectedIndex);
+            if (lastSelectedRow == null || lastSelectedRow.getNum() != selectedIndex) {
+                lastSelectedRow = getRow(Commands.CHANGE, selectedIndex);
+            }
         }
     }
 
@@ -240,18 +243,22 @@ public class TableEditor {
 
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
 
-        if (selectedIndex == -1) {
+        if (selectedIndex == -1 || lastSelectedRow == null) {
             return;
         }
 
-        /*
-        try {
-            dbControl.update(Queries.changeRow(getRow(Commands.CHANGE, selectedIndex)));
-        } catch (SQLException e) {
-            logger.error("Table editor error[changeRow]: " + e);
-            new Alert(Alert.AlertType.ERROR, "Failure to change the row.\nSee more info in console!").showAndWait();
+        Row row = getRow(Commands.CHANGE, selectedIndex);
+
+        if (!lastSelectedRow.equals(row)) {
+            try {
+                String query = Queries.changeRow(lastSelectedRow, row);
+                dbControl.update(query);
+                lastSelectedRow = row;
+            } catch (SQLException e) {
+                logger.error("Table editor error[changeRow]: " + e);
+                new Alert(Alert.AlertType.ERROR, "Failure to change the row.\nSee more info in console!").showAndWait();
+            }
         }
-        */
     }
 
     /**

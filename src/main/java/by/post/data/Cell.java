@@ -62,11 +62,11 @@ public class Cell implements Data {
 
         Cell cell = (Cell) o;
 
-        if (name != null ? !name.equals(cell.name) : cell.name != null)
+        if (name != null ? !name.getValue().equals(cell.name.getValue()) : cell.name != null)
             return false;
-        if (type != null ? !type.equals(cell.type) : cell.type != null)
+        if (type != null ? !type.getValue().equals(cell.type.getValue()) : cell.type != null)
             return false;
-        return value != null ? value.equals(cell.value) : cell.value == null;
+        return value != null ? value.getValue().equals(cell.value.getValue()) : cell.value == null;
     }
 
     @Override

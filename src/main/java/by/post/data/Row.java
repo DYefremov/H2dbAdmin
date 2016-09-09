@@ -49,6 +49,28 @@ public class Row implements Data {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Row row = (Row) o;
+
+        if (num != row.num) return false;
+        if (tableName != null ? !tableName.equals(row.tableName) : row.tableName != null)
+            return false;
+        return cells != null ? cells.equals(row.cells) : row.cells == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = num;
+        result = 31 * result + (tableName != null ? tableName.hashCode() : 0);
+        result = 31 * result + (cells != null ? cells.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public Object getData() {
         return cells;
     }
