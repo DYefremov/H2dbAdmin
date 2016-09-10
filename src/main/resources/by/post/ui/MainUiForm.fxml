@@ -75,6 +75,7 @@
                   <TextArea fx:id="console" editable="false" prefWidth="650.0" styleClass="console" stylesheets="@Ui.css" />
                </content>
             </TitledPane>
+             <fx:include source="StatusBar.fxml"/>
          </children>
       </VBox>
    </bottom>
