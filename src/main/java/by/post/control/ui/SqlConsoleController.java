@@ -188,7 +188,7 @@ public class SqlConsoleController {
         List<Integer> lengths = new ArrayList<>();
 
         values.forEach(column -> {
-            Cell max  = column.parallelStream().max(Comparator.comparing(item -> item.getValue().toString().length())).get();
+            Cell max  = column.parallelStream().max(Comparator.comparing(item -> item.getValue() != null ? item.getValue().toString().length() : 0)).get();
             lengths.add(String.valueOf(max.getValue()).length());
         });
 
