@@ -1,18 +1,14 @@
 package by.post.control.ui;
 
 import by.post.control.db.TableEditor;
-import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.ui.ColumnDialog;
-import by.post.ui.ConfirmationDialog;
 import by.post.ui.Resources;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.image.ImageView;
 
 import java.util.Optional;
 
