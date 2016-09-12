@@ -65,10 +65,12 @@ public class Queries {
     }
 
     /**
-     * @param column
+     * @param oldColumn
+     * @param newColumn
      * @return
      */
-    public static String updateColumn(Column column) {
+    public static String changeColumn(Column oldColumn, Column newColumn) {
+
         return "";
     }
 

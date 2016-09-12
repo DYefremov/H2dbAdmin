@@ -129,9 +129,17 @@ public class TableEditor {
     /**
      * Change column properties in the table
      *
-     * @param column
+     * @param oldColumn
+     * @param newColumn
      */
-    public void changeColumnProperties(Column column) {
+    public void changeColumnProperties(Column oldColumn, Column newColumn) {
+
+        try {
+            dbControl.update(Queries.changeColumn(oldColumn, newColumn));
+        } catch (SQLException e) {
+            logger.error("Table editor error[addColumn]: " + e);
+            new Alert(Alert.AlertType.ERROR, "Failed to change the column.\nSee more info in console!").showAndWait();
+        }
 
         logger.info("Modified column in the table.");
     }

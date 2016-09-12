@@ -28,6 +28,7 @@ public class MultipleTableColumnController {
     @FXML
     private TableColumn tableColumn;
     private TableEditor tableEditor;
+    private Column oldColumn;
 
     public MultipleTableColumnController() {
 
@@ -70,12 +71,13 @@ public class MultipleTableColumnController {
         Column data = (Column) tableColumn.getUserData();
 
         if (data != null) {
+            saveColumnData(data);
             Optional<Column> result = new ColumnDialog(data).showAndWait();
 
             if (result.isPresent()) {
+                tableEditor.changeColumnProperties(oldColumn, data);
                 setType(data.getType());
                 setName(data.getColumnName());
-                tableEditor.changeColumnProperties(data);
             }
         }
     }
@@ -117,5 +119,27 @@ public class MultipleTableColumnController {
     @FXML
     private void initialize() {
         tableEditor = TableEditor.getInstance();
+    }
+
+    /**
+     *Saving the intermediate column. (Old column)
+     */
+    private void saveColumnData(Column column) {
+
+        if (oldColumn == null) {
+           oldColumn = new Column();
+        }
+
+        oldColumn.setTableName(column.getTableName());
+        oldColumn.setColumnName(column.getColumnName());
+        oldColumn.setType(column.getType());
+        oldColumn.setPrimaryKey(column.isPrimaryKey());
+        oldColumn.setNotNull(column.isNotNull());
+        oldColumn.setAutoIncrement(column.isAutoIncrement());
+        oldColumn.setCaseSensitive(column.isCaseSensitive());
+        oldColumn.setReadOnly(column.isReadOnly());
+        oldColumn.setSearchable(column.isSearchable());
+        oldColumn.setWritable(column.isWritable());
+        oldColumn.setSigned(column.isSigned());
     }
 }
