@@ -71,7 +71,24 @@ public class Queries {
      */
     public static String changeColumn(Column oldColumn, Column newColumn) {
 
-        return "";
+        StringBuilder sb = new StringBuilder();
+        String tableName = oldColumn.getTableName();
+        String columnName = oldColumn.getColumnName();
+        String type = newColumn.getType();
+        String alterQuery = "ALTER TABLE " + tableName  + " ALTER COLUMN ";
+
+        boolean nameIsChanged = !columnName.equals(newColumn.getColumnName());
+        boolean notNullIsChanged = oldColumn.isNotNull() != newColumn.isNotNull();
+        boolean typeIsChanged = !type.equals(oldColumn.getType());
+        // Rename column if changed
+        sb.append(nameIsChanged ? alterQuery + columnName + " RENAME TO " + newColumn.getColumnName() + ";\n" : "");
+        // Add column name to the query
+        alterQuery = nameIsChanged ? alterQuery + newColumn.getColumnName() : alterQuery + columnName;
+
+        sb.append(typeIsChanged ? alterQuery + " " + type +";\n" : "");
+        sb.append(notNullIsChanged ? newColumn.isNotNull() ? alterQuery + " SET NOT NULL;\n" : alterQuery + " SET NULL;\n" : "");
+
+        return sb.toString();
     }
 
     /**
