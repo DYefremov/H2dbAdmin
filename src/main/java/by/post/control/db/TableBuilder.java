@@ -141,7 +141,7 @@ public class TableBuilder {
         column.setTableName(rsMetaData.getTableName(index));
         column.setColumnName(rsMetaData.getColumnName(index));
         column.setType(rsMetaData.getColumnTypeName(index));
-        column.setNotNull(rsMetaData.isNullable(index) == 1);
+        column.setNotNull(rsMetaData.isNullable(index) != 1);
         column.setAutoIncrement(rsMetaData.isAutoIncrement(index));
         column.setReadOnly(rsMetaData.isReadOnly(index));
         column.setCaseSensitive(rsMetaData.isCaseSensitive(index));

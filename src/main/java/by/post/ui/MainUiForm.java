@@ -66,7 +66,6 @@ public class MainUiForm extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("MainUiForm.fxml"));
 
-
         mainPane = loader.load();
         controller = loader.getController();
         controller.setMainUiForm(this);
