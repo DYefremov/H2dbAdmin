@@ -1,17 +1,14 @@
 package by.post.control.ui;
 
-import by.post.control.PropertiesController;
-import by.post.ui.ConfirmationDialog;
-import javafx.collections.FXCollections;
+import by.post.ui.MainUiForm;
 import javafx.fxml.FXML;
-import javafx.scene.AccessibleRole;
-import javafx.scene.control.*;
-import org.apache.logging.log4j.Level;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionModel;
+import javafx.scene.layout.HBox;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Properties;
-
+import java.io.IOException;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -19,76 +16,67 @@ import java.util.Properties;
 public class SettingsPaneController {
 
     @FXML
-    private TextField path;
+    private HBox parent;
     @FXML
-    private TextField dbName;
-    @FXML
-    private TextField login;
-    @FXML
-    private TextField password;
-    @FXML
-    private PasswordField maskedPassword;
-    @FXML
-    private CheckBox showPassword;
-    @FXML
-    private ComboBox driver;
-
-    private Properties properties;
+    private ListView<String> settingsList;
 
     public SettingsPaneController() {
 
     }
 
+    /**
+     * Navigation in settings list by mouse
+     */
     @FXML
-    public void onSaveAction() {
-
-        Optional result = new ConfirmationDialog("").showAndWait();
-
-        if (result.get() == ButtonType.OK && properties != null) {
-            properties.setProperty("path", path.getText());
-            properties.setProperty("user", login.getText());
-            properties.setProperty("password", showPassword.isSelected() ? password.getText() : maskedPassword.getText());
-            properties.setProperty("driver", driver.getSelectionModel().getSelectedItem().toString());
-
-            PropertiesController.setProperties(properties);
-        }
+    public void onSettingsMouseClicked() {
+        selectSettingsItem();
     }
 
-    @FXML
-    public void onShowChange() {
-
-        passwordFieldsReverse();
+    /**
+     * Navigation in settings list by keyboard
+     */
+    public void onSettingsKeyReleased() {
+        selectSettingsItem();
     }
 
     @FXML
     private void initialize() {
 
-        properties = PropertiesController.getProperties();
-        path.setText(properties.getProperty("path"));
-        dbName.setText(properties.getProperty("db"));
-        login.setText(properties.getProperty("user"));
-        password.setText(properties.getProperty("password"));
-
-        passwordFieldsReverse();
-
-        driver.setItems(FXCollections.observableArrayList(Arrays.asList("org.h2.Driver", "com.mysql.jdbc.Driver")));
-        driver.getSelectionModel().selectFirst();
+        if (!settingsList.getItems().isEmpty()) {
+            setSettings(settingsList.getItems().get(0));
+        }
     }
 
     /**
-     * Reverse fields for password
+     * Selecting value from items list
      */
-    private void passwordFieldsReverse() {
+    private void selectSettingsItem() {
 
-        if (showPassword.isSelected()) {
-            password.setText(maskedPassword.getText());
-        } else {
-            maskedPassword.setText(password.getText());
+        SelectionModel model = settingsList.getSelectionModel();
+
+        if (model.getSelectedItem() == null) {
+            model.select(0);
         }
 
-        password.managedProperty().bind(showPassword.selectedProperty());
-        password.visibleProperty().bind(showPassword.selectedProperty());
-        maskedPassword.managedProperty().bind(showPassword.selectedProperty().not());
-        maskedPassword.visibleProperty().bind(showPassword.selectedProperty().not());
+        setSettings(model.getSelectedItem().toString());
+    }
+
+    /**
+     * @param name
+     */
+    private void setSettings(String name) {
+
+        if (parent.getChildren().size() > 1) {
+            parent.getChildren().remove(1);
+        }
+
+        if (name.equals("Database")) {
+            try {
+                Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource("DbSettings.fxml"));
+                parent.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

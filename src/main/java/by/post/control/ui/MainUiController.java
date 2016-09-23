@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -25,7 +24,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,6 +77,9 @@ public class MainUiController {
         init();
     }
 
+    /**
+     * Action for "File/Open" menu item
+     */
     @FXML
     public void onItemOpen() {
         try {
@@ -106,7 +107,14 @@ public class MainUiController {
     }
 
     /**
-     * Action for "close" menu item
+     * Action for "File/Settings" menu item
+     */
+    public void onItemSettings() throws IOException {
+        setCenter("SettingsPane.fxml");
+    }
+
+    /**
+     * Action for "File/Close" menu item
      */
     @FXML
     public void onItemExit() {

@@ -29,10 +29,11 @@
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#onItemOpen" text="Open" />
                         <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#onItemSettings" text="Settings" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
                     <MenuItem mnemonicParsing="false" onAction="#onItemExit" text="Exit" />
                   </items>
                 </Menu>
-                <Menu fx:id="menuSettings" mnemonicParsing="false" text="Settings" />
                   <Menu mnemonicParsing="false" text="Tools">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#onItemSqlConsole" text="SQL console" />
@@ -75,7 +76,7 @@
                   <TextArea fx:id="console" editable="false" prefWidth="650.0" styleClass="console" stylesheets="@Ui.css" />
                </content>
             </TitledPane>
-             <fx:include source="StatusBar.fxml"/>
+             <fx:include source="StatusBar.fxml" />
          </children>
       </VBox>
    </bottom>
