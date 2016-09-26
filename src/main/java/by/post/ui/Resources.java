@@ -10,6 +10,10 @@ public class Resources {
     public static final String LOGO_PATH ="/img/logo.jpg";
     // Title for window
     public static final String TITLE = "H2dbAdmin";
+    // Min height of app window
+    public static final double  MIN_HEIGHT = 510;
+    // Min width of app window
+    public static final double MIN_WIDTH = 700;
     // Program version
     public final static String PROGRAM_VERSION = "0.0.1 Pre-alpha";
     // Text about program

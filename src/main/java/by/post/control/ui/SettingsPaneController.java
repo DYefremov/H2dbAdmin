@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.layout.HBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -19,6 +21,8 @@ public class SettingsPaneController {
     private HBox parent;
     @FXML
     private ListView<String> settingsList;
+
+    private static final Logger logger = LogManager.getLogger(SettingsPaneController.class);
 
     public SettingsPaneController() {
 
@@ -70,13 +74,21 @@ public class SettingsPaneController {
             parent.getChildren().remove(1);
         }
 
-        if (name.equals("Database")) {
-            try {
-                Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource("DbSettings.fxml"));
-                parent.getChildren().add(node);
-            } catch (IOException e) {
-                e.printStackTrace();
+        Node node = null;
+
+        try {
+            if (name.equals(settingsList.getItems().get(0))) {
+                node = (Node) FXMLLoader.load(MainUiForm.class.getResource("DbSettings.fxml"));
+            } else  if (name.equals(settingsList.getItems().get(1))) {
+                node = (Node) FXMLLoader.load(MainUiForm.class.getResource("UiSettings.fxml"));
             }
+        } catch (IOException e) {
+            logger.error("SettingsPaneController error: " + e);
         }
+
+        if (node != null) {
+            parent.getChildren().add(node);
+        }
+
     }
 }

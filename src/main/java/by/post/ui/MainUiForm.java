@@ -59,7 +59,7 @@ public class MainUiForm extends Application {
     }
 
     /**
-     * Initialize main ui elements
+     * Initializing main ui elements
      */
     private void initApp() throws Exception {
 
@@ -69,10 +69,10 @@ public class MainUiForm extends Application {
         mainPane = loader.load();
         controller = loader.getController();
         controller.setMainUiForm(this);
-        mainScene = new Scene(mainPane, 700, 500);
+        mainScene = new Scene(mainPane, Resources.MIN_WIDTH, Resources.MIN_HEIGHT);
         mainStage.setScene(mainScene);
-        mainStage.setMinHeight(500);
-        mainStage.setMinWidth(700);
+        mainStage.setMinHeight(Resources.MIN_HEIGHT);
+        mainStage.setMinWidth(Resources.MIN_WIDTH);
         //Override closing program
         mainStage.setOnCloseRequest(event -> {
             Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
@@ -88,13 +88,18 @@ public class MainUiForm extends Application {
         mainStage.show();
     }
 
+    /**
+     * @return main stage
+     */
     public Stage getMainStage() {
         return mainStage;
     }
 
+    /**
+     * Closing connection to database
+     */
     private void closeConnection() {
         DbControl dbControl = DbController.getInstance();
         dbControl.closeConnection();
     }
-
 }
