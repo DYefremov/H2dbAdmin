@@ -139,7 +139,7 @@ public class MainUiController {
     @FXML
     public void onItemRecovery() {
         try {
-            new RecoveryDialog().showAndWait();
+            mainPane.setCenter(FXMLLoader.load(MainUiForm.class.getResource("RecoveryPane.fxml")));
         } catch (Exception e) {
             logger.error("MainUiController error onItemRecovery: " + e);
         }
