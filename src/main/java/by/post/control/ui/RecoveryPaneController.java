@@ -15,10 +15,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -44,15 +41,15 @@ public class RecoveryPaneController {
         String file = null;
         String save = null;
 
-        TreeItem baseItem = databasePath.getSelectionModel().getSelectedItem();
-        TreeItem saveItem = savePath.getSelectionModel().getSelectedItem();
+        FileTreeItem baseItem = (FileTreeItem) databasePath.getSelectionModel().getSelectedItem();
+        FileTreeItem saveItem = (FileTreeItem) savePath.getSelectionModel().getSelectedItem();
 
         if (baseItem != null) {
-            file = String.valueOf(baseItem.getValue());
+            file = String.valueOf(baseItem.getPath());
         }
 
         if (saveItem != null) {
-           save = String.valueOf(saveItem.getValue());
+           save = String.valueOf(saveItem.getPath());
         }
 
         logger.info("Selected: database file = " + file + ",  path for save = " + save);
@@ -72,8 +69,8 @@ public class RecoveryPaneController {
         hostName = hostName == null ? "PC" : hostName;
 
         Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
-        TreeItem<Path> databaseItem = new TreeItem(hostName);
-        TreeItem<Path> saveItem = new TreeItem(hostName);
+        FileTreeItem databaseItem = new FileTreeItem(hostName);
+        FileTreeItem saveItem = new FileTreeItem(hostName);
 
         rootDirectories.forEach(name -> {
             getRootNode(databaseItem, name);
@@ -90,9 +87,9 @@ public class RecoveryPaneController {
      * @param item
      * @param name
      */
-    private void getRootNode(TreeItem<Path> item, Path name) {
+    private void getRootNode(FileTreeItem item, Path name) {
 
-        TreeItem newItem = new TreeItem(name);
+        FileTreeItem newItem = new FileTreeItem(name);
         newItem.setGraphic(getFolderImage());
         item.getChildren().add(newItem);
         item.setExpanded(true);
@@ -111,8 +108,8 @@ public class RecoveryPaneController {
                     return;
                 }
 
-                TreeItem<Path> item = (TreeItem<Path>) newValue;
-                Path path = (Path) item.getValue();
+                FileTreeItem item = (FileTreeItem) newValue;
+                Path path = item.getPath();
 
                 if (Files.isDirectory(path)) {
                     if (item.isLeaf()) {
@@ -124,8 +121,6 @@ public class RecoveryPaneController {
                         });
                         item.setExpanded(true);
                     }
-                } else {
-                    System.out.println(path.toFile().getAbsolutePath());
                 }
             }
         });
@@ -135,20 +130,19 @@ public class RecoveryPaneController {
      * @param item
      * @throws IOException
      */
-    private void getTree(TreeItem<Path> item) {
+    private void getTree(FileTreeItem item) {
 
         try {
-            if (Files.isReadable(item.getValue())) {
-                DirectoryStream<Path> directoryStream = Files.newDirectoryStream(item.getValue());
+            if (Files.isReadable(item.getPath())) {
+                DirectoryStream<Path> directoryStream = Files.newDirectoryStream(item.getPath());
 
                 directoryStream.forEach(path -> {
 
-                    TreeItem<Path> newItem = new TreeItem<>(path);
+                    FileTreeItem newItem = new FileTreeItem(path);
 
                     if (Files.isDirectory(path)) {
                         newItem.setGraphic(getFolderImage());
                         item.getChildren().add(newItem);
-                        System.out.println(path);
                     } else {
                         boolean isDbFile = path.toFile().getName().toUpperCase().endsWith(".DB");
 
@@ -170,4 +164,26 @@ public class RecoveryPaneController {
         return new ImageView(new Image("/img/folder_test.png", 16, 16, false, false));
     }
 
+}
+
+/**
+ * Custom implementation of tree item for better work with file names
+ */
+class FileTreeItem extends TreeItem {
+
+    private Path path;
+
+    public FileTreeItem(Path path) {
+        super(String.valueOf(path.getFileName() == null ? path : path.getFileName()));
+        this.path = path;
+    }
+
+    public FileTreeItem(String path) {
+        super(path);
+        this.path = Paths.get(path);
+    }
+
+    public Path getPath() {
+        return path;
+    }
 }
