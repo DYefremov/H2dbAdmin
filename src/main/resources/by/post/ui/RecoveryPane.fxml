@@ -6,19 +6,35 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<VBox xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.RecoveryPaneController">
+<GridPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.RecoveryPaneController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" vgrow="SOMETIMES" />
+   </rowConstraints>
    <children>
-      <HBox prefHeight="30.0" prefWidth="600.0" />
-      <SplitPane dividerPositions="0.5" prefWidth="200.0">
+      <SplitPane dividerPositions="0.5">
          <items>
-            <VBox>
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="275.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="-Infinity" minHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
+                  <TreeView fx:id="databasePath" GridPane.rowIndex="1" />
                   <HBox alignment="CENTER_LEFT" minHeight="22.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="122.0" text="Select database file...">
+                        <Label prefHeight="22.0" prefWidth="120.0" text="Select database file...">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -30,30 +46,34 @@
                         </CheckBox>
                      </children>
                   </HBox>
-                  <TreeView fx:id="databasePath" prefWidth="200.0" />
                </children>
-            </VBox>
-            <VBox>
+            </GridPane>
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="275.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="-Infinity" minHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <Label minHeight="22.0" text="Path to save...">
-                     <VBox.margin>
-                        <Insets left="10.0" />
-                     </VBox.margin></Label>
-                  <TreeView fx:id="savePath" prefWidth="200.0" />
+                  <Label minHeight="22.0" minWidth="-Infinity" prefWidth="120.0" text="Path to save..." />
+                  <TreeView fx:id="savePath" GridPane.rowIndex="1" />
                </children>
-            </VBox>
+            </GridPane>
          </items>
       </SplitPane>
-      <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="35.0">
+      <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
          <children>
           <Button mnemonicParsing="false" onAction="#onRun" prefHeight="25.0" prefWidth="75.0" text="Run">
                <HBox.margin>
                   <Insets right="25.0" />
-               </HBox.margin></Button>
+               </HBox.margin>
+            </Button>
          </children>
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
       </HBox>
    </children>
-</VBox>
+</GridPane>
