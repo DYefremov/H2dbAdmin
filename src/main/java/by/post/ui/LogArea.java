@@ -12,6 +12,8 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import java.io.Serializable;
 
 /**
+ * @deprecated more not used
+ *
  * Text Area implementation for logging output
  *
  * @author Dmitriy V.Yefremov

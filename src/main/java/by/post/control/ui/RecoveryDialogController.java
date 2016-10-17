@@ -16,6 +16,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 
 /**
+ * @deprecated will used RecoveryPane
+ *
  * @author Dmitriy V.Yefremov
  */
 public class RecoveryDialogController {

@@ -3,7 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -58,7 +60,15 @@
                </rowConstraints>
                <children>
                   <Label minHeight="22.0" minWidth="-Infinity" prefWidth="120.0" text="Path to save..." />
-                  <TreeView fx:id="savePath" GridPane.rowIndex="1" />
+                  <TreeView fx:id="savePath" GridPane.rowIndex="1">
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#onAddFolder" text="Add folder" />
+                              <MenuItem mnemonicParsing="false" onAction="#onDeleteFolder" text="Delete" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu></TreeView>
                </children>
             </GridPane>
          </items>

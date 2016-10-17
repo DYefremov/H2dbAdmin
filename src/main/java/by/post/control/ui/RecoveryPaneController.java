@@ -1,21 +1,22 @@
 package by.post.control.ui;
 
+import by.post.ui.InputDialog;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.*;
+import java.util.Optional;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -49,10 +50,43 @@ public class RecoveryPaneController {
         }
 
         if (saveItem != null) {
-           save = String.valueOf(saveItem.getPath());
+            save = String.valueOf(saveItem.getPath());
         }
 
         logger.info("Selected: database file = " + file + ",  path for save = " + save);
+    }
+
+    /**
+     * Context menu for save path view
+     */
+    @FXML
+    public void onAddFolder() {
+
+        Optional<String> folder = new InputDialog("Write folder name", "new", false).showAndWait();
+
+        FileTreeItem item = (FileTreeItem) savePath.getSelectionModel().getSelectedItem();
+
+        if (folder.isPresent()) {
+            if (item.getPath().toFile().isDirectory()) {
+                item.setExpanded(true);
+                getNewDir(folder.get() ,item);
+            } else {
+                item = (FileTreeItem) item.getParent();
+                if (item != null && item.getPath() != null) {
+                    getNewDir(folder.get(), item);
+                } else {
+                    new Alert(Alert.AlertType.ERROR,
+                            "Create here a directory is impossible!", ButtonType.OK).showAndWait();
+                }
+            }
+        }
+
+    }
+
+    @FXML
+    public void onDeleteFolder() {
+
+        new Alert(Alert.AlertType.INFORMATION, "Not implemented!", ButtonType.OK).showAndWait();
     }
 
     @FXML
@@ -61,7 +95,7 @@ public class RecoveryPaneController {
         String hostName = null;
 
         try {
-            hostName =  InetAddress.getLocalHost().getHostName();
+            hostName = InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
             logger.error("RecoveryPaneController error [initialize]: " + e);
         }
@@ -164,26 +198,49 @@ public class RecoveryPaneController {
         return new ImageView(new Image("/img/folder_test.png", 16, 16, false, false));
     }
 
-}
+    /**
+     * Create new directory in file system and add new item to tree view
+     */
+    private void getNewDir(String dir, FileTreeItem item) {
 
-/**
- * Custom implementation of tree item for better work with file names
- */
-class FileTreeItem extends TreeItem {
+        String path = item.getPath().toFile().getAbsolutePath() + File.separator + dir;
 
-    private Path path;
+        File file = new File(path);
+        file.mkdir();
 
-    public FileTreeItem(Path path) {
-        super(String.valueOf(path.getFileName() == null ? path : path.getFileName()));
-        this.path = path;
-    }
-
-    public FileTreeItem(String path) {
-        super(path);
-        this.path = Paths.get(path);
-    }
-
-    public Path getPath() {
-        return path;
+        try {
+            file.createNewFile();
+            FileTreeItem newItem = new FileTreeItem(path);
+            newItem.setGraphic(getFolderImage());
+            item.getChildren().add(newItem);
+        } catch (IOException e) {
+            logger.error("RecoveryPaneController error [getNewDir]: " + e);
     }
 }
+
+    /**
+     * Custom implementation of tree item for better work with file names
+     */
+    class FileTreeItem extends TreeItem {
+
+        private Path path;
+
+        public FileTreeItem(Path path) {
+            super(String.valueOf(path.getFileName() == null ? path : path.getFileName()));
+            this.path = path;
+        }
+
+        public FileTreeItem(String path) {
+            super();
+            this.path = Paths.get(path);
+            this.setValue(this.path.getFileName());
+        }
+
+        public Path getPath() {
+            return path;
+        }
+    }
+
+}
+
+

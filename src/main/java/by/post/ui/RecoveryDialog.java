@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
+ * @deprecated will used RecoveryPane
+ *
  * @author Dmitriy V.Yefremov
  */
 public class RecoveryDialog{
