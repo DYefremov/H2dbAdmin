@@ -1,5 +1,6 @@
 package by.post.control.ui;
 
+import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -16,7 +17,11 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.*;
+import java.util.Comparator;
 import java.util.Optional;
+
+import static java.util.Comparator.reverseOrder;
+
 
 /**
  * @author Dmitriy V.Yefremov
@@ -69,7 +74,7 @@ public class RecoveryPaneController {
         if (folder.isPresent()) {
             if (item.getPath().toFile().isDirectory()) {
                 item.setExpanded(true);
-                getNewDir(folder.get() ,item);
+                getNewDir(folder.get(), item);
             } else {
                 item = (FileTreeItem) item.getParent();
                 if (item != null && item.getPath() != null) {
@@ -86,7 +91,11 @@ public class RecoveryPaneController {
     @FXML
     public void onDeleteFolder() {
 
-        new Alert(Alert.AlertType.INFORMATION, "Not implemented!", ButtonType.OK).showAndWait();
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            deleteDir((FileTreeItem) savePath.getSelectionModel().getSelectedItem());
+        }
     }
 
     @FXML
@@ -151,9 +160,10 @@ public class RecoveryPaneController {
                             @Override
                             public void run() {
                                 getTree(item);
+                                item.setExpanded(true);
                             }
                         });
-                        item.setExpanded(true);
+
                     }
                 }
             }
@@ -205,18 +215,49 @@ public class RecoveryPaneController {
 
         String path = item.getPath().toFile().getAbsolutePath() + File.separator + dir;
 
-        File file = new File(path);
-        file.mkdir();
-
         try {
-            file.createNewFile();
+            Files.createDirectory(Paths.get(path));
             FileTreeItem newItem = new FileTreeItem(path);
             newItem.setGraphic(getFolderImage());
             item.getChildren().add(newItem);
         } catch (IOException e) {
             logger.error("RecoveryPaneController error [getNewDir]: " + e);
+        }
     }
-}
+
+    /**
+     * Delete directory in file system and item from tree view
+     *
+     * @param item
+     */
+    private void deleteDir(FileTreeItem item) {
+
+        Path path = item.getPath();
+
+        try {
+            if (!Files.isDirectory(path)) {
+                Files.deleteIfExists(path);
+            } else {
+                if (Files.list(path).findFirst().isPresent()) {
+
+                    Optional<ButtonType> result = new ConfirmationDialog("Directory is not empty!").showAndWait();
+
+                    if (result.get() == ButtonType.OK) {
+                        // Deleting directories recursively
+                        Files.walk(path, FileVisitOption.FOLLOW_LINKS)
+                                .sorted(Comparator.reverseOrder())
+                                .map(Path::toFile).forEach(File::delete);
+                    }
+                } else {
+                    Files.deleteIfExists(path);
+                }
+            }
+
+            item.getParent().getChildren().remove(item);
+        } catch (IOException e) {
+            logger.error("RecoveryPaneController error [deleteDir]: " + e);
+        }
+    }
 
     /**
      * Custom implementation of tree item for better work with file names
