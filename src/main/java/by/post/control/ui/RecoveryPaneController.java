@@ -68,20 +68,19 @@ public class RecoveryPaneController {
             return;
         }
 
-        //        if (save == null || !save.toFile().canWrite()) {
-//            new Alert(Alert.AlertType.ERROR,"Please set path for save!").showAndWait();
-//            logger.error("RecoveryPaneController error [onRun]: " +
-//                    "Not selected properly path for save recovered database file.");
-//            return;
-//        }
-
-
+        if (save == null || !save.toFile().canWrite()) {
+            new Alert(Alert.AlertType.ERROR,"Please set path for save!").showAndWait();
+            logger.error("RecoveryPaneController error [onRun]: " +
+                    "Not selected properly path for save recovered database file.");
+            return;
+        }
 
         Optional<Pair<String, String>> userData = null;
+
         try {
             userData = new LoginDialog().showAndWait();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("RecoveryPaneController error [onRun]: " + e);
         }
 
         if (userData.isPresent()) {
@@ -97,7 +96,6 @@ public class RecoveryPaneController {
              * @see "http://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm"
              */
             Task task = new Task<Void>() {
-
                 @Override
                 protected Void call() throws Exception {
 
@@ -106,7 +104,6 @@ public class RecoveryPaneController {
                     recovery.recover(file, save, user, password, new Callback<Boolean, Boolean>() {
                         @Override
                         public Boolean call(Boolean param) {
-
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
@@ -114,11 +111,9 @@ public class RecoveryPaneController {
                                     progressBar.setVisible(false);
                                 }
                             });
-
                             return param.booleanValue();
                         }
                     });
-
                     return null;
                 }
             };
@@ -229,7 +224,6 @@ public class RecoveryPaneController {
                                 item.setExpanded(true);
                             }
                         });
-
                     }
                 }
             }

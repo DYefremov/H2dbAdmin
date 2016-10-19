@@ -27,7 +27,5 @@ public class Resources {
             "Apache Log4j 2 - http://logging.apache.org/log4j/2.x/\n" +
             "All icons are taken from the standard Linux Mint icon sets  or taken away from http://icons8.com\n" +
             "\n" +
-            "To building the project uses Gradle - https://gradle.org\n" +
-            "\n" +
-            "I'm sorry if anyone forgot.";
+            "To building the project uses Gradle - https://gradle.org\n";
 }
