@@ -26,6 +26,7 @@ public class SimpleProgressIndicator extends Stage {
         FXMLLoader loader = new FXMLLoader(SimpleProgressIndicator.class.getResource("SimpleProgressIndicator.fxml"));
 
         try {
+            parent = loader.load();
             stage = this;
             stage.setScene(new Scene(parent));
             stage.setResizable(false);
@@ -33,7 +34,6 @@ public class SimpleProgressIndicator extends Stage {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.centerOnScreen();
 
-            parent = loader.load();
             parent.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {

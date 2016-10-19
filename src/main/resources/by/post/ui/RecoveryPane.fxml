@@ -6,14 +6,16 @@
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<GridPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.RecoveryPaneController">
+<GridPane xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.RecoveryPaneController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" />
    </columnConstraints>
@@ -73,17 +75,36 @@
             </GridPane>
          </items>
       </SplitPane>
-      <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
+      <GridPane GridPane.rowIndex="1">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0" />
+            <ColumnConstraints minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-          <Button mnemonicParsing="false" onAction="#onRun" prefHeight="25.0" prefWidth="75.0" text="Run">
-               <HBox.margin>
-                  <Insets right="25.0" />
-               </HBox.margin>
+            <Label fx:id="progress" alignment="CENTER" contentDisplay="CENTER" text="Please wait..." textAlignment="CENTER" visible="false">
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="16.0" />
+               </font></Label>
+            <ProgressBar fx:id="progressBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="100.0" visible="false">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets left="200.0" />
+               </GridPane.margin>
+            </ProgressBar>
+          <Button alignment="CENTER" mnemonicParsing="false" onAction="#onRun" prefHeight="25.0" prefWidth="75.0" text="Run" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
             </Button>
          </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </HBox>
+      </GridPane>
    </children>
 </GridPane>

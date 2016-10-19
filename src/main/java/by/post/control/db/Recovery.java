@@ -2,14 +2,12 @@ package by.post.control.db;
 
 import javafx.util.Callback;
 
-import java.io.File;
+import java.nio.file.Path;
 
 /**
  * @author Dmitriy V.Yefremov
  */
 public interface Recovery {
 
-    boolean recover(String openPath, String savePath, Callback<Boolean, Boolean> done);
-
-    boolean recover(File openFile, File saveDir, Callback<Boolean, Boolean> done);
+    boolean recover(Path dbFile, Path saveDir, String user, String password, Callback<Boolean, Boolean> done);
 }

@@ -1,14 +1,21 @@
 package by.post.control.ui;
 
+import by.post.control.db.Recovery;
+import by.post.control.db.RecoveryManager;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
+import by.post.ui.LoginDialog;
+import by.post.ui.SimpleProgressIndicator;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Callback;
+import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,8 +26,8 @@ import java.net.UnknownHostException;
 import java.nio.file.*;
 import java.util.Comparator;
 import java.util.Optional;
-
-import static java.util.Comparator.reverseOrder;
+import java.util.Timer;
+import java.util.concurrent.ExecutorService;
 
 
 /**
@@ -34,6 +41,10 @@ public class RecoveryPaneController {
     private TreeView<Path> savePath;
     @FXML
     private CheckBox filter;
+    @FXML
+    private Label progress;
+    @FXML
+    private ProgressBar progressBar;
 
     private static final Logger logger = LogManager.getLogger(RecoveryPaneController.class);
 
@@ -44,21 +55,76 @@ public class RecoveryPaneController {
     @FXML
     public void onRun() {
 
-        String file = null;
-        String save = null;
-
         FileTreeItem baseItem = (FileTreeItem) databasePath.getSelectionModel().getSelectedItem();
         FileTreeItem saveItem = (FileTreeItem) savePath.getSelectionModel().getSelectedItem();
 
-        if (baseItem != null) {
-            file = String.valueOf(baseItem.getPath());
+        Path file = baseItem != null ? baseItem.getPath() : null;
+        Path save = saveItem != null ? saveItem.getPath() : null;
+
+        if (file == null || !file.toFile().isFile()) {
+            new Alert(Alert.AlertType.ERROR,"Please select database file!").showAndWait();
+            logger.error("RecoveryPaneController error [onRun]: " +
+                    "Not selected properly database file.");
+            return;
         }
 
-        if (saveItem != null) {
-            save = String.valueOf(saveItem.getPath());
+        //        if (save == null || !save.toFile().canWrite()) {
+//            new Alert(Alert.AlertType.ERROR,"Please set path for save!").showAndWait();
+//            logger.error("RecoveryPaneController error [onRun]: " +
+//                    "Not selected properly path for save recovered database file.");
+//            return;
+//        }
+
+
+
+        Optional<Pair<String, String>> userData = null;
+        try {
+            userData = new LoginDialog().showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        logger.info("Selected: database file = " + file + ",  path for save = " + save);
+        if (userData.isPresent()) {
+            final String user = userData.get().getKey();
+            final String password = userData.get().getValue();
+
+            progress.setText("Please wait...");
+            progress.setVisible(true);
+            progressBar.setVisible(true);
+
+            /**
+             * Run recovery task
+             * @see "http://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm"
+             */
+            Task task = new Task<Void>() {
+
+                @Override
+                protected Void call() throws Exception {
+
+                    Recovery recovery = new RecoveryManager();
+
+                    recovery.recover(file, save, user, password, new Callback<Boolean, Boolean>() {
+                        @Override
+                        public Boolean call(Boolean param) {
+
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progress.setText(param.booleanValue() ? "Done!" : "Error...");
+                                    progressBar.setVisible(false);
+                                }
+                            });
+
+                            return param.booleanValue();
+                        }
+                    });
+
+                    return null;
+                }
+            };
+
+            new Thread(task).start();
+        }
     }
 
     /**

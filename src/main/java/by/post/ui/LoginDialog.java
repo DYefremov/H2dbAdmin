@@ -10,6 +10,10 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 /**
  * Custom dialog for entering login and password
@@ -22,14 +26,20 @@ public class LoginDialog extends Dialog<Pair<String, String>> {
     private Parent parent;
     private LoginDialogController controller;
 
-    public LoginDialog() throws Exception {
+    private static final Logger logger = LogManager.getLogger(LoginDialog.class);
+
+    public LoginDialog() {
         init();
     }
 
-    private void init() throws Exception {
+    private void init() {
 
         loader = new FXMLLoader(LoginDialog.class.getResource("LoginDialog.fxml"));
-        parent = loader.<DialogPane>load();
+        try {
+            parent = loader.<DialogPane>load();
+        } catch (IOException e) {
+           logger.error("LoginDialog error: " + e);
+        }
         controller = loader.getController();
 
         this.setDialogPane((DialogPane) parent);

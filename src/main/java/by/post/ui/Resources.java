@@ -20,4 +20,14 @@ public class Resources {
     public final static String ABOUT_TEXT = "This program is free software and " +
             "distributed in the hope that it will be useful, but WITHOUT ANY " +
             "WARRANTY! \n  Dmitriy Yefremov  2016";
+
+    public final static String USED_RESOURCES = "In this program are used:\n" +
+            "Java SE Development Kit 8 - http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html\n" +
+            "H2 Database Engine - http://www.h2database.com/html/main.html\n" +
+            "Apache Log4j 2 - http://logging.apache.org/log4j/2.x/\n" +
+            "All icons are taken from the standard Linux Mint icon sets  or taken away from http://icons8.com\n" +
+            "\n" +
+            "To building the project uses Gradle - https://gradle.org\n" +
+            "\n" +
+            "I'm sorry if anyone forgot.";
 }

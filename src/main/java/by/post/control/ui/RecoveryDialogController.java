@@ -3,13 +3,10 @@ package by.post.control.ui;
 import by.post.control.db.Recovery;
 import by.post.control.db.RecoveryManager;
 import by.post.ui.RecoveryDialog;
-import by.post.ui.SimpleProgressIndicator;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,13 +48,14 @@ public class RecoveryDialogController {
 
     @FXML
     public void onRunClick(ActionEvent event) {
-
+        /*
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
 
                 SimpleProgressIndicator pi = new SimpleProgressIndicator();
                 pi.show();
+
 
                 boolean done = recovery.recover(dbFile, saveDir, new Callback<Boolean, Boolean>() {
                     @Override
@@ -73,6 +71,7 @@ public class RecoveryDialogController {
 
             }
         });
+        */
 
     }
 
