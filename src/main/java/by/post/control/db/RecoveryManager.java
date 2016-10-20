@@ -4,7 +4,9 @@ import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.tools.Recover;
+import org.h2.tools.RunScript;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.sql.SQLException;
 
@@ -15,28 +17,48 @@ public class RecoveryManager implements Recovery {
 
     private boolean recoveryDone;
 
+    private final String RECOVERED_DB_NAME = "recovered";
+
     private static final Logger logger = LogManager.getLogger(RecoveryManager.class);
 
     public RecoveryManager() {
 
     }
 
-    private boolean recover(String dbPath, String dbName, String user, String password) {
+    /**
+     * @param dbPath
+     * @param dbName
+     * @param pathToSave
+     * @param user
+     * @param password
+     * @return
+     */
+    private boolean recover(String dbPath, String dbName, String pathToSave, String user, String password) {
 
         try {
+            // Dumps the contents of a database to a SQL script file.
             Recover.execute(dbPath, dbName);
+            String scriptFile = dbPath + File.separator + dbName + ".h2.sql";
+            String url = "jdbc:h2:" + pathToSave;
+            // Executes the SQL commands in a script file.
+            RunScript.execute(url, user, password, scriptFile, null, true);
             recoveryDone = true;
         } catch (SQLException e) {
             logger.error("RecoveryManager error: " + e);
             recoveryDone = false;
         }
-//            String url = "jdbc:h2:" + openPath + "recovered";
-//            String scriptFile = openPath + db + ".h2.sql";
-//            RunScript.execute(url, user, password, scriptFile, null, true);
 
         return recoveryDone;
     }
 
+    /**
+     * @param dbFile
+     * @param saveDir
+     * @param user
+     * @param password
+     * @param done
+     * @return true if done
+     */
     @Override
     public boolean recover(Path dbFile, Path saveDir, String user, String password, Callback<Boolean, Boolean> done) {
 
@@ -44,6 +66,8 @@ public class RecoveryManager implements Recovery {
         String dbName =  String.valueOf(dbFile.getFileName());
         dbName = dbName.substring(0, dbName.indexOf('.'));
 
-        return done.call(recover(dbPath, dbName, user, password));
+        String savePath = saveDir + File.separator + RECOVERED_DB_NAME;
+
+        return done.call(recover(dbPath, dbName, savePath, user, password));
     }
 }

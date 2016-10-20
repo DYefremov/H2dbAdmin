@@ -5,7 +5,6 @@ import by.post.control.db.RecoveryManager;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
 import by.post.ui.LoginDialog;
-import by.post.ui.SimpleProgressIndicator;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,8 +25,6 @@ import java.net.UnknownHostException;
 import java.nio.file.*;
 import java.util.Comparator;
 import java.util.Optional;
-import java.util.Timer;
-import java.util.concurrent.ExecutorService;
 
 
 /**
@@ -54,6 +51,8 @@ public class RecoveryPaneController {
 
     @FXML
     public void onRun() {
+
+        //TODO The ability to put a warning about the increased consumption of RAM
 
         FileTreeItem baseItem = (FileTreeItem) databasePath.getSelectionModel().getSelectedItem();
         FileTreeItem saveItem = (FileTreeItem) savePath.getSelectionModel().getSelectedItem();
@@ -118,6 +117,7 @@ public class RecoveryPaneController {
                 }
             };
 
+            //TODO maybe need adding termination of thread by button click for canceling.
             new Thread(task).start();
         }
     }
