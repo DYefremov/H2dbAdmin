@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -32,6 +33,12 @@ public class MainUiForm extends Application {
     private static final Logger logger = LogManager.getLogger(MainUiForm.class);
 
     public static void main(String[] args) {
+        // Checking that the application is already running
+        if (new AppRunChecker().isRunning()) {
+            Platform.exit();
+            System.exit(0);
+        }
+
         launch(args);
     }
 

@@ -13,7 +13,7 @@ public class RecoveryManagerTest {
         String openPath = "~/test";
         String savePath = "~/recovered";
 
-        Recovery recovery = new RecoveryManager(openPath, savePath);
+        Recovery recovery = new RecoveryManager();
     }
 
 }
