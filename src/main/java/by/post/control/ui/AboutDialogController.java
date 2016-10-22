@@ -40,7 +40,7 @@ public class AboutDialogController {
 
     @FXML
     private void initialize(){
-        textArea.setText(Resources.ABOUT_TEXT);
+        textArea.setText(Resources.ABOUT_TEXT + Resources.USED_RESOURCES + Resources.CREATOR);
         versionLabel.setText("H2dbAdmin ver: " + Resources.PROGRAM_VERSION);
     }
 
