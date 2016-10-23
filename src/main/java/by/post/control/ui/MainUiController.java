@@ -7,10 +7,14 @@ import by.post.control.db.TableDataResolver;
 import by.post.control.db.TableEditor;
 import by.post.data.Table;
 import by.post.ui.*;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -50,6 +54,8 @@ public class MainUiController {
     private SplitPane mainSplitPane;
     @FXML
     private TitledPane infoPane;
+    @FXML
+    private ContextMenu treeContextMenu;
 
     private String dbName;
 
@@ -97,9 +103,22 @@ public class MainUiController {
                 logger.info("Entered user data : user = " + user + ", password = " + password);
 
                 PropertiesController.setProperties(path, dbName, user, password);
-                init();
-            }
 
+                Task<Void> task = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                init();
+                            }
+                        });
+                        return null;
+                    }
+                };
+
+                new Thread(task).start();
+            }
         } catch (Exception e) {
             logger.error("MainUiController error onItemOpen: " + e);
         }
@@ -298,6 +317,14 @@ public class MainUiController {
         getDbTablesList(dbControl).stream().forEach(t -> {
             tables.add(new TreeItem(t));
         });
+
+        if (tables.isEmpty()) {
+            tableTree.setRoot(new TreeItem("Database is not present..."));
+            tableTree.setContextMenu(null);
+            return;
+        }
+
+        tableTree.setContextMenu(treeContextMenu);
         // Sorting
 //        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
         ObservableList<TreeItem> list = FXCollections.observableList(tables);
@@ -308,6 +335,7 @@ public class MainUiController {
         tableTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+
                 if (newValue == null) {
                     return;
                 }
@@ -315,8 +343,28 @@ public class MainUiController {
                 TreeItem<String> item = (TreeItem<String>) newValue;
                 // A TreeItem is a leaf if it has no children
                 if (item.isLeaf()) {
-                    Table table = dbControl.getTable(item.getValue());
-                    selectTable(table);
+
+                    Task<Boolean> task = new Task<Boolean>() {
+                        @Override
+                        protected Boolean call() throws Exception {
+
+                            Table table = dbControl.getTable(item.getValue());
+
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    selectTable(table);
+                                }
+                            });
+                            return true;
+                        }
+                    };
+
+                    task.setOnFailed(event -> {
+                        logger.error("MainUiController error when selecting table: " + task.getException());
+                    });
+
+                    new Thread(task).start();
                 }
             }
         });

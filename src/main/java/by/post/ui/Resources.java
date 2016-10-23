@@ -23,10 +23,12 @@ public class Resources {
 
     public final static String CREATOR = "Dmitriy Yefremov  2016";
 
-    public final static String USED_RESOURCES = "In this program are used:\n" +
-            "Java SE Development Kit 8 - https://www.oracle.com\n" +
+    public final static String USED_RESOURCES = "Used components: \t\t\t\t\t\t\t\t\n" +
             "H2 Database Engine - http://www.h2database.com\n" +
             "Apache Log4j 2 - http://logging.apache.org/log4j/2.x/\n" +
             "All icons are taken from the standard Linux Mint icon sets  or taken away from http://icons8.com\n" +
             "To building the project uses Gradle - https://gradle.org\n\n";
+
+    public final static String JAVA_VERSION = "OS: " + System.getProperty("os.name") +  ". Java version: "
+            + System.getProperty("java.version") + " from " + System.getProperty("java.vendor");
 }

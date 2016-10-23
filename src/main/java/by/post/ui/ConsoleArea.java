@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
+ * @deprecated more not used
+ *
  * @author Dmitriy V.Yefremov
  */
 public class ConsoleArea extends OutputStream{

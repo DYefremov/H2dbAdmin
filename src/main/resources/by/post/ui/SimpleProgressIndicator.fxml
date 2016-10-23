@@ -3,7 +3,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ProgressIndicator?>
 
-<ProgressIndicator prefHeight="40.0" prefWidth="60.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<ProgressIndicator cache="true" cacheHint="SPEED" prefHeight="40.0" prefWidth="60.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1">
    <cursor>
       <Cursor fx:constant="N_RESIZE" />
    </cursor>

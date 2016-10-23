@@ -19,6 +19,8 @@ public class AboutDialogController {
     @FXML
     private Label versionLabel;
     @FXML
+    private Label javaVersion;
+    @FXML
     private Hyperlink hyperlink;
 
     private HostServices hostServices;
@@ -42,6 +44,7 @@ public class AboutDialogController {
     private void initialize(){
         textArea.setText(Resources.ABOUT_TEXT + Resources.USED_RESOURCES + Resources.CREATOR);
         versionLabel.setText("H2dbAdmin ver: " + Resources.PROGRAM_VERSION);
+        javaVersion.setText(Resources.JAVA_VERSION);
     }
 
 }

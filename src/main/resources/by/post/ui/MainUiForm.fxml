@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
+<BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
    <top>
       <VBox>
          <children>
@@ -87,7 +87,7 @@
          <items>
             <TreeView fx:id="tableTree" minWidth="-Infinity" prefHeight="330.0" prefWidth="100.0">
                <contextMenu>
-                  <ContextMenu>
+                  <ContextMenu fx:id="treeContextMenu">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#onTreeContextAdd" text="Add table" />
                         <MenuItem mnemonicParsing="false" onAction="#onTreeContextDelete" text="Delete table" />

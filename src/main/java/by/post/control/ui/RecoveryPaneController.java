@@ -116,7 +116,6 @@ public class RecoveryPaneController {
                     return null;
                 }
             };
-
             //TODO maybe need adding termination of thread by button click for canceling.
             new Thread(task).start();
         }
