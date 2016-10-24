@@ -73,6 +73,10 @@ public class TableEditor {
 
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
 
+        if (lastSelectedRow !=null && !lastSelectedRow.getTableName().equals(mainTable.getId())) {
+            lastSelectedRow = null;
+        }
+
         if (selectedIndex != -1) {
             if (lastSelectedRow == null || lastSelectedRow.getNum() != selectedIndex) {
                 lastSelectedRow = getRow(Commands.CHANGE, selectedIndex);

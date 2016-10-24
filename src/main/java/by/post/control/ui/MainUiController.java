@@ -13,8 +13,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -311,7 +309,11 @@ public class MainUiController {
 
         List<TreeItem> tables = new ArrayList<>();
         DbControl dbControl = DbController.getInstance();
-        tableEditor = TableEditor.getInstance();
+
+        if (tableEditor == null) {
+            tableEditor = TableEditor.getInstance();
+        }
+
         tableEditor.setTable(mainTable);
 
         getDbTablesList(dbControl).stream().forEach(t -> {

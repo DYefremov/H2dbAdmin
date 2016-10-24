@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<TableColumn fx:id="tableColumn" maxWidth="1.7976931348623157E308" minWidth="80" onEditCommit="#onEditCommit" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MultipleTableColumnController">
+<TableColumn fx:id="tableColumn" maxWidth="1.7976931348623157E308" minWidth="80" onEditCommit="#onEditCommit" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MultipleTableColumnController">
     <graphic>
         <VBox alignment="CENTER">
             <children>
@@ -23,7 +23,7 @@
    <contextMenu>
       <ContextMenu>
         <items>
-          <MenuItem mnemonicParsing="false" onAction="#onAdd" text="Add new" />
+          <MenuItem mnemonicParsing="false" onAction="#onAdd" text="Add column" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#onShowProperties" text="Show properties" />
             <MenuItem mnemonicParsing="false" onAction="#onChange" text="Change" />

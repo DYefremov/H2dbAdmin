@@ -176,7 +176,10 @@ public class Queries {
         int lastOldIndex = oldCells.size() - 1;
 
         oldCells.forEach(c -> {
-            String value = c.getName() + "='" + c.getValue() + "'";
+            String columnName = c.getName();
+            String value = (String) c.getValue();
+            System.out.println("value = " + value);
+            value = value.equals("") ? columnName + " IS NULL OR " + columnName + "=''" : columnName + "='"+ value + "'";
             sb.append(oldCells.indexOf(c) != lastOldIndex ? value + " AND " : value + ";");
         });
 
