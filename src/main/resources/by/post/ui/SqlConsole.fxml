@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.SqlConsoleController">
+<GridPane xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.SqlConsoleController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -21,7 +21,7 @@
    <children>
       <SplitPane dividerPositions="0.5" orientation="VERTICAL">
          <items>
-            <TextArea fx:id="console" styleClass="console" stylesheets="@Ui.css" />
+            <TextArea fx:id="console" onKeyPressed="#onEnterKey" styleClass="console" stylesheets="@Ui.css" />
             <TextArea fx:id="consoleOut" editable="false" styleClass="console-out" stylesheets="@Ui.css" />
          </items>
       </SplitPane>

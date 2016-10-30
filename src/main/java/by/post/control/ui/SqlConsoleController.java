@@ -10,6 +10,8 @@ import by.post.ui.ConfirmationDialog;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,10 +19,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -33,6 +32,7 @@ public class SqlConsoleController {
     private TextArea consoleOut;
 
     private DbControl dbControl;
+    private List<String> queriesHistory;
 
     private static final String DONE_MESSAGE = "\n---- Done! ----\n\n";
     private static final String ERROR_MESSAGE = "Error.See \"More info.\" for details!";
@@ -71,9 +71,43 @@ public class SqlConsoleController {
         }
     }
 
+    /**
+     * Actions for keyboard
+     */
+    @FXML
+    public void onEnterKey(KeyEvent e) {
+
+        KeyCode keyCode = e.getCode();
+
+        switch (keyCode) {
+            case ENTER:
+                String query = console.getText();
+                // (query need ends with ";" to execute)
+                if (query.endsWith(";")) {
+                    onExecuteAction();
+                    console.clear();
+                }
+
+                break;
+
+            case UP:
+                System.out.println("UP");
+                break;
+
+            case DOWN:
+                System.out.println("DOWN");
+                break;
+
+            default:
+                break;
+        }
+    }
+
     @FXML
     private void initialize() {
+
         dbControl = DbController.getInstance();
+        queriesHistory = new ArrayList<>();
     }
 
     /**
@@ -83,6 +117,8 @@ public class SqlConsoleController {
      */
     private String executeQuery(String query) {
 
+        //TODO add history of queries
+
         String result = null;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -90,7 +126,7 @@ public class SqlConsoleController {
         try {
             if (isUpdateQuery(query)) {
                 statement = dbControl.update(query);
-                return statement.getUpdateCount() != -1 ? DONE_MESSAGE :  ERROR_MESSAGE;
+                return statement.getUpdateCount() != -1 ? DONE_MESSAGE : ERROR_MESSAGE;
             }
 
             statement = dbControl.execute(query);
@@ -117,7 +153,7 @@ public class SqlConsoleController {
             }
         }
 
-        return  result != null ? result : "No data or error!";
+        return result != null ? result : "No data or error!";
     }
 
     /**
@@ -188,7 +224,7 @@ public class SqlConsoleController {
         List<Integer> lengths = new ArrayList<>();
 
         values.forEach(column -> {
-            Cell max  = column.parallelStream().max(Comparator.comparing(item -> item.getValue() != null ? item.getValue().toString().length() : 0)).get();
+            Cell max = column.parallelStream().max(Comparator.comparing(item -> item.getValue() != null ? item.getValue().toString().length() : 0)).get();
             lengths.add(String.valueOf(max.getValue()).length());
         });
 
@@ -222,7 +258,7 @@ public class SqlConsoleController {
             for (List<Cell> row : columnsData) {
                 int columnIndex = columnsData.indexOf(row);
                 String val = String.format(cellsFormats.get(columnIndex), String.valueOf(row.get(rowIndex).getValue()));
-                stringBuilder.append(++columnIndex  !=  headerSize  ? val : val +"\n");
+                stringBuilder.append(++columnIndex != headerSize ? val : val + "\n");
             }
             // Add  separator for the header
             if (rowIndex == 0) {
