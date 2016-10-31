@@ -7,6 +7,7 @@ import by.post.control.db.UpdateCommands;
 import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.ui.ConfirmationDialog;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
@@ -33,7 +34,9 @@ public class SqlConsoleController {
 
     private DbControl dbControl;
     private List<String> queriesHistory;
+    private int historyPosition;
 
+    private static final int HISTORY_SIZE = 10;
     private static final String DONE_MESSAGE = "\n---- Done! ----\n\n";
     private static final String ERROR_MESSAGE = "Error.See \"More info.\" for details!";
 
@@ -86,6 +89,14 @@ public class SqlConsoleController {
                 if (query.endsWith(";")) {
                     onExecuteAction();
                     console.clear();
+                    //Without this wrapping next code not work properly!!!
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            //return cursor on start position
+                            console.selectPositionCaret(0);
+                        }
+                    });
                 }
 
                 break;
@@ -117,7 +128,12 @@ public class SqlConsoleController {
      */
     private String executeQuery(String query) {
 
-        //TODO add history of queries
+        // Store queries
+        queriesHistory.add(query);
+
+        if (queriesHistory.size() > HISTORY_SIZE) {
+            queriesHistory.remove(0);
+        }
 
         String result = null;
         Statement statement = null;
