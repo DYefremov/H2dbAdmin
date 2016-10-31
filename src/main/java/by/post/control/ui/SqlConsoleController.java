@@ -89,6 +89,7 @@ public class SqlConsoleController {
                 if (query.endsWith(";")) {
                     onExecuteAction();
                     console.clear();
+                    historyPosition = 0;
                     //Without this wrapping next code not work properly!!!
                     Platform.runLater(new Runnable() {
                         @Override
@@ -98,15 +99,18 @@ public class SqlConsoleController {
                         }
                     });
                 }
-
                 break;
 
             case UP:
-                System.out.println("UP");
+                if (historyPosition < queriesHistory.size()) {
+                    console.setText(queriesHistory.get(queriesHistory.size() - ++historyPosition));
+                }
                 break;
 
             case DOWN:
-                System.out.println("DOWN");
+                if (historyPosition > 1) {
+                    console.setText(queriesHistory.get(queriesHistory.size() - --historyPosition));
+                }
                 break;
 
             default:
@@ -118,7 +122,7 @@ public class SqlConsoleController {
     private void initialize() {
 
         dbControl = DbController.getInstance();
-        queriesHistory = new ArrayList<>();
+        queriesHistory = new ArrayList<>(HISTORY_SIZE + 1);
     }
 
     /**
@@ -127,7 +131,6 @@ public class SqlConsoleController {
      * @throws SQLException
      */
     private String executeQuery(String query) {
-
         // Store queries
         queriesHistory.add(query);
 
