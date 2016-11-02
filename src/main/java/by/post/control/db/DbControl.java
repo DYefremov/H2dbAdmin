@@ -13,21 +13,19 @@ import java.util.List;
 public interface DbControl {
 
     /**
-     * @param path
-     * @param db
+     * @param url
      * @param user
      * @param password
      */
-    void connect(String path, String db, String user, String password) ;
+    void connect(String url, String user, String password) ;
 
     /**
-     * @param path
-     * @param db
+     * @param url
      * @param user
      * @param password
      * @return connection
      */
-    Connection getConnection(String path, String db, String user, String password);
+    Connection getConnection(String url, String user, String password);
 
     /**
      * @return current connection

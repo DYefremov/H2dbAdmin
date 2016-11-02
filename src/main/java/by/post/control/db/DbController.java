@@ -16,12 +16,10 @@ import java.util.List;
  */
 public class DbController implements DbControl {
 
-    private String db;
     private Connection connection = null;
 
     private static final DbController instance = new DbController();
-    //The connection only succeeds when the database already exists
-    private static final String EXISTS_FLAG = ";IFEXISTS=TRUE";
+
     private static final Logger logger = LogManager.getLogger(DbController.class);
 
     private DbController() {
@@ -38,16 +36,12 @@ public class DbController implements DbControl {
     /**
      * Connect to database
      *
-     * @param path
-     * @param db
+     * @param url
      * @param user
      * @param password
      */
     @Override
-    public void connect(String path, String db, String user, String password) {
-
-        this.db = db;
-        String url = "jdbc:h2:" + path + db + EXISTS_FLAG;
+    public void connect(String url, String user, String password) {
 
         if (connection == null) {
             try {
@@ -69,16 +63,15 @@ public class DbController implements DbControl {
     }
 
     /**
-     * @param path
-     * @param db
+     * @param url
      * @param user
      * @param password
      * @return connection
      */
     @Override
-    public Connection getConnection(String path, String db, String user, String password) {
+    public Connection getConnection(String url, String user, String password) {
 
-        connect(path, db, user, password);
+        connect(url, user, password);
 
         return connection;
     }
@@ -126,7 +119,7 @@ public class DbController implements DbControl {
     @Override
     public Table getTable(String name) {
 
-        if (connection == null || name.equals(db)) {
+        if (connection == null) {
             return new Table(name);
         }
 
@@ -149,6 +142,11 @@ public class DbController implements DbControl {
         builder.update(table, connection);
     }
 
+    /**
+     * @param sql
+     * @return statement
+     * @throws SQLException
+     */
     @Override
     public Statement update(String sql) throws SQLException {
 
@@ -158,6 +156,11 @@ public class DbController implements DbControl {
         return statement;
     }
 
+    /**
+     * @param sql
+     * @return statement
+     * @throws SQLException
+     */
     @Override
     public Statement execute(String sql) throws SQLException {
 
@@ -167,6 +170,9 @@ public class DbController implements DbControl {
         return statement;
     }
 
+    /**
+     * Close connection to database
+     */
     @Override
     public void closeConnection() {
         if (connection != null) {

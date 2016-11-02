@@ -12,11 +12,12 @@ import java.util.Properties;
  */
 public class PropertiesController {
 
-    private static final String PATH = "~/";
+    private static final String URL = "~/";
     private static final String DB = "test";
     private static final String USER = "sa";
     private static final String PASSWORD = "";
     private static final String DRIVER = "org.h2.Driver";
+
     private static Properties properties = new Properties();
 
     private static final Logger logger = LogManager.getLogger(PropertiesController.class);
@@ -24,15 +25,15 @@ public class PropertiesController {
     /**
      * Set properties for db connection
      *
-     * @param path
+     * @param url
      * @param dbName
      * @param user
      * @param password
      */
-    public static void setProperties(String path, String dbName, String user, String password) {
+    public static void setProperties(String url, String dbName, String user, String password) {
 
         properties.put("driver", DRIVER);
-        properties.put("path", path != null ? path : PATH);
+        properties.put("url", url != null ? url : URL);
         properties.put("db", dbName != null ? dbName : DB);
         properties.put("user", user != null ? user : USER);
         properties.put("password", password != null ? password : PASSWORD);
@@ -70,7 +71,7 @@ public class PropertiesController {
             File file = new File("config.properties");
 
             if (!file.exists()) {
-                setProperties(PATH, DB, USER, PASSWORD);
+                setProperties(URL, DB, USER, PASSWORD);
             }
 
             in = new FileInputStream("config.properties");

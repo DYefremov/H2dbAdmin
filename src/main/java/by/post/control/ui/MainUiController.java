@@ -13,6 +13,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -23,6 +24,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.StringBuilders;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +84,7 @@ public class MainUiController {
     }
 
     /**
-     * Action for "File/Open" menu item
+     * Action for "File/Open file" menu item
      */
     @FXML
     public void onItemOpen() {
@@ -97,10 +99,11 @@ public class MainUiController {
                 Optional<Pair<String, String>> data = new LoginDialog().showAndWait();
                 String user = data.get().getKey();
                 String password = data.get().getValue();
+                String url = getConnectionUrl(path, dbName, "", true);
 
                 logger.info("Entered user data : user = " + user + ", password = " + password);
 
-                PropertiesController.setProperties(path, dbName, user, password);
+                PropertiesController.setProperties(url, dbName, user, password);
 
                 Task<Void> task = new Task<Void>() {
                     @Override
@@ -121,6 +124,24 @@ public class MainUiController {
             logger.error("MainUiController error onItemOpen: " + e);
         }
 
+    }
+
+    /**
+     * Action for "File/Open connection" menu item
+     */
+    @FXML
+    public void onConnectRemote() {
+
+        Dialog dialog = new Dialog();
+
+        try {
+            dialog.setDialogPane(FXMLLoader.load(MainUiForm.class.getResource("OpenDbDialog.fxml")));
+            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        dialog.showAndWait();
     }
 
     /**
@@ -343,6 +364,11 @@ public class MainUiController {
                 }
 
                 TreeItem<String> item = (TreeItem<String>) newValue;
+                String tableName = item.getValue();
+
+                if (tableName.equals(dbName)) {
+                    return;
+                }
                 // A TreeItem is a leaf if it has no children
                 if (item.isLeaf()) {
 
@@ -408,13 +434,28 @@ public class MainUiController {
         Properties properties = PropertiesController.getProperties();
         String user = properties.getProperty("user");
         String password = properties.getProperty("password");
-        String path = properties.getProperty("path");
         String db = properties.getProperty("db");
+        String url = properties.getProperty("url");
         dbName = db;
 
-        dbControl.connect(path, db, user, password);
+        dbControl.connect(url, user, password);
 
         return dbControl.getTablesList() != null ? dbControl.getTablesList() : new ArrayList<>();
+    }
+
+    private String getConnectionUrl(String path, String dbName, String host, boolean exist) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("jdbc:h2:");
+        sb.append(host == null ? "" : host);
+        sb.append(path);
+        sb.append(dbName);
+        //The connection only succeeds when the database already exists
+        sb.append(exist ? ";IFEXISTS=TRUE" : ";");
+
+        // jdbc:h2:tcp://localhost/~/test
+        //jdbc:h2:tcp://dbserv:8084/~/sample
+        return sb.toString();
     }
 
     /**

@@ -27,7 +27,8 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onItemOpen" text="Open" />
+                        <MenuItem mnemonicParsing="false" onAction="#onItemOpen" text="Open local db file" />
+                        <MenuItem mnemonicParsing="false" onAction="#onConnectRemote" text="Connect to remote db" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#onItemSettings" text="Settings" />
                         <SeparatorMenuItem mnemonicParsing="false" />
@@ -99,7 +100,7 @@
                <center>
                   <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked" prefHeight="330.0" prefWidth="400.0" stylesheets="@Ui.css">
                       <placeholder>
-                          <Label text=""/>
+                          <Label text="" />
                       </placeholder>
                      <contextMenu>
                         <ContextMenu>
