@@ -13,7 +13,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,14 +23,10 @@ import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.StringBuilders;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Controller class for main ui form
@@ -132,16 +127,11 @@ public class MainUiController {
     @FXML
     public void onConnectRemote() {
 
-        Dialog dialog = new Dialog();
+        Optional<Map<String, String>> settings = new OpenDbDialog().showAndWait();
 
-        try {
-            dialog.setDialogPane(FXMLLoader.load(MainUiForm.class.getResource("OpenDbDialog.fxml")));
-            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (settings.isPresent()) {
+            System.out.println(settings.get());
         }
-
-        dialog.showAndWait();
     }
 
     /**
@@ -452,7 +442,6 @@ public class MainUiController {
         sb.append(dbName);
         //The connection only succeeds when the database already exists
         sb.append(exist ? ";IFEXISTS=TRUE" : ";");
-
         // jdbc:h2:tcp://localhost/~/test
         //jdbc:h2:tcp://dbserv:8084/~/sample
         return sb.toString();

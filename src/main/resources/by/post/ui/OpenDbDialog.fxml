@@ -1,70 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<DialogPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.OpenDbDialogController">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.OpenDbDialogController">
    <content>
-      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="174.0" prefWidth="450.0">
+      <GridPane prefHeight="120.0" prefWidth="400.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="358.0" minWidth="10.0" prefWidth="230.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="233.0" minWidth="10.0" prefWidth="230.0" />
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="120.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="170.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="120.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField maxWidth="-Infinity" onMouseClicked="#onHost" prefHeight="25.0" prefWidth="160.0" text="Not implemented!" GridPane.rowIndex="1">
+            <Label alignment="CENTER_RIGHT" prefHeight="30.0" text="Host:">
                <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </TextField>
-            <Label text="Host">
-               <GridPane.margin>
-                  <Insets left="10.0" />
+                  <Insets right="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Port" GridPane.columnIndex="1">
-               <padding>
-                  <Insets left="5.0" />
-               </padding>
-            </Label>
-            <TextField maxWidth="-Infinity" prefWidth="75.0" text="Not implemented!" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label text="User:" GridPane.rowIndex="2">
                <GridPane.margin>
-                  <Insets />
-               </GridPane.margin></TextField>
-            <Label text="User" GridPane.rowIndex="2">
+                  <Insets right="5.0" />
+               </GridPane.margin></Label>
+            <Label text="Password:" GridPane.rowIndex="3">
                <GridPane.margin>
-                  <Insets left="10.0" />
-               </GridPane.margin>
-            </Label>
-            <Label text="Password" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <Insets right="5.0" />
+               </GridPane.margin></Label>
+            <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="user" text="sa" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="host" onMouseClicked="#onHost" text="localhost" GridPane.columnIndex="1" />
+            <CheckBox fx:id="showPassword" mnemonicParsing="false" text="Show password" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
-            </Label>
-            <TextField maxWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" text="Not implemented!" GridPane.rowIndex="3">
-               <GridPane.margin>
+            </CheckBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
+               <children>
+                  <Label prefHeight="30.0" text="Port:">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="port" prefHeight="30.0" prefWidth="60.0" text="default">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <TextField fx:id="path" text="~/test" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <HBox GridPane.rowIndex="1">
+               <children>
+                  <Hyperlink onAction="#onPath" prefHeight="30.0" prefWidth="78.0" text="Open db file" />
+                  <Label prefHeight="30.0" prefWidth="32.0" text="Path:" />
+               </children>
+            </HBox>
+            <CheckBox fx:id="embedded" mnemonicParsing="false" prefHeight="17.0" prefWidth="116.0" text="Embedded" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <opaqueInsets>
                   <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets left="5.0" />
                </GridPane.margin>
-            </TextField>
-            <PasswordField maxWidth="-Infinity" prefWidth="165.0" text="Not implemented!" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin></PasswordField>
+            </CheckBox>
          </children>
       </GridPane>
    </content>
-   <header>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="455.0" text="For selecting local database file double click on host field!" textAlignment="CENTER" />
-   </header>
 </DialogPane>
