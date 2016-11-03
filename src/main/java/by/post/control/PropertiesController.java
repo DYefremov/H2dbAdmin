@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -13,7 +14,6 @@ import java.util.Properties;
 public class PropertiesController {
 
     private static final String URL = "~/";
-    private static final String DB = "test";
     private static final String USER = "sa";
     private static final String PASSWORD = "";
     private static final String DRIVER = "org.h2.Driver";
@@ -26,19 +26,30 @@ public class PropertiesController {
      * Set properties for db connection
      *
      * @param url
-     * @param dbName
      * @param user
      * @param password
      */
-    public static void setProperties(String url, String dbName, String user, String password) {
+    public static void setProperties(String url, String user, String password) {
 
         properties.put("driver", DRIVER);
         properties.put("url", url != null ? url : URL);
-        properties.put("db", dbName != null ? dbName : DB);
         properties.put("user", user != null ? user : USER);
         properties.put("password", password != null ? password : PASSWORD);
 
         save();
+    }
+
+    /**
+     * @param settings
+     */
+    public static void setProperties(Map<String, String> settings) {
+
+        Map<String, String> st = settings;
+        String user = st.get("user");
+        String password = st.get("password");
+        String url = getConnectionUrl(st.get("host"), st.get("port"), st.get("path"), Boolean.valueOf(st.get("embedded")));
+
+        setProperties(url, user, password);
     }
 
     /**
@@ -71,7 +82,7 @@ public class PropertiesController {
             File file = new File("config.properties");
 
             if (!file.exists()) {
-                setProperties(URL, DB, USER, PASSWORD);
+                setProperties(URL, USER, PASSWORD);
             }
 
             in = new FileInputStream("config.properties");
@@ -113,6 +124,34 @@ public class PropertiesController {
                 }
             }
         }
+    }
+
+    /**
+     * @param host
+     * @param port
+     * @param path
+     * @param embedded
+     * @return url string
+     */
+    private static String getConnectionUrl(String host, String port, String path, boolean embedded) {
+
+        String localPath = "";
+
+        if (embedded) {
+            File file = new File(path);
+            String fileName = file.getName();
+            localPath = file.getParent() + File.separator + fileName.substring(0, fileName.indexOf("."));
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("jdbc:h2:");
+        sb.append(embedded ? localPath : "tcp://" + host + (port.equals("default") ? "/" : ":" + port + "/") + path);
+        //TODO add to setup dialog
+        boolean exist = true;
+        //The connection only succeeds when the database already exists
+        sb.append(exist ? ";IFEXISTS=TRUE" : ";");
+
+        return sb.toString();
     }
 
 }

@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -40,36 +41,46 @@
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin></Label>
-            <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="user" text="sa" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="host" onMouseClicked="#onHost" text="localhost" GridPane.columnIndex="1" />
-            <CheckBox fx:id="showPassword" mnemonicParsing="false" text="Show password" GridPane.columnIndex="2" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </CheckBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
+            <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <tooltip>
+                  <Tooltip text="Password" />
+               </tooltip></PasswordField>
+            <TextField fx:id="user" text="sa" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <tooltip>
+                  <Tooltip text="User name" />
+               </tooltip></TextField>
+            <TextField fx:id="host" text="localhost" GridPane.columnIndex="1">
+               <tooltip>
+                  <Tooltip text="Host name" />
+               </tooltip></TextField>
+            <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2">
                <children>
                   <Label prefHeight="30.0" text="Port:">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="port" prefHeight="30.0" prefWidth="60.0" text="default">
+                  <TextField fx:id="port" prefWidth="60.0" text="default">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
                   </TextField>
                </children>
             </HBox>
-            <TextField fx:id="path" text="~/test" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="path" onMouseClicked="#onPathClicked" text="~/test" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <tooltip>
+                  <Tooltip text="Path to db file. Double click to choose." />
+               </tooltip></TextField>
             <HBox GridPane.rowIndex="1">
                <children>
-                  <Hyperlink onAction="#onPath" prefHeight="30.0" prefWidth="78.0" text="Open db file" />
+                  <Hyperlink onAction="#onPath" prefHeight="30.0" prefWidth="78.0" text="Open db file">
+                     <tooltip>
+                        <Tooltip text="Open local database file" />
+                     </tooltip></Hyperlink>
                   <Label prefHeight="30.0" prefWidth="32.0" text="Path:" />
                </children>
             </HBox>
-            <CheckBox fx:id="embedded" mnemonicParsing="false" prefHeight="17.0" prefWidth="116.0" text="Embedded" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <CheckBox fx:id="embedded" mnemonicParsing="false" onAction="#onMode" prefHeight="17.0" prefWidth="116.0" selected="true" text="Embedded" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
