@@ -47,7 +47,8 @@ public class PropertiesController {
         Map<String, String> st = settings;
         String user = st.get("user");
         String password = st.get("password");
-        String url = getConnectionUrl(st.get("host"), st.get("port"), st.get("path"), Boolean.valueOf(st.get("embedded")));
+        boolean embedded = Boolean.valueOf(st.get("embedded"));
+        String url = getConnectionUrl(st.get("host"), st.get("port"), st.get("path"), embedded);
 
         setProperties(url, user, password);
     }
@@ -136,12 +137,15 @@ public class PropertiesController {
     private static String getConnectionUrl(String host, String port, String path, boolean embedded) {
 
         String localPath = "";
+        File file = new File(path);
+        String fileName = file.getName();
 
         if (embedded) {
-            File file = new File(path);
-            String fileName = file.getName();
-            localPath = file.getParent() + File.separator + fileName.substring(0, fileName.indexOf("."));
+            fileName = fileName.contains(".") ? fileName.substring(0, fileName.indexOf(".")) : fileName;
+            localPath = file.getParent() + File.separator + fileName;
         }
+        //Set db name
+        properties.setProperty("db", fileName);
 
         StringBuilder sb = new StringBuilder();
         sb.append("jdbc:h2:");

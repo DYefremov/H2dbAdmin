@@ -137,7 +137,7 @@ public class SqlConsoleController {
         if (queriesHistory.size() > HISTORY_SIZE) {
             queriesHistory.remove(0);
         }
-        
+
         consoleOut.clear();
 
         String result = null;

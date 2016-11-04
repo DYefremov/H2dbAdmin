@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.OpenDbDialogController">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.OpenDbDialogController">
    <content>
       <GridPane prefHeight="120.0" prefWidth="400.0">
         <columnConstraints>
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="120.0" />
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="130.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="170.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="120.0" />
         </columnConstraints>
@@ -60,7 +60,7 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="port" prefWidth="60.0" text="default">
+                  <TextField fx:id="port" prefHeight="26.0" prefWidth="70.0" text="default">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
@@ -73,11 +73,11 @@
                </tooltip></TextField>
             <HBox GridPane.rowIndex="1">
                <children>
-                  <Hyperlink onAction="#onPath" prefHeight="30.0" prefWidth="78.0" text="Open db file">
+                  <Hyperlink onAction="#onPath" prefHeight="30.0" prefWidth="100.0" text="Open db file">
                      <tooltip>
                         <Tooltip text="Open local database file" />
                      </tooltip></Hyperlink>
-                  <Label prefHeight="30.0" prefWidth="32.0" text="Path:" />
+                  <Label prefHeight="30.0" prefWidth="45.0" text="Path:" />
                </children>
             </HBox>
             <CheckBox fx:id="embedded" mnemonicParsing="false" onAction="#onMode" prefHeight="17.0" prefWidth="116.0" selected="true" text="Embedded" GridPane.columnIndex="2" GridPane.rowIndex="1">

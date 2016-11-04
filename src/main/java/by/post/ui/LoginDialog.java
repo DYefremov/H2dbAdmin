@@ -16,6 +16,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 
 /**
+ * @deprecated Use instead OpenDbDialog
+ *
  * Custom dialog for entering login and password
  *
  * @author Dmitriy V.Yefremov

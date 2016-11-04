@@ -312,9 +312,7 @@ public class MainUiController {
 //        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
         ObservableList<TreeItem> list = FXCollections.observableList(tables);
 
-        //TODO add retrieving name from the database
         TreeItem root = new TreeItem(dbName);
-
         root.getChildren().addAll(list);
         tableTree.setRoot(root);
 
@@ -327,8 +325,6 @@ public class MainUiController {
                 }
 
                 TreeItem<String> item = (TreeItem<String>) newValue;
-                String tableName = item.getValue();
-
                 // A TreeItem is a leaf if it has no children
                 if (!item.isLeaf()) {
                     return;
@@ -396,6 +392,7 @@ public class MainUiController {
         String user = properties.getProperty("user");
         String password = properties.getProperty("password");
         String url = properties.getProperty("url");
+        dbName = properties.getProperty("db");
 
         dbControl.connect(url, user, password);
 
