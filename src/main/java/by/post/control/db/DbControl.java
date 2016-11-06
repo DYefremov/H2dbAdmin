@@ -33,9 +33,14 @@ public interface DbControl {
     Connection getCurrentConnection();
 
     /**
+     * @return current database name
+     */
+    String getCurrentDbName();
+
+    /**
      * @return table names list
      */
-    List<String> getTablesList();
+    List<String> getTablesList(String type);
 
     /**
      * @param name

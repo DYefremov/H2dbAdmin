@@ -81,18 +81,34 @@ public class DbController implements DbControl {
         return connection;
     }
 
+    @Override
+    public String getCurrentDbName() {
+
+        String name = null;
+
+        if (connection != null) {
+            try {
+                name = connection.getCatalog();
+            } catch (SQLException e) {
+                logger.error("DbController error in getCurrentDbName: " + e);
+            }
+        }
+
+        return name != null ? name : "unknown";
+    }
+
     /**
      * @return table names list
      */
     @Override
-    public List<String> getTablesList() {
+    public List<String> getTablesList(String type) {
 
         List<String> tables = new ArrayList<>();
         ResultSet rs = null;
 
         if (connection != null) {
             try {
-                rs = connection.getMetaData().getTables(null, null, "%", new String[]{"TABLE", "VIEW"});
+                rs = connection.getMetaData().getTables(null, null, "%", new String[]{type});
                 while (rs.next()) {
                     tables.add(rs.getString("TABLE_NAME"));
                 }

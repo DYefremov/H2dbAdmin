@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<HBox alignment="CENTER" minHeight="-Infinity" prefHeight="16.0" prefWidth="650.0" styleClass="status-bar" stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.StatusBarController">
+<GridPane alignment="CENTER_LEFT" styleClass="status-bar" stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.StatusBarController">
+   <columnConstraints>
+      <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" />
+      <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" percentWidth="50.0" prefWidth="650.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
    <children>
-      <Label fx:id="info" alignment="CENTER" text="Info" />
+      <Label fx:id="info" contentDisplay="CENTER" text="Info" GridPane.columnIndex="1" />
+      <Label fx:id="host" contentDisplay="CENTER" maxWidth="-Infinity" text="host">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin></Label>
    </children>
-</HBox>
+</GridPane>

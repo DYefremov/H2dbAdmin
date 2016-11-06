@@ -1,5 +1,8 @@
 package by.post.ui;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * Resources constants
  *
@@ -7,11 +10,11 @@ package by.post.ui;
  */
 public class Resources {
     // Path for main logo image
-    public static final String LOGO_PATH ="/img/logo.jpg";
+    public static final String LOGO_PATH = "/img/logo.jpg";
     // Title for window
     public static final String TITLE = "H2dbAdmin";
     // Min height of app window
-    public static final double  MIN_HEIGHT = 510;
+    public static final double MIN_HEIGHT = 510;
     // Min width of app window
     public static final double MIN_WIDTH = 700;
     // Program version
@@ -29,6 +32,31 @@ public class Resources {
             "All icons are taken from the standard Linux Mint icon sets  or taken away from http://icons8.com\n" +
             "To building the project uses Gradle - https://gradle.org\n\n";
 
-    public final static String JAVA_VERSION = "OS: " + System.getProperty("os.name") +  ". Java version: "
+    public final static String JAVA_VERSION = "OS: " + System.getProperty("os.name") + ". Java version: "
             + System.getProperty("java.version") + " from " + System.getProperty("java.vendor");
+
+    // Host name
+    public static final String HOST_NAME = getHostName();
+
+    /**
+     * @return host name
+     */
+    private static String getHostName() {
+
+        String hostName = null;
+
+        try {
+            hostName = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+
+        }
+
+        return  hostName == null ? "PC" : hostName;
+    }
+
+
+    private Resources() {
+
+    }
 }
+

@@ -11,6 +11,8 @@ public class StatusBarController {
 
     @FXML
     private Label info;
+    @FXML
+    private Label host;
 
     public StatusBarController() {
 
@@ -18,7 +20,8 @@ public class StatusBarController {
 
     @FXML
     private void initialize() {
-        info.setText(Resources.PROGRAM_VERSION);
+        host.setText("Host: " + Resources.HOST_NAME);
+        info.setText("Program version: " + Resources.PROGRAM_VERSION);
     }
 
 }

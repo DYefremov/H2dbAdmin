@@ -1,10 +1,7 @@
 package by.post.control.ui;
 
 import by.post.control.PropertiesController;
-import by.post.control.db.DbControl;
-import by.post.control.db.DbController;
-import by.post.control.db.TableDataResolver;
-import by.post.control.db.TableEditor;
+import by.post.control.db.*;
 import by.post.data.Table;
 import by.post.ui.*;
 import javafx.application.Platform;
@@ -17,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -50,7 +49,7 @@ public class MainUiController {
     @FXML
     private ContextMenu treeContextMenu;
 
-    private String dbName;
+    private DbControl dbControl;
 
     private MainUiForm mainUiForm;
 
@@ -288,8 +287,7 @@ public class MainUiController {
      */
     private void init() {
 
-        List<TreeItem> tables = new ArrayList<>();
-        DbControl dbControl = DbController.getInstance();
+        dbControl = DbController.getInstance();
 
         if (tableEditor == null) {
             tableEditor = TableEditor.getInstance();
@@ -297,9 +295,7 @@ public class MainUiController {
 
         tableEditor.setTable(mainTable);
 
-        getDbTablesList(dbControl).stream().forEach(t -> {
-            tables.add(new TreeItem(t));
-        });
+        List<TreeItem> tables = getRootItems();
 
         if (tables.isEmpty()) {
             tableTree.setRoot(new TreeItem("Database is not present..."));
@@ -312,7 +308,7 @@ public class MainUiController {
 //        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
         ObservableList<TreeItem> list = FXCollections.observableList(tables);
 
-        TreeItem root = new TreeItem(dbName);
+        TreeItem root = new TreeItem(dbControl.getCurrentDbName(), getItemImage("database.png"));
         root.getChildren().addAll(list);
         tableTree.setRoot(root);
 
@@ -356,6 +352,31 @@ public class MainUiController {
     }
 
     /**
+     * Get tables items for root element
+     *
+     * @return items list
+     */
+    private List<TreeItem> getRootItems() {
+
+        List<TreeItem> tables = new ArrayList<>();
+
+        for (TableType tType : TableType.values()) {
+            String iconName = tType.name().toLowerCase() + ".png";
+            TreeItem item = new TreeItem(tType.preparedName(), getItemImage(iconName));
+            tables.add(item);
+            List<TreeItem> items = new ArrayList<>();
+
+            getDbTablesList(tType.preparedName()).stream().forEach(t -> {
+                items.add(new TreeItem(t, getItemImage(iconName)));
+            });
+
+            item.getChildren().addAll(items);
+        }
+
+        return tables;
+    }
+
+    /**
      * Select and display the selected table
      *
      * @param table
@@ -386,17 +407,17 @@ public class MainUiController {
     /**
      * @return list of db tables
      */
-    private List<String> getDbTablesList(DbControl dbControl) {
+    private List<String> getDbTablesList(String type) {
 
         Properties properties = PropertiesController.getProperties();
         String user = properties.getProperty("user");
         String password = properties.getProperty("password");
         String url = properties.getProperty("url");
-        dbName = properties.getProperty("db");
 
         dbControl.connect(url, user, password);
+        List tables = dbControl.getTablesList(type);
 
-        return dbControl.getTablesList() != null ? dbControl.getTablesList() : new ArrayList<>();
+        return tables != null ? tables : new ArrayList<>();
     }
 
     /**
@@ -416,5 +437,12 @@ public class MainUiController {
     private void closeProgram() {
         Stage mainStage = mainUiForm.getMainStage();
         mainStage.fireEvent(new WindowEvent(mainStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+    }
+
+    /**
+     * @return view with item image
+     */
+    private ImageView getItemImage(String name) {
+        return new ImageView(new Image("/img/" + name, 16, 16, false, false));
     }
 }

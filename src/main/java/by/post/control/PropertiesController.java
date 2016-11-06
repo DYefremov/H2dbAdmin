@@ -144,8 +144,6 @@ public class PropertiesController {
             fileName = fileName.contains(".") ? fileName.substring(0, fileName.indexOf(".")) : fileName;
             localPath = file.getParent() + File.separator + fileName;
         }
-        //Set db name
-        properties.setProperty("db", fileName);
 
         StringBuilder sb = new StringBuilder();
         sb.append("jdbc:h2:");

@@ -5,6 +5,7 @@ import by.post.control.db.RecoveryManager;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.InputDialog;
 import by.post.ui.LoginDialog;
+import by.post.ui.Resources;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -161,19 +162,9 @@ public class RecoveryPaneController {
     @FXML
     private void initialize() {
 
-        String hostName = null;
-
-        try {
-            hostName = InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException e) {
-            logger.error("RecoveryPaneController error [initialize]: " + e);
-        }
-
-        hostName = hostName == null ? "PC" : hostName;
-
         Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
-        FileTreeItem databaseItem = new FileTreeItem(hostName);
-        FileTreeItem saveItem = new FileTreeItem(hostName);
+        FileTreeItem databaseItem = new FileTreeItem(Resources.HOST_NAME);
+        FileTreeItem saveItem = new FileTreeItem(Resources.HOST_NAME);
 
         rootDirectories.forEach(name -> {
             getRootNode(databaseItem, name);
