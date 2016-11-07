@@ -65,17 +65,6 @@ public class MainUiController {
     }
 
     /**
-     * Add action at the start
-     */
-    @FXML
-    private void initialize() {
-        // Set log messages output to the text area
-        LogArea.setArea(console);
-        logger.info("Starting application...");
-        init();
-    }
-
-    /**
      * Action for "File/Open" menu item
      */
     @FXML
@@ -283,6 +272,17 @@ public class MainUiController {
     }
 
     /**
+     * Add action at the start
+     */
+    @FXML
+    private void initialize() {
+        // Set log messages output to the text area
+        LogArea.setArea(console);
+        logger.info("Starting application...");
+        init();
+    }
+
+    /**
      * Init data on startup
      */
     private void init() {
@@ -295,7 +295,7 @@ public class MainUiController {
 
         tableEditor.setTable(mainTable);
 
-        List<TreeItem> tables = getRootItems();
+        List<TypedTreeItem> tables = getRootItems();
 
         if (tables.isEmpty()) {
             tableTree.setRoot(new TreeItem("Database is not present..."));
@@ -306,9 +306,9 @@ public class MainUiController {
         tableTree.setContextMenu(treeContextMenu);
         // Sorting
 //        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
-        ObservableList<TreeItem> list = FXCollections.observableList(tables);
+        ObservableList<TypedTreeItem> list = FXCollections.observableList(tables);
 
-        TreeItem root = new TreeItem(dbControl.getCurrentDbName(), getItemImage("database.png"));
+        TypedTreeItem root = new TypedTreeItem(dbControl.getCurrentDbName(), getItemImage("database.png"), null);
         root.getChildren().addAll(list);
         tableTree.setRoot(root);
 
@@ -356,13 +356,17 @@ public class MainUiController {
      *
      * @return items list
      */
-    private List<TreeItem> getRootItems() {
+    private List<TypedTreeItem> getRootItems() {
 
-        List<TreeItem> tables = new ArrayList<>();
+        List<TypedTreeItem> tables = new ArrayList<>();
 
         for (TableType tType : TableType.values()) {
             String iconName = tType.name().toLowerCase() + ".png";
-            TypedTreeItem item = new TypedTreeItem(tType.preparedName(), getItemImage(iconName), tType);
+            boolean isSchema = tType.equals(TableType.SYSTEM_TABLE);
+            String name = isSchema ? "INFORMATION_SCHEMA" : tType.preparedName() + "S";
+            ImageView image = getItemImage( isSchema ? "info.png": iconName);
+
+            TypedTreeItem item = new TypedTreeItem(name, image, tType);
             tables.add(item);
             List<TypedTreeItem> items = new ArrayList<>();
 
