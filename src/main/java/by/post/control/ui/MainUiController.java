@@ -320,7 +320,7 @@ public class MainUiController {
                     return;
                 }
 
-                TreeItem<String> item = (TreeItem<String>) newValue;
+                TypedTreeItem item = (TypedTreeItem) newValue;
                 // A TreeItem is a leaf if it has no children
                 if (!item.isLeaf()) {
                     return;
@@ -330,7 +330,7 @@ public class MainUiController {
                     @Override
                     protected Boolean call() throws Exception {
 
-                        Table table = dbControl.getTable(item.getValue());
+                        Table table = dbControl.getTable((String)item.getValue(), item.getType());
 
                         Platform.runLater(new Runnable() {
                             @Override
@@ -362,12 +362,12 @@ public class MainUiController {
 
         for (TableType tType : TableType.values()) {
             String iconName = tType.name().toLowerCase() + ".png";
-            TreeItem item = new TreeItem(tType.preparedName(), getItemImage(iconName));
+            TypedTreeItem item = new TypedTreeItem(tType.preparedName(), getItemImage(iconName), tType);
             tables.add(item);
-            List<TreeItem> items = new ArrayList<>();
+            List<TypedTreeItem> items = new ArrayList<>();
 
             getDbTablesList(tType.preparedName()).stream().forEach(t -> {
-                items.add(new TreeItem(t, getItemImage(iconName)));
+                items.add(new TypedTreeItem(t, getItemImage(iconName), tType));
             });
 
             item.getChildren().addAll(items);
@@ -390,7 +390,7 @@ public class MainUiController {
             mainTable.getItems().clear();
         }
         // Set text for current table name label by selected tree item.
-        TreeItem item = (TreeItem) tableTree.getSelectionModel().getSelectedItem();
+        TypedTreeItem item = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
         String name = item.getValue() != null ? item.getValue().toString() : "";
         currentTableName.setText(name);
         mainTable.setId(name);
@@ -444,5 +444,22 @@ public class MainUiController {
      */
     private ImageView getItemImage(String name) {
         return new ImageView(new Image("/img/" + name, 16, 16, false, false));
+    }
+
+    /**
+     * Custom implementation of TreeItem
+     */
+    class TypedTreeItem extends TreeItem {
+
+        TableType type;
+
+        TypedTreeItem(final String value, final ImageView graphic, final TableType type) {
+            super(value, graphic);
+            this.type = type;
+        }
+
+        public TableType getType() {
+            return type;
+        }
     }
 }

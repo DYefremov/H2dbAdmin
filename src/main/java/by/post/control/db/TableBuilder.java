@@ -17,10 +17,11 @@ public class TableBuilder {
 
     /**
      * @param name
+     * @param type
      * @param connection
      * @return constructed table
      */
-    public Table getTable(String name, Connection connection) {
+    public Table getTable(String name, TableType type, Connection connection) {
 
         Table table = new Table(name);
 
@@ -33,7 +34,8 @@ public class TableBuilder {
         try {
             st = connection.createStatement();
             dbMetaData = connection.getMetaData();
-            st.executeQuery(Queries.getTable(name));
+            boolean isSysTable = type.equals(TableType.SYSTEM_TABLE);
+            st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTable(name));
             rs = st.getResultSet();
             rsMetaData = rs.getMetaData();
             keys = dbMetaData.getPrimaryKeys("", "", name);

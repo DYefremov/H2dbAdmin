@@ -5,7 +5,7 @@ package by.post.control.db;
  */
 public enum TableType {
 
-    TABLE, VIEW;
+    TABLE, VIEW, SYSTEM_TABLE;
 
     public String preparedName() {
         return name().replaceAll("_", " ");

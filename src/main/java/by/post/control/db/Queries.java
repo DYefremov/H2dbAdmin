@@ -21,6 +21,14 @@ public class Queries {
 
     /**
      * @param tableName
+     * @return return system table from schema
+     */
+    public static String getSystemTable(String tableName) {
+        return "SELECT * FROM INFORMATION_SCHEMA." + tableName;
+    }
+
+    /**
+     * @param tableName
      * @return
      */
     public static String createTable(String tableName) {

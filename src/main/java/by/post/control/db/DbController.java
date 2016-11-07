@@ -133,13 +133,13 @@ public class DbController implements DbControl {
      * @return table
      */
     @Override
-    public Table getTable(String name) {
+    public Table getTable(String name, TableType type) {
 
         if (connection == null) {
             return new Table(name);
         }
 
-        Table table = new TableBuilder().getTable(name, connection);
+        Table table = new TableBuilder().getTable(name, type, connection);
 
         return table != null ? table : new Table(name);
     }

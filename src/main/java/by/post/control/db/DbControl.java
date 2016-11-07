@@ -46,7 +46,7 @@ public interface DbControl {
      * @param name
      * @return table by name
      */
-    Table getTable(String name);
+    Table getTable(String name, TableType type);
 
     /**
      * @param table
