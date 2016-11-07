@@ -241,6 +241,27 @@ public class MainUiController {
      * Actions for tree context menu
      */
     @FXML
+    public void onContextMenuRequested() {
+
+        TypedTreeItem treeItem = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
+
+        if (treeItem == null) {
+            treeContextMenu.hide();
+            return;
+        }
+
+        TableType type = treeItem.getType();
+
+        if (type == null || type.equals(TableType.TABLE)) {
+
+        } else if (type.equals(TableType.VIEW)) {
+            treeContextMenu.hide();
+        } else if (type.equals(TableType.SYSTEM_TABLE)){
+            treeContextMenu.hide();
+        }
+    }
+
+    @FXML
     public void onTreeContextAdd() {
         Optional<String> result = new InputDialog("Please, write table name!", "New table", false).showAndWait();
 
@@ -330,7 +351,7 @@ public class MainUiController {
                     @Override
                     protected Boolean call() throws Exception {
 
-                        Table table = dbControl.getTable((String)item.getValue(), item.getType());
+                        Table table = dbControl.getTable((String) item.getValue(), item.getType());
 
                         Platform.runLater(new Runnable() {
                             @Override
@@ -364,7 +385,7 @@ public class MainUiController {
             String iconName = tType.name().toLowerCase() + ".png";
             boolean isSchema = tType.equals(TableType.SYSTEM_TABLE);
             String name = isSchema ? "INFORMATION_SCHEMA" : tType.preparedName() + "S";
-            ImageView image = getItemImage( isSchema ? "info.png": iconName);
+            ImageView image = getItemImage(isSchema ? "info.png" : iconName);
 
             TypedTreeItem item = new TypedTreeItem(name, image, tType);
             tables.add(item);

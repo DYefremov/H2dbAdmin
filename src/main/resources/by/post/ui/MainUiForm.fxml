@@ -85,7 +85,7 @@
    <center>
       <SplitPane fx:id="mainSplitPane" dividerPositions="0.3" prefHeight="330.0" style="-fx-background-color: lightgray;">
          <items>
-            <TreeView fx:id="tableTree" minWidth="-Infinity" prefHeight="330.0" prefWidth="100.0">
+            <TreeView fx:id="tableTree" minWidth="-Infinity" onContextMenuRequested="#onContextMenuRequested" prefHeight="330.0" prefWidth="100.0">
                <contextMenu>
                   <ContextMenu fx:id="treeContextMenu">
                     <items>
