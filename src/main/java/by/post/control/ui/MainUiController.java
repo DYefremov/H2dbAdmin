@@ -48,6 +48,10 @@ public class MainUiController {
     private TitledPane infoPane;
     @FXML
     private ContextMenu treeContextMenu;
+    @FXML
+    private MenuItem contextMenuItemTable;
+    @FXML
+    private MenuItem contextMenuItemView;
 
     private DbControl dbControl;
 
@@ -243,30 +247,44 @@ public class MainUiController {
     @FXML
     public void onContextMenuRequested() {
 
-        TypedTreeItem treeItem = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                TypedTreeItem treeItem = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
 
-        if (treeItem == null) {
-            treeContextMenu.hide();
-            return;
-        }
+                if (treeItem == null) {
+                    treeContextMenu.hide();
+                    return;
+                }
 
-        TableType type = treeItem.getType();
+                TableType type = treeItem.getType();
 
-        if (type == null || type.equals(TableType.TABLE)) {
+                contextMenuItemTable.setVisible(type == null || type.equals(TableType.TABLE));
+                contextMenuItemView.setVisible(type == null || type.equals(TableType.VIEW));
 
-        } else if (type.equals(TableType.VIEW)) {
-            treeContextMenu.hide();
-        } else if (type.equals(TableType.SYSTEM_TABLE)){
-            treeContextMenu.hide();
+                if (type != null && type.equals(TableType.SYSTEM_TABLE)){
+                    treeContextMenu.hide();
+                }
+            }
+        });
+    }
+
+    @FXML
+    public void onTreeContextAddTable() {
+        Optional<String> result = new InputDialog("Please, write table name!", "New_table", false).showAndWait();
+
+        if (result.isPresent()) {
+            tableEditor.addTable(tableTree, result.get(), getItemImage("table.png"), TableType.TABLE);
         }
     }
 
     @FXML
-    public void onTreeContextAdd() {
-        Optional<String> result = new InputDialog("Please, write table name!", "New table", false).showAndWait();
+    public void onTreeContextAddView() {
+
+        Optional<String> result = new InputDialog("Please, write view name!", "New_view", false).showAndWait();
 
         if (result.isPresent()) {
-            tableEditor.addTable(tableTree, result.get());
+            tableEditor.addTable(tableTree, result.get(), getItemImage("view.png"), TableType.VIEW);
         }
     }
 
@@ -471,20 +489,4 @@ public class MainUiController {
         return new ImageView(new Image("/img/" + name, 16, 16, false, false));
     }
 
-    /**
-     * Custom implementation of TreeItem
-     */
-    class TypedTreeItem extends TreeItem {
-
-        TableType type;
-
-        TypedTreeItem(final String value, final ImageView graphic, final TableType type) {
-            super(value, graphic);
-            this.type = type;
-        }
-
-        public TableType getType() {
-            return type;
-        }
-    }
 }

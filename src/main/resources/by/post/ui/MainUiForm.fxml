@@ -19,11 +19,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
+<BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
    <top>
       <VBox>
          <children>
-            <MenuBar>
+            <MenuBar style="-fx-background-color: lightgray;">
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
@@ -89,8 +89,10 @@
                <contextMenu>
                   <ContextMenu fx:id="treeContextMenu">
                     <items>
-                      <MenuItem mnemonicParsing="false" onAction="#onTreeContextAdd" text="Add table" />
-                        <MenuItem mnemonicParsing="false" onAction="#onTreeContextDelete" text="Delete table" />
+                      <MenuItem fx:id="contextMenuItemTable" mnemonicParsing="false" onAction="#onTreeContextAddTable" text="Add table" />
+                      <MenuItem fx:id="contextMenuItemView" mnemonicParsing="false" onAction="#onTreeContextAddView" text="Add view" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#onTreeContextDelete" text="Delete" />
                     </items>
                   </ContextMenu>
                </contextMenu>
@@ -112,7 +114,7 @@
                   </TableView>
                </center>
                <bottom>
-                  <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" BorderPane.alignment="CENTER">
+                  <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" style="-fx-background-color: lightgray;" BorderPane.alignment="CENTER">
                     <items>
                         <Button mnemonicParsing="false" onAction="#onAddButton" prefHeight="25.0" prefWidth="25.0" text="+">
                            <tooltip>

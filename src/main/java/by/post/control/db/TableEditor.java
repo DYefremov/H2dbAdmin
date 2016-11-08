@@ -1,12 +1,15 @@
 package by.post.control.db;
 
+import by.post.control.ui.TypedTreeItem;
 import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.data.Row;
 import by.post.ui.ColumnDialog;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -89,13 +92,25 @@ public class TableEditor {
      *
      * @param tableTree
      */
-    public void addTable(TreeView tableTree, String name) {
+    public void addTable(TreeView tableTree, String name, ImageView icon, TableType type) {
+
+        if (type.equals(TableType.VIEW)) {
+            new Alert(Alert.AlertType.INFORMATION, "Not implemented!").showAndWait();
+            return;
+        }
 
         try {
             dbControl.update(Queries.createTable(name));
 
-            TreeItem treeItem = new TreeItem<>(name);
-            tableTree.getRoot().getChildren().add(treeItem);
+            TypedTreeItem treeItem = new TypedTreeItem(name, icon, type);
+            ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
+
+            for (TypedTreeItem item : items) {
+                if (item.getType().equals(type)) {
+                    item.getChildren().add(treeItem);
+                }
+            }
+
             tableTree.getSelectionModel().select(treeItem);
             tableTree.scrollTo(tableTree.getSelectionModel().getSelectedIndex());
             tableTree.refresh();
@@ -115,12 +130,19 @@ public class TableEditor {
     public void deleteTable(TreeView tableTree) {
 
         try {
-            TreeItem item = (TreeItem) tableTree.getSelectionModel().getSelectedItem();
-            String name = item.getValue().toString();
+            TypedTreeItem itemToDelete = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
+            String name = itemToDelete.getValue().toString();
 
             dbControl.update(Queries.deleteTable(name));
 
-            tableTree.getRoot().getChildren().remove(item);
+            ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
+
+            for (TypedTreeItem item : items) {
+                if (item.getType().equals(itemToDelete.getType())) {
+                    item.getChildren().remove(itemToDelete);
+                }
+            }
+
             tableTree.refresh();
 
             logger.info("Deleted table: " + name);
