@@ -247,26 +247,21 @@ public class MainUiController {
     @FXML
     public void onContextMenuRequested() {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                TypedTreeItem treeItem = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
+        TypedTreeItem treeItem = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
 
-                if (treeItem == null) {
-                    treeContextMenu.hide();
-                    return;
-                }
+        if (treeItem == null) {
+            treeContextMenu.hide();
+            return;
+        }
 
-                TableType type = treeItem.getType();
+        TableType type = treeItem.getType();
+        
+        contextMenuItemView.setVisible(type == null || type.equals(TableType.VIEW));
+        contextMenuItemTable.setVisible(type == null || type.equals(TableType.TABLE));
 
-                contextMenuItemTable.setVisible(type == null || type.equals(TableType.TABLE));
-                contextMenuItemView.setVisible(type == null || type.equals(TableType.VIEW));
-
-                if (type != null && type.equals(TableType.SYSTEM_TABLE)){
-                    treeContextMenu.hide();
-                }
-            }
-        });
+        if (type != null && type.equals(TableType.SYSTEM_TABLE)){
+            treeContextMenu.hide();
+        }
     }
 
     @FXML
