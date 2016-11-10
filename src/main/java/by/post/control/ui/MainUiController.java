@@ -255,7 +255,7 @@ public class MainUiController {
         }
 
         TableType type = treeItem.getType();
-        
+
         contextMenuItemView.setVisible(type == null || type.equals(TableType.VIEW));
         contextMenuItemTable.setVisible(type == null || type.equals(TableType.TABLE));
 

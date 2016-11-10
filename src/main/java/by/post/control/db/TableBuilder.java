@@ -24,47 +24,25 @@ public class TableBuilder {
     public Table getTable(String name, TableType type, Connection connection) {
 
         Table table = new Table(name);
-
-        Statement st = null;
-        DatabaseMetaData dbMetaData = null;
-        ResultSet rs = null;
-        ResultSetMetaData rsMetaData = null;
-        ResultSet keys = null;
-
-        try {
-            st = connection.createStatement();
-            dbMetaData = connection.getMetaData();
-            boolean isSysTable = type.equals(TableType.SYSTEM_TABLE);
+        boolean isSysTable = type.equals(TableType.SYSTEM_TABLE);
+        /**
+         * Using the try-with-resources statement
+         * @see "https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html"
+         */
+        try (Statement st = connection.createStatement()) {
+            DatabaseMetaData dbMetaData = connection.getMetaData();
             st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTable(name));
-            rs = st.getResultSet();
-            rsMetaData = rs.getMetaData();
-            keys = dbMetaData.getPrimaryKeys("", "", name);
+             try (ResultSet rs = st.getResultSet()) {
+                 ResultSetMetaData rsMetaData = rs.getMetaData();
+                 table.setRows(getRows(rs));
+                 table.setColumns(getColumns(rsMetaData));
+             }
 
-            while (keys.next()) {
-                String pk = keys.getString("COLUMN_NAME");
-                table.setPrimaryKey(pk);
+            try (ResultSet keys = dbMetaData.getPrimaryKeys("", "", name)) {
+                table.setPrimaryKey(keys.next() ? keys.getString("COLUMN_NAME") : "");
             }
-
-            table.setRows(getRows(rs));
-            table.setColumns(getColumns(rsMetaData));
         } catch (SQLException e) {
             logger.error("TableBuilder error in getTable: " + e);
-        } finally {
-            try {
-                if (keys != null) {
-                    keys.close();
-                }
-
-                if (rs != null) {
-                    rs.close();
-                }
-
-                if (st != null) {
-                    st.close();
-                }
-            } catch (SQLException e) {
-                logger.error("TableBuilder error in getTable[finally]: " + e);
-            }
         }
 
         return table;

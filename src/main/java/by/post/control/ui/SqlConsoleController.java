@@ -38,7 +38,7 @@ public class SqlConsoleController {
 
     private static final int HISTORY_SIZE = 10;
     private static final String DONE_MESSAGE = "\n---- Done! ----\n\n";
-    private static final String ERROR_MESSAGE = "Error.See \"More info.\" for details!";
+    private static final String ERROR_MESSAGE = "No data or error.See \"More info.\" for details!";
 
     private static final Logger logger = LogManager.getLogger(SqlConsoleController.class);
 
@@ -141,40 +141,26 @@ public class SqlConsoleController {
         consoleOut.clear();
 
         String result = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
+        boolean isUpdateQuery = isUpdateQuery(query);
 
-        try {
-            if (isUpdateQuery(query)) {
-                statement = dbControl.update(query);
+        try (Statement statement = isUpdateQuery ? dbControl.update(query) :  dbControl.execute(query)) {
+
+            if (isUpdateQuery) {
                 return statement.getUpdateCount() != -1 ? DONE_MESSAGE : ERROR_MESSAGE;
             }
-
-            statement = dbControl.execute(query);
 
             if (statement == null || statement.getResultSet() == null) {
                 return ERROR_MESSAGE;
             }
 
-            resultSet = statement.getResultSet();
-            result = getFormattedOut(resultSet);
+            try (ResultSet resultSet = statement.getResultSet()) {
+                result = getFormattedOut(resultSet);
+            }
         } catch (SQLException e) {
             logger.error("SqlConsoleController error in executeQuery: " + e);
-        } finally {
-            try {
-                if (statement != null && !statement.isClosed()) {
-                    statement.close();
-                }
-
-                if (resultSet != null && !resultSet.isClosed()) {
-                    resultSet.close();
-                }
-            } catch (SQLException e) {
-                logger.error("SqlConsoleController error in executeQuery: " + e);
-            }
         }
 
-        return result != null ? result : "No data or error!";
+        return result != null ? result : ERROR_MESSAGE;
     }
 
     /**
