@@ -5,10 +5,12 @@ import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.data.Row;
 import by.post.ui.ColumnDialog;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -353,20 +355,10 @@ public class TableEditor {
      */
     private int getDbRowsCount() throws SQLException {
 
-        Statement statement = dbControl.execute(Queries.getRecordsCount(mainTable.getId()));
-        ResultSet resultSet = statement.getResultSet();
-        resultSet.next();
-
-        int count = resultSet.getInt(1);
-
-        if (statement != null) {
-            statement.close();
+        try (Statement statement = dbControl.execute(Queries.getRecordsCount(mainTable.getId()));
+             ResultSet resultSet = statement.getResultSet()) {
+             resultSet.next();
+             return resultSet.getInt(1);
         }
-
-        if (resultSet != null) {
-            resultSet.close();
-        }
-
-        return count;
     }
 }
