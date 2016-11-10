@@ -1,3 +1,11 @@
+/* About dialog style */
+.about-area .scroll-pane .content {
+    -fx-background-image: url(/img/logo.png);
+    -fx-background-repeat: stretch;
+    -fx-background-size: stretch;
+    -fx-background-position: center center;
+}
+
 .about-area *.text {
     -fx-text-alignment: center;
 }
