@@ -19,6 +19,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
    <top>
       <VBox>
@@ -27,11 +29,40 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onOpenItem" text="Open" />
+                        <Menu mnemonicParsing="false" text="New">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Database" />
+                          </items>
+                        </Menu>
+                        <MenuItem mnemonicParsing="false" onAction="#onOpenItem" text="Open">
+                            <graphic>
+                                <ImageView fitHeight="12.0" fitWidth="12.0">
+                                    <image>
+                                        <Image url="/img/folder.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#onItemSettings" text="Settings" />
+                        <MenuItem mnemonicParsing="false" onAction="#onItemSettings" text="Settings">
+                            <graphic>
+                                <ImageView fitHeight="12.0" fitWidth="12.0">
+                                    <image>
+                                        <Image url="/img/preferences.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#onItemExit" text="Exit" />
+                    <MenuItem mnemonicParsing="false" onAction="#onItemExit" text="Exit">
+                        <graphic>
+                            <ImageView fitHeight="12.0" fitWidth="12.0">
+                                <image>
+                                    <Image url="/img/exit.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </MenuItem>
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Tools">

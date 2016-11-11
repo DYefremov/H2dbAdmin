@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<MenuBar style="-fx-background-color: lightgray;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112-ea">
+<menus>
+    <Menu mnemonicParsing="false" text="File">
+        <items>
+            <Menu mnemonicParsing="false" text="New">
+                <items>
+                    <MenuItem mnemonicParsing="false" text="Database" />
+                </items>
+            </Menu>
+            <MenuItem mnemonicParsing="false" onAction="#onOpenItem" text="Open...">
+                <graphic>
+                    <ImageView fitHeight="12.0" fitWidth="12.0">
+                        <image>
+                            <Image url="/img/folder.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </MenuItem>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#onItemSettings" text="Settings">
+                <graphic>
+                    <ImageView fitHeight="12.0" fitWidth="12.0">
+                        <image>
+                            <Image url="/img/preferences.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </MenuItem>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#onItemExit" text="Exit">
+                <graphic>
+                    <ImageView fitHeight="12.0" fitWidth="12.0">
+                        <image>
+                            <Image url="/img/exit.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </MenuItem>
+        </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Tools">
+        <items>
+            <MenuItem mnemonicParsing="false" onAction="#onItemSqlConsole" text="SQL console" />
+            <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onItemRecovery" text="Recovery tool" />
+        </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Help">
+        <items>
+            <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onItemAbout" text="About" />
+        </items>
+    </Menu>
+</menus>
+</MenuBar>

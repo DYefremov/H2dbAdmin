@@ -21,8 +21,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.file.*;
 import java.util.Comparator;
 import java.util.Optional;
@@ -255,7 +253,7 @@ public class RecoveryPaneController {
      * @return view with folder image
      */
     private ImageView getFolderImage() {
-        return new ImageView(new Image("/img/folder_test.png", 16, 16, false, false));
+        return new ImageView(new Image("/img/folder.png", 16, 16, false, false));
     }
 
     /**
