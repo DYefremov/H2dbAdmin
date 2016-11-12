@@ -69,8 +69,23 @@ public class MainUiController {
     }
 
     /**
-     * Action for "File/Open" menu item
+     * Actions for menu bar items
      */
+    @FXML
+    public void onItemNewDb() {
+
+    }
+
+    @FXML
+    public void onItemNewTable() {
+        addNewTable();
+    }
+
+    @FXML
+    public void onItemNewView() {
+        addNewView();
+    }
+
     @FXML
     public void onOpenItem() {
 
@@ -96,24 +111,15 @@ public class MainUiController {
         }
     }
 
-    /**
-     * Action for "File/Settings" menu item
-     */
     public void onItemSettings() throws IOException {
         setCenter("SettingsPane.fxml");
     }
 
-    /**
-     * Action for "File/Close" menu item
-     */
     @FXML
     public void onItemExit() {
         closeProgram();
     }
 
-    /**
-     * Action for "About" menu item
-     */
     @FXML
     public void onItemAbout() {
         try {
@@ -123,9 +129,6 @@ public class MainUiController {
         }
     }
 
-    /**
-     * Action for "Tools\Recovery" menu item
-     */
     @FXML
     public void onItemRecovery() {
         try {
@@ -135,20 +138,14 @@ public class MainUiController {
         }
     }
 
-    /**
-     * Action for "Tools\SQL console" menu item
-     */
     @FXML
     public void onItemSqlConsole() throws IOException {
-        if (mainPane.getChildren().contains(mainSplitPane)) {
-            setCenter("SqlConsole.fxml");
-        } else {
-            mainPane.setCenter(mainSplitPane);
-        }
+        mainPane.getChildren().remove(mainPane.getCenter());
+        setCenter("SqlConsole.fxml");
     }
 
     /**
-     * Actions for menu bar
+     * Actions for tool bar
      */
     @FXML
     public void onBarExplorer() {
@@ -175,7 +172,7 @@ public class MainUiController {
      * Actions for table context menu
      */
     @FXML
-    public void onTableItemAdd() {
+    public void onTableItemAddRow() {
 
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
@@ -183,13 +180,13 @@ public class MainUiController {
             try {
                 tableEditor.addRow();
             } catch (Exception e) {
-                logger.error("MainUiController error onTableItemAdd: " + e);
+                logger.error("MainUiController error onTableItemAddRow: " + e);
             }
         }
     }
 
     @FXML
-    public void onTableItemDelete() {
+    public void onTableItemDeleteRow() {
 
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
@@ -202,7 +199,7 @@ public class MainUiController {
      * Actions for tool bar buttons
      */
     @FXML
-    public void onAddButton() {
+    public void onAddRowButton() {
 
         if (!currentTableName.getText().equals("")) {
             Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
@@ -211,14 +208,14 @@ public class MainUiController {
                 try {
                     tableEditor.addRow();
                 } catch (Exception e) {
-                    logger.error("MainUiController error onAddButton: " + e);
+                    logger.error("MainUiController error onAddRowButton: " + e);
                 }
             }
         }
     }
 
     @FXML
-    public void onRemoveButton() {
+    public void onRemoveRowButton() {
 
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
@@ -228,7 +225,7 @@ public class MainUiController {
     }
 
     @FXML
-    public void onSaveButton() {
+    public void onSaveRowButton() {
 
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
 
@@ -266,21 +263,12 @@ public class MainUiController {
 
     @FXML
     public void onTreeContextAddTable() {
-        Optional<String> result = new InputDialog("Please, write table name!", "New_table", false).showAndWait();
-
-        if (result.isPresent()) {
-            tableEditor.addTable(tableTree, result.get(), getItemImage("table.png"), TableType.TABLE);
-        }
+        addNewTable();
     }
 
     @FXML
     public void onTreeContextAddView() {
-
-        Optional<String> result = new InputDialog("Please, write view name!", "New_view", false).showAndWait();
-
-        if (result.isPresent()) {
-            tableEditor.addTable(tableTree, result.get(), getItemImage("view.png"), TableType.VIEW);
-        }
+        addNewView();
     }
 
     @FXML
@@ -456,6 +444,29 @@ public class MainUiController {
         List tables = dbControl.getTablesList(type);
 
         return tables != null ? tables : new ArrayList<>();
+    }
+
+    /**
+     * Add new table
+     */
+    private void addNewTable() {
+        Optional<String> result = new InputDialog("Please, write table name!", "New_table", false).showAndWait();
+
+        if (result.isPresent()) {
+            tableEditor.addTable(tableTree, result.get(), getItemImage("table.png"), TableType.TABLE);
+        }
+    }
+
+    /**
+     * Add new view
+     */
+    private void addNewView() {
+
+        Optional<String> result = new InputDialog("Please, write view name!", "New_view", false).showAndWait();
+
+        if (result.isPresent()) {
+            tableEditor.addTable(tableTree, result.get(), getItemImage("view.png"), TableType.VIEW);
+        }
     }
 
     /**
