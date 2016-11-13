@@ -1,9 +1,7 @@
 package by.post.control.ui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.File;
@@ -27,6 +25,8 @@ public class DatabaseDialogController {
     private PasswordField password;
     @FXML
     private ChoiceBox mode;
+    @FXML
+    private Dialog<Map<String, String>> dialog;
 
     private Map<String, String> settings;
 
@@ -79,6 +79,12 @@ public class DatabaseDialogController {
     @FXML
     private void initialize() {
         settings = new HashMap<>();
+
+        dialog.setResultConverter(dialogButton -> {
+            ButtonBar.ButtonData data = dialogButton == null ? null : (ButtonBar.ButtonData) dialogButton.getButtonData();
+            return data == ButtonBar.ButtonData.OK_DONE ? getSettings() : null;
+        });
+
     }
 
     /**

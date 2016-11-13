@@ -72,9 +72,11 @@ public class MainUiController {
      * Actions for menu bar items
      */
     @FXML
-    public void onItemNewDb() {
+    public void onItemNewDb() throws IOException {
 
-        Optional<Map<String, String>> result = new DatabaseDialog().showAndWait();
+        Dialog dialog = FXMLLoader.load(MainUiForm.class.getResource("DatabaseDialog.fxml"));
+
+        Optional<Map<String, String>> result = dialog.showAndWait();
 
         if (result.isPresent()) {
             new Alert(Alert.AlertType.INFORMATION, "Not implemented!").showAndWait();
