@@ -74,6 +74,11 @@ public class MainUiController {
     @FXML
     public void onItemNewDb() {
 
+        Optional<Map<String, String>> result = new DatabaseDialog().showAndWait();
+
+        if (result.isPresent()) {
+            new Alert(Alert.AlertType.INFORMATION, "Not implemented!").showAndWait();
+        }
     }
 
     @FXML

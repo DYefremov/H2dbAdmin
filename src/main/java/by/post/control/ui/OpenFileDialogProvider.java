@@ -1,9 +1,8 @@
 package by.post.control.ui;
 
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
@@ -14,23 +13,17 @@ import java.io.File;
  */
 public class OpenFileDialogProvider {
 
-    private static final Logger logger = LogManager.getLogger(OpenFileDialogProvider.class);
-
-
     public OpenFileDialogProvider() {
 
     }
 
     public File getFileDialog(String title, boolean dir) {
 
-        File file = getFileChooser("Select db file...").showOpenDialog(getFileOpenStage());
-
-        if (file != null) {
-            String path = file.getPath();
-            logger.info(title + path);
+        if (dir) {
+            return getDirectoryChooser(title).showDialog(getFileOpenStage());
         }
 
-        return file;
+        return getFileChooser(title).showOpenDialog(getFileOpenStage());
     }
 
     /**
@@ -56,5 +49,13 @@ public class OpenFileDialogProvider {
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("DB","*.db"));
 
         return fileChooser;
+    }
+
+    private DirectoryChooser getDirectoryChooser(String title) {
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle(title);
+
+        return directoryChooser;
     }
 }

@@ -1,7 +1,7 @@
 package by.post.control.ui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * @author Dmitriy V.Yefremov
  */
-public class OpenDbDialogController {
+public class DatabaseDialogController {
 
     @FXML
     private TextField host;
@@ -26,11 +26,11 @@ public class OpenDbDialogController {
     @FXML
     private PasswordField password;
     @FXML
-    private CheckBox embedded;
+    private ChoiceBox mode;
 
     private Map<String, String> settings;
 
-    public OpenDbDialogController() {
+    public DatabaseDialogController() {
 
     }
 
@@ -44,7 +44,6 @@ public class OpenDbDialogController {
         settings.put("path", path.getText());
         settings.put("user", user.getText());
         settings.put("password", password.getText());
-        settings.put("embedded", String.valueOf(embedded.isSelected()));
 
         return settings;
     }
@@ -54,7 +53,7 @@ public class OpenDbDialogController {
      */
     public void onPath() {
 
-        File dbFile = new OpenFileDialogProvider().getFileDialog("Select db file...", false);
+        File dbFile = new OpenFileDialogProvider().getFileDialog("", true);
 
         if (dbFile != null) {
             path.setText(dbFile.getPath());
@@ -70,13 +69,8 @@ public class OpenDbDialogController {
     @FXML
     public void onPathClicked(MouseEvent event) {
         if (event.getClickCount() == 2) {
-           onPath();
+            onPath();
         }
-    }
-
-    @FXML
-    public void onMode() {
-        setEmbedded(embedded.isSelected());
     }
 
     /**
@@ -85,8 +79,6 @@ public class OpenDbDialogController {
     @FXML
     private void initialize() {
         settings = new HashMap<>();
-        //
-        setEmbedded(embedded.isSelected());
     }
 
     /**
@@ -96,11 +88,6 @@ public class OpenDbDialogController {
      */
     private void setEmbedded(boolean mode) {
 
-        embedded.setSelected(mode);
-        host.setEditable(!mode);
-        host.setText(mode ? "Embedded mode is on!" : "localhost");
-        host.getTooltip().setText(mode ? "Turn off the embedded mode for editing." : "Host name");
-        port.setEditable(!mode);
-        port.setText(mode ? "" : "default");
     }
+
 }
