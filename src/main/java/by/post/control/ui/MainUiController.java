@@ -457,6 +457,7 @@ public class MainUiController {
      * Add new table
      */
     private void addNewTable() {
+
         Optional<String> result = new InputDialog("Please, write table name!", "New_table", false).showAndWait();
 
         if (result.isPresent()) {

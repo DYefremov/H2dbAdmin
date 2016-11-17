@@ -5,6 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonType?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Dialog?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -15,13 +16,12 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.control.Dialog?>
 
-<Dialog fx:id="dialog" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DatabaseDialogController">
+<Dialog fx:id="dialog" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DatabaseDialogController">
     <dialogPane>
-        <DialogPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="420.0" >
+        <DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="420.0">
             <content>
-                <GridPane alignment="CENTER" style="-fx-background-color: lightgray;">
+                <GridPane fx:id="gridPane" alignment="CENTER" style="-fx-background-color: lightgray;">
                     <columnConstraints>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="120.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="170.0" />
@@ -39,7 +39,7 @@
                             <GridPane.margin>
                                 <Insets right="5.0" />
                             </GridPane.margin></Label>
-                        <ChoiceBox fx:id="mode" prefWidth="170.0" value="Server" GridPane.columnIndex="1">
+                        <ChoiceBox onAction="#onModeSelection"   fx:id="mode" prefWidth="170.0" value="Server" GridPane.columnIndex="1">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Server" />

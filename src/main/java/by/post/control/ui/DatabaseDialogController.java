@@ -1,8 +1,10 @@
 package by.post.control.ui;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 
 import java.io.File;
 import java.util.HashMap;
@@ -27,6 +29,8 @@ public class DatabaseDialogController {
     private ChoiceBox mode;
     @FXML
     private Dialog<Map<String, String>> dialog;
+    @FXML
+    private GridPane gridPane;
 
     private Map<String, String> settings;
 
@@ -57,7 +61,6 @@ public class DatabaseDialogController {
 
         if (dbFile != null) {
             path.setText(dbFile.getPath());
-            setEmbedded(true);
         }
     }
 
@@ -87,13 +90,24 @@ public class DatabaseDialogController {
 
     }
 
-    /**
-     * On/Off embedded mode
-     *
-     * @param mode
-     */
-    private void setEmbedded(boolean mode) {
+    @FXML
+    public void onModeSelection(ActionEvent actionEvent) {
+
+        if (mode.getValue().equals("Server")) {
+            setServer();
+        } else {
+            setEmbedded();
+        }
+    }
+
+    private void setServer() {
 
     }
 
+    /**
+     * On/Off embedded mode
+     */
+    private void setEmbedded() {
+
+    }
 }
