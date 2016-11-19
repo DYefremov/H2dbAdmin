@@ -3,13 +3,10 @@ package by.post.search;
 import by.post.control.PropertiesController;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
-import by.post.control.db.Queries;
 import by.post.control.db.TableType;
-import by.post.data.Table;
-import org.h2.fulltext.FullText;
-import org.h2.fulltext.FullTextLucene;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,60 +15,68 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * Very simple implementation text search
+ * without  database indexing and  procedures creation.
+ *It will slow on large volumes of data.
+ * Maybe this implementation is temporary.
+ *
  * @author Dmitriy V.Yefremov
  */
 public class SearchProvider {
 
-    public static void main(String[] args) {
-        long start = System.currentTimeMillis();
+    private boolean terminate;
 
-        List<Table> tables = new SearchProvider().getSearchResult("dddd");
-        System.out.println("Found " + tables);
+    private static final Logger logger = LogManager.getLogger(SearchProvider.class);
 
-        long end = System.currentTimeMillis();
-
-        System.out.println("Consumed " + (end - start) / 1000   + "s");
+    public void setTerminate(boolean terminate) {
+        this.terminate = terminate;
     }
 
     /**
      * @param searchValue
      */
-    private List<Table> getSearchResult(String searchValue) {
+    public List<String> getSearchResult(String searchValue) {
 
-        List<Table> tables = new ArrayList<>();
+        List<String> tables = new ArrayList<>();
 
-        Properties ps = PropertiesController.getProperties();
+        Properties properties = PropertiesController.getProperties();
 
-        DbControl dc = DbController.getInstance();
-        dc.connect(ps.getProperty("url"), ps.getProperty("user"), ps.getProperty("password"));
+        DbControl dbControl = DbController.getInstance();
+        dbControl.connect(properties.getProperty("url"), properties.getProperty("user"), properties.getProperty("password"));
 
-        List<String> tablesList = dc.getTablesList(TableType.TABLE.name());
+        List<String> tablesList = dbControl.getTablesList(TableType.TABLE.name());
 
-        tablesList.stream().forEach(t -> {
+        tablesList.forEach(t -> {
+
+            if (terminate) {
+                return;
+            }
 
             List<String> colNames = new ArrayList<String>();
 
-            try (Statement namesStatement = dc.execute(getTableColumnNames(t));
+            try (Statement namesStatement = dbControl.execute(getTableColumnNames(t));
                  ResultSet colNamesRs = namesStatement.getResultSet()) {
                 while (colNamesRs.next()) {
                     colNames.add(colNamesRs.getNString(1));
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("SearchProvider error: " + e);
             }
 
             if (!colNames.isEmpty()) {
                 String query = getQuery(t, colNames, searchValue);
 
-                try (Statement st = dc.execute(query); ResultSet rs = st.getResultSet()) {
+                try (Statement st = dbControl.execute(query); ResultSet rs = st.getResultSet()) {
                     if (rs != null && rs.next()) {
-                        tables.add(new Table(t));
+                        tables.add(t);
                     }
                 } catch (SQLException e) {
-
+                    logger.error("SearchProvider error: " + e);
                 }
             }
         });
+
+        logger.info(terminate ? "SearchProvider: search is canceled!": "SearchProvider: search is done!");
 
         return tables;
     }
@@ -80,7 +85,7 @@ public class SearchProvider {
      * @param tableName
      * @param columnNames
      * @param text
-     * @return
+     * @return query string
      */
     private String getQuery(String tableName, List<String> columnNames, String text) {
 
@@ -104,9 +109,9 @@ public class SearchProvider {
 
     /**
      * @param tableName
-     * @return
+     * @return columns names
      */
-    public static String getTableColumnNames(String tableName) {
+    private  String getTableColumnNames(String tableName) {
         return "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='"+ tableName + "';";
     }
 

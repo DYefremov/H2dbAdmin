@@ -87,7 +87,6 @@ public class DatabaseDialogController {
             ButtonBar.ButtonData data = dialogButton == null ? null : (ButtonBar.ButtonData) dialogButton.getButtonData();
             return data == ButtonBar.ButtonData.OK_DONE ? getSettings() : null;
         });
-
     }
 
     @FXML

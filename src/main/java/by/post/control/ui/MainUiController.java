@@ -146,6 +146,11 @@ public class MainUiController {
     }
 
     @FXML
+    public void onItemSearchTool() {
+        onSearchTool();
+    }
+
+    @FXML
     public void onItemSqlConsole() throws IOException {
         mainPane.getChildren().remove(mainPane.getCenter());
         setCenter("SqlConsole.fxml");
@@ -163,6 +168,11 @@ public class MainUiController {
     @FXML
     public void onBarConsole() throws IOException {
         setCenter("SqlConsole.fxml");
+    }
+
+    @FXML
+    public void onBarSearch() {
+        onSearchTool();
     }
 
     @FXML
@@ -501,6 +511,21 @@ public class MainUiController {
      */
     private ImageView getItemImage(String name) {
         return new ImageView(new Image("/img/" + name, 16, 16, false, false));
+    }
+
+    /**
+     * Show and work with search tool
+     */
+    private void onSearchTool()  {
+
+        Dialog dialog = null;
+        
+        try {
+            dialog = FXMLLoader.load(MainUiForm.class.getResource("SearchToolDialog.fxml"));
+            dialog.showAndWait();
+        } catch (IOException e) {
+            logger.error("MainUiController error onSearchTool: " + e);
+        }
     }
 
 }

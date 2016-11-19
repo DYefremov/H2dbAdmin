@@ -94,6 +94,7 @@
                   <Menu mnemonicParsing="false" text="Tools">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#onItemSqlConsole" text="SQL console" />
+                        <MenuItem mnemonicParsing="false" onAction="#onItemSearchTool" text="Search tool" />
                         <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onItemRecovery" text="Recovery tool" />
                      </items>
                   </Menu>
@@ -110,6 +111,8 @@
                   <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                   <Button mnemonicParsing="false" onAction="#onBarConsole" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/terminal.png);" stylesheets="@Ui.css" />
                   <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                   <Button mnemonicParsing="false" onAction="#onBarSearch" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/search.png);" stylesheets="@Ui.css" />
+                   <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                    <Button mnemonicParsing="false" onAction="#onItemRecovery" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/recovery.png);" stylesheets="@Ui.css" />
                    <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                   <Button mnemonicParsing="false" onAction="#onBarSettings" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/preferences.png);" stylesheets="@Ui.css" />
