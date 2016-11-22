@@ -374,6 +374,7 @@ public class MainUiController {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
+                                showIndicator(true);
                                 selectTable(table);
                             }
                         });
@@ -382,8 +383,11 @@ public class MainUiController {
                 };
 
                 task.setOnFailed(event -> {
+                    showIndicator(false);
                     logger.error("MainUiController error when selecting table: " + task.getException());
                 });
+
+                task.setOnSucceeded(event -> showIndicator(false));
 
                 new Thread(task).start();
             }
@@ -526,6 +530,27 @@ public class MainUiController {
         } catch (IOException e) {
             logger.error("MainUiController error onSearchTool: " + e);
         }
+    }
+
+    /**
+     * Show/hide simple progress indicator
+     *
+     * @param show
+     */
+    private void showIndicator(boolean show) {
+
+        SimpleProgressIndicator sp = SimpleProgressIndicator.getInstance();
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (show) {
+                    sp.showAndWait();
+                } else {
+                    sp.hide();
+                }
+            }
+        });
     }
 
 }

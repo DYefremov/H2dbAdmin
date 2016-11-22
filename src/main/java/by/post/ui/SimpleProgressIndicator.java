@@ -21,7 +21,13 @@ public class SimpleProgressIndicator extends Stage {
     private ProgressIndicator parent;
     private Stage stage;
 
-    public SimpleProgressIndicator() {
+    private static SimpleProgressIndicator instance = new SimpleProgressIndicator();
+
+    public static SimpleProgressIndicator getInstance() {
+        return instance;
+    }
+
+    private SimpleProgressIndicator() {
 
         FXMLLoader loader = new FXMLLoader(SimpleProgressIndicator.class.getResource("SimpleProgressIndicator.fxml"));
 
