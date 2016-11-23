@@ -3,6 +3,7 @@ package by.post.control.ui;
 import by.post.control.PropertiesController;
 import by.post.control.db.*;
 import by.post.data.Table;
+import by.post.search.SearchProvider;
 import by.post.ui.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -58,6 +59,9 @@ public class MainUiController {
     private MainUiForm mainUiForm;
 
     private TableEditor tableEditor;
+
+    private TypedTreeItem tablesTreeItem;
+
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
@@ -411,6 +415,10 @@ public class MainUiController {
 
             TypedTreeItem item = new TypedTreeItem(name, image, tType);
             tables.add(item);
+            //Set tables tree item for using in search tool
+            if (item.getType().equals(TableType.TABLE)) {
+                tablesTreeItem = item;
+            }
             List<TypedTreeItem> items = new ArrayList<>();
 
             getDbTablesList(tType.preparedName()).stream().forEach(t -> {
@@ -522,10 +530,12 @@ public class MainUiController {
      */
     private void onSearchTool()  {
 
-        Dialog dialog = null;
-        
         try {
-            dialog = FXMLLoader.load(MainUiForm.class.getResource("SearchToolDialog.fxml"));
+            FXMLLoader loader =  new FXMLLoader(MainUiForm.class.getResource("SearchToolDialog.fxml"));
+            Dialog dialog = loader.load();
+            SearchToolDialogController controller = loader.getController();
+            controller.setTablesTreeItem(tablesTreeItem);
+            controller.setTableTree(tableTree);
             dialog.showAndWait();
         } catch (IOException e) {
             logger.error("MainUiController error onSearchTool: " + e);

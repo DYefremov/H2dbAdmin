@@ -1,15 +1,16 @@
 package by.post.control.ui;
 
 import by.post.search.SearchProvider;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 
 import java.util.List;
 
@@ -33,10 +34,22 @@ public class SearchToolDialogController {
 
     private boolean searchRunning;
 
-    private  SearchProvider searchProvider;
+    private SearchProvider searchProvider;
+
+    private TypedTreeItem tablesTreeItem;
+
+    private TreeView tableTree;
 
     public SearchToolDialogController() {
 
+    }
+
+    public void setTablesTreeItem(TypedTreeItem tablesTreeItem) {
+        this.tablesTreeItem = tablesTreeItem;
+    }
+
+    public void setTableTree(TreeView tableTree) {
+        this.tableTree = tableTree;
     }
 
     /**
@@ -46,8 +59,9 @@ public class SearchToolDialogController {
      */
     @FXML
     public void onListViewClicked(MouseEvent event) {
-        if (event.getClickCount() == 2) {
 
+        if (event.getClickCount() == 2) {
+           selectItem();
         }
     }
 
@@ -55,9 +69,10 @@ public class SearchToolDialogController {
     public void onListViewKeyReleased(KeyEvent event) {
 
         if (event.getCode() == KeyCode.ENTER) {
-
+            selectItem();
         }
     }
+
 
     /**
      * Action for Enter key
@@ -88,31 +103,31 @@ public class SearchToolDialogController {
         }
 
         setProgressVisible(true);
+        setListViewVisible(false);
 
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                List<String> list = searchProvider.getSearchResult(searchField.getText());
-                listView.getItems().addAll(FXCollections.observableList(list));
-                return !list.isEmpty();
+                List<String> tablesNames = searchProvider.getSearchResult(searchField.getText());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        listView.getItems().clear();
+                        listView.getItems().addAll(FXCollections.observableList(tablesNames));
+                    }
+                });
+
+                return !tablesNames.isEmpty();
             }
         };
 
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
+        task.setOnSucceeded(event -> {
 
-                if (task.getValue()) {
-                    listView.setVisible(true);
-                    listView.setPrefHeight(Control.USE_COMPUTED_SIZE);
-
-                    if (dialogPane.getScene() != null) {
-                        // Resize dialog pane
-                        dialogPane.getScene().getWindow().sizeToScene();
-                    }
-                }
-                setProgressVisible(false);
+            if (task.getValue()) {
+                setListViewVisible(true);
             }
+
+            setProgressVisible(false);
         });
 
         new Thread(task).start();
@@ -128,18 +143,48 @@ public class SearchToolDialogController {
     }
 
     /**
+     * @param visible
+     */
+    private void setListViewVisible(boolean visible) {
+
+        listView.setVisible(visible);
+        listView.setPrefHeight(visible ? Control.USE_COMPUTED_SIZE : Control.USE_PREF_SIZE);
+
+        if (dialogPane.getScene() != null) {
+            // Resize dialog pane
+            dialogPane.getScene().getWindow().sizeToScene();
+        }
+    }
+
+    @FXML
+    private void onCloseRequest() {
+        searchProvider.setTerminate(true);
+    }
+
+    /**
      *
      */
     @FXML
     private void initialize() {
-
+        //Remove icon from window
+        dialog.initStyle(StageStyle.UTILITY);
         searchProvider = new SearchProvider();
+    }
 
-        dialog.setOnCloseRequest(new EventHandler<DialogEvent>() {
-            @Override
-            public void handle(DialogEvent event) {
-                searchProvider.setTerminate(true);
-            }
-        });
+    /**
+     * Select item in table tree by table name
+     */
+    private void selectItem() {
+
+        if (tablesTreeItem == null || tableTree == null) {
+            return;
+        }
+
+        String tableName = String.valueOf(listView.getSelectionModel().getSelectedItem());
+        ObservableList<TypedTreeItem> typedTreeItems = tablesTreeItem.getChildren();
+        //Search first element with equal table name value
+        TypedTreeItem item = typedTreeItems.stream().filter(val -> tableName.equals(val.getValue())).findFirst().get();
+
+        tableTree.getSelectionModel().select(item);
     }
 }
