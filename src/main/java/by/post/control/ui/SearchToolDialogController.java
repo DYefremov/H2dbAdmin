@@ -2,6 +2,7 @@ package by.post.control.ui;
 
 import by.post.search.SearchProvider;
 import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -162,6 +163,9 @@ public class SearchToolDialogController {
         }
     }
 
+    /**
+     *
+     */
     @FXML
     private void onCloseRequest() {
         searchProvider.setTerminate(true);
@@ -193,7 +197,6 @@ public class SearchToolDialogController {
                 ObservableList<TypedTreeItem> typedTreeItems = tablesTreeItem.getChildren();
                 //Search first element with equal table name value
                 TypedTreeItem item = typedTreeItems.stream().filter(val -> tableName.equals(val.getValue())).findFirst().get();
-
                 tableTree.getSelectionModel().select(item);
 
                 return null;
@@ -218,20 +221,32 @@ public class SearchToolDialogController {
 
         ObservableList<ObservableList> rows = mainTableView.getItems();
 
-        rows.forEach(row -> {
+        int index = 0;
 
+        for (Observable row : rows) {
             if (row.toString().toUpperCase().contains(text.toUpperCase())) {
-                int index = rows.indexOf(row);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        mainTableView.scrollTo(index);
-                        mainTableView.getSelectionModel().select(index);
-                    }
-                });
+                index = rows.indexOf(row);
+                break;
+            }
+        }
 
-                return;
+        select(index);
+    }
+
+    /**
+     * @param index
+     */
+    private void select(int index) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                mainTableView.scrollTo(index);
+                mainTableView.getSelectionModel().clearSelection();
+                mainTableView.getSelectionModel().select(index);
+                mainTableView.getFocusModel().focus(index);
             }
         });
     }
+
 }
