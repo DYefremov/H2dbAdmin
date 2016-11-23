@@ -40,6 +40,8 @@ public class SearchToolDialogController {
 
     private TreeView tableTree;
 
+    private TableView mainTableView;
+
     public SearchToolDialogController() {
 
     }
@@ -50,6 +52,10 @@ public class SearchToolDialogController {
 
     public void setTableTree(TreeView tableTree) {
         this.tableTree = tableTree;
+    }
+
+    public void setMainTableView(TableView mainTableView) {
+        this.mainTableView = mainTableView;
     }
 
     /**
@@ -180,11 +186,52 @@ public class SearchToolDialogController {
             return;
         }
 
-        String tableName = String.valueOf(listView.getSelectionModel().getSelectedItem());
-        ObservableList<TypedTreeItem> typedTreeItems = tablesTreeItem.getChildren();
-        //Search first element with equal table name value
-        TypedTreeItem item = typedTreeItems.stream().filter(val -> tableName.equals(val.getValue())).findFirst().get();
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                String tableName = String.valueOf(listView.getSelectionModel().getSelectedItem());
+                ObservableList<TypedTreeItem> typedTreeItems = tablesTreeItem.getChildren();
+                //Search first element with equal table name value
+                TypedTreeItem item = typedTreeItems.stream().filter(val -> tableName.equals(val.getValue())).findFirst().get();
 
-        tableTree.getSelectionModel().select(item);
+                tableTree.getSelectionModel().select(item);
+
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(event -> scrollToRow(searchField.getText()));
+
+        new Thread(task).start();
+    }
+
+    /**
+     * Go to row with text value in main table
+     *
+     * @param text
+     */
+    private void scrollToRow(String text) {
+
+        if (mainTableView == null) {
+            return;
+        }
+
+        ObservableList<ObservableList> rows = mainTableView.getItems();
+
+        rows.forEach(row -> {
+
+            if (row.toString().toUpperCase().contains(text.toUpperCase())) {
+                int index = rows.indexOf(row);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainTableView.scrollTo(index);
+                        mainTableView.getSelectionModel().select(index);
+                    }
+                });
+
+                return;
+            }
+        });
     }
 }

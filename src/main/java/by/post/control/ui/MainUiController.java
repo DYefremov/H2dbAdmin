@@ -3,7 +3,6 @@ package by.post.control.ui;
 import by.post.control.PropertiesController;
 import by.post.control.db.*;
 import by.post.data.Table;
-import by.post.search.SearchProvider;
 import by.post.ui.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -536,6 +535,7 @@ public class MainUiController {
             SearchToolDialogController controller = loader.getController();
             controller.setTablesTreeItem(tablesTreeItem);
             controller.setTableTree(tableTree);
+            controller.setMainTableView(mainTable);
             dialog.showAndWait();
         } catch (IOException e) {
             logger.error("MainUiController error onSearchTool: " + e);
