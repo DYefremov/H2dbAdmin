@@ -276,7 +276,7 @@ public class MainUiController {
         contextMenuItemView.setVisible(type == null || type.equals(TableType.VIEW));
         contextMenuItemTable.setVisible(type == null || type.equals(TableType.TABLE));
 
-        if (type != null && type.equals(TableType.SYSTEM_TABLE)){
+        if (type != null && type.equals(TableType.SYSTEM_TABLE)) {
             treeContextMenu.hide();
         }
     }
@@ -344,16 +344,15 @@ public class MainUiController {
             tableTree.setContextMenu(null);
             return;
         }
-
-        tableTree.setContextMenu(treeContextMenu);
         // Sorting
 //        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
         ObservableList<TypedTreeItem> list = FXCollections.observableList(tables);
 
         TypedTreeItem root = new TypedTreeItem(dbControl.getCurrentDbName(), getItemImage("database.png"), null);
         root.getChildren().addAll(list);
-        tableTree.setRoot(root);
 
+        tableTree.setRoot(root);
+        tableTree.setContextMenu(treeContextMenu);
         tableTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -368,31 +367,7 @@ public class MainUiController {
                     return;
                 }
 
-                Task<Boolean> task = new Task<Boolean>() {
-                    @Override
-                    protected Boolean call() throws Exception {
-
-                        Table table = dbControl.getTable((String) item.getValue(), item.getType());
-
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                showIndicator(true);
-                                selectTable(table);
-                            }
-                        });
-                        return true;
-                    }
-                };
-
-                task.setOnFailed(event -> {
-                    showIndicator(false);
-                    logger.error("MainUiController error when selecting table: " + task.getException());
-                });
-
-                task.setOnSucceeded(event -> showIndicator(false));
-
-                new Thread(task).start();
+                selectTable(item);
             }
         });
     }
@@ -428,6 +403,42 @@ public class MainUiController {
         }
 
         return tables;
+    }
+
+    /**
+     * Select table by selected item
+     *
+     * @param item
+     */
+    private void selectTable(TypedTreeItem item) {
+
+        showIndicator(true);
+
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+
+                Table table = dbControl.getTable((String) item.getValue(), item.getType());
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        selectTable(table);
+                    }
+                });
+
+                return null;
+            }
+        };
+
+        task.setOnFailed(event -> {
+            showIndicator(false);
+            logger.error("MainUiController error when selecting table: " + task.getException());
+        });
+
+        task.setOnSucceeded(event -> showIndicator(false));
+
+        new Thread(task).start();
     }
 
     /**
@@ -527,10 +538,9 @@ public class MainUiController {
     /**
      * Show and work with search tool
      */
-    private void onSearchTool()  {
-
+    private void onSearchTool() {
         try {
-            FXMLLoader loader =  new FXMLLoader(MainUiForm.class.getResource("SearchToolDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("SearchToolDialog.fxml"));
             Dialog dialog = loader.load();
             SearchToolDialogController controller = loader.getController();
             controller.setTablesTreeItem(tablesTreeItem);

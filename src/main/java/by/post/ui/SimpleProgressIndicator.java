@@ -3,6 +3,7 @@ package by.post.ui;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -18,7 +19,7 @@ import java.io.IOException;
  */
 public class SimpleProgressIndicator extends Stage {
 
-    private ProgressIndicator parent;
+    private ProgressBar parent;
     private Stage stage;
 
     private static SimpleProgressIndicator instance = new SimpleProgressIndicator();

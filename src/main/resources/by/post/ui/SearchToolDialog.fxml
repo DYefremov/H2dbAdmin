@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
 
 <Dialog fx:id="dialog" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.SearchToolDialogController" onCloseRequest="#onCloseRequest" >
    <dialogPane>
@@ -20,7 +18,7 @@
                      <children>
                         <Label fx:id="progressLabel" text="Please white" underline="true" visible="false">
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets left="28.0" />
                            </HBox.margin>
                         </Label>
                         <ProgressBar fx:id="progress" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="150.0" visible="false" />
@@ -33,7 +31,7 @@
                <top>
                   <HBox alignment="CENTER_LEFT" prefHeight="30.0" spacing="5.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label prefHeight="16.0" prefWidth="91.0" text="Search text:">
+                        <Label prefHeight="16.0" prefWidth="90.0" text="Search text:">
                            <padding>
                               <Insets left="10.0" />
                            </padding>

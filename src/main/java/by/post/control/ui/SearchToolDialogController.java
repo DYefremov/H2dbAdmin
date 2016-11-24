@@ -68,7 +68,7 @@ public class SearchToolDialogController {
     public void onListViewClicked(MouseEvent event) {
 
         if (event.getClickCount() == 2) {
-           selectItem();
+            selectItem();
         }
     }
 
@@ -129,11 +129,7 @@ public class SearchToolDialogController {
         };
 
         task.setOnSucceeded(event -> {
-
-            if (task.getValue()) {
-                setListViewVisible(true);
-            }
-
+            setListViewVisible(task.getValue());
             setProgressVisible(false);
         });
 
@@ -221,27 +217,24 @@ public class SearchToolDialogController {
 
         ObservableList<ObservableList> rows = mainTableView.getItems();
 
-        int index = 0;
-
         for (Observable row : rows) {
             if (row.toString().toUpperCase().contains(text.toUpperCase())) {
-                index = rows.indexOf(row);
-                break;
+                select(rows.indexOf(row));
+                return;
             }
         }
-
-        select(index);
     }
 
     /**
      * @param index
      */
     private void select(int index) {
-
+        
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 mainTableView.scrollTo(index);
+                mainTableView.layout();
                 mainTableView.getSelectionModel().clearSelection();
                 mainTableView.getSelectionModel().select(index);
                 mainTableView.getFocusModel().focus(index);
