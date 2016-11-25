@@ -80,7 +80,6 @@ public class SearchToolDialogController {
         }
     }
 
-
     /**
      * Action for Enter key
      */
@@ -229,7 +228,7 @@ public class SearchToolDialogController {
      * @param index
      */
     private void select(int index) {
-        
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {

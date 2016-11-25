@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -142,7 +143,11 @@ public class MainUiController {
     @FXML
     public void onItemRecovery() {
         try {
-            mainPane.setCenter(FXMLLoader.load(MainUiForm.class.getResource("RecoveryPane.fxml")));
+            Dialog dialog = new Dialog();
+            dialog.setDialogPane(FXMLLoader.load(MainUiForm.class.getResource("RecoveryPane.fxml")));
+            dialog.setHeaderText("Recovery tool");
+            dialog.initStyle(StageStyle.UTILITY);
+            dialog.showAndWait();
         } catch (Exception e) {
             logger.error("MainUiController error onItemRecovery: " + e);
         }
