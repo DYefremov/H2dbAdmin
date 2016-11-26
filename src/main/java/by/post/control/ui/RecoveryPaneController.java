@@ -27,6 +27,8 @@ import java.util.Optional;
 
 
 /**
+ * @deprecated will be another controller (simpler)
+ *
  * @author Dmitriy V.Yefremov
  */
 public class RecoveryPaneController {

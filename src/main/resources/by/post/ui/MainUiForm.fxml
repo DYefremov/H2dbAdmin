@@ -31,7 +31,7 @@
                   <items>
                         <Menu mnemonicParsing="false" text="New">
                           <items>
-                            <MenuItem mnemonicParsing="false" onAction="#onItemNewDb" text="Database">
+                            <MenuItem mnemonicParsing="false" onAction="#onNewDbAdd" text="Database">
                                 <graphic>
                                     <ImageView fitHeight="12.0" fitWidth="12.0">
                                         <image>
@@ -40,7 +40,7 @@
                                     </ImageView>
                                 </graphic>
                             </MenuItem>
-                              <MenuItem mnemonicParsing="false" onAction="#onItemNewTable" text="Table">
+                              <MenuItem mnemonicParsing="false" onAction="#onAddNewTable" text="Table">
                                  <graphic>
                                     <ImageView fitHeight="12.0" fitWidth="12.0">
                                         <image>
@@ -49,7 +49,7 @@
                                     </ImageView>
                                  </graphic>
                               </MenuItem>
-                              <MenuItem mnemonicParsing="false" onAction="#onItemNewView" text="View">
+                              <MenuItem mnemonicParsing="false" onAction="#onAddNewView" text="View">
                                  <graphic>
                                     <ImageView fitHeight="12.0" fitWidth="12.0">
                                         <image>
@@ -60,7 +60,7 @@
                               </MenuItem>
                           </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" onAction="#onOpenItem" text="Open">
+                        <MenuItem mnemonicParsing="false" onAction="#onOpenDb" text="Open">
                             <graphic>
                                 <ImageView fitHeight="12.0" fitWidth="12.0">
                                     <image>
@@ -70,7 +70,7 @@
                             </graphic>
                         </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#onItemSettings" text="Settings">
+                        <MenuItem mnemonicParsing="false" onAction="#onSettings" text="Settings">
                             <graphic>
                                 <ImageView fitHeight="12.0" fitWidth="12.0">
                                     <image>
@@ -80,7 +80,7 @@
                             </graphic>
                         </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#onItemExit" text="Exit">
+                    <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit">
                         <graphic>
                             <ImageView fitHeight="12.0" fitWidth="12.0">
                                 <image>
@@ -93,31 +93,31 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="Tools">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onItemSqlConsole" text="SQL console" />
-                        <MenuItem mnemonicParsing="false" onAction="#onItemSearchTool" text="Search tool" />
-                        <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onItemRecovery" text="Recovery tool" />
+                        <MenuItem mnemonicParsing="false" onAction="#onSqlConsole" text="SQL console" />
+                        <MenuItem mnemonicParsing="false" onAction="#onSearchTool" text="Search tool" />
+                        <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onRecoveryTool" text="Recovery tool" />
                      </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
-                    <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onItemAbout" text="About" />
+                    <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onAbout" text="About" />
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
             <ToolBar prefHeight="25.0" prefWidth="650.0">
                <items>
-                  <Button mnemonicParsing="false" onAction="#onBarExplorer" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/manager.png);" stylesheets="@Ui.css" />
+                  <Button mnemonicParsing="false" onAction="#onExplorer" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/manager.png);" stylesheets="@Ui.css" />
                   <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                  <Button mnemonicParsing="false" onAction="#onBarConsole" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/terminal.png);" stylesheets="@Ui.css" />
+                  <Button mnemonicParsing="false" onAction="#onSqlConsole" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/terminal.png);" stylesheets="@Ui.css" />
                   <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                   <Button mnemonicParsing="false" onAction="#onBarSearch" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/search.png);" stylesheets="@Ui.css" />
+                   <Button mnemonicParsing="false" onAction="#onSearchTool" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/search.png);" stylesheets="@Ui.css" />
                    <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                   <Button mnemonicParsing="false" onAction="#onItemRecovery" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/recovery.png);" stylesheets="@Ui.css" />
+                   <Button mnemonicParsing="false" onAction="#onRecoveryTool" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/recovery.png);" stylesheets="@Ui.css" />
                    <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                  <Button mnemonicParsing="false" onAction="#onBarSettings" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/preferences.png);" stylesheets="@Ui.css" />
+                  <Button mnemonicParsing="false" onAction="#onSettings" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/preferences.png);" stylesheets="@Ui.css" />
                   <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                  <Button mnemonicParsing="false" onAction="#onBarExit" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/exit.png);" stylesheets="@Ui.css" />
+                  <Button mnemonicParsing="false" onAction="#onExit" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/exit.png);" stylesheets="@Ui.css" />
                   <Separator layoutX="114.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                </items>
                <VBox.margin>
@@ -151,12 +151,12 @@
                     <items>
                         <Menu mnemonicParsing="false" text="New">
                            <items>
-                            <MenuItem fx:id="contextMenuItemTable" mnemonicParsing="false" onAction="#onTreeContextAddTable" text="Table" />
-                            <MenuItem fx:id="contextMenuItemView" mnemonicParsing="false" onAction="#onTreeContextAddView" text="View" />
+                            <MenuItem fx:id="contextMenuItemTable" mnemonicParsing="false" onAction="#onAddNewTable" text="Table" />
+                            <MenuItem fx:id="contextMenuItemView" mnemonicParsing="false" onAction="#onAddNewView" text="View" />
                            </items>
                         </Menu>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#onTreeContextDelete" text="Delete" />
+                        <MenuItem mnemonicParsing="false" onAction="#onTableDelete" text="Delete" />
                     </items>
                   </ContextMenu>
                </contextMenu>
@@ -170,8 +170,8 @@
                      <contextMenu>
                         <ContextMenu>
                           <items>
-                              <MenuItem mnemonicParsing="false" onAction="#onTableItemAddRow" text="Add new row" />
-                              <MenuItem mnemonicParsing="false" onAction="#onTableItemDeleteRow" text="Delete row" />
+                              <MenuItem mnemonicParsing="false" onAction="#onAddRow" text="Add new row" />
+                              <MenuItem mnemonicParsing="false" onAction="#onRemoveRow" text="Delete row" />
                           </items>
                         </ContextMenu>
                      </contextMenu>
@@ -180,17 +180,17 @@
                <bottom>
                   <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" style="-fx-background-color: lightgray;" BorderPane.alignment="CENTER">
                     <items>
-                        <Button mnemonicParsing="false" onAction="#onAddRowButton" prefHeight="25.0" prefWidth="25.0" text="+">
+                        <Button mnemonicParsing="false" onAction="#onAddRow" prefHeight="25.0" prefWidth="25.0" text="+">
                            <tooltip>
                               <Tooltip text="Add row." />
                            </tooltip>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onRemoveRowButton" prefHeight="25.0" prefWidth="25.0" text="-" textAlignment="CENTER">
+                        <Button mnemonicParsing="false" onAction="#onRemoveRow" prefHeight="25.0" prefWidth="25.0" text="-" textAlignment="CENTER">
                            <tooltip>
                               <Tooltip text="Delete row." />
                            </tooltip>
                         </Button>
-                      <Button mnemonicParsing="false" onAction="#onSaveRowButton" text="Save" textAlignment="RIGHT">
+                      <Button mnemonicParsing="false" onAction="#onSaveRow" text="Save" textAlignment="RIGHT">
                            <tooltip>
                               <Tooltip text="Save changes." />
                            </tooltip>

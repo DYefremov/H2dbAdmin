@@ -73,10 +73,10 @@ public class MainUiController {
     }
 
     /**
-     * Actions for menu bar items
+     * Actions for menu and tool bar items
      */
     @FXML
-    public void onItemNewDb() throws IOException {
+    public void onNewDbAdd() throws IOException {
 
         Dialog dialog = FXMLLoader.load(MainUiForm.class.getResource("DatabaseDialog.fxml"));
 
@@ -88,51 +88,41 @@ public class MainUiController {
     }
 
     @FXML
-    public void onItemNewTable() {
+    public void onAddNewTable() {
         addNewTable();
     }
 
     @FXML
-    public void onItemNewView() {
+    public void onAddNewView() {
         addNewView();
     }
 
     @FXML
-    public void onOpenItem() {
+    public void onTableDelete() {
 
-        Optional<Map<String, String>> result = new OpenDbDialog().showAndWait();
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
-        if (result.isPresent()) {
-            PropertiesController.setProperties(result.get());
-
-            Task<Void> task = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            init();
-                        }
-                    });
-                    return null;
-                }
-            };
-
-            new Thread(task).start();
+        if (result.get() == ButtonType.OK) {
+            tableEditor.deleteTable(tableTree);
         }
     }
 
-    public void onItemSettings() throws IOException {
+    @FXML
+    public void onOpenDb() {
+        openNewDatabase();
+    }
+
+    public void onSettings() throws IOException {
         setCenter("SettingsPane.fxml");
     }
 
     @FXML
-    public void onItemExit() {
+    public void onExit() {
         closeProgram();
     }
 
     @FXML
-    public void onItemAbout() {
+    public void onAbout() {
         try {
             new AboutDialog(mainUiForm.getHostServices()).showAndWait();
         } catch (Exception e) {
@@ -141,7 +131,7 @@ public class MainUiController {
     }
 
     @FXML
-    public void onItemRecovery() {
+    public void onRecoveryTool() {
         try {
             Dialog dialog = new Dialog();
             dialog.setDialogPane(FXMLLoader.load(MainUiForm.class.getResource("RecoveryPane.fxml")));
@@ -154,113 +144,18 @@ public class MainUiController {
     }
 
     @FXML
-    public void onItemSearchTool() {
-        onSearchTool();
+    public void onSearchTool() {
+        showSearchTool();
     }
 
     @FXML
-    public void onItemSqlConsole() throws IOException {
-        mainPane.getChildren().remove(mainPane.getCenter());
+    public void onSqlConsole() throws IOException {
         setCenter("SqlConsole.fxml");
     }
 
-    /**
-     * Actions for tool bar
-     */
     @FXML
-    public void onBarExplorer() {
-        mainPane.getChildren().remove(mainPane.getCenter());
+    public void onExplorer() {
         mainPane.setCenter(mainSplitPane);
-    }
-
-    @FXML
-    public void onBarConsole() throws IOException {
-        setCenter("SqlConsole.fxml");
-    }
-
-    @FXML
-    public void onBarSearch() {
-        onSearchTool();
-    }
-
-    @FXML
-    public void onBarSettings() throws IOException {
-        setCenter("SettingsPane.fxml");
-    }
-
-    @FXML
-    public void onBarExit() {
-        closeProgram();
-    }
-
-    /**
-     * Actions for table context menu
-     */
-    @FXML
-    public void onTableItemAddRow() {
-
-        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
-
-        if (result.get() == ButtonType.OK) {
-            try {
-                tableEditor.addRow();
-            } catch (Exception e) {
-                logger.error("MainUiController error onTableItemAddRow: " + e);
-            }
-        }
-    }
-
-    @FXML
-    public void onTableItemDeleteRow() {
-
-        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
-
-        if (result.get() == ButtonType.OK) {
-            tableEditor.deleteRow();
-        }
-    }
-
-    /**
-     * Actions for tool bar buttons
-     */
-    @FXML
-    public void onAddRowButton() {
-
-        if (!currentTableName.getText().equals("")) {
-            Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
-
-            if (result.get() == ButtonType.OK) {
-                try {
-                    tableEditor.addRow();
-                } catch (Exception e) {
-                    logger.error("MainUiController error onAddRowButton: " + e);
-                }
-            }
-        }
-    }
-
-    @FXML
-    public void onRemoveRowButton() {
-
-        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
-
-        if (result.get() == ButtonType.OK) {
-            tableEditor.deleteRow();
-        }
-    }
-
-    @FXML
-    public void onSaveRowButton() {
-
-        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex != -1) {
-            Optional<ButtonType> result = new ConfirmationDialog("Save current row to database?").showAndWait();
-
-            if (result.get() == ButtonType.OK) {
-                tableEditor.saveRow(selectedIndex);
-            }
-        }
     }
 
     /**
@@ -286,26 +181,6 @@ public class MainUiController {
         }
     }
 
-    @FXML
-    public void onTreeContextAddTable() {
-        addNewTable();
-    }
-
-    @FXML
-    public void onTreeContextAddView() {
-        addNewView();
-    }
-
-    @FXML
-    public void onTreeContextDelete() {
-
-        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
-
-        if (result.get() == ButtonType.OK) {
-            tableEditor.deleteTable(tableTree);
-        }
-    }
-
     /**
      * Actions for selections in the table
      */
@@ -316,6 +191,49 @@ public class MainUiController {
 
     public void onKeyReleased() {
         tableEditor.saveCurrentRow();
+    }
+
+    /**
+     * Actions for work with rows
+     */
+    @FXML
+    public void onAddRow() {
+
+        if (!currentTableName.getText().equals("")) {
+            Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+            if (result.get() == ButtonType.OK) {
+                try {
+                    tableEditor.addRow();
+                } catch (Exception e) {
+                    logger.error("MainUiController error onAddRowButton: " + e);
+                }
+            }
+        }
+    }
+
+    @FXML
+    public void onRemoveRow() {
+
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            tableEditor.deleteRow();
+        }
+    }
+
+    @FXML
+    public void onSaveRow() {
+
+        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex != -1) {
+            Optional<ButtonType> result = new ConfirmationDialog("Save current row to database?").showAndWait();
+
+            if (result.get() == ButtonType.OK) {
+                tableEditor.saveRow(selectedIndex);
+            }
+        }
     }
 
     /**
@@ -408,6 +326,33 @@ public class MainUiController {
         }
 
         return tables;
+    }
+
+    /**
+     * Open new database
+     */
+    private void openNewDatabase() {
+
+        Optional<Map<String, String>> result = new OpenDbDialog().showAndWait();
+
+        if (result.isPresent()) {
+            PropertiesController.setProperties(result.get());
+
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            init();
+                        }
+                    });
+                    return null;
+                }
+            };
+
+            new Thread(task).start();
+        }
     }
 
     /**
@@ -543,7 +488,7 @@ public class MainUiController {
     /**
      * Show and work with search tool
      */
-    private void onSearchTool() {
+    private void showSearchTool() {
         try {
             FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("SearchToolDialog.fxml"));
             Dialog dialog = loader.load();
@@ -553,7 +498,7 @@ public class MainUiController {
             controller.setMainTableView(mainTable);
             dialog.showAndWait();
         } catch (IOException e) {
-            logger.error("MainUiController error onSearchTool: " + e);
+            logger.error("MainUiController error showSearchTool: " + e);
         }
     }
 
