@@ -18,6 +18,11 @@
    -fx-background-size: 20px;
 }
 
+.table-view {
+   -fx-background-image: url(/img/logo.png);
+   -fx-background-size:  cover;
+}
+
 /* Style for table cell */
 .table-view .table-cell {
     -fx-alignment: CENTER-RIGHT;
