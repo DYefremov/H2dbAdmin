@@ -17,13 +17,26 @@ public class OpenFileDialogProvider {
 
     }
 
+    /**
+     * @param title
+     * @param dir
+     * @return
+     */
     public File getFileDialog(String title, boolean dir) {
 
         if (dir) {
             return getDirectoryChooser(title).showDialog(getFileOpenStage());
         }
 
-        return getFileChooser(title).showOpenDialog(getFileOpenStage());
+        return getFileChooser(title, true).showOpenDialog(getFileOpenStage());
+    }
+
+    /**
+     * @param title
+     * @return
+     */
+    public File getSaveFileDialog(String title) {
+        return getFileChooser(title, false).showSaveDialog(getFileOpenStage());
     }
 
     /**
@@ -41,16 +54,23 @@ public class OpenFileDialogProvider {
      * @param title
      * @return file chooser with filtered selection
      */
-    private FileChooser getFileChooser(String title) {
+    private FileChooser getFileChooser(String title, boolean filtered) {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
-        //Add filter for open only ".db" files
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("DB","*.db"));
+
+        if (filtered) {
+            //Add filter for open only ".db" files
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("DB","*.db"));
+        }
 
         return fileChooser;
     }
 
+    /**
+     * @param title
+     * @return
+     */
     private DirectoryChooser getDirectoryChooser(String title) {
 
         DirectoryChooser directoryChooser = new DirectoryChooser();

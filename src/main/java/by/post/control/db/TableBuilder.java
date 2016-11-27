@@ -92,10 +92,16 @@ public class TableBuilder {
         List<Cell> cells = new ArrayList<>();
         ResultSetMetaData metaData = rs.getMetaData();
 
+
         int count = metaData.getColumnCount();
 
         for (int i = 1; i <= count; i++) {
-            cells.add(getCell(i, rs));
+            ColumnDataType type = ColumnDataType.valueOf(metaData.getColumnTypeName(i));
+            if (type.equals(ColumnDataType.CLOB) || type.equals(ColumnDataType.BLOB)) {
+                cells.add(new Cell(null, null, "value"));
+            } else {
+                cells.add(getCell(i, rs));
+            }
         }
 
         return cells;

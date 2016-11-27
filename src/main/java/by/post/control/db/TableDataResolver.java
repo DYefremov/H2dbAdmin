@@ -2,6 +2,7 @@ package by.post.control.db;
 
 import by.post.control.ui.MultipleTableColumnController;
 import by.post.data.Column;
+import by.post.data.ColumnDataType;
 import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.MainUiForm;
@@ -9,7 +10,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
@@ -102,6 +107,11 @@ public class TableDataResolver {
     public TableColumn getColumn(Column column) {
 
         TableColumn tableColumn = getTableColumn(column);
+        ColumnDataType type = ColumnDataType.valueOf(column.getType());
+
+        if (type.equals(ColumnDataType.BLOB) || type.equals(ColumnDataType.CLOB)) {
+            return getBlobClobTableColumn(tableColumn);
+        }
 
         tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
             @Override
@@ -141,4 +151,30 @@ public class TableDataResolver {
 
         return tableColumn;
     }
+
+    /**
+     * @param column
+     * @return table column with blob or clob type
+     */
+    private TableColumn getBlobClobTableColumn(TableColumn column) {
+
+        TableColumn tableColumn = column;
+
+        column.setCellFactory(param -> {
+            TableCell cell = new TableCell();
+            Hyperlink hyperlink = new Hyperlink("download");
+            hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    new LobDataManager().save(cell);
+                }
+            });
+            cell.setGraphic(hyperlink);
+
+            return cell;
+        });
+
+        return tableColumn;
+    }
+
 }
