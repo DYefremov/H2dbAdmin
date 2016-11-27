@@ -25,10 +25,7 @@ public class TableBuilder {
 
         Table table = new Table(name);
         boolean isSysTable = type.equals(TableType.SYSTEM_TABLE);
-        /**
-         * Using the try-with-resources statement
-         * @see "https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html"
-         */
+
         try (Statement st = connection.createStatement()) {
             DatabaseMetaData dbMetaData = connection.getMetaData();
             st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTable(name));
@@ -92,7 +89,6 @@ public class TableBuilder {
         List<Cell> cells = new ArrayList<>();
         ResultSetMetaData metaData = rs.getMetaData();
 
-
         int count = metaData.getColumnCount();
 
         for (int i = 1; i <= count; i++) {
@@ -134,6 +130,7 @@ public class TableBuilder {
         column.setSearchable(rsMetaData.isSearchable(index));
         column.setWritable(rsMetaData.isWritable(index));
         column.setSigned(rsMetaData.isSigned(index));
+        column.setIndex(index);
 
         return column;
     }

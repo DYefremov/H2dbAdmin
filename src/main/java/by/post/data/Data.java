@@ -1,5 +1,7 @@
 package by.post.data;
 
+import java.util.stream.Stream;
+
 /**
  * root element for data model
  *

@@ -3,6 +3,7 @@ package by.post.search;
 import by.post.control.PropertiesController;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
+import by.post.control.db.Queries;
 import by.post.control.db.TableType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,7 +55,7 @@ public class SearchProvider {
 
             List<String> colNames = new ArrayList<String>();
 
-            try (Statement namesStatement = dbControl.execute(getTableColumnNames(t));
+            try (Statement namesStatement = dbControl.execute(Queries.getTableColumnNames(t));
                  ResultSet colNamesRs = namesStatement.getResultSet()) {
                 while (colNamesRs.next()) {
                     colNames.add(colNamesRs.getNString(1));
@@ -105,14 +106,4 @@ public class SearchProvider {
 
         return sb.toString();
     }
-
-
-    /**
-     * @param tableName
-     * @return columns names
-     */
-    private  String getTableColumnNames(String tableName) {
-        return "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='"+ tableName + "';";
-    }
-
 }

@@ -16,6 +16,7 @@ public class Column {
     private boolean searchable;
     private boolean writable;
     private boolean signed;
+    private int index;
 
     public Column() {
 
@@ -115,6 +116,14 @@ public class Column {
         this.signed = signed;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     @Override
     public String toString() {
         return "Column{" +
@@ -129,6 +138,7 @@ public class Column {
                 ", searchable=" + searchable +
                 ", writable=" + writable +
                 ", signed=" + signed +
+                ", index=" + index +
                 '}';
     }
 
@@ -148,10 +158,12 @@ public class Column {
         if (searchable != column.searchable) return false;
         if (writable != column.writable) return false;
         if (signed != column.signed) return false;
+        if (index != column.index) return false;
         if (tableName != null ? !tableName.equals(column.tableName) : column.tableName != null)
             return false;
         if (columnName != null ? !columnName.equals(column.columnName) : column.columnName != null)
             return false;
+
         return type != null ? type.equals(column.type) : column.type == null;
     }
 
@@ -169,6 +181,7 @@ public class Column {
         result = 31 * result + (searchable ? 1 : 0);
         result = 31 * result + (writable ? 1 : 0);
         result = 31 * result + (signed ? 1 : 0);
+        result = 31 * result + index;
 
         return result;
     }

@@ -194,4 +194,12 @@ public class Queries {
         return sb.toString();
     }
 
+    /**
+     * @param tableName
+     * @return columns names
+     */
+    public static  String getTableColumnNames(String tableName) {
+        return "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='"+ tableName + "';";
+    }
+
 }

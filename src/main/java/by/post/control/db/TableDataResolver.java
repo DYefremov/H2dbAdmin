@@ -1,10 +1,7 @@
 package by.post.control.db;
 
 import by.post.control.ui.MultipleTableColumnController;
-import by.post.data.Column;
-import by.post.data.ColumnDataType;
-import by.post.data.Row;
-import by.post.data.Table;
+import by.post.data.*;
 import by.post.ui.MainUiForm;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -166,7 +163,8 @@ public class TableDataResolver {
             hyperlink.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    new LobDataManager().save(cell);
+                    int rowIndex = cell.getTableRow().getIndex();
+                    new LobDataManager().save(rowIndex, (Column) tableColumn.getUserData(), table);
                 }
             });
             cell.setGraphic(hyperlink);
