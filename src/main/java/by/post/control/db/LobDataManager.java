@@ -97,11 +97,10 @@ public class LobDataManager {
      * @param file
      * @param resultSet
      * @param columnName
-     * @throws IOException
-     * @throws SQLException
+     * @param isBlob
      */
     private void saveData(File file, ResultSet resultSet, String columnName, boolean isBlob) {
-        
+
         try (OutputStream os = new FileOutputStream(file); InputStream is = isBlob ?
                 resultSet.getBinaryStream(columnName) : resultSet.getAsciiStream(columnName) ){
             int b;
