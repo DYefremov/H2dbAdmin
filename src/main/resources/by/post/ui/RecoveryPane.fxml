@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.RecoveryPaneController">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.RecoveryPaneController">
     <content>
         <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="480.0" style="-fx-background-color: lightgray;">
             <columnConstraints>
@@ -54,7 +54,7 @@
             </Button>
             <TextField fx:id="dbPath" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" />
             <TextField fx:id="savePath" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <CheckBox mnemonicParsing="false" selected="true" text="Show only db files" GridPane.columnIndex="2" />
+            <CheckBox fx:id="isFiltered" mnemonicParsing="false" selected="true" text="Show only db files" GridPane.columnIndex="2" />
             <TextField fx:id="userField" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="User:" GridPane.rowIndex="2">
                 <opaqueInsets>

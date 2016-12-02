@@ -22,13 +22,13 @@ public class OpenFileDialogProvider {
      * @param dir
      * @return
      */
-    public File getFileDialog(String title, boolean dir) {
+    public File getFileDialog(String title, boolean dir, boolean isFiltered) {
 
         if (dir) {
             return getDirectoryChooser(title).showDialog(getFileOpenStage());
         }
 
-        return getFileChooser(title, true).showOpenDialog(getFileOpenStage());
+        return getFileChooser(title, isFiltered).showOpenDialog(getFileOpenStage());
     }
 
     /**

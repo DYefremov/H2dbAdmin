@@ -54,7 +54,7 @@ public class OpenDbDialogController {
      */
     public void onPath() {
 
-        File dbFile = new OpenFileDialogProvider().getFileDialog("Select db file...", false);
+        File dbFile = new OpenFileDialogProvider().getFileDialog("Select db file...", false, true);
 
         if (dbFile != null) {
             path.setText(dbFile.getPath());

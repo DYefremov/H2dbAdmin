@@ -5,6 +5,7 @@ import by.post.control.db.RecoveryManager;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
@@ -32,6 +33,8 @@ public class RecoveryPaneController {
     private Label progress;
     @FXML
     private ProgressBar progressBar;
+    @FXML
+    private CheckBox isFiltered;
 
     private static final Logger logger = LogManager.getLogger(RecoveryPaneController.class);
 
@@ -159,7 +162,7 @@ public class RecoveryPaneController {
      */
     private void getDbPath() {
 
-        File file = new OpenFileDialogProvider().getFileDialog("", false);
+        File file = new OpenFileDialogProvider().getFileDialog("", false, isFiltered.isSelected());
 
         if (file != null) {
             dbPath.setStyle(null);
@@ -173,7 +176,7 @@ public class RecoveryPaneController {
      */
     private void getSavePath() {
 
-        File file = new OpenFileDialogProvider().getFileDialog("", true);
+        File file = new OpenFileDialogProvider().getFileDialog("", true, false);
 
         if (file != null) {
             savePath.setStyle(null);

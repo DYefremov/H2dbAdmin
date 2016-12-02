@@ -505,9 +505,9 @@ public class MainUiController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                if (show) {
+                if (!sp.isShowing() && show) {
                     sp.showAndWait();
-                } else {
+                } else if (sp.isShowing() && !show){
                     sp.hide();
                 }
             }
