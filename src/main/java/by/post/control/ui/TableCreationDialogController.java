@@ -1,12 +1,11 @@
 package by.post.control.ui;
 
-import by.post.data.Column;
-import by.post.data.ColumnDataType;
-import by.post.data.Table;
+import by.post.data.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 
 /**
@@ -15,19 +14,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class TableCreationDialogController {
 
     @FXML
-    private TableView tableView;
+    private TableView<Column> tableView;
     @FXML
-    private TableColumn nameColumn;
+    private TableColumn<Column, String> nameColumn;
     @FXML
-    private TableColumn typeColumn;
+    private TableColumn<Column, String> typeColumn;
     @FXML
-    private TableColumn lengthColumn;
+    private TableColumn<Column, String> lengthColumn;
     @FXML
-    private TableColumn keyColumn;
+    private TableColumn<Column, String> keyColumn;
     @FXML
-    private TableColumn notNullColumn;
+    private TableColumn<Column, String> notNullColumn;
     @FXML
-    private TableColumn defaultValueColumn;
+    private TableColumn<Column, String> defaultValueColumn;
     @FXML
     private TextField tableName;
     @FXML
@@ -85,12 +84,23 @@ public class TableCreationDialogController {
      */
     private void initColumns() {
 
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Column, String>("columnName"));
-        typeColumn.setCellValueFactory(new PropertyValueFactory<Column, String>("type"));
-        keyColumn.setCellValueFactory(new PropertyValueFactory<Column, String>("primaryKey"));
-        notNullColumn.setCellValueFactory(new PropertyValueFactory<Column, String>("notNull"));
-        lengthColumn.setCellValueFactory(new PropertyValueFactory<Column, String>("length"));
-        defaultValueColumn.setCellValueFactory(new PropertyValueFactory<Column, String>("defaultValue"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("columnName"));
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        typeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        keyColumn.setCellValueFactory(new PropertyValueFactory<>("primaryKey"));
+//        keyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        notNullColumn.setCellValueFactory(new PropertyValueFactory<>("notNull"));
+//        notNullColumn.setCellFactory(TextFieldTableCell.<Column>forTableColumn());
+
+        lengthColumn.setCellValueFactory(new PropertyValueFactory<>("length"));
+//        lengthColumn.setCellFactory(TextFieldTableCell.<Column>forTableColumn());
+
+        defaultValueColumn.setCellValueFactory(new PropertyValueFactory<>("defaultValue"));
+        defaultValueColumn.setCellFactory(TextFieldTableCell.<Column>forTableColumn());
     }
 
     /**

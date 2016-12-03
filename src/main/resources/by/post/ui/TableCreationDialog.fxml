@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableCreationDialogController">
+<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableCreationDialogController">
    <buttonTypes>
       <ButtonType fx:constant="OK" />
       <ButtonType fx:constant="CANCEL" />
@@ -53,7 +53,7 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </Label>
-                  <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
+                  <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="200.0">
                       <placeholder>
                           <Label text="Add columns!" />
                       </placeholder>
