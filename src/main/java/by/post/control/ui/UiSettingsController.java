@@ -20,7 +20,7 @@ public class UiSettingsController {
 
     @FXML
     public void onNotShowClosingDialog() {
-        new Alert(Alert.AlertType.INFORMATION, "Not implemented!").showAndWait();
+        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
     }
 
     @FXML

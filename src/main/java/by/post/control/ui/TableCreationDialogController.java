@@ -1,10 +1,8 @@
 package by.post.control.ui;
 
+import by.post.data.Table;
 import javafx.fxml.FXML;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 
 /**
@@ -31,26 +29,34 @@ public class TableCreationDialogController {
     @FXML
     private DialogPane dialogPane;
 
+    private Table table;
+
     public TableCreationDialogController() {
 
     }
 
     @FXML
     public void onAddButton() {
-
+        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
     }
 
     @FXML
     public void onDeleteButton() {
+        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
+    }
 
+    /**
+     * @return
+     */
+    public Table getTable() {
+        return table == null ? new Table(tableName.getText()) : table;
     }
 
     @FXML
     private void initialize() {
 
-
-
     }
+
 
 }
 

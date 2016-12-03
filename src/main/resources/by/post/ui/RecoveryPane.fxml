@@ -90,4 +90,14 @@
         </GridPane>
     </content>
     <ButtonType fx:constant="CANCEL" />
+    <header>
+        <Label alignment="CENTER" text="Recovery tool">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+            <padding>
+                <Insets bottom="5.0" top="5.0" />
+            </padding>
+        </Label>
+    </header>
 </DialogPane>

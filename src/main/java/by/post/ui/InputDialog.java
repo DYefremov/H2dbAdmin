@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
+ * @deprecated replaced with TableCreationDialog
+ *
  * @author Dmitriy V.Yefremov
  */
 public class InputDialog extends TextInputDialog {

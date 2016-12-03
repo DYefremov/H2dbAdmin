@@ -229,9 +229,6 @@ public class MainUiController {
         }
     }
 
-    /**
-     * Add action at the start
-     */
     @FXML
     private void initialize() {
         // Set log messages output to the text area
@@ -416,10 +413,10 @@ public class MainUiController {
      */
     private void addNewTable() {
 
-        Optional<String> result = new InputDialog("Please, write table name!", "New_table", false).showAndWait();
+        Optional<Table> result =  new TableCreationDialog().showAndWait();
 
         if (result.isPresent()) {
-            tableEditor.addTable(tableTree, result.get(), getItemImage("table.png"), TableType.TABLE);
+            tableEditor.addTable(tableTree, result.get().getName(), getItemImage("table.png"), TableType.TABLE);
         }
     }
 
