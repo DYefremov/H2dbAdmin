@@ -54,6 +54,9 @@
                      </font>
                   </Label>
                   <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
+                      <placeholder>
+                          <Label text="Add columns!" />
+                      </placeholder>
                     <columns>
                       <TableColumn fx:id="nameColumn" prefWidth="106.0" sortable="false" text="Name" />
                         <TableColumn fx:id="typeColumn" prefWidth="75.0" sortable="false" text="Type" />

@@ -8,6 +8,7 @@ public class Column {
     private String tableName;
     private String columnName;
     private String type;
+    private String defaultValue;
     private boolean primaryKey;
     private boolean notNull;
     private boolean autoIncrement;
@@ -17,6 +18,8 @@ public class Column {
     private boolean writable;
     private boolean signed;
     private int index;
+    private int length;
+
 
     public Column() {
 
@@ -120,6 +123,22 @@ public class Column {
         return index;
     }
 
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
     public void setIndex(int index) {
         this.index = index;
     }
@@ -130,6 +149,7 @@ public class Column {
                 "tableName='" + tableName + '\'' +
                 ", columnName='" + columnName + '\'' +
                 ", type='" + type + '\'' +
+                ", defaultValue='" + defaultValue + '\'' +
                 ", primaryKey=" + primaryKey +
                 ", notNull=" + notNull +
                 ", autoIncrement=" + autoIncrement +
@@ -139,12 +159,12 @@ public class Column {
                 ", writable=" + writable +
                 ", signed=" + signed +
                 ", index=" + index +
+                ", length=" + length +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -159,12 +179,14 @@ public class Column {
         if (writable != column.writable) return false;
         if (signed != column.signed) return false;
         if (index != column.index) return false;
+        if (length != column.length) return false;
         if (tableName != null ? !tableName.equals(column.tableName) : column.tableName != null)
             return false;
         if (columnName != null ? !columnName.equals(column.columnName) : column.columnName != null)
             return false;
-
-        return type != null ? type.equals(column.type) : column.type == null;
+        if (type != null ? !type.equals(column.type) : column.type != null)
+            return false;
+        return defaultValue != null ? defaultValue.equals(column.defaultValue) : column.defaultValue == null;
     }
 
     @Override
@@ -173,6 +195,7 @@ public class Column {
         int result = tableName != null ? tableName.hashCode() : 0;
         result = 31 * result + (columnName != null ? columnName.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
         result = 31 * result + (primaryKey ? 1 : 0);
         result = 31 * result + (notNull ? 1 : 0);
         result = 31 * result + (autoIncrement ? 1 : 0);
@@ -182,6 +205,7 @@ public class Column {
         result = 31 * result + (writable ? 1 : 0);
         result = 31 * result + (signed ? 1 : 0);
         result = 31 * result + index;
+        result = 31 * result + length;
 
         return result;
     }

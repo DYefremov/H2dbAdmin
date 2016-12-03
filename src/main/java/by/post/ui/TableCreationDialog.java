@@ -22,7 +22,7 @@ public class TableCreationDialog extends Dialog<Table> {
 
     private TableCreationDialogController controller;
 
-    private static final Logger logger = LogManager.getLogger(SettingsDialog.class);
+    private static final Logger logger = LogManager.getLogger(TableCreationDialog.class);
 
     public TableCreationDialog() {
         init();
@@ -36,7 +36,7 @@ public class TableCreationDialog extends Dialog<Table> {
             Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
             stage.setIconified(false);
         } catch (IOException e) {
-            logger.error("RecoveryToolDialog error[init]: " + e);
+            logger.error("TableCreationDialog error[init]: " + e);
         }
         //Consume ok button event if canceled in confirmation dialog
         final Button okButton = (Button) getDialogPane().lookupButton(ButtonType.OK);
