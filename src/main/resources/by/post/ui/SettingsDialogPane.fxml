@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<DialogPane headerText="Settings" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.SettingsDialogController">
+   <buttonTypes>
+      <ButtonType fx:constant="CANCEL" />
+   </buttonTypes>
+   <content>
+      <HBox alignment="CENTER_LEFT" spacing="2.0" style="-fx-background-color: lightgray;">
+         <ListView fx:id="settingsList" maxWidth="-Infinity" minWidth="-Infinity" onKeyReleased="#onSettingsKeyReleased" onMouseClicked="#onSettingsMouseClicked" prefWidth="150.0">
+            <items>
+               <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Database" />
+                  <String fx:value="User interface" />
+               </FXCollections>
+            </items>
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+            <padding>
+               <Insets right="1.0" />
+            </padding>
+         </ListView>
+         <VBox fx:id="content" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="490.0" style="-fx-background-image: url(/img/logo.png); -fx-background-size: stretch;">
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
+            <padding>
+               <Insets right="10.0" />
+            </padding></VBox>
+         <padding>
+            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+   </content>
+</DialogPane>

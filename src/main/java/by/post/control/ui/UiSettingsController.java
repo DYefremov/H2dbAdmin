@@ -3,6 +3,8 @@ package by.post.control.ui;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * @author Dmitriy V.Yefremov

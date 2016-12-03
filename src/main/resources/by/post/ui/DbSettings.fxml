@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DbSettingsController">
+<GridPane xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DbSettingsController">
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="150.0" minWidth="-Infinity" prefWidth="150.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="-Infinity" prefWidth="170.0" />
@@ -56,7 +56,7 @@
                 <Insets left="10.0" />
             </GridPane.margin>
         </CheckBox>
-        <Button mnemonicParsing="false" onAction="#onSaveAction" prefHeight="25.0" prefWidth="75.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="4">
+        <Button mnemonicParsing="false" onAction="#onSaveAction" prefHeight="25.0" prefWidth="85.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="4">
             <GridPane.margin>
                 <Insets left="70.0" />
             </GridPane.margin>
@@ -66,7 +66,7 @@
         </Button>
         <ComboBox fx:id="driver" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
         <PasswordField fx:id="maskedPassword" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <Label text="Database columnName:" GridPane.rowIndex="1">
+        <Label text="Database Name:" GridPane.rowIndex="1">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>

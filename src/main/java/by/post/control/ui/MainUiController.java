@@ -111,10 +111,6 @@ public class MainUiController {
         openNewDatabase();
     }
 
-    public void onSettings() throws IOException {
-        setCenter("SettingsPane.fxml");
-    }
-
     @FXML
     public void onExit() {
         closeProgram();
@@ -130,13 +126,8 @@ public class MainUiController {
     }
 
     @FXML
-    public void onRecoveryTool() {
-        new RecoveryToolDialog().showAndWait();
-    }
-
-    @FXML
-    public void onSearchTool() {
-        showSearchTool();
+    public void onExplorer() {
+        mainPane.setCenter(mainSplitPane);
     }
 
     @FXML
@@ -145,8 +136,19 @@ public class MainUiController {
     }
 
     @FXML
-    public void onExplorer() {
+    public void onSearchTool() {
         mainPane.setCenter(mainSplitPane);
+        showSearchTool();
+    }
+
+    @FXML
+    public void onRecoveryTool() {
+        new RecoveryToolDialog().showAndWait();
+    }
+
+    @FXML
+    public void onSettings() throws IOException {
+        new SettingsDialog().showAndWait();
     }
 
     /**
