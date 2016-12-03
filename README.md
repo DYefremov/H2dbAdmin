@@ -1,5 +1,5 @@
 # H2dbAdmin
-GUI application for use with H2 database based on JavaFX library. 
+Small GUI application for working with a data H2 by JavaFX libraries. 
 For correct operation requires the latest version of Java 8.
 
 
