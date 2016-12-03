@@ -137,7 +137,7 @@ public class MainUiController {
 
     @FXML
     public void onSearchTool() {
-        mainPane.setCenter(mainSplitPane);
+        onExplorer();
         showSearchTool();
     }
 
@@ -331,20 +331,11 @@ public class MainUiController {
         if (result.isPresent()) {
             PropertiesController.setProperties(result.get());
 
-            Task<Void> task = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            init();
-                        }
-                    });
-                    return null;
-                }
-            };
-
-            new Thread(task).start();
+            Platform.runLater(() -> {
+                mainTable.getItems().clear();
+                mainTable.getColumns().clear();
+                init();
+            });
         }
     }
 
@@ -360,16 +351,8 @@ public class MainUiController {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-
                 Table table = dbControl.getTable((String) item.getValue(), item.getType());
-
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        selectTable(table);
-                    }
-                });
-
+                Platform.runLater(() -> selectTable(table));
                 return null;
             }
         };
@@ -502,16 +485,13 @@ public class MainUiController {
      */
     private void showIndicator(boolean show) {
 
-        SimpleProgressIndicator sp = SimpleProgressIndicator.getInstance();
+        Platform.runLater(() -> {
+            SimpleProgressIndicator sp = SimpleProgressIndicator.getInstance();
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (!sp.isShowing() && show) {
-                    sp.showAndWait();
-                } else if (sp.isShowing() && !show){
-                    sp.hide();
-                }
+            if (!sp.isShowing() && show) {
+                sp.showAndWait();
+            } else {
+                sp.hide();
             }
         });
     }

@@ -22,6 +22,7 @@ public class SettingsDialogController {
     private VBox content;
     @FXML
     private ListView<String> settingsList;
+
     private Node dbSettings;
     private Node uiSettings;
 
@@ -90,14 +91,12 @@ public class SettingsDialogController {
      * @param node
      */
     private void setContent(Node node) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (!content.getChildren().isEmpty()) {
-                    content.getChildren().clear();
-                }
-                content.getChildren().add(node);
+
+        Platform.runLater(() -> {
+            if (!content.getChildren().isEmpty()) {
+                content.getChildren().clear();
             }
+            content.getChildren().add(node);
         });
     }
 

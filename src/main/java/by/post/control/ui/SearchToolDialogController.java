@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.StageStyle;
+import javafx.stage.Stage;
 
 import java.util.List;
 
@@ -115,12 +115,9 @@ public class SearchToolDialogController {
             @Override
             protected Boolean call() throws Exception {
                 List<String> tablesNames = searchProvider.getSearchResult(searchField.getText());
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        listView.getItems().clear();
-                        listView.getItems().addAll(FXCollections.observableList(tablesNames));
-                    }
+                Platform.runLater(() -> {
+                    listView.getItems().clear();
+                    listView.getItems().addAll(FXCollections.observableList(tablesNames));
                 });
 
                 return !tablesNames.isEmpty();
@@ -172,7 +169,9 @@ public class SearchToolDialogController {
     @FXML
     private void initialize() {
         //Remove icon from window
-        dialog.initStyle(StageStyle.UTILITY);
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.setIconified(false);
+
         searchProvider = new SearchProvider();
     }
 
@@ -229,15 +228,12 @@ public class SearchToolDialogController {
      */
     private void select(int index) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                mainTableView.scrollTo(index);
-                mainTableView.layout();
-                mainTableView.getSelectionModel().clearSelection();
-                mainTableView.getSelectionModel().select(index);
-                mainTableView.getFocusModel().focus(index);
-            }
+        Platform.runLater(() -> {
+            mainTableView.scrollTo(index);
+            mainTableView.layout();
+            mainTableView.getSelectionModel().clearSelection();
+            mainTableView.getSelectionModel().select(index);
+            mainTableView.getFocusModel().focus(index);
         });
     }
 
