@@ -9,12 +9,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableCreationDialogController">
+<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableCreationDialogController">
    <buttonTypes>
       <ButtonType fx:constant="OK" />
       <ButtonType fx:constant="CANCEL" />
@@ -53,17 +54,35 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </Label>
-                  <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="200.0">
+                  <TableView fx:id="tableView" editable="true" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
                       <placeholder>
                           <Label text="Add columns!" />
                       </placeholder>
                     <columns>
-                      <TableColumn fx:id="nameColumn" prefWidth="106.0" sortable="false" text="Name" />
-                        <TableColumn fx:id="typeColumn" prefWidth="75.0" sortable="false" text="Type" />
-                        <TableColumn fx:id="lengthColumn" prefWidth="75.0" sortable="false" text="Length" />
-                        <TableColumn fx:id="keyColumn" prefWidth="75.0" sortable="false" text="Key" />
-                        <TableColumn fx:id="notNullColumn" prefWidth="70.0" sortable="false" text="Not null" />
-                        <TableColumn fx:id="defaultValueColumn" prefWidth="89.0" sortable="false" text="Default value" />
+                        <TableColumn fx:id="nameColumn" prefWidth="106.0" sortable="false" text="Name">
+                            <cellValueFactory><PropertyValueFactory property="columnName" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="typeColumn" prefWidth="75.0" sortable="false" text="Type">
+                            <cellValueFactory><PropertyValueFactory property="type" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="lengthColumn" maxWidth="65.0" minWidth="65.0" prefWidth="65.0" sortable="false" text="Length">
+                            <cellValueFactory><PropertyValueFactory property="length" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="keyColumn" maxWidth="65.0" minWidth="65.0" prefWidth="65.0" sortable="false" text="Key">
+                            <cellValueFactory><PropertyValueFactory property="primaryKey" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="notNullColumn" maxWidth="65.0" minWidth="65.0" prefWidth="65.0" sortable="false" text="Not null">
+                            <cellValueFactory><PropertyValueFactory property="notNull" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="defaultValueColumn" prefWidth="89.0" sortable="false" text="Default value">
+                            <cellValueFactory><PropertyValueFactory property="defaultValue" />
+                            </cellValueFactory>
+                        </TableColumn>
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

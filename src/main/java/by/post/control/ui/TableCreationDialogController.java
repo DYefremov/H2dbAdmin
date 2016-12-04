@@ -1,14 +1,20 @@
 package by.post.control.ui;
 
-import by.post.data.*;
+import by.post.data.Column;
+import by.post.data.ColumnDataType;
+import by.post.data.Table;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
 
 
 /**
+ *The controller class to build a new table.
+ *
  * @author Dmitriy V.Yefremov
  */
 public class TableCreationDialogController {
@@ -20,11 +26,11 @@ public class TableCreationDialogController {
     @FXML
     private TableColumn<Column, String> typeColumn;
     @FXML
-    private TableColumn<Column, String> lengthColumn;
+    private TableColumn<Column, Integer> lengthColumn;
     @FXML
-    private TableColumn<Column, String> keyColumn;
+    private TableColumn<Column, Boolean> keyColumn;
     @FXML
-    private TableColumn<Column, String> notNullColumn;
+    private TableColumn<Column, Boolean> notNullColumn;
     @FXML
     private TableColumn<Column, String> defaultValueColumn;
     @FXML
@@ -64,7 +70,7 @@ public class TableCreationDialogController {
 
     @FXML
     private void initialize() {
-        initColumns();
+        initColumnsCellFactory();
     }
 
     /**
@@ -80,31 +86,20 @@ public class TableCreationDialogController {
     }
 
     /**
-     *
+     * Initialise CellFactory for columns
+     * Cell value factory is specified in fxml file!!!
      */
-    private void initColumns() {
+    private void initColumnsCellFactory() {
 
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("columnName"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        typeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-
-        keyColumn.setCellValueFactory(new PropertyValueFactory<>("primaryKey"));
-//        keyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-
-        notNullColumn.setCellValueFactory(new PropertyValueFactory<>("notNull"));
-//        notNullColumn.setCellFactory(TextFieldTableCell.<Column>forTableColumn());
-
-        lengthColumn.setCellValueFactory(new PropertyValueFactory<>("length"));
-//        lengthColumn.setCellFactory(TextFieldTableCell.<Column>forTableColumn());
-
-        defaultValueColumn.setCellValueFactory(new PropertyValueFactory<>("defaultValue"));
-        defaultValueColumn.setCellFactory(TextFieldTableCell.<Column>forTableColumn());
+        typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(ColumnDataType.getTypes().values())));
+        lengthColumn.setCellFactory(TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter()));
+        keyColumn.setCellFactory(CheckBoxTableCell.forTableColumn(keyColumn));
+        notNullColumn.setCellFactory(CheckBoxTableCell.forTableColumn(notNullColumn));
+        defaultValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
     /**
-     *
      * @return default column
      */
     private Column getColumn() {
@@ -117,15 +112,44 @@ public class TableCreationDialogController {
     }
 
     /**
-     * @param column
+     * Custom implementation of IntegerStringConverter
      */
-    private void setColumnGraphic(TableColumn column, Node node) {
+    class CustomIntegerStringConverter extends IntegerStringConverter {
 
-        column.setCellFactory(param -> {
-            TableCell cell = new TableCell();
-            cell.setGraphic(node);
-            return cell;
-        });
+        private int defaultValue;
+
+        public CustomIntegerStringConverter() {
+
+        }
+
+        public CustomIntegerStringConverter(int defaultValue) {
+            this.defaultValue = defaultValue;
+        }
+
+        @Override
+        public Integer fromString(String value) {
+
+            if (value == null ) {
+                return defaultValue > 0 ? defaultValue : null;
+            }
+
+            value = value.trim();
+
+            if (value.length() < 1) {
+                return defaultValue> 0 ? defaultValue : null;
+            }
+
+            if (!value.matches("\\d+")) {
+                new Alert(Alert.AlertType.ERROR, "Please specify correct value!").showAndWait();
+                return defaultValue > 0 ? defaultValue : null;
+            }
+
+            return Integer.valueOf(value);
+        }
     }
+
 }
+
+
+
 
