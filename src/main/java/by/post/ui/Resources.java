@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
  */
 public class Resources {
     // Path for main logo image
-    public static final String LOGO_PATH = "/img/logo.jpg";
+    public static final String LOGO_PATH = "/img/logo_mini.png";
     // Title for window
     public static final String TITLE = "H2dbAdmin";
     // Min height of app window

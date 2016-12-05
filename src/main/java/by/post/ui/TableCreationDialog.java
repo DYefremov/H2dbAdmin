@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,7 @@ public class TableCreationDialog extends Dialog<Table> {
             this.setDialogPane(loader.load());
             controller = loader.getController();
             Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
-            stage.setIconified(false);
+            stage.getIcons().add(new Image(Resources.LOGO_PATH));
         } catch (IOException e) {
             logger.error("TableCreationDialog error[init]: " + e);
         }

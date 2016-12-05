@@ -2,6 +2,7 @@ package by.post.ui;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Dialog;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +24,7 @@ public class SettingsDialog extends Dialog {
         try {
             this.setDialogPane(FXMLLoader.load(SettingsDialog.class.getResource("SettingsDialogPane.fxml")));
             Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
-            stage.setIconified(false);
+            stage.getIcons().add(new Image(Resources.LOGO_PATH));
         } catch (IOException e) {
             logger.error("RecoveryToolDialog error[init]: " + e);
         }

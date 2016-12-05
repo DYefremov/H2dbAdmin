@@ -465,6 +465,8 @@ public class MainUiController {
         try {
             FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("SearchToolDialog.fxml"));
             Dialog dialog = loader.load();
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(Resources.LOGO_PATH));
             SearchToolDialogController controller = loader.getController();
             controller.setTablesTreeItem(tablesTreeItem);
             controller.setTableTree(tableTree);
