@@ -1,5 +1,8 @@
 package by.post.data;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 /**
  * @author Dmitriy V.Yefremov
  */
@@ -8,10 +11,10 @@ public class Column {
     private String tableName;
     private String columnName;
     private String type;
+    private BooleanProperty autoIncrement = new SimpleBooleanProperty(false);
+    private BooleanProperty primaryKey = new SimpleBooleanProperty(false);
+    private BooleanProperty notNull = new SimpleBooleanProperty(false);
     private String defaultValue;
-    private boolean primaryKey;
-    private boolean notNull;
-    private boolean autoIncrement;
     private boolean readOnly;
     private boolean caseSensitive;
     private boolean searchable;
@@ -55,28 +58,48 @@ public class Column {
         this.type = type;
     }
 
-    public boolean isPrimaryKey() {
-        return primaryKey;
-    }
-
-    public void setPrimaryKey(boolean primaryKey) {
-        this.primaryKey = primaryKey;
-    }
-
-    public boolean isNotNull() {
-        return notNull;
-    }
-
-    public void setNotNull(boolean notNull) {
-        this.notNull = notNull;
-    }
-
     public boolean isAutoIncrement() {
+        return autoIncrement.get();
+    }
+
+    public BooleanProperty autoIncrementProperty() {
         return autoIncrement;
     }
 
     public void setAutoIncrement(boolean autoIncrement) {
-        this.autoIncrement = autoIncrement;
+        this.autoIncrement.set(autoIncrement);
+    }
+
+    public boolean isPrimaryKey() {
+        return primaryKey.get();
+    }
+
+    public BooleanProperty primaryKeyProperty() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(boolean primaryKey) {
+        this.primaryKey.set(primaryKey);
+    }
+
+    public boolean isNotNull() {
+        return notNull.get();
+    }
+
+    public BooleanProperty notNullProperty() {
+        return notNull;
+    }
+
+    public void setNotNull(boolean notNull) {
+        this.notNull.set(notNull);
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     public boolean isReadOnly() {
@@ -123,12 +146,8 @@ public class Column {
         return index;
     }
 
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public int getLength() {
@@ -139,20 +158,17 @@ public class Column {
         this.length = length;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
     @Override
     public String toString() {
+
         return "Column{" +
                 "tableName='" + tableName + '\'' +
                 ", columnName='" + columnName + '\'' +
                 ", type='" + type + '\'' +
-                ", defaultValue='" + defaultValue + '\'' +
+                ", autoIncrement=" + autoIncrement +
                 ", primaryKey=" + primaryKey +
                 ", notNull=" + notNull +
-                ", autoIncrement=" + autoIncrement +
+                ", defaultValue='" + defaultValue + '\'' +
                 ", readOnly=" + readOnly +
                 ", caseSensitive=" + caseSensitive +
                 ", searchable=" + searchable +
@@ -165,14 +181,12 @@ public class Column {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         Column column = (Column) o;
 
-        if (primaryKey != column.primaryKey) return false;
-        if (notNull != column.notNull) return false;
-        if (autoIncrement != column.autoIncrement) return false;
         if (readOnly != column.readOnly) return false;
         if (caseSensitive != column.caseSensitive) return false;
         if (searchable != column.searchable) return false;
@@ -186,6 +200,12 @@ public class Column {
             return false;
         if (type != null ? !type.equals(column.type) : column.type != null)
             return false;
+        if (autoIncrement != null ? !autoIncrement.equals(column.autoIncrement) : column.autoIncrement != null)
+            return false;
+        if (primaryKey != null ? !primaryKey.equals(column.primaryKey) : column.primaryKey != null)
+            return false;
+        if (notNull != null ? !notNull.equals(column.notNull) : column.notNull != null)
+            return false;
         return defaultValue != null ? defaultValue.equals(column.defaultValue) : column.defaultValue == null;
     }
 
@@ -195,10 +215,10 @@ public class Column {
         int result = tableName != null ? tableName.hashCode() : 0;
         result = 31 * result + (columnName != null ? columnName.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (autoIncrement != null ? autoIncrement.hashCode() : 0);
+        result = 31 * result + (primaryKey != null ? primaryKey.hashCode() : 0);
+        result = 31 * result + (notNull != null ? notNull.hashCode() : 0);
         result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
-        result = 31 * result + (primaryKey ? 1 : 0);
-        result = 31 * result + (notNull ? 1 : 0);
-        result = 31 * result + (autoIncrement ? 1 : 0);
         result = 31 * result + (readOnly ? 1 : 0);
         result = 31 * result + (caseSensitive ? 1 : 0);
         result = 31 * result + (searchable ? 1 : 0);
