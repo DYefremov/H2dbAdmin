@@ -101,7 +101,7 @@ public class LobDataManager {
      */
     private void saveData(File file, ResultSet resultSet, String columnName, boolean isBlob) {
 
-        try (OutputStream os = new FileOutputStream(file); InputStream is = isBlob ?
+        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file)); InputStream is = isBlob ?
                 resultSet.getBinaryStream(columnName) : resultSet.getAsciiStream(columnName) ){
             int b;
             while ((b = is.read()) != -1) {
