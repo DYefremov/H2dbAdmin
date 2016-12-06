@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableCreationDialogController">
+<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableCreationDialogController">
    <buttonTypes>
       <ButtonType fx:constant="OK" />
       <ButtonType fx:constant="CANCEL" />
@@ -59,27 +59,27 @@
                           <Label text="Add columns!" />
                       </placeholder>
                     <columns>
-                        <TableColumn fx:id="nameColumn" prefWidth="106.0" sortable="false" text="Name">
+                        <TableColumn fx:id="nameColumn" onEditCommit="#onEditName" prefWidth="106.0" sortable="false" text="Name">
                             <cellValueFactory><PropertyValueFactory property="columnName" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="typeColumn" prefWidth="75.0" sortable="false" text="Type">
+                        <TableColumn fx:id="typeColumn" onEditCommit="#onEditType" prefWidth="75.0" sortable="false" text="Type">
                             <cellValueFactory><PropertyValueFactory property="type" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="lengthColumn" maxWidth="65.0" minWidth="65.0" prefWidth="65.0" sortable="false" text="Length">
+                        <TableColumn fx:id="lengthColumn" maxWidth="65.0" minWidth="65.0" onEditCommit="#onEditLength" prefWidth="65.0" sortable="false" text="Length">
                             <cellValueFactory><PropertyValueFactory property="length" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="keyColumn" maxWidth="65.0" minWidth="65.0" prefWidth="65.0" sortable="false" text="Key">
+                        <TableColumn fx:id="keyColumn" maxWidth="65.0" minWidth="65.0" onEditCommit="#onEditKey" prefWidth="65.0" sortable="false" text="Key">
                             <cellValueFactory><PropertyValueFactory property="primaryKey" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="notNullColumn" maxWidth="65.0" minWidth="65.0" prefWidth="65.0" sortable="false" text="Not null">
+                        <TableColumn fx:id="notNullColumn" maxWidth="65.0" minWidth="65.0" onEditCommit="#onEditNotNull" prefWidth="65.0" sortable="false" text="Not null">
                             <cellValueFactory><PropertyValueFactory property="notNull" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="defaultValueColumn" prefWidth="89.0" sortable="false" text="Default value">
+                        <TableColumn fx:id="defaultValueColumn" onEditCommit="#onEditDefaultValue" prefWidth="89.0" sortable="false" text="Default value">
                             <cellValueFactory><PropertyValueFactory property="defaultValue" />
                             </cellValueFactory>
                         </TableColumn>

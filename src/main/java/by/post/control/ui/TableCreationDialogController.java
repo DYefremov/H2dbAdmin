@@ -11,9 +11,12 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
- *The controller class to build a new table.
+ * The controller class to build a new table.
  *
  * @author Dmitriy V.Yefremov
  */
@@ -38,8 +41,6 @@ public class TableCreationDialogController {
     @FXML
     private DialogPane dialogPane;
 
-    private Table table;
-
     public TableCreationDialogController() {
 
     }
@@ -61,11 +62,46 @@ public class TableCreationDialogController {
         tableView.getItems().remove(selectedIndex);
     }
 
+    @FXML
+    public void onEditName(TableColumn.CellEditEvent<Column, String> event) {
+        event.getRowValue().setColumnName(event.getNewValue());
+    }
+
+    @FXML
+    public void onEditType(TableColumn.CellEditEvent<Column, String> event) {
+        event.getRowValue().setType(event.getNewValue());
+    }
+
+    @FXML
+    public void onEditLength(TableColumn.CellEditEvent<Column, Integer> event) {
+        event.getRowValue().setLength(event.getNewValue());
+    }
+
+    @FXML
+    public void onEditKey(TableColumn.CellEditEvent<Column, Boolean> event) {
+        event.getRowValue().setPrimaryKey(event.getNewValue());
+    }
+
+    @FXML
+    public void onEditNotNull(TableColumn.CellEditEvent<Column, Boolean> event) {
+        event.getRowValue().setNotNull(event.getNewValue());
+    }
+
+    public void onEditDefaultValue(TableColumn.CellEditEvent<Column, String> event) {
+        event.getRowValue().setDefaultValue(event.getNewValue());
+    }
+
     /**
-     * @return
+     * @return table
      */
     public Table getTable() {
-        return table == null ? new Table(tableName.getText()) : table;
+
+        Table table = new Table(tableName.getText());
+        table.setColumns(tableView.getItems());
+
+        System.out.println(table);
+
+        return table;
     }
 
     @FXML
@@ -74,14 +110,12 @@ public class TableCreationDialogController {
     }
 
     /**
-     *
+     * Add new row (Column)
      */
     private void addRow() {
 
         int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
-        selectedIndex = selectedIndex == -1 ? ++selectedIndex : selectedIndex;
-
-        tableView.getItems().add(selectedIndex, getColumn());
+        tableView.getItems().add(++selectedIndex, getColumn());
         tableView.getSelectionModel().select(selectedIndex, null);
     }
 
@@ -129,14 +163,14 @@ public class TableCreationDialogController {
         @Override
         public Integer fromString(String value) {
 
-            if (value == null ) {
+            if (value == null) {
                 return defaultValue > 0 ? defaultValue : null;
             }
 
             value = value.trim();
 
             if (value.length() < 1) {
-                return defaultValue> 0 ? defaultValue : null;
+                return defaultValue > 0 ? defaultValue : null;
             }
 
             if (!value.matches("\\d+")) {

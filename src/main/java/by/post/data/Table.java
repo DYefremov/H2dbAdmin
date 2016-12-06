@@ -56,6 +56,7 @@ public class Table implements Data {
         return "Table{" +
                 "name='" + name + '\'' +
                 ", primaryKey='" + primaryKey + '\'' +
+                ", columns=" + columns +
                 ", rows=" + rows +
                 '}';
     }
