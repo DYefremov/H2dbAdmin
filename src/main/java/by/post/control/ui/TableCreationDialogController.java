@@ -4,15 +4,13 @@ import by.post.data.Column;
 import by.post.data.ColumnDataType;
 import by.post.data.Table;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.IntegerStringConverter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -87,6 +85,7 @@ public class TableCreationDialogController {
         event.getRowValue().setNotNull(event.getNewValue());
     }
 
+    @FXML
     public void onEditDefaultValue(TableColumn.CellEditEvent<Column, String> event) {
         event.getRowValue().setDefaultValue(event.getNewValue());
     }
@@ -98,8 +97,6 @@ public class TableCreationDialogController {
 
         Table table = new Table(tableName.getText());
         table.setColumns(tableView.getItems());
-
-        System.out.println(table);
 
         return table;
     }
