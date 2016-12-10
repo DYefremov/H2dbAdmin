@@ -139,7 +139,6 @@ public class TableCreationDialogController {
     private Column getColumn() {
 
         Column column = new Column(tableName.getText(), "ColumnName", ColumnDataType.VARCHAR.name());
-        column.setDefaultValue("value");
         column.setLength(255);
 
         return column;

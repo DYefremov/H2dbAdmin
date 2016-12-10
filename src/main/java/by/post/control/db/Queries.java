@@ -3,6 +3,7 @@ package by.post.control.db;
 import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.data.Row;
+import by.post.data.Table;
 
 import java.util.List;
 
@@ -28,11 +29,36 @@ public class Queries {
     }
 
     /**
-     * @param tableName
-     * @return
+     * @param table
+     * @return string query for adding table
      */
-    public static String createTable(String tableName) {
-        return "CREATE TABLE " + tableName.toUpperCase();
+    public static String createTable(Table table) {
+
+        List<Column> columns = table.getColumns();
+        String tableName = table.getName();
+
+        if (columns == null || columns.isEmpty()) {
+            return    "CREATE TABLE " + tableName;
+        }
+
+        StringBuilder sb = new StringBuilder("CREATE TABLE " + tableName + "(\n");
+        int lastIndex = columns.size() - 1;
+
+        columns.forEach(column -> {
+
+            int length = column.getLength();
+            String type = column.getType();
+            String defValue = column.getDefaultValue();
+
+            sb.append(column.getColumnName());
+            sb.append(length > 0 ? " " + type + "(" + length +")" : " " + type);
+            sb.append(defValue == null ? "" : " DEFAULT " + "'" + defValue + "'");
+            sb.append(column.isNotNull() ? " NOT NULL" : "");
+            sb.append(column.isPrimaryKey() ? " PRIMARY KEY" : "");
+            sb.append(columns.indexOf(column) != lastIndex ? ",\n" : "\n)");
+        });
+
+        return sb.toString();
     }
 
     /**

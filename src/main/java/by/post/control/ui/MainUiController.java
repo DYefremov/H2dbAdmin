@@ -416,7 +416,7 @@ public class MainUiController {
         Optional<Table> result =  new TableCreationDialog().showAndWait();
 
         if (result.isPresent()) {
-            tableEditor.addTable(tableTree, result.get().getName(), getItemImage("table.png"), TableType.TABLE);
+            tableEditor.addTable(tableTree, result.get(), getItemImage("table.png"), TableType.TABLE);
         }
     }
 
@@ -428,7 +428,7 @@ public class MainUiController {
         Optional<String> result = new InputDialog("Please, write view name!", "New_view", false).showAndWait();
 
         if (result.isPresent()) {
-            tableEditor.addTable(tableTree, result.get(), getItemImage("view.png"), TableType.VIEW);
+            tableEditor.addTable(tableTree, new Table(result.get()), getItemImage("view.png"), TableType.VIEW);
         }
     }
 

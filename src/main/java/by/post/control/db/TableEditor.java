@@ -4,6 +4,7 @@ import by.post.control.ui.TypedTreeItem;
 import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.data.Row;
+import by.post.data.Table;
 import by.post.ui.ColumnDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -94,15 +95,17 @@ public class TableEditor {
      *
      * @param tableTree
      */
-    public void addTable(TreeView tableTree, String name, ImageView icon, TableType type) {
+    public void addTable(TreeView tableTree, Table table, ImageView icon, TableType type) {
 
         if (type.equals(TableType.VIEW)) {
-            new Alert(Alert.AlertType.INFORMATION, "Not implemented!").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
             return;
         }
 
         try {
-            dbControl.update(Queries.createTable(name));
+            String name = table.getName();
+
+            dbControl.update(Queries.createTable(table));
 
             TypedTreeItem treeItem = new TypedTreeItem(name, icon, type);
             ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
