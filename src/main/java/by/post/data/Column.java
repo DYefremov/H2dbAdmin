@@ -23,7 +23,6 @@ public class Column {
     private int index;
     private int length;
 
-
     public Column() {
 
     }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
@@ -10,7 +12,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.SqlConsoleController">
+<GridPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.SqlConsoleController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -19,10 +21,14 @@
       <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" style="-fx-background-color: black;">
          <items>
             <TextArea fx:id="console" onKeyPressed="#onEnterKey" styleClass="console" stylesheets="@Ui.css" />
-            <TextArea fx:id="consoleOut" editable="false" styleClass="console-out" stylesheets="@Ui.css" />
+             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" visible="false">
+                 <placeholder>
+                     <Label fx:id="viewLabel" text=" " />
+                 </placeholder>
+             </TableView>
          </items>
       </SplitPane>
       <ToolBar prefHeight="25.0" prefWidth="200.0" GridPane.rowIndex="1">

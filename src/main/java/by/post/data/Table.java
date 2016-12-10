@@ -1,5 +1,6 @@
 package by.post.data;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -62,7 +63,7 @@ public class Table implements Data {
     }
 
     @Override
-    public Object getData() {
+    public Collection getData() {
         return rows;
     }
 }

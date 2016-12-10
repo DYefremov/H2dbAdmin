@@ -9,11 +9,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.DataFormat;
 import javafx.util.converter.IntegerStringConverter;
 
 
 /**
- * The controller class to build a new table.
+ * The controller class for table build dialog.
  *
  * @author Dmitriy V.Yefremov
  */
@@ -37,6 +38,8 @@ public class TableCreationDialogController {
     private TextField tableName;
     @FXML
     private DialogPane dialogPane;
+
+    private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
     public TableCreationDialogController() {
 
@@ -102,6 +105,7 @@ public class TableCreationDialogController {
 
     @FXML
     private void initialize() {
+
         initColumnsCellFactory();
     }
 

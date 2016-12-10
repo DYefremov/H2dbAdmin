@@ -1,15 +1,15 @@
 package by.post.control.ui;
 
-import by.post.control.db.*;
+import by.post.control.db.DbControl;
+import by.post.control.db.DbController;
+import by.post.control.db.TableBuilder;
+import by.post.control.db.UpdateCommands;
 import by.post.data.Cell;
-import by.post.data.Row;
-import by.post.data.Table;
+import by.post.data.Column;
 import by.post.ui.ConfirmationDialog;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -20,25 +20,21 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
+ * @deprecated changed data output in sql console (from TextArea into TableView)
+ *
  * @author Dmitriy V.Yefremov
  */
-public class SqlConsoleController {
+public class SqlConsoleControllerOld {
 
     @FXML
     private TextArea console;
     @FXML
-    private TableView tableView;
-    @FXML
-    private Label viewLabel;
+    private TextArea consoleOut;
 
     private DbControl dbControl;
-    private TableBuilder tableBuilder;
     private List<String> queriesHistory;
     private int historyPosition;
 
@@ -48,7 +44,7 @@ public class SqlConsoleController {
 
     private static final Logger logger = LogManager.getLogger(SqlConsoleControllerOld.class);
 
-    public SqlConsoleController() {
+    public SqlConsoleControllerOld() {
 
     }
 
@@ -64,31 +60,9 @@ public class SqlConsoleController {
 
         if (result.get() == ButtonType.OK) {
             logger.info("Execute query: \n" + query);
-            setData(executeQuery(query));
+            consoleOut.appendText(executeQuery(query));
             console.clear();
         }
-    }
-
-    /**
-     * @param table
-     */
-    private void setData(Table table) {
-
-        List<Row> rows = table.getRows();
-
-        boolean hasData = rows != null && !rows.isEmpty();
-        setOutputMessage(hasData ? " " : ERROR_MESSAGE);
-
-        if (!hasData) {
-            return;
-        }
-
-        TableDataResolver resolver = new TableDataResolver(table);
-
-        Platform.runLater(() -> {
-            tableView.getColumns().addAll(resolver.getTableColumns());
-            tableView.setItems(resolver.getItems());
-        });
     }
 
     @FXML
@@ -98,7 +72,7 @@ public class SqlConsoleController {
 
         if (result.get() == ButtonType.OK) {
             console.clear();
-            clearOutput();
+            consoleOut.clear();
         }
     }
 
@@ -151,7 +125,6 @@ public class SqlConsoleController {
 
         dbControl = DbController.getInstance();
         queriesHistory = new ArrayList<>(HISTORY_SIZE + 1);
-        tableBuilder = new TableBuilder();
     }
 
     /**
@@ -159,7 +132,7 @@ public class SqlConsoleController {
      * @return result as string
      * @throws SQLException
      */
-    private Table executeQuery(String query) {
+    private String executeQuery(String query) {
         // Store queries
         queriesHistory.add(query);
 
@@ -167,58 +140,72 @@ public class SqlConsoleController {
             queriesHistory.remove(0);
         }
 
-        Table table = new Table();
-        clearOutput();
+        consoleOut.clear();
 
+        String result = null;
         boolean isUpdateQuery = isUpdateQuery(query);
 
         try (Statement statement = isUpdateQuery ? dbControl.update(query) :  dbControl.execute(query)) {
 
             if (isUpdateQuery) {
-                String message = statement.getUpdateCount() != -1 ? DONE_MESSAGE : ERROR_MESSAGE;
-                setOutputMessage(message);
-                return table;
+                return statement.getUpdateCount() != -1 ? DONE_MESSAGE : ERROR_MESSAGE;
             }
 
             if (statement == null || statement.getResultSet() == null) {
-                setOutputMessage(ERROR_MESSAGE);
-                return table;
+                return ERROR_MESSAGE;
             }
 
             try (ResultSet resultSet = statement.getResultSet()) {
-                ResultSetMetaData rsMetaData = resultSet.getMetaData();
-                table.setRows(tableBuilder.getRows(resultSet));
-                table.setColumns( tableBuilder.getColumns(rsMetaData));
+                result = getFormattedOut(resultSet);
             }
         } catch (SQLException e) {
             logger.error("SqlConsoleControllerOld error in executeQuery: " + e);
         }
 
-        return table;
+        return result != null ? result : ERROR_MESSAGE;
     }
 
     /**
-     * @param message
+     * @param resultSet
+     * @return formatted output
      */
-    private void setOutputMessage(String message) {
+    private String getFormattedOut(ResultSet resultSet) throws SQLException {
 
-        Platform.runLater(() -> {
-            viewLabel.setText(message);
-            tableView.setVisible(true);
-        });
-    }
+        TableBuilder tableBuilder = new TableBuilder();
 
-    /**
-     *Clear table view
-     */
-    private void clearOutput() {
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        List<Column> columnsHeader = tableBuilder.getColumns(metaData);
+        List<List<Cell>> columnsData = new ArrayList<>();
 
-        Platform.runLater(() -> {
-            tableView.getColumns().clear();
-            tableView.getItems().clear();
-            tableView.refresh();
-            tableView.setVisible(false);
-        });
+        if (columnsHeader != null || !columnsHeader.isEmpty()) {
+            columnsHeader.forEach(column -> {
+                List<Cell> headerCells = new ArrayList<>();
+                String name = column.getColumnName();
+                headerCells.add(new Cell(name, name, name));
+                columnsData.add(headerCells);
+            });
+        }
+
+        while (resultSet.next()) {
+            List<Cell> cells = tableBuilder.getCells(resultSet);
+
+            if (cells != null || cells.isEmpty()) {
+                int headerSize = columnsHeader.size();
+                cells.forEach(cell -> {
+                    int columnIndex = cells.indexOf(cell);
+
+                    if (!columnsData.isEmpty() && columnsData.size() == headerSize) {
+                        columnsData.get(columnIndex).add(cell);
+                    } else {
+                        List<Cell> column = new ArrayList<Cell>();
+                        column.add(cell);
+                        columnsData.add(columnIndex, column);
+                    }
+                });
+            }
+        }
+
+        return resolveDataOutput(columnsData);
     }
 
     /**
@@ -253,5 +240,49 @@ public class SqlConsoleController {
         return lengths;
     }
 
-}
+    /**
+     * @return prepared output string
+     */
+    private String resolveDataOutput(List<List<Cell>> columnsData) {
 
+        if (columnsData == null || columnsData.isEmpty()) {
+            return "No data for output!";
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        List<Integer> maxLengths = getMaxCellValuesLengths(columnsData);
+        List<String> cellsFormats = new ArrayList<>();
+        maxLengths.forEach(value -> cellsFormats.add("%" + ++value + "s|"));
+
+        List<Cell> cells = columnsData.get(0);
+        int headerSize = columnsData.size();
+
+        String separator = "";
+        int maxRows = cells.size() - 1;
+
+        for (Cell cell : cells) {
+            int rowIndex = cells.indexOf(cell);
+
+            for (List<Cell> row : columnsData) {
+                int columnIndex = columnsData.indexOf(row);
+                String val = String.format(cellsFormats.get(columnIndex), String.valueOf(row.get(rowIndex).getValue()));
+                stringBuilder.append(++columnIndex != headerSize ? val : val + "\n");
+            }
+            // Add  separator for the header
+            if (rowIndex == 0) {
+                int sepLength = stringBuilder.length();
+
+                if (sepLength > 0) {
+                    // Build separator for the header and bottom
+                    separator = String.format("%" + --sepLength + "s", " ").replace(' ', '-') + "\n";
+                    stringBuilder.append(separator);
+                }
+            } else if (rowIndex == maxRows) {
+                stringBuilder.append(separator);
+            }
+        }
+
+        return stringBuilder.toString();
+    }
+}
