@@ -1,7 +1,7 @@
 package by.post.ui;
 
-import by.post.control.ui.TableCreationDialogController;
-import by.post.data.Table;
+import by.post.control.ui.ViewCreationDialogController;
+import by.post.data.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -19,19 +19,19 @@ import java.util.Optional;
 /**
  * @author Dmitriy V.Yefremov
  */
-public class TableCreationDialog extends Dialog<Table> {
+public class ViewCreationDialog extends Dialog<View> {
 
-    private TableCreationDialogController controller;
+    private ViewCreationDialogController controller;
 
     private static final Logger logger = LogManager.getLogger(TableCreationDialog.class);
 
-    public TableCreationDialog() {
+    public ViewCreationDialog() {
         init();
     }
 
     private void init() {
         try {
-            FXMLLoader loader = new FXMLLoader(SettingsDialog.class.getResource("TableCreationDialogPane.fxml"));
+            FXMLLoader loader = new FXMLLoader(SettingsDialog.class.getResource("ViewCreationDialogPane.fxml"));
             this.setDialogPane(loader.load());
             controller = loader.getController();
             Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
@@ -50,7 +50,7 @@ public class TableCreationDialog extends Dialog<Table> {
 
         setResultConverter((dialogButton) -> {
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
-            return data == ButtonBar.ButtonData.OK_DONE ? controller.getTable() : null;
+            return data == ButtonBar.ButtonData.OK_DONE ? controller.getView() : null;
         });
     }
 }

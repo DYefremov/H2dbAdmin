@@ -1,10 +1,7 @@
 package by.post.control.db;
 
 import by.post.control.ui.TypedTreeItem;
-import by.post.data.Cell;
-import by.post.data.Column;
-import by.post.data.Row;
-import by.post.data.Table;
+import by.post.data.*;
 import by.post.ui.ColumnDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -79,7 +76,7 @@ public class TableEditor {
 
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
 
-        if (lastSelectedRow !=null && !lastSelectedRow.getTableName().equals(mainTable.getId())) {
+        if (lastSelectedRow != null && !lastSelectedRow.getTableName().equals(mainTable.getId())) {
             lastSelectedRow = null;
         }
 
@@ -97,34 +94,52 @@ public class TableEditor {
      */
     public void addTable(TreeView tableTree, Table table, ImageView icon, TableType type) {
 
-        if (type.equals(TableType.VIEW)) {
-            new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
-            return;
-        }
-
         try {
             String name = table.getName();
 
             dbControl.update(Queries.createTable(table));
 
-            TypedTreeItem treeItem = new TypedTreeItem(name, icon, type);
-            ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
-
-            for (TypedTreeItem item : items) {
-                if (item.getType().equals(type)) {
-                    item.getChildren().add(treeItem);
-                }
-            }
-
-            tableTree.getSelectionModel().select(treeItem);
-            tableTree.scrollTo(tableTree.getSelectionModel().getSelectedIndex());
-            tableTree.refresh();
+            addTableTreeItem(tableTree, icon, type, name);
 
             logger.info("Added new  table: " + name);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Table editor error[addTable]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to add  the table.\nSee more info in console!").showAndWait();
         }
+    }
+
+    /**
+     * @param tableTree
+     * @param view
+     * @param icon
+     * @param type
+     */
+    public void addView(TreeView tableTree, View view, ImageView icon, TableType type) {
+        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
+    }
+
+    /**
+     * Add new item into tables tree
+     *
+     * @param tableTree
+     * @param icon
+     * @param type
+     * @param name
+     */
+    private void addTableTreeItem(TreeView tableTree, ImageView icon, TableType type, String name) {
+
+        TypedTreeItem treeItem = new TypedTreeItem(name, icon, type);
+        ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
+
+        for (TypedTreeItem item : items) {
+            if (item.getType().equals(type)) {
+                item.getChildren().add(treeItem);
+            }
+        }
+
+        tableTree.getSelectionModel().select(treeItem);
+        tableTree.scrollTo(tableTree.getSelectionModel().getSelectedIndex());
+        tableTree.refresh();
     }
 
     /**
@@ -360,8 +375,8 @@ public class TableEditor {
 
         try (Statement statement = dbControl.execute(Queries.getRecordsCount(mainTable.getId()));
              ResultSet resultSet = statement.getResultSet()) {
-             resultSet.next();
-             return resultSet.getInt(1);
+            resultSet.next();
+            return resultSet.getInt(1);
         }
     }
 }

@@ -3,6 +3,7 @@ package by.post.control.ui;
 import by.post.control.PropertiesController;
 import by.post.control.db.*;
 import by.post.data.Table;
+import by.post.data.View;
 import by.post.ui.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -425,10 +426,10 @@ public class MainUiController {
      */
     private void addNewView() {
 
-        Optional<String> result = new InputDialog("Please, write view name!", "New_view", false).showAndWait();
+        Optional<View> result = new ViewCreationDialog().showAndWait();
 
         if (result.isPresent()) {
-            tableEditor.addTable(tableTree, new Table(result.get()), getItemImage("view.png"), TableType.VIEW);
+            tableEditor.addView(tableTree, result.get(), getItemImage("view.png"), TableType.VIEW);
         }
     }
 
