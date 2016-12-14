@@ -1,11 +1,8 @@
 package by.post.control;
 
 import by.post.control.ui.TypedTreeItem;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
-
-import java.util.List;
 
 /**
  * Class for storing the application context

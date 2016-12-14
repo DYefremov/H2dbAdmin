@@ -2,7 +2,6 @@ package by.post.control.ui;
 
 import by.post.control.Context;
 import by.post.search.SearchProvider;
-import by.post.ui.SimpleProgressIndicator;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;

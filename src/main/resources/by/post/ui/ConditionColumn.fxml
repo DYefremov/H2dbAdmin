@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.cell.TextFieldTableCell?>
+
+<TableColumn prefWidth="75.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+   <columns>
+      <TableColumn prefWidth="75.0" text="Column name">
+         <cellFactory>
+            <TextFieldTableCell fx:factory="forTableColumn" />
+         </cellFactory>
+         <cellValueFactory>
+            <PropertyValueFactory property="name" />
+         </cellValueFactory>
+      </TableColumn>
+      <TableColumn prefWidth="75.0" text="Select">
+         <cellValueFactory>
+            <PropertyValueFactory property="selected" />
+         </cellValueFactory>
+      </TableColumn>
+      <TableColumn prefWidth="75.0" text="Condition">
+         <cellFactory>
+            <TextFieldTableCell fx:factory="forTableColumn" />
+         </cellFactory>
+         <cellValueFactory>
+            <PropertyValueFactory property="condition" />
+         </cellValueFactory>
+      </TableColumn>
+   </columns>
+</TableColumn>
