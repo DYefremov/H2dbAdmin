@@ -1,6 +1,8 @@
 package by.post.control.ui;
 
+import by.post.control.Context;
 import by.post.search.SearchProvider;
+import by.post.ui.SimpleProgressIndicator;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -38,25 +40,11 @@ public class SearchToolDialogController {
     private SearchProvider searchProvider;
 
     private TypedTreeItem tablesTreeItem;
-
-    private TreeView tableTree;
-
+    private TreeView mainTableTree;
     private TableView mainTableView;
 
     public SearchToolDialogController() {
 
-    }
-
-    public void setTablesTreeItem(TypedTreeItem tablesTreeItem) {
-        this.tablesTreeItem = tablesTreeItem;
-    }
-
-    public void setTableTree(TreeView tableTree) {
-        this.tableTree = tableTree;
-    }
-
-    public void setMainTableView(TableView mainTableView) {
-        this.mainTableView = mainTableView;
     }
 
     /**
@@ -172,6 +160,10 @@ public class SearchToolDialogController {
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.setIconified(false);
 
+        tablesTreeItem = Context.getTablesTreeItem();
+        mainTableView = Context.getMainTableView();
+        mainTableTree = Context.getMainTableTree();
+
         searchProvider = new SearchProvider();
     }
 
@@ -180,7 +172,7 @@ public class SearchToolDialogController {
      */
     private void selectItem() {
 
-        if (tablesTreeItem == null || tableTree == null) {
+        if (tablesTreeItem == null || mainTableTree == null) {
             return;
         }
 
@@ -191,7 +183,7 @@ public class SearchToolDialogController {
                 ObservableList<TypedTreeItem> typedTreeItems = tablesTreeItem.getChildren();
                 //Search first element with equal table name value
                 TypedTreeItem item = typedTreeItems.stream().filter(val -> tableName.equals(val.getValue())).findFirst().get();
-                tableTree.getSelectionModel().select(item);
+                mainTableTree.getSelectionModel().select(item);
 
                 return null;
             }
@@ -199,7 +191,9 @@ public class SearchToolDialogController {
 
         task.setOnSucceeded(event -> scrollToRow(searchField.getText()));
 
-        new Thread(task).start();
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**

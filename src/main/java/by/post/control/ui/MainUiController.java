@@ -1,5 +1,6 @@
 package by.post.control.ui;
 
+import by.post.control.Context;
 import by.post.control.PropertiesController;
 import by.post.control.db.*;
 import by.post.data.Table;
@@ -55,13 +56,8 @@ public class MainUiController {
     private MenuItem contextMenuItemView;
 
     private DbControl dbControl;
-
     private MainUiForm mainUiForm;
-
     private TableEditor tableEditor;
-
-    private TypedTreeItem tablesTreeItem;
-
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
@@ -236,6 +232,9 @@ public class MainUiController {
         LogArea.setArea(console);
         logger.info("Starting application...");
         init();
+        //Set context
+        Context.setMainTableTree(tableTree);
+        Context.setMainTableView(mainTable);
     }
 
     /**
@@ -303,9 +302,9 @@ public class MainUiController {
 
             TypedTreeItem item = new TypedTreeItem(name, image, tType);
             tables.add(item);
-            //Set tables tree item for using in search tool
+            //Set tables tree item for using in search tool and view creation dialog
             if (item.getType().equals(TableType.TABLE)) {
-                tablesTreeItem = item;
+                Context.setTablesTreeItem(item);
             }
             List<TypedTreeItem> items = new ArrayList<>();
 
@@ -468,10 +467,6 @@ public class MainUiController {
             Dialog dialog = loader.load();
             Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image(Resources.LOGO_PATH));
-            SearchToolDialogController controller = loader.getController();
-            controller.setTablesTreeItem(tablesTreeItem);
-            controller.setTableTree(tableTree);
-            controller.setMainTableView(mainTable);
             dialog.showAndWait();
         } catch (IOException e) {
             logger.error("MainUiController error showSearchTool: " + e);
