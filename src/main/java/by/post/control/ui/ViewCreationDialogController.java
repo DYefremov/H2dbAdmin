@@ -5,14 +5,13 @@ import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import by.post.control.db.Queries;
 import by.post.data.View;
-import by.post.ui.MainUiForm;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +33,7 @@ public class ViewCreationDialogController {
     @FXML
     private ListView tablesListView;
     @FXML
-    private TableView<ConditionRow> tableView;
+    private TableView tableView;
 
     private View view;
 
@@ -49,7 +48,6 @@ public class ViewCreationDialogController {
     @FXML
     public void onAddButton() {
         addTable();
-//        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
     }
 
     @FXML
@@ -102,19 +100,16 @@ public class ViewCreationDialogController {
         }
 
         String tableName = String.valueOf(item);
-        TableColumn column = null;
+        addTableColumn(tableName);
+        addData(tableName);
+        tableView.refresh();
+    }
 
-        try {
-            column = getTableColumn(tableName);
-            tableView.getColumns().add(column);
-        } catch (IOException e) {
-            new Alert(Alert.AlertType.ERROR, "Error creating column!").showAndWait();
-            logger.error("ViewCreationDialogController error[addTable]: " + e);
-        }
+    /**
+     * @param tableName
+     */
+    private void addData(String tableName) {
 
-        if (column == null) {
-            return;
-        }
     }
 
     /**
@@ -122,13 +117,17 @@ public class ViewCreationDialogController {
      * @return
      * @throws IOException
      */
-    private TableColumn getTableColumn(String tableName) throws IOException {
+    private TableColumn addTableColumn(String tableName) {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainUiForm.class.getResource("ConditionColumn.fxml"));
-        TableColumn column = null;
-        column = (TableColumn) loader.load();
-        column.setText(tableName);
+        TableColumn<ObservableList<String>, String> column = new TableColumn(tableName);
+        tableView.getColumns().add(column);
+
+        column.setCellValueFactory(cellData -> {
+            int index = column.getTableView().getColumns().indexOf(column);
+            return new SimpleStringProperty(String.valueOf(cellData.getValue().get(index)));
+        });
+
+        column.setCellFactory(TextFieldTableCell.forTableColumn());
 
         return column;
     }
