@@ -4,15 +4,19 @@ import by.post.control.Context;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import by.post.control.db.Queries;
+import by.post.data.Column;
+import by.post.data.ConditionRow;
+import by.post.data.Table;
 import by.post.data.View;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
+import by.post.ui.MainUiForm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,7 +37,7 @@ public class ViewCreationDialogController {
     @FXML
     private ListView tablesListView;
     @FXML
-    private TableView tableView;
+    private HBox viewsHBox;
 
     private View view;
 
@@ -46,7 +50,7 @@ public class ViewCreationDialogController {
     }
 
     @FXML
-    public void onAddButton() {
+    public void onAdd() {
         addTable();
     }
 
@@ -63,8 +67,40 @@ public class ViewCreationDialogController {
         }
     }
 
+    /**
+     * @return view
+     */
     public View getView() {
-        return view != null ? view : new View();
+
+        ObservableList tableViews = viewsHBox.getChildren();
+        List<Table> tables = new ArrayList<>();
+        tableViews.forEach(v -> tables.add(getTable((TableView) v)));
+
+        return new View(viewName.getText(), tables);
+    }
+
+    /**
+     * @param view
+     * @return table
+     */
+    private Table getTable(TableView view) {
+
+        String tableName = view.getId();
+        Table table = new Table(tableName);
+        List<ConditionRow> rows = view.getItems();
+        List<Column> columns = new ArrayList<>();
+
+        rows.forEach(row -> {
+            if (row.isSelected()) {
+                Column column = new Column(tableName, row.getName(), null);
+                column.setCondition(row.getCondition());
+                columns.add(column);
+            }
+        });
+
+        table.setColumns(columns);
+
+        return table;
     }
 
     @FXML
@@ -100,16 +136,40 @@ public class ViewCreationDialogController {
         }
 
         String tableName = String.valueOf(item);
-        addTableColumn(tableName);
-        addData(tableName);
-        tableView.refresh();
+
+        try {
+            TableView<ConditionRow> view = getTableView(tableName);
+
+            if (checkNotExist(tableName)) {
+                viewsHBox.getChildren().add(view);
+                setData(view, tableName);
+            } else {
+                new Alert(Alert.AlertType.ERROR, "This table has been added!").showAndWait();
+            }
+        } catch (IOException e) {
+            logger.error("ViewCreationDialogController error[addTable]: " + e);
+        }
     }
 
     /**
      * @param tableName
+     * @return true if not exist
      */
-    private void addData(String tableName) {
+    private boolean checkNotExist(String tableName) {
+        ObservableList<Node> views = viewsHBox.getChildren();
 
+        return views.stream().noneMatch(v -> v.getId().equals(tableName));
+    }
+
+    /**
+     * @param view
+     */
+    private void setData(TableView view, String tableName) {
+
+        List<String> columns = getColumnsNames(tableName);
+        ObservableList<ConditionRow> data = FXCollections.observableArrayList();
+        columns.forEach(c -> data.add(new ConditionRow(c, "", false)));
+        view.setItems(data);
     }
 
     /**
@@ -117,19 +177,18 @@ public class ViewCreationDialogController {
      * @return
      * @throws IOException
      */
-    private TableColumn addTableColumn(String tableName) {
+    private TableView<ConditionRow> getTableView(String tableName) throws IOException {
 
-        TableColumn<ObservableList<String>, String> column = new TableColumn(tableName);
-        tableView.getColumns().add(column);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainUiForm.class.getResource("ConditionTableView.fxml"));
+        TableView<ConditionRow> tableView =  loader.load();
+        tableView.setId(tableName);
 
-        column.setCellValueFactory(cellData -> {
-            int index = column.getTableView().getColumns().indexOf(column);
-            return new SimpleStringProperty(String.valueOf(cellData.getValue().get(index)));
-        });
+        ConditionTableViewController controller = loader.getController();
+        controller.setMainColumnText(tableName);
+        controller.setParent(viewsHBox);
 
-        column.setCellFactory(TextFieldTableCell.forTableColumn());
-
-        return column;
+        return tableView;
     }
 
     /**
@@ -151,72 +210,4 @@ public class ViewCreationDialogController {
 
         return colNames;
     }
-
-    /**
-     *
-     */
-    class ConditionRow {
-
-        private SimpleStringProperty name;
-        private SimpleStringProperty condition;
-        private SimpleBooleanProperty selected;
-
-        public ConditionRow() {
-            this.name = new SimpleStringProperty();
-            this.condition = new SimpleStringProperty();
-            this.selected = new SimpleBooleanProperty(false);
-        }
-
-        public ConditionRow(String name, String condition, boolean selected) {
-            this.name = new SimpleStringProperty(name);
-            this.condition = new SimpleStringProperty(condition);
-            this.selected = new SimpleBooleanProperty(selected);
-        }
-
-        public String getName() {
-            return name.get();
-        }
-
-        public SimpleStringProperty nameProperty() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name.set(name);
-        }
-
-        public String getCondition() {
-            return condition.get();
-        }
-
-        public SimpleStringProperty conditionProperty() {
-            return condition;
-        }
-
-        public void setCondition(String condition) {
-            this.condition.set(condition);
-        }
-
-        public boolean isSelected() {
-            return selected.get();
-        }
-
-        public SimpleBooleanProperty selectedProperty() {
-            return selected;
-        }
-
-        public void setSelected(boolean selected) {
-            this.selected.set(selected);
-        }
-
-        @Override
-        public String toString() {
-            return "ConditionRow{" +
-                    "name=" + name +
-                    ", condition=" + condition +
-                    ", selected=" + selected +
-                    '}';
-        }
-    }
-
 }

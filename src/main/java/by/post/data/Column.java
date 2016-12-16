@@ -22,6 +22,8 @@ public class Column {
     private boolean signed;
     private int index;
     private int length;
+    //It's used in view creation
+    private String condition;
 
     public Column() {
 
@@ -157,9 +159,16 @@ public class Column {
         this.length = length;
     }
 
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+
     @Override
     public String toString() {
-
         return "Column{" +
                 "tableName='" + tableName + '\'' +
                 ", columnName='" + columnName + '\'' +
@@ -175,6 +184,7 @@ public class Column {
                 ", signed=" + signed +
                 ", index=" + index +
                 ", length=" + length +
+                ", condition='" + condition + '\'' +
                 '}';
     }
 
@@ -205,7 +215,9 @@ public class Column {
             return false;
         if (notNull != null ? !notNull.equals(column.notNull) : column.notNull != null)
             return false;
-        return defaultValue != null ? defaultValue.equals(column.defaultValue) : column.defaultValue == null;
+        if (defaultValue != null ? !defaultValue.equals(column.defaultValue) : column.defaultValue != null)
+            return false;
+        return condition != null ? condition.equals(column.condition) : column.condition == null;
     }
 
     @Override
@@ -225,6 +237,7 @@ public class Column {
         result = 31 * result + (signed ? 1 : 0);
         result = 31 * result + index;
         result = 31 * result + length;
+        result = 31 * result + (condition != null ? condition.hashCode() : 0);
 
         return result;
     }

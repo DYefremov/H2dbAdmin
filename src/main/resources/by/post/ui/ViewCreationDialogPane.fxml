@@ -9,8 +9,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
@@ -65,7 +65,7 @@
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>
-                                        <MenuItem mnemonicParsing="false" text="Add" />
+                                        <MenuItem mnemonicParsing="false" onAction="#onAdd" text="Add" />
                                       </items>
                                     </ContextMenu>
                                  </contextMenu>
@@ -82,14 +82,11 @@
                                     <Insets left="5.0" top="5.0" />
                                  </padding>
                               </Label>
-                                    <TableView fx:id="tableView" editable="true" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
-                                        <placeholder>
-                                            <Label text="Add data for view!" />
-                                        </placeholder>
-                                 <tooltip>
-                                    <Tooltip text="Select and set up the columns!" />
-                                 </tooltip>
-                                    </TableView>
+                              <ScrollPane prefHeight="189.0" prefWidth="381.0">
+                                 <content>
+                                    <HBox fx:id="viewsHBox" alignment="CENTER" />
+                                 </content>
+                              </ScrollPane>
                            </children>
                         </VBox>
                      </items>
@@ -101,7 +98,7 @@
                   <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                       <buttons>
                           <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteButton" text="Delete" />
-                          <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onAddButton" text="Add" />
+                          <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onAdd" text="Add" />
                       </buttons>
                <BorderPane.margin>
                   <Insets left="10.0" />

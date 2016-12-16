@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.cell.TextFieldTableCell?>
+
+<TableView fx:id="tableView" editable="true" minWidth="-Infinity" prefHeight="183.0" prefWidth="252.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.ConditionTableViewController">
+  <columns>
+      <TableColumn fx:id="mainColumn" editable="false" prefWidth="75.0" resizable="false" sortable="false" text="Table name">
+         <columns>
+            <TableColumn minWidth="100.0" prefWidth="100.0" resizable="false" text="Column name">
+                <cellValueFactory>
+                    <PropertyValueFactory property="name" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="selColumn" minWidth="-Infinity" prefWidth="50.0" resizable="false" text="Select">
+                <cellValueFactory>
+                    <PropertyValueFactory property="selected" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn minWidth="-Infinity" prefWidth="100.0" resizable="false" text="Condition">
+                <cellFactory>
+                    <TextFieldTableCell fx:factory="forTableColumn" />
+                </cellFactory>
+                <cellValueFactory>
+                    <PropertyValueFactory property="condition" />
+                </cellValueFactory>
+            </TableColumn>
+         </columns>
+      </TableColumn>
+  </columns>
+   <contextMenu>
+      <ContextMenu>
+        <items>
+          <MenuItem mnemonicParsing="false" onAction="#onContextMenuDelete" text="Delete" />
+        </items>
+      </ContextMenu>
+   </contextMenu>
+</TableView>
