@@ -115,7 +115,29 @@ public class TableEditor {
      * @param type
      */
     public void addView(TreeView tableTree, View view, ImageView icon, TableType type) {
-        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
+
+        if (view.getTables() == null) {
+            new Alert(Alert.AlertType.INFORMATION, "No table is present!").showAndWait();
+            return;
+        }
+
+        if (view.getTables().size() > 1) {
+            new Alert(Alert.AlertType.INFORMATION, "Not implemented yet for more than one table!").showAndWait();
+            return;
+        }
+
+        try {
+            String name = view.getName();
+
+            dbControl.update(Queries.createView(view));
+
+            addTableTreeItem(tableTree, icon, type, name);
+
+            logger.info("Added new  table: " + name);
+        } catch (SQLException e) {
+            logger.error("Table editor error[addTable]: " + e);
+            new Alert(Alert.AlertType.ERROR, "Failure to add  the table.\nSee more info in console!").showAndWait();
+        }
     }
 
     /**
@@ -153,12 +175,18 @@ public class TableEditor {
             TypedTreeItem itemToDelete = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
             String name = itemToDelete.getValue().toString();
 
-            dbControl.update(Queries.deleteTable(name));
+            TableType type = itemToDelete.getType();
+
+            if (type.equals(TableType.TABLE)) {
+                dbControl.update(Queries.deleteTable(name));
+            } else if (type.equals(TableType.VIEW)) {
+                dbControl.update(Queries.deleteView(name));
+            }
 
             ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
 
             for (TypedTreeItem item : items) {
-                if (item.getType().equals(itemToDelete.getType())) {
+                if (item.getType().equals(type)) {
                     item.getChildren().remove(itemToDelete);
                 }
             }

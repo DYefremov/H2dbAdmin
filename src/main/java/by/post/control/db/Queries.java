@@ -1,10 +1,8 @@
 package by.post.control.db;
 
-import by.post.data.Cell;
-import by.post.data.Column;
-import by.post.data.Row;
-import by.post.data.Table;
+import by.post.data.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,11 +60,71 @@ public class Queries {
     }
 
     /**
+     * @param view
+     * @return
+     */
+    public static String createView(View view) {
+
+        List<Table> tables = view.getTables();
+
+        StringBuilder sb = new StringBuilder("CREATE VIEW " + view.getName() + " AS\n");
+        //Only for one table
+        if (tables !=null && tables.size() == 1) {
+            Table table = tables.get(0);
+            List<Column> columns = table.getColumns();
+
+            if (columns == null || columns.isEmpty()) {
+                return "No columns in table!";
+            }
+
+            int lastIndex = columns.size() - 1;
+
+            sb.append("SELECT ");
+            
+            List<Column> withConditions = new ArrayList<>();
+
+            columns.forEach(column -> {
+                sb.append(column.getColumnName());
+                sb.append(columns.indexOf(column) != lastIndex ? "," : "\n");
+
+                String condition = column.getCondition();
+
+                if (condition != null && !condition.equals("")) {
+                    withConditions.add(column);
+                }
+            });
+
+            sb.append("FROM " + table.getName() + "\n");
+
+            if (!withConditions.isEmpty()) {
+                int lastCondIndex = withConditions.size() - 1;
+                sb.append("WHERE ");
+                withConditions.forEach(column -> {
+                    sb.append(column.getColumnName() + "='" + column.getCondition() +"'");
+                    sb.append(columns.indexOf(column) != lastCondIndex ? " AND " : "\n");
+                });
+            }
+
+            sb.append(";");
+        }
+
+        return sb.toString();
+    }
+
+    /**
      * @param tableName
      * @return
      */
     public static String deleteTable(String tableName){
         return "DROP TABLE " + tableName.toUpperCase();
+    }
+
+    /**
+     * @param viewName
+     * @return
+     */
+    public static String deleteView(String viewName) {
+        return "DROP VIEW " + viewName.toUpperCase();
     }
 
     public static String getRecordsCount(String tableName) {
