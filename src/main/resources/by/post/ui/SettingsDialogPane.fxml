@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane headerText="Settings" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.SettingsDialogController">
+<DialogPane headerText="Settings" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.SettingsDialogController">
    <buttonTypes>
       <ButtonType fx:constant="CANCEL" />
    </buttonTypes>
@@ -31,13 +31,10 @@
                <Insets right="1.0" />
             </padding>
          </ListView>
-         <VBox fx:id="content" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="490.0" style="-fx-background-image: url(/img/logo.png); -fx-background-size: stretch;">
+         <VBox fx:id="content" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="430.0" style="-fx-background-image: url(/img/logo.png); -fx-background-size: stretch;">
             <HBox.margin>
                <Insets />
-            </HBox.margin>
-            <padding>
-               <Insets right="10.0" />
-            </padding></VBox>
+            </HBox.margin></VBox>
          <padding>
             <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
          </padding>

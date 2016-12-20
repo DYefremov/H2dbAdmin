@@ -80,7 +80,7 @@ public class Queries {
             int lastIndex = columns.size() - 1;
 
             sb.append("SELECT ");
-            
+
             List<Column> withConditions = new ArrayList<>();
 
             columns.forEach(column -> {

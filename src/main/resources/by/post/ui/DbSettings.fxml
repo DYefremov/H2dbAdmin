@@ -3,60 +3,65 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DbSettingsController">
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<GridPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DbSettingsController">
     <columnConstraints>
-        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="150.0" minWidth="-Infinity" prefWidth="150.0" />
+        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="100.0" minWidth="-Infinity" prefWidth="100.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="-Infinity" prefWidth="170.0" />
         <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="150.0" minWidth="-Infinity" prefWidth="150.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints minHeight="-Infinity" prefHeight="32.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Label text="Server/Path:">
+        <Label text="Host:" GridPane.rowIndex="1">
             <GridPane.margin>
                 <Insets right="5.0" top="2.0" />
             </GridPane.margin>
         </Label>
-        <Label text="Login:" GridPane.rowIndex="2">
+        <Label text="Login:" GridPane.rowIndex="3">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>
         </Label>
-        <Label text="Password:" GridPane.rowIndex="3">
+        <Label text="Password:" GridPane.rowIndex="4">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>
         </Label>
-        <Label text="Driver:" GridPane.rowIndex="4">
+        <Label text="Driver:" GridPane.rowIndex="5">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>
         </Label>
-        <TextField fx:id="path" GridPane.columnIndex="1">
+        <TextField fx:id="path" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets top="2.0" />
          </GridPane.margin></TextField>
-        <TextField fx:id="login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-        <TextField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <CheckBox fx:id="showPassword" mnemonicParsing="false" onAction="#onShowChange" text="Show password" GridPane.columnIndex="2" GridPane.rowIndex="3">
+        <TextField fx:id="login" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <TextField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <CheckBox fx:id="showPassword" mnemonicParsing="false" onAction="#onShowChange" text="Show password" GridPane.columnIndex="2" GridPane.rowIndex="4">
             <GridPane.margin>
                 <Insets left="10.0" />
             </GridPane.margin>
         </CheckBox>
-        <Button mnemonicParsing="false" onAction="#onSaveAction" prefHeight="25.0" prefWidth="85.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="4">
+        <Button mnemonicParsing="false" onAction="#onSaveAction" prefHeight="25.0" prefWidth="85.0" text="Save" GridPane.columnIndex="2" GridPane.rowIndex="5">
             <GridPane.margin>
                 <Insets left="70.0" />
             </GridPane.margin>
@@ -64,13 +69,39 @@
             <Insets left="50.0" />
          </opaqueInsets>
         </Button>
-        <ComboBox fx:id="driver" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-        <PasswordField fx:id="maskedPassword" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <Label text="Database Name:" GridPane.rowIndex="1">
+        <ComboBox fx:id="driver" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <PasswordField fx:id="maskedPassword" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Label text="Path" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>
         </Label>
-        <TextField fx:id="dbName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <TextField fx:id="host" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <children>
+            <Label text="Port:">
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="port" maxWidth="-Infinity" prefWidth="60.0" />
+         </children>
+      </HBox>
+      <Label text="Mode:">
+         <GridPane.margin>
+            <Insets right="5.0" />
+         </GridPane.margin>
+      </Label>
+        <ChoiceBox prefWidth="170.0" value="Server" GridPane.columnIndex="1" >
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Server" />
+                    <String fx:value="Embedded (local)" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
     </children>
 </GridPane>

@@ -74,9 +74,7 @@ public class MainUiController {
     @FXML
     public void onNewDbAdd() throws IOException {
 
-        Dialog dialog = FXMLLoader.load(MainUiForm.class.getResource("DatabaseDialog.fxml"));
-
-        Optional<Map<String, String>> result = dialog.showAndWait();
+        Optional<Map<String, String>> result = new DatabaseDialog().showAndWait();
 
         if (result.isPresent()) {
             new Alert(Alert.AlertType.INFORMATION, "Not implemented!").showAndWait();

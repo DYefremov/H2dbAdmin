@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionModel;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class SettingsDialogController {
 
     @FXML
-    private VBox content;
+    private Pane content;
     @FXML
     private ListView<String> settingsList;
 
