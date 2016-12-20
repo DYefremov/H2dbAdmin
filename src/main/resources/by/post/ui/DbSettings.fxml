@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -13,8 +15,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 <GridPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DbSettingsController">
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="100.0" minWidth="-Infinity" prefWidth="100.0" />
@@ -50,7 +50,7 @@
                 <Insets right="5.0" />
             </GridPane.margin>
         </Label>
-        <TextField fx:id="path" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField fx:id="host" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets top="2.0" />
          </GridPane.margin></TextField>
@@ -76,7 +76,7 @@
                 <Insets right="5.0" />
             </GridPane.margin>
         </Label>
-        <TextField fx:id="host" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <TextField fx:id="path" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <children>
             <Label text="Port:">
@@ -95,7 +95,7 @@
             <Insets right="5.0" />
          </GridPane.margin>
       </Label>
-        <ChoiceBox prefWidth="170.0" value="Server" GridPane.columnIndex="1" >
+        <ChoiceBox fx:id="mode" prefWidth="170.0" value="Server" GridPane.columnIndex="1">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Server" />

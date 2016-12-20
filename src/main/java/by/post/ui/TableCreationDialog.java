@@ -31,7 +31,7 @@ public class TableCreationDialog extends Dialog<Table> {
 
     private void init() {
         try {
-            FXMLLoader loader = new FXMLLoader(SettingsDialog.class.getResource("TableCreationDialogPane.fxml"));
+            FXMLLoader loader = new FXMLLoader(TableCreationDialog.class.getResource("TableCreationDialogPane.fxml"));
             this.setDialogPane(loader.load());
             controller = loader.getController();
             Stage stage = (Stage)this.getDialogPane().getScene().getWindow();

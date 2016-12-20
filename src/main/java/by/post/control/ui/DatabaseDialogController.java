@@ -28,8 +28,6 @@ public class DatabaseDialogController {
     @FXML
     private ChoiceBox mode;
     @FXML
-    private Dialog<Map<String, String>> dialog;
-    @FXML
     private GridPane gridPane;
 
     private Map<String, String> settings;
@@ -82,11 +80,6 @@ public class DatabaseDialogController {
     @FXML
     private void initialize() {
         settings = new HashMap<>();
-
-        dialog.setResultConverter(dialogButton -> {
-            ButtonBar.ButtonData data = dialogButton == null ? null : (ButtonBar.ButtonData) dialogButton.getButtonData();
-            return data == ButtonBar.ButtonData.OK_DONE ? getSettings() : null;
-        });
     }
 
     @FXML

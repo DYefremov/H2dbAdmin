@@ -27,9 +27,8 @@ public class DatabaseDialog extends Dialog<Map<String, String>> {
 
     private void init() {
 
-        FXMLLoader loader = new FXMLLoader(SettingsDialog.class.getResource("DatabaseDialogPane.fxml"));
-
         try {
+            FXMLLoader loader = new FXMLLoader(DatabaseDialog.class.getResource("DatabaseDialogPane.fxml"));
             this.setDialogPane(loader.load());
             controller = loader.getController();
         } catch (IOException e) {
@@ -37,7 +36,7 @@ public class DatabaseDialog extends Dialog<Map<String, String>> {
         }
 
         this.setResultConverter(dialogButton -> {
-            ButtonBar.ButtonData data = dialogButton == null ? null : (ButtonBar.ButtonData) dialogButton.getButtonData();
+            ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
             return data == ButtonBar.ButtonData.OK_DONE ? controller.getSettings() : null;
         });
 

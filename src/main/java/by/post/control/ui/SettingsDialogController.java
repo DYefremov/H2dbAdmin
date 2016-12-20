@@ -20,7 +20,7 @@ import java.io.IOException;
 public class SettingsDialogController {
 
     @FXML
-    private Pane content;
+    private VBox content;
     @FXML
     private ListView<String> settingsList;
 
@@ -51,8 +51,8 @@ public class SettingsDialogController {
     @FXML
     private void initialize() {
         try {
-            dbSettings = (Node) FXMLLoader.load(MainUiForm.class.getResource("DbSettings.fxml"));
-            uiSettings = (Node) FXMLLoader.load(MainUiForm.class.getResource("UiSettings.fxml"));
+            dbSettings = FXMLLoader.load(MainUiForm.class.getResource("DbSettings.fxml"));
+            uiSettings = FXMLLoader.load(MainUiForm.class.getResource("UiSettings.fxml"));
 
             if (!settingsList.getItems().isEmpty()) {
                 setSettings(settingsList.getItems().get(0));

@@ -31,7 +31,7 @@ public class ViewCreationDialog extends Dialog<View> {
 
     private void init() {
         try {
-            FXMLLoader loader = new FXMLLoader(SettingsDialog.class.getResource("ViewCreationDialogPane.fxml"));
+            FXMLLoader loader = new FXMLLoader(ViewCreationDialog.class.getResource("ViewCreationDialogPane.fxml"));
             this.setDialogPane(loader.load());
             controller = loader.getController();
             Stage stage = (Stage)this.getDialogPane().getScene().getWindow();

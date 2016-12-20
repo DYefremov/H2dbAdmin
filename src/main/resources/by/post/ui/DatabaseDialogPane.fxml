@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DatabaseDialogController">
+<DialogPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DatabaseDialogController">
     <buttonTypes>
         <ButtonType fx:constant="OK" />
         <ButtonType fx:constant="CANCEL" />
@@ -108,7 +108,7 @@
         </GridPane>
     </content>
    <header>
-      <Label alignment="CENTER" text="Setup new database" textAlignment="CENTER">
+      <Label alignment="CENTER" text="Setting up new database" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>

@@ -18,7 +18,9 @@ public class DbSettingsController {
     @FXML
     private TextField path;
     @FXML
-    private TextField dbName;
+    private TextField host;
+    @FXML
+    private TextField port;
     @FXML
     private TextField login;
     @FXML
@@ -29,6 +31,8 @@ public class DbSettingsController {
     private CheckBox showPassword;
     @FXML
     private ComboBox driver;
+    @FXML
+    ChoiceBox mode;
 
     private Properties properties;
 
@@ -77,8 +81,7 @@ public class DbSettingsController {
     private void initialize() {
 
         properties = PropertiesController.getProperties();
-        path.setText(properties.getProperty("path"));
-        dbName.setText(properties.getProperty("db"));
+        host.setText(properties.getProperty("url"));
         login.setText(properties.getProperty("user"));
         password.setText(properties.getProperty("password"));
 
