@@ -47,6 +47,8 @@ public class MainUiController {
     @FXML
     private SplitPane mainSplitPane;
     @FXML
+    private SplitPane explorerSplitPane;
+    @FXML
     private TitledPane infoPane;
     @FXML
     private ContextMenu treeContextMenu;
@@ -122,12 +124,12 @@ public class MainUiController {
 
     @FXML
     public void onExplorer() {
-        mainPane.setCenter(mainSplitPane);
+        setCenter(explorerSplitPane);
     }
 
     @FXML
     public void onSqlConsole() throws IOException {
-        setCenter("SqlConsole.fxml");
+        setCenter(FXMLLoader.load(MainUiForm.class.getResource("SqlConsole.fxml")));
     }
 
     @FXML
@@ -431,14 +433,12 @@ public class MainUiController {
     }
 
     /**
-     * Set center node in main border pane
+     * Set center node in main split pane
      *
-     * @param fxml
+     * @param node
      */
-    private void setCenter(String fxml) throws IOException {
-        mainPane.getChildren().remove(mainPane.getCenter());
-        Node node = (Node) FXMLLoader.load(MainUiForm.class.getResource(fxml));
-        mainPane.setCenter(node);
+    private void setCenter(Node node) {
+        mainSplitPane.getItems().set(0, node);
     }
 
     /**

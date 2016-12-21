@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
@@ -12,6 +13,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
@@ -19,191 +21,251 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="650.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainUiController">
-   <top>
-      <VBox>
-         <children>
-            <MenuBar style="-fx-background-color: lightgray;">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                        <Menu mnemonicParsing="false" text="New">
-                          <items>
-                            <MenuItem mnemonicParsing="false" onAction="#onNewDbAdd" text="Database">
-                                <graphic>
-                                    <ImageView fitHeight="12.0" fitWidth="12.0">
-                                        <image>
-                                            <Image url="/img/database.png" />
-                                        </image>
-                                    </ImageView>
-                                </graphic>
-                            </MenuItem>
-                              <MenuItem mnemonicParsing="false" onAction="#onAddNewTable" text="Table">
-                                 <graphic>
-                                    <ImageView fitHeight="12.0" fitWidth="12.0">
-                                        <image>
-                                            <Image url="/img/table.png" />
-                                        </image>
-                                    </ImageView>
-                                 </graphic>
-                              </MenuItem>
-                              <MenuItem mnemonicParsing="false" onAction="#onAddNewView" text="View">
-                                 <graphic>
-                                    <ImageView fitHeight="12.0" fitWidth="12.0">
-                                        <image>
-                                            <Image url="/img/view.png" />
-                                        </image>
-                                    </ImageView>
-                                 </graphic>
-                              </MenuItem>
-                          </items>
+    <top>
+        <VBox>
+            <children>
+                <MenuBar style="-fx-background-color: lightgray;">
+                    <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                            <items>
+                                <Menu mnemonicParsing="false" text="New">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#onNewDbAdd" text="Database">
+                                            <graphic>
+                                                <ImageView fitHeight="12.0" fitWidth="12.0">
+                                                    <image>
+                                                        <Image url="/img/database.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </MenuItem>
+                                        <MenuItem mnemonicParsing="false" onAction="#onAddNewTable" text="Table">
+                                            <graphic>
+                                                <ImageView fitHeight="12.0" fitWidth="12.0">
+                                                    <image>
+                                                        <Image url="/img/table.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </MenuItem>
+                                        <MenuItem mnemonicParsing="false" onAction="#onAddNewView" text="View">
+                                            <graphic>
+                                                <ImageView fitHeight="12.0" fitWidth="12.0">
+                                                    <image>
+                                                        <Image url="/img/view.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </MenuItem>
+                                    </items>
+                                </Menu>
+                                <MenuItem mnemonicParsing="false" onAction="#onOpenDb" text="Open">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/folder.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                                <SeparatorMenuItem mnemonicParsing="false" />
+                                <MenuItem mnemonicParsing="false" onAction="#onSettings" text="Settings">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/preferences.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                                <SeparatorMenuItem mnemonicParsing="false" />
+                                <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/exit.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                            </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" onAction="#onOpenDb" text="Open">
-                            <graphic>
-                                <ImageView fitHeight="12.0" fitWidth="12.0">
-                                    <image>
-                                        <Image url="/img/folder.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </MenuItem>
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#onSettings" text="Settings">
-                            <graphic>
-                                <ImageView fitHeight="12.0" fitWidth="12.0">
-                                    <image>
-                                        <Image url="/img/preferences.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </MenuItem>
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit">
-                        <graphic>
-                            <ImageView fitHeight="12.0" fitWidth="12.0">
-                                <image>
-                                    <Image url="/img/exit.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                    </MenuItem>
-                  </items>
-                </Menu>
-                  <Menu mnemonicParsing="false" text="Tools">
-                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onSqlConsole" text="SQL console" />
-                        <MenuItem mnemonicParsing="false" onAction="#onSearchTool" text="Search tool" />
-                        <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onRecoveryTool" text="Recovery tool" />
-                     </items>
-                  </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onAbout" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-            <ToolBar prefHeight="25.0" prefWidth="650.0">
-               <items>
-                  <Button mnemonicParsing="false" onAction="#onExplorer" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/manager.png);" stylesheets="@Ui.css" />
-                  <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                  <Button mnemonicParsing="false" onAction="#onSqlConsole" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/terminal.png);" stylesheets="@Ui.css" />
-                  <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                   <Button mnemonicParsing="false" onAction="#onSearchTool" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/search.png);" stylesheets="@Ui.css" />
-                   <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                   <Button mnemonicParsing="false" onAction="#onRecoveryTool" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/recovery.png);" stylesheets="@Ui.css" />
-                   <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                  <Button mnemonicParsing="false" onAction="#onSettings" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/preferences.png);" stylesheets="@Ui.css" />
-                  <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                  <Button mnemonicParsing="false" onAction="#onExit" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/exit.png);" stylesheets="@Ui.css" />
-                  <Separator layoutX="114.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-               </items>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </ToolBar>
-         </children>
-      </VBox>
-   </top>
-   <bottom>
-      <VBox>
-         <children>
-            <TitledPane fx:id="infoPane" expanded="false" text="More info.">
-               <content>
-                  <TextArea fx:id="console" editable="false" prefWidth="650.0" styleClass="console" stylesheets="@Ui.css" />
-               </content>
-            </TitledPane>
-             <fx:include source="StatusBar.fxml" />
-         </children>
-      </VBox>
-   </bottom>
-   <center>
-      <SplitPane fx:id="mainSplitPane" dividerPositions="0.3" prefHeight="330.0" style="-fx-background-color: lightgray;">
+                        <Menu mnemonicParsing="false" text="Tools">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#onSqlConsole" text="SQL console" />
+                                <MenuItem mnemonicParsing="false" onAction="#onSearchTool" text="Search tool" />
+                                <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onRecoveryTool" text="Recovery tool" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onAbout" text="About" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <ToolBar prefHeight="25.0" prefWidth="650.0">
+                    <items>
+                        <Button mnemonicParsing="false" onAction="#onExplorer" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/manager.png);" stylesheets="@Ui.css">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                        <Button mnemonicParsing="false" onAction="#onSqlConsole" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/terminal.png);" stylesheets="@Ui.css">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                        <Button mnemonicParsing="false" onAction="#onSearchTool" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/search.png);" stylesheets="@Ui.css">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                        <Button mnemonicParsing="false" onAction="#onRecoveryTool" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/recovery.png);" stylesheets="@Ui.css">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                        <Button mnemonicParsing="false" onAction="#onSettings" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/preferences.png);" stylesheets="@Ui.css">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                        <Button mnemonicParsing="false" onAction="#onExit" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/exit.png);" stylesheets="@Ui.css">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Separator layoutX="114.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                    </items>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </ToolBar>
+            </children>
+        </VBox>
+    </top>
+    <bottom>
+        <VBox>
+            <children>
+                <fx:include source="StatusBar.fxml" />
+            </children>
+        </VBox>
+    </bottom>
+    <center>
+      <SplitPane fx:id="mainSplitPane" dividerPositions="0.5" orientation="VERTICAL" styleClass="split-pane-divider" stylesheets="@Ui.css">
          <items>
-            <TreeView fx:id="tableTree" minWidth="-Infinity" onContextMenuRequested="#onContextMenuRequested" prefHeight="330.0" prefWidth="100.0" style="-fx-background-color: gray;">
-               <contextMenu>
-                  <ContextMenu fx:id="treeContextMenu">
-                    <items>
-                        <Menu mnemonicParsing="false" text="New">
-                           <items>
-                            <MenuItem fx:id="contextMenuItemTable" mnemonicParsing="false" onAction="#onAddNewTable" text="Table" />
-                            <MenuItem fx:id="contextMenuItemView" mnemonicParsing="false" onAction="#onAddNewView" text="View" />
-                           </items>
-                        </Menu>
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#onTableDelete" text="Delete" />
-                    </items>
-                  </ContextMenu>
-               </contextMenu>
-            </TreeView>
-            <BorderPane>
-               <center>
-                  <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked" prefHeight="330.0" prefWidth="400.0" stylesheets="@Ui.css">
-                      <placeholder>
-                          <Label text="" />
-                      </placeholder>
-                     <contextMenu>
-                        <ContextMenu>
-                          <items>
-                              <MenuItem mnemonicParsing="false" onAction="#onAddRow" text="Add new row" />
-                              <MenuItem mnemonicParsing="false" onAction="#onRemoveRow" text="Delete row" />
-                          </items>
-                        </ContextMenu>
-                     </contextMenu>
-                  </TableView>
-               </center>
-               <bottom>
-                  <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" style="-fx-background-color: lightgray;" BorderPane.alignment="CENTER">
-                    <items>
-                        <Button mnemonicParsing="false" onAction="#onAddRow" prefHeight="25.0" prefWidth="25.0" text="+">
-                           <tooltip>
-                              <Tooltip text="Add row." />
-                           </tooltip>
-                        </Button>
-                        <Button mnemonicParsing="false" onAction="#onRemoveRow" prefHeight="25.0" prefWidth="25.0" text="-" textAlignment="CENTER">
-                           <tooltip>
-                              <Tooltip text="Delete row." />
-                           </tooltip>
-                        </Button>
-                      <Button mnemonicParsing="false" onAction="#onSaveRow" text="Save" textAlignment="RIGHT">
-                           <tooltip>
-                              <Tooltip text="Save changes." />
-                           </tooltip>
-                        </Button>
-                    </items>
-                  </ToolBar>
-               </bottom>
-               <top>
-                  <Label fx:id="currentTableName" textAlignment="CENTER" BorderPane.alignment="CENTER">
-                  </Label>
-               </top>
-            </BorderPane>
+              <SplitPane fx:id="explorerSplitPane" dividerPositions="0.3" prefHeight="330.0" style="-fx-background-color: lightgray;">
+                  <items>
+                      <TreeView fx:id="tableTree" minWidth="-Infinity" onContextMenuRequested="#onContextMenuRequested" prefHeight="330.0" prefWidth="100.0" style="-fx-background-color: gray;">
+                          <contextMenu>
+                              <ContextMenu fx:id="treeContextMenu">
+                                  <items>
+                                      <Menu mnemonicParsing="false" text="New">
+                                          <items>
+                                              <MenuItem fx:id="contextMenuItemTable" mnemonicParsing="false" onAction="#onAddNewTable" text="Table" />
+                                              <MenuItem fx:id="contextMenuItemView" mnemonicParsing="false" onAction="#onAddNewView" text="View" />
+                                          </items>
+                                      </Menu>
+                                      <SeparatorMenuItem mnemonicParsing="false" />
+                                      <MenuItem mnemonicParsing="false" onAction="#onTableDelete" text="Delete" />
+                                  </items>
+                              </ContextMenu>
+                          </contextMenu>
+                      </TreeView>
+                      <BorderPane>
+                          <center>
+                              <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked" prefHeight="330.0" prefWidth="400.0" stylesheets="@Ui.css">
+                                  <placeholder>
+                                      <Label text="" />
+                                  </placeholder>
+                                  <contextMenu>
+                                      <ContextMenu>
+                                          <items>
+                                              <MenuItem mnemonicParsing="false" onAction="#onAddRow" text="Add new row" />
+                                              <MenuItem mnemonicParsing="false" onAction="#onRemoveRow" text="Delete row" />
+                                          </items>
+                                      </ContextMenu>
+                                  </contextMenu>
+                              </TableView>
+                          </center>
+                          <bottom>
+                              <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" style="-fx-background-color: lightgray;" styleClass="bar" stylesheets="@Ui.css" BorderPane.alignment="CENTER">
+                                  <items>
+                                      <Button mnemonicParsing="false" onAction="#onAddRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/list-add.png);">
+                                          <tooltip>
+                                              <Tooltip text="Add row." />
+                                          </tooltip>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                      </Button>
+                                      <Button mnemonicParsing="false" onAction="#onRemoveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/list-remove.png);">
+                                          <tooltip>
+                                              <Tooltip text="Delete row." />
+                                          </tooltip>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                      </Button>
+                                      <Button mnemonicParsing="false" onAction="#onSaveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/enter.png);">
+                                          <tooltip>
+                                              <Tooltip text="Save changes." />
+                                          </tooltip>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                      </Button>
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <TextField prefHeight="26.0" prefWidth="130.0" />
+                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/filter.png);">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </Button>
+                                 </children>
+                                 <padding>
+                                    <Insets left="50.0" />
+                                 </padding>
+                              </HBox>
+                                  </items>
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                              </ToolBar>
+                          </bottom>
+                          <top>
+                              <Label fx:id="currentTableName" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                        </Label>
+                          </top>
+                      </BorderPane>
+                  </items>
+              </SplitPane>
+                <TitledPane fx:id="infoPane" expanded="false" text="More info.">
+                    <content>
+                        <TextArea fx:id="console" editable="false" prefWidth="650.0" styleClass="console" stylesheets="@Ui.css" />
+                    </content>
+                </TitledPane>
          </items>
       </SplitPane>
-   </center>
+    </center>
 </BorderPane>

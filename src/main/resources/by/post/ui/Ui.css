@@ -23,6 +23,11 @@
    -fx-background-size:  cover;
 }
 
+/* SplitPane style for divider  */
+.split-pane  .split-pane-divider {
+    -fx-padding: 0 2px 0 2px;
+}
+
 /* Style for table cell */
 .table-view .table-cell {
     -fx-alignment: CENTER-RIGHT;
@@ -72,4 +77,11 @@
 
 .menu-bar .label {
     -fx-text-fill: black;
+ }
+
+ /* Styles for main table view tool bar elements */
+ .bar .button{
+    -fx-background-repeat: stretch;
+    -fx-background-position: center center;
+    -fx-background-size: 16px;
  }
