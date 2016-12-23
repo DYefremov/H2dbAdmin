@@ -1,6 +1,7 @@
 package by.post.control;
 
 import by.post.control.ui.TypedTreeItem;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
 
@@ -14,6 +15,7 @@ public class Context {
     private static TypedTreeItem tablesTreeItem;
     private static TableView mainTableView;
     private static TreeView mainTableTree;
+    private static ObservableList<ObservableList> currentData;
 
     public static TypedTreeItem getTablesTreeItem() {
         return tablesTreeItem;
@@ -37,6 +39,14 @@ public class Context {
 
     public static synchronized void setMainTableTree(TreeView mainTableTree) {
         Context.mainTableTree = mainTableTree;
+    }
+
+    public static synchronized ObservableList<ObservableList> getCurrentData() {
+        return currentData;
+    }
+
+    public static synchronized void setCurrentData(ObservableList<ObservableList> currentData) {
+        Context.currentData = currentData;
     }
 
     private Context() {

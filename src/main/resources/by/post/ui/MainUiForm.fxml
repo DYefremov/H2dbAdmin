@@ -233,12 +233,12 @@
                                       </Button>
                               <HBox spacing="5.0">
                                  <children>
-                                    <TextField prefHeight="26.0" prefWidth="130.0" />
                                     <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/filter.png);">
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
                                     </Button>
+                                    <TextField fx:id="filterTextField" onKeyReleased="#onFilter" prefHeight="26.0" prefWidth="130.0" />
                                  </children>
                                  <padding>
                                     <Insets left="50.0" />

@@ -56,12 +56,17 @@ public class MainUiController {
     private MenuItem contextMenuItemTable;
     @FXML
     private MenuItem contextMenuItemView;
+    @FXML
+    private TextField filterTextField;
 
     private DbControl dbControl;
     private MainUiForm mainUiForm;
     private TableEditor tableEditor;
+    //Indicate if running filter data process
+    private boolean inFiltering;
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
+    
 
     public MainUiController() {
     }
@@ -227,6 +232,11 @@ public class MainUiController {
     }
 
     @FXML
+    public void onFilter() {
+        filterData();
+    }
+
+    @FXML
     private void initialize() {
         // Set log messages output to the text area
         LogArea.setArea(console);
@@ -388,7 +398,9 @@ public class MainUiController {
         if (!resolver.getTableColumns().isEmpty()) {
             mainTable.refresh();
             mainTable.getColumns().addAll(resolver.getTableColumns());
-            mainTable.setItems(resolver.getItems());
+            ObservableList<ObservableList> items = resolver.getItems();
+            Context.setCurrentData(items);
+            mainTable.setItems(items);
         }
     }
 
@@ -469,6 +481,40 @@ public class MainUiController {
         } catch (IOException e) {
             logger.error("MainUiController error showSearchTool: " + e);
         }
+    }
+
+    /**
+     *Filter data without default sorting replacement
+     */
+    private void filterData() {
+
+        //TODO Think about the limitation of the minimum number of characters or the time delay
+
+        ObservableList<ObservableList> data = Context.getCurrentData();
+
+        if (inFiltering || data == null || data.isEmpty()) {
+            return;
+        }
+
+        inFiltering = true;
+
+        String searchText = filterTextField.getText();
+
+        List<ObservableList> filtered = new ArrayList<>();
+
+        Platform.runLater(() -> {
+            data.stream().forEach(row -> {
+                if (row.toString().toUpperCase().contains(searchText.toUpperCase())) {
+                    filtered.add(row);
+                }
+            });
+
+            if (!filtered.isEmpty()) {
+                mainTable.setItems(FXCollections.observableArrayList(filtered));
+            }
+
+            inFiltering = false;
+        });
     }
 
     /**
