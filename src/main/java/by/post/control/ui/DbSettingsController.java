@@ -1,14 +1,13 @@
 package by.post.control.ui;
 
 import by.post.control.PropertiesController;
+import by.post.control.Settings;
 import by.post.ui.ConfirmationDialog;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -51,12 +50,14 @@ public class DbSettingsController {
         Optional result = new ConfirmationDialog("").showAndWait();
 
         if (result.get() == ButtonType.OK && properties != null) {
-            properties.setProperty("path", path.getText());
-            properties.setProperty("user", login.getText());
-            properties.setProperty("password", showPassword.isSelected() ? password.getText() : maskedPassword.getText());
-            properties.setProperty("driver", driver.getSelectionModel().getSelectedItem().toString());
+            Map<String, String> settings = new HashMap<>();
+            settings.put(Settings.PATH, path.getText());
+            settings.put(Settings.PORT, port.getText());
+            settings.put(Settings.USER, login.getText());
+            settings.put(Settings.PASSWORD, showPassword.isSelected() ? password.getText() : maskedPassword.getText());
+            settings.put(Settings.DRIVER, driver.getSelectionModel().getSelectedItem().toString());
 
-            PropertiesController.setProperties(properties);
+            PropertiesController.setProperties(settings);
         }
     }
 
@@ -81,9 +82,15 @@ public class DbSettingsController {
     private void initialize() {
 
         properties = PropertiesController.getProperties();
-        host.setText(properties.getProperty("url"));
-        login.setText(properties.getProperty("user"));
-        password.setText(properties.getProperty("password"));
+
+        host.setText(properties.getProperty(Settings.HOST));
+        path.setText(properties.getProperty(Settings.PATH));
+        login.setText(properties.getProperty(Settings.USER));
+        password.setText(properties.getProperty(Settings.PASSWORD));
+
+        String mod = properties.getProperty(Settings.MODE);
+        boolean embedded = Settings.EMBEDDED_MODE.equals(mod != null ? mod : Settings.EMBEDDED_MODE);
+        mode.getSelectionModel().select(embedded ? 1 : 0);
 
         passwordFieldsReverse();
 

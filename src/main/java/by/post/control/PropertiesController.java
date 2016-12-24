@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -13,31 +13,9 @@ import java.util.Properties;
  */
 public class PropertiesController {
 
-    private static final String URL = "~/";
-    private static final String USER = "sa";
-    private static final String PASSWORD = "";
-    private static final String DRIVER = "org.h2.Driver";
-
     private static Properties properties = new Properties();
 
     private static final Logger logger = LogManager.getLogger(PropertiesController.class);
-
-    /**
-     * Set properties for db connection
-     *
-     * @param url
-     * @param user
-     * @param password
-     */
-    public static void setProperties(String url, String user, String password) {
-
-        properties.put("driver", DRIVER);
-        properties.put("url", url != null ? url : URL);
-        properties.put("user", user != null ? user : USER);
-        properties.put("password", password != null ? password : PASSWORD);
-
-        save();
-    }
 
     /**
      * @param settings
@@ -45,26 +23,31 @@ public class PropertiesController {
     public static void setProperties(Map<String, String> settings) {
 
         Map<String, String> st = settings;
-        String user = st.get("user");
-        String password = st.get("password");
-        boolean embedded = Boolean.valueOf(st.get("embedded"));
-        String url = getConnectionUrl(st.get("host"), st.get("port"), st.get("path"), embedded);
+        //Database settings
+        String user =  st.get(Settings.USER);
+        String password = st.get(Settings.PASSWORD);
+        String host = st.get(Settings.HOST);
+        String port = st.get(Settings.PORT);
+        String path = st.get(Settings.PATH);
+        String mode = st.get(Settings.MODE);
+        String exist = st.get(Settings.EXIST);
+        String driver = st.get(Settings.DRIVER);
 
-        setProperties(url, user, password);
-    }
+        boolean embedded = mode != null ? mode.equals(Settings.EMBEDDED_MODE) : true;
+        String url = getConnectionUrl(host, port, path, embedded);
 
-    /**
-     * @param properties
-     */
-    public static void setProperties(Properties properties) {
-
-        Enumeration<String> keys = (Enumeration<String>) properties.propertyNames();
-
-        while (keys.hasMoreElements()) {
-            String key = keys.nextElement();
-            properties.put(key, properties.getProperty(key));
-        }
-
+        properties.put(Settings.DRIVER, driver != null ? driver : Settings.DEFAULT_DRIVER);
+        properties.put(Settings.USER, user != null ? user : Settings.DEFAULT_USER);
+        properties.put(Settings.PASSWORD, password != null ?password : Settings.DEFAULT_PASSWORD);
+        properties.put(Settings.HOST, host != null ? host : Settings.DEFAULT_HOST);
+        properties.put(Settings.PATH, path != null ? path : Settings.DEFAULT_PATH);
+        properties.put(Settings.URL, url != null ? url : Settings.DEFAULT_URL);
+        properties.put(Settings.MODE, mode != null ? mode : Settings.EMBEDDED_MODE);
+        properties.put(Settings.EXIST, exist != null ? exist : String.valueOf(true));
+        //Ui settings
+        String promptIfExit = st.get(Settings.SHOW_PROMPT_IF_EXIT);
+        properties.put(Settings.SHOW_PROMPT_IF_EXIT, promptIfExit != null ? promptIfExit : String.valueOf(true));
+        // Save to file
         save();
     }
 
@@ -77,27 +60,16 @@ public class PropertiesController {
             return properties;
         }
 
-        InputStream in = null;
+        File file = new File("config.properties");
 
-        try {
-            File file = new File("config.properties");
+        if (!file.exists()) {
+            setProperties(new HashMap<>());
+        }
 
-            if (!file.exists()) {
-                setProperties(URL, USER, PASSWORD);
-            }
-
-            in = new FileInputStream("config.properties");
+        try (InputStream in = new FileInputStream("config.properties")) {
             properties.load(in);
         } catch (IOException e) {
             logger.error("PropertiesController error: " + e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    logger.error("PropertiesController error: " + e);
-                }
-            }
         }
 
         return properties;
@@ -108,22 +80,11 @@ public class PropertiesController {
      */
     private static void save() {
 
-        OutputStream out = null;
-
-        try {
-            out = new FileOutputStream("config.properties");
+        try (OutputStream out = new FileOutputStream("config.properties")) {
             properties.store(out, null);
             logger.info("Saving settings.");
         } catch (IOException e) {
-            logger.error("PropertiesController error: " + e);
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    logger.error("PropertiesController error: " + e);
-                }
-            }
+            logger.error("PropertiesController error[save]: " + e);
         }
     }
 
@@ -136,6 +97,10 @@ public class PropertiesController {
      */
     private static String getConnectionUrl(String host, String port, String path, boolean embedded) {
 
+        if (host == null || path == null) {
+            return Settings.DEFAULT_URL;
+        }
+
         String localPath = "";
         File file = new File(path);
         String fileName = file.getName();
@@ -147,11 +112,12 @@ public class PropertiesController {
 
         StringBuilder sb = new StringBuilder();
         sb.append("jdbc:h2:");
-        sb.append(embedded ? localPath : "tcp://" + host + (port.equals("default") ? "/" : ":" + port + "/") + path);
-        //TODO add to setup dialog
-        boolean exist = true;
+        sb.append(embedded ? localPath : "tcp://" + host + (port == null || port.equals("") ? "/" : ":" + port + "/") + path);
+
+        String ex = properties.getProperty(Settings.EXIST);
+        boolean exist = ex != null ? Boolean.valueOf(ex) : true;
         //The connection only succeeds when the database already exists
-        sb.append(exist ? ";IFEXISTS=TRUE" : ";");
+        sb.append(exist ? Settings.DEFAULT_EXIST : ";");
 
         return sb.toString();
     }

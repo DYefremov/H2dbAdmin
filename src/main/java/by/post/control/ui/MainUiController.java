@@ -2,6 +2,7 @@ package by.post.control.ui;
 
 import by.post.control.Context;
 import by.post.control.PropertiesController;
+import by.post.control.Settings;
 import by.post.control.db.*;
 import by.post.data.Table;
 import by.post.data.View;
@@ -410,9 +411,9 @@ public class MainUiController {
     private List<String> getDbTablesList(String type) {
 
         Properties properties = PropertiesController.getProperties();
-        String user = properties.getProperty("user");
-        String password = properties.getProperty("password");
-        String url = properties.getProperty("url");
+        String user = properties.getProperty(Settings.USER);
+        String password = properties.getProperty(Settings.PASSWORD);
+        String url = properties.getProperty(Settings.URL);
 
         dbControl.connect(url, user, password);
         List tables = dbControl.getTablesList(type);

@@ -1,5 +1,6 @@
 package by.post.control.ui;
 
+import by.post.control.Settings;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
@@ -39,12 +40,14 @@ public class OpenDbDialogController {
      */
     public Map<String, String> getSettings() {
 
-        settings.put("host", host.getText());
-        settings.put("port", port.getText());
-        settings.put("path", path.getText());
-        settings.put("user", user.getText());
-        settings.put("password", password.getText());
-        settings.put("embedded", String.valueOf(embedded.isSelected()));
+        settings.put(Settings.PORT, port.getText());
+        settings.put(Settings.PATH, path.getText());
+        settings.put(Settings.USER, user.getText());
+        settings.put(Settings.PASSWORD, password.getText());
+        boolean emb = embedded.isSelected();
+        settings.put(Settings.EMBEDDED_MODE, String.valueOf(emb));
+        settings.put(Settings.MODE, emb ? Settings.EMBEDDED_MODE : Settings.SERVER_MODE );
+        settings.put(Settings.HOST, emb ? Settings.DEFAULT_HOST : host.getText());
 
         return settings;
     }
@@ -84,8 +87,8 @@ public class OpenDbDialogController {
      */
     @FXML
     private void initialize() {
+
         settings = new HashMap<>();
-        //
         setEmbedded(embedded.isSelected());
     }
 
