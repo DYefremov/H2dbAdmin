@@ -1,5 +1,7 @@
 package by.post.ui;
 
+import by.post.control.PropertiesController;
+import by.post.control.Settings;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import by.post.control.ui.MainUiController;
@@ -16,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Main class for Ui
@@ -28,6 +31,7 @@ public class MainUiForm extends Application {
     private Stage mainStage;
     private Scene mainScene;
     private BorderPane mainPane;
+    private Properties properties;
 
     private static final Logger logger = LogManager.getLogger(MainUiForm.class);
 
@@ -79,19 +83,40 @@ public class MainUiForm extends Application {
         mainStage.setScene(mainScene);
         mainStage.setMinHeight(Resources.MIN_HEIGHT);
         mainStage.setMinWidth(Resources.MIN_WIDTH);
-        //Override closing program
-        mainStage.setOnCloseRequest(event -> {
-            Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+        setCloseRequest();
 
-            if (result.get() == ButtonType.OK) {
-                closeConnection();
-                Platform.exit();
-                System.exit(0);
-            }
-            event.consume();
-        });
+        properties = PropertiesController.getProperties();
 
         mainStage.show();
+    }
+
+    /**
+     * Override closing program
+     */
+    private void setCloseRequest() {
+        mainStage.setOnCloseRequest(event -> {
+            Boolean showPrompt = Boolean.valueOf(properties.getProperty(Settings.SHOW_PROMPT_IF_EXIT));
+
+            if (showPrompt) {
+                Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    close();
+                } else {
+                    event.consume();
+                }
+            }  else {
+                close();
+            }
+        });
+    }
+
+    /**
+     * Actions for close program
+     */
+    private void close() {
+        closeConnection();
+        Platform.exit();
+        System.exit(0);
     }
 
     /**
