@@ -24,7 +24,7 @@ public class Resources {
             "distributed in the hope that it will be useful, but WITHOUT ANY " +
             "WARRANTY! \n\n";
 
-    public final static String CREATOR = "Dmitriy Yefremov  2016";
+    public final static String CREATOR = "Dmitriy Yefremov  2017";
 
     public final static String USED_RESOURCES = "Used components: \t\t\t\t\t\t\t\t\n" +
             "H2 Database Engine - http://www.h2database.com\n" +

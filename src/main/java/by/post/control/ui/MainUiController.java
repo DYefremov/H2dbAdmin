@@ -63,11 +63,12 @@ public class MainUiController {
     private DbControl dbControl;
     private MainUiForm mainUiForm;
     private TableEditor tableEditor;
+    private DatabaseManager databaseManager;
     //Indicate if running filter data process
     private boolean inFiltering;
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
-    
+
 
     public MainUiController() {
     }
@@ -85,7 +86,7 @@ public class MainUiController {
         Optional<Map<String, String>> result = new DatabaseDialog().showAndWait();
 
         if (result.isPresent()) {
-            new Alert(Alert.AlertType.INFORMATION, "Not implemented!").showAndWait();
+           databaseManager.addDatabase(result.get());
         }
     }
 
@@ -257,6 +258,10 @@ public class MainUiController {
 
         if (tableEditor == null) {
             tableEditor = TableEditor.getInstance();
+        }
+
+        if (databaseManager == null) {
+            databaseManager = DatabaseManager.getInstance();
         }
 
         tableEditor.setTable(mainTable);

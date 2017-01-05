@@ -1,8 +1,10 @@
 package by.post.control.ui;
 
-import javafx.event.ActionEvent;
+import by.post.control.Settings;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -21,6 +23,8 @@ public class DatabaseDialogController {
     private TextField port;
     @FXML
     private TextField path;
+    @FXML
+    private TextField dbName;
     @FXML
     private TextField user;
     @FXML
@@ -41,11 +45,14 @@ public class DatabaseDialogController {
      */
     public Map<String, String> getSettings() {
 
-        settings.put("host", host.getText());
-        settings.put("port", port.getText());
-        settings.put("path", path.getText());
-        settings.put("user", user.getText());
-        settings.put("password", password.getText());
+        boolean serverMode = mode.getValue().equals("Server");
+
+        settings.put(Settings.MODE, serverMode ? Settings.SERVER_MODE : Settings.EMBEDDED_MODE);
+        settings.put(Settings.HOST, host.getText());
+        settings.put(Settings.PORT, port.getText());
+        settings.put(Settings.PATH, path.getText() + File.separator +  dbName.getText());
+        settings.put(Settings.USER, user.getText());
+        settings.put(Settings.PASSWORD, password.getText());
 
         return settings;
     }
@@ -83,23 +90,10 @@ public class DatabaseDialogController {
     }
 
     @FXML
-    public void onModeSelection(ActionEvent actionEvent) {
+    public void onModeSelection() {
 
-        if (mode.getValue().equals("Server")) {
-            setServer();
-        } else {
-            setEmbedded();
-        }
-    }
-
-    private void setServer() {
-
-    }
-
-    /**
-     * On/Off embedded mode
-     */
-    private void setEmbedded() {
-
+        boolean serverMode = mode.getValue().equals("Server");
+        port.setDisable(!serverMode);
+        host.setDisable(!serverMode);
     }
 }
