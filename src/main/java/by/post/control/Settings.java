@@ -29,6 +29,7 @@ public class Settings {
     public static final String DEFAULT_DRIVER = "org.h2.Driver";
     public static final String DEFAULT_URL = "jdbc:h2:file:~/test;IFEXISTS=TRUE";
     public static final String DEFAULT_EXIST = ";IFEXISTS=TRUE";
+    public static final String DEFAULT_PORT = "8082";
     /**
      * Ui settings
      */

@@ -112,7 +112,9 @@ public class PropertiesController {
 
         StringBuilder sb = new StringBuilder();
         sb.append("jdbc:h2:");
-        sb.append(embedded ? localPath : "tcp://" + host + (port == null || port.equals("") ? "/" : ":" + port + "/") + path);
+
+        boolean defaultPort = port == null || port.equals("default") || port.equals("");
+        sb.append(embedded ? localPath : "tcp://" + host + (defaultPort ? "/" : ":" + port + "/") + path);
 
         String ex = properties.getProperty(Settings.EXIST);
         boolean exist = ex != null ? Boolean.valueOf(ex) : true;

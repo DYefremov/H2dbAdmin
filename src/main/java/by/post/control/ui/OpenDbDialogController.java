@@ -103,7 +103,7 @@ public class OpenDbDialogController {
         host.setEditable(!mode);
         host.setText(mode ? "Embedded mode is on!" : "localhost");
         host.getTooltip().setText(mode ? "Turn off the embedded mode for editing." : "Host name");
-        port.setEditable(!mode);
-        port.setText(mode ? "" : "default");
+        host.setDisable(mode);
+        port.setDisable(mode);
     }
 }

@@ -73,6 +73,20 @@
                                     </graphic>
                                 </MenuItem>
                                 <SeparatorMenuItem mnemonicParsing="false" />
+                                <Menu mnemonicParsing="false" text="Delete">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/trash.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="All data" />
+                              <MenuItem mnemonicParsing="false" text="Database" />
+                           </items>
+                                </Menu>
+                        <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem mnemonicParsing="false" onAction="#onSettings" text="Settings">
                                     <graphic>
                                         <ImageView fitHeight="12.0" fitWidth="12.0">
@@ -96,14 +110,46 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Tools">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#onSqlConsole" text="SQL console" />
-                                <MenuItem mnemonicParsing="false" onAction="#onSearchTool" text="Search tool" />
-                                <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onRecoveryTool" text="Recovery tool" />
+                                <MenuItem mnemonicParsing="false" onAction="#onSqlConsole" text="SQL console">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/terminal.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#onSearchTool" text="Search tool">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/search.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                                <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onRecoveryTool" text="Recovery tool">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/recovery.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
                             <items>
-                                <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onAbout" text="About" />
+                                <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onAbout" text="About">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/info.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
                             </items>
                         </Menu>
                     </menus>
