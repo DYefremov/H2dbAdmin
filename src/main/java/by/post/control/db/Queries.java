@@ -112,6 +112,16 @@ public class Queries {
     }
 
     /**
+     * DROP ALL OBJECTS
+     * @see "http://www.h2database.com/html/grammar.html#drop_all_objects"
+     * @param dropOnly
+     * @return
+     */
+    public static String dropDatabase(boolean dropOnly) {
+        return "DROP ALL OBJECTS" + (dropOnly ? "" : " DELETE FILES");
+    }
+
+    /**
      * @param tableName
      * @return
      */

@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -86,7 +87,11 @@ public class MainUiController {
         Optional<Map<String, String>> result = new DatabaseDialog().showAndWait();
 
         if (result.isPresent()) {
-           databaseManager.addDatabase(result.get());
+            databaseManager.addDatabase(result.get());
+            Platform.runLater(() -> {
+                clearMainTable();
+                init();
+            });
         }
     }
 
@@ -98,6 +103,16 @@ public class MainUiController {
     @FXML
     public void onAddNewView() {
         addNewView();
+    }
+
+    @FXML
+    public void onDbDelete() {
+        databaseDelete(false);
+    }
+
+    @FXML
+    public void onDbDrop() {
+        databaseDelete(true);
     }
 
     @FXML
@@ -345,8 +360,7 @@ public class MainUiController {
             PropertiesController.setProperties(result.get());
 
             Platform.runLater(() -> {
-                mainTable.getItems().clear();
-                mainTable.getColumns().clear();
+                clearMainTable();
                 init();
             });
         }
@@ -388,11 +402,7 @@ public class MainUiController {
     private void selectTable(Table table) {
 
         logger.info("Select table: " + table.getName());
-
-        if (!mainTable.getColumns().isEmpty()) {
-            mainTable.getColumns().clear();
-            mainTable.getItems().clear();
-        }
+        clearMainTable();
         // Set text for current table name label by selected tree item.
         TypedTreeItem item = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
         String name = item.getValue() != null ? item.getValue().toString() : "";
@@ -539,6 +549,41 @@ public class MainUiController {
                 sp.hide();
             }
         });
+    }
+
+    /**
+     * Clear main table
+     */
+    private void clearMainTable() {
+        currentTableName.setText("");
+        mainTable.getColumns().clear();
+        mainTable.getItems().clear();
+    }
+
+    /**
+     * Deleting database
+     * If not dropOnly the database files will be removed!
+     */
+    private void databaseDelete(boolean dropOnly) {
+
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            try {
+                databaseManager.deleteDatabase(dropOnly);
+
+                Platform.runLater(() -> {
+                    clearMainTable();
+                    tableTree.setRoot(null);
+
+                    if (dropOnly) {
+                        init();
+                    }
+                });
+            } catch (SQLException e) {
+                logger.error("MainUiController error [databaseDelete]: " + e);
+            }
+        }
     }
 
 }

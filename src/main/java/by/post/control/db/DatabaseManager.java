@@ -1,7 +1,8 @@
 package by.post.control.db;
 
+import by.post.control.PropertiesController;
 import by.post.control.Settings;
-
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -33,13 +34,15 @@ public class DatabaseManager {
         String url = getUrl(settings);
 
         dbControl.getConnection(url, user, password);
+        PropertiesController.setProperties(settings);
     }
 
     /**
      * Drop database
      */
-    public void deleteDatabase() {
-
+    public void deleteDatabase(boolean drop) throws SQLException {
+        dbControl.update(Queries.dropDatabase(drop));
+        dbControl.closeConnection();
     }
 
     /**

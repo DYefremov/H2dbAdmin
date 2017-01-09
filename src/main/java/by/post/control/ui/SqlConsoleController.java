@@ -46,7 +46,7 @@ public class SqlConsoleController {
     private static final String DONE_MESSAGE = "\n---- Done! ----\n\n";
     private static final String ERROR_MESSAGE = "No data or error.See \"More info.\" for details!";
 
-    private static final Logger logger = LogManager.getLogger(SqlConsoleControllerOld.class);
+    private static final Logger logger = LogManager.getLogger(SqlConsoleController.class);
 
     public SqlConsoleController() {
 
@@ -119,12 +119,9 @@ public class SqlConsoleController {
                     console.clear();
                     historyPosition = 0;
                     //Without this wrapping next code not work properly!!!
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            //return cursor on start position
-                            console.selectPositionCaret(0);
-                        }
+                    Platform.runLater(() -> {
+                        //return cursor on start position
+                        console.selectPositionCaret(0);
                     });
                 }
                 break;

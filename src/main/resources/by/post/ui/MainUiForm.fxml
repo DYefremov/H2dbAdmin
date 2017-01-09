@@ -82,8 +82,8 @@
                                         </ImageView>
                                     </graphic>
                            <items>
-                              <MenuItem mnemonicParsing="false" text="All data" />
-                              <MenuItem mnemonicParsing="false" text="Database" />
+                              <MenuItem mnemonicParsing="false" onAction="#onDbDelete" text="Database files" />
+                              <MenuItem mnemonicParsing="false" onAction="#onDbDrop" text="Drop database" />
                            </items>
                                 </Menu>
                         <SeparatorMenuItem mnemonicParsing="false" />
