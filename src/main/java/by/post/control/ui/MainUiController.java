@@ -8,8 +8,6 @@ import by.post.data.Table;
 import by.post.data.View;
 import by.post.ui.*;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -90,7 +88,7 @@ public class MainUiController {
             databaseManager.addDatabase(result.get());
             Platform.runLater(() -> {
                 clearMainTable();
-                init();
+                initData();
             });
         }
     }
@@ -259,27 +257,41 @@ public class MainUiController {
         LogArea.setArea(console);
         logger.info("Starting application...");
         init();
+        initData();
         //Set context
         Context.setMainTableTree(tableTree);
         Context.setMainTableView(mainTable);
     }
 
     /**
-     * Init data on startup
+     * Init on startup
      */
     private void init() {
 
         dbControl = DbController.getInstance();
-
-        if (tableEditor == null) {
-            tableEditor = TableEditor.getInstance();
-        }
-
-        if (databaseManager == null) {
-            databaseManager = DatabaseManager.getInstance();
-        }
-
+        tableEditor = TableEditor.getInstance();
+        databaseManager = DatabaseManager.getInstance();
         tableEditor.setTable(mainTable);
+
+        tableTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+
+            TypedTreeItem item = (TypedTreeItem) newValue;
+            // A TreeItem is a leaf if it has no children
+            if (!item.isLeaf()) {
+                return;
+            }
+
+            selectTable(item);
+        });
+    }
+
+    /**
+     * Init data
+     */
+    private void initData() {
 
         List<TypedTreeItem> tables = getRootItems();
 
@@ -297,23 +309,6 @@ public class MainUiController {
 
         tableTree.setRoot(root);
         tableTree.setContextMenu(treeContextMenu);
-        tableTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-
-                if (newValue == null) {
-                    return;
-                }
-
-                TypedTreeItem item = (TypedTreeItem) newValue;
-                // A TreeItem is a leaf if it has no children
-                if (!item.isLeaf()) {
-                    return;
-                }
-
-                selectTable(item);
-            }
-        });
     }
 
     /**
@@ -361,7 +356,7 @@ public class MainUiController {
 
             Platform.runLater(() -> {
                 clearMainTable();
-                init();
+                initData();
             });
         }
     }
@@ -577,7 +572,7 @@ public class MainUiController {
                     tableTree.setRoot(null);
 
                     if (dropOnly) {
-                        init();
+                        initData();
                     }
                 });
             } catch (SQLException e) {
