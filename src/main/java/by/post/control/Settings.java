@@ -34,5 +34,12 @@ public class Settings {
      * Ui settings
      */
     public static final String SHOW_PROMPT_IF_EXIT = "guiShowPromptIfExit";
+    public static final String LANG = "lang";
+    //Default values
+    public static final String DEFAULT_LANG = "en";
+
+    private Settings() {
+
+    }
 
 }

@@ -47,7 +47,7 @@
                <Insets />
             </HBox.margin>
             <children>
-               <VBox fx:id="dbSettingsPane" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="430.0">
+               <VBox fx:id="dbSettingsPane" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="430.0" visible="false">
                   <children>
                      <GridPane>
                         <columnConstraints>
@@ -140,7 +140,7 @@
       
                   </children>
                </VBox>
-               <VBox fx:id="uiSettingsPane" prefHeight="245.0" prefWidth="430.0" visible="false">
+               <VBox fx:id="uiSettingsPane" prefHeight="245.0" prefWidth="430.0">
                   <children>
                      <GridPane>
                        <columnConstraints>
@@ -158,10 +158,26 @@
                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                        </rowConstraints>
                         <children>
-                           <CheckBox fx:id="promptClosingProgram" mnemonicParsing="false" prefHeight="18.0" prefWidth="279.0" text="Show prompt before closing program" GridPane.rowIndex="1">
+                           <CheckBox fx:id="promptClosingProgram" mnemonicParsing="false" prefHeight="18.0" prefWidth="279.0" text="Show prompt before closing program" GridPane.rowIndex="3">
                               <GridPane.margin>
                                  <Insets left="20.0" />
                               </GridPane.margin></CheckBox>
+                           <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                              <children>
+                                 <Label text="Language">
+                                    <HBox.margin>
+                                       <Insets left="20.0" right="10.0" />
+                                    </HBox.margin></Label>
+                                 <ChoiceBox prefWidth="150.0" value="English">
+                                    <items>
+                                       <FXCollections fx:factory="observableArrayList">
+                                          <String fx:value="English" />
+                                          <String fx:value="Русский" />
+                                       </FXCollections>
+                                    </items>
+                                 </ChoiceBox>
+                              </children>
+                           </HBox>
                         </children>
                      </GridPane>
                   </children>

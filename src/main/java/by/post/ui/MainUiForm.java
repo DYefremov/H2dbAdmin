@@ -17,8 +17,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 /**
  * Main class for Ui
@@ -73,8 +75,12 @@ public class MainUiForm extends Application {
      */
     private void initApp() throws Exception {
 
+        properties = PropertiesController.getProperties();
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("MainUiForm.fxml"));
+        //Set language
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", new Locale("en", "US")));
 
         mainPane = loader.load();
         controller = loader.getController();
@@ -84,9 +90,6 @@ public class MainUiForm extends Application {
         mainStage.setMinHeight(Resources.MIN_HEIGHT);
         mainStage.setMinWidth(Resources.MIN_WIDTH);
         setCloseRequest();
-
-        properties = PropertiesController.getProperties();
-
         mainStage.show();
     }
 

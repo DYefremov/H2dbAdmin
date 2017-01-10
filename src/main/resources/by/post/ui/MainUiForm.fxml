@@ -30,7 +30,7 @@
             <children>
                 <MenuBar style="-fx-background-color: lightgray;">
                     <menus>
-                        <Menu mnemonicParsing="false" text="File">
+                        <Menu mnemonicParsing="false" text="%File">
                             <items>
                                 <Menu mnemonicParsing="false" text="New">
                                     <items>
@@ -108,7 +108,7 @@
                                 </MenuItem>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Tools">
+                        <Menu mnemonicParsing="false" text="%Tools">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#onSqlConsole" text="SQL console">
                                     <graphic>
@@ -139,7 +139,7 @@
                                 </MenuItem>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Help">
+                        <Menu mnemonicParsing="false" text="%Help">
                             <items>
                                 <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onAbout" text="About">
                                     <graphic>
