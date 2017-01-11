@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
 
+import java.util.Locale;
+
 /**
  * Class for storing the application context
  *
@@ -16,6 +18,7 @@ public class Context {
     private static TableView mainTableView;
     private static TreeView mainTableTree;
     private static ObservableList<ObservableList> currentData;
+    private static Locale locale;
 
     public static TypedTreeItem getTablesTreeItem() {
         return tablesTreeItem;
@@ -47,6 +50,14 @@ public class Context {
 
     public static synchronized void setCurrentData(ObservableList<ObservableList> currentData) {
         Context.currentData = currentData;
+    }
+
+    public static Locale getLocale() {
+        return locale;
+    }
+
+    public static synchronized void setLocale(Locale locale) {
+        Context.locale = locale;
     }
 
     private Context() {

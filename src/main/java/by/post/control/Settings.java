@@ -37,6 +37,7 @@ public class Settings {
     public static final String LANG = "lang";
     //Default values
     public static final String DEFAULT_LANG = "en";
+    public static final String SECOND_LANG = "ru";
 
     private Settings() {
 

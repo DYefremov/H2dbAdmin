@@ -1,5 +1,6 @@
 package by.post.ui;
 
+import by.post.control.Context;
 import by.post.control.ui.SettingsDialogController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -31,6 +33,7 @@ public class SettingsDialog extends Dialog {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(SettingsDialog.class.getResource("SettingsDialogPane.fxml"));
+            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             this.setDialogPane(loader.load());
             controller = loader.getController();
             Stage stage = (Stage)this.getDialogPane().getScene().getWindow();

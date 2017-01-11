@@ -252,7 +252,7 @@ public class MainUiController {
     }
 
     @FXML
-    private void initialize() {
+    public void initialize() {
         // Set log messages output to the text area
         LogArea.setArea(console);
         logger.info("Starting application...");

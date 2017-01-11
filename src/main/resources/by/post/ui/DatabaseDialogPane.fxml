@@ -25,9 +25,9 @@
     <content>
         <GridPane fx:id="gridPane" alignment="CENTER" style="-fx-background-color: lightgray;">
             <columnConstraints>
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="170.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="135.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints fillHeight="false" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -38,7 +38,7 @@
                 <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Label text="Mode:">
+                <Label text="%Mode">
                     <GridPane.margin>
                         <Insets right="5.0" />
                     </GridPane.margin></Label>
@@ -50,34 +50,34 @@
                         </FXCollections>
                     </items>
                 </ChoiceBox>
-                <Label alignment="CENTER_RIGHT" prefHeight="30.0" text="Host:" GridPane.rowIndex="1">
+                <Label alignment="CENTER_RIGHT" prefHeight="30.0" text="%Host" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets right="5.0" />
                     </GridPane.margin>
                 </Label>
-                <Label text="User:" GridPane.rowIndex="4">
+                <Label text="%Login" GridPane.rowIndex="4">
                     <GridPane.margin>
                         <Insets right="5.0" />
                     </GridPane.margin></Label>
-                <Label text="Password:" GridPane.rowIndex="5">
+                <Label text="%Password" GridPane.rowIndex="5">
                     <GridPane.margin>
                         <Insets right="5.0" />
                     </GridPane.margin></Label>
                 <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <tooltip>
-                        <Tooltip text="Password" />
+                        <Tooltip text="%Password" />
                     </tooltip></PasswordField>
                 <TextField fx:id="user" text="sa" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <tooltip>
-                        <Tooltip text="User name" />
+                        <Tooltip text="%UserName" />
                     </tooltip></TextField>
                 <TextField fx:id="host" text="localhost" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <tooltip>
-                        <Tooltip text="Host name" />
+                        <Tooltip text="%Host" />
                     </tooltip></TextField>
                 <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                     <children>
-                        <Label prefHeight="30.0" text="Port:">
+                        <Label prefHeight="30.0" text="%Port">
                             <HBox.margin>
                                 <Insets left="10.0" />
                             </HBox.margin>
@@ -91,21 +91,21 @@
                 </HBox>
                 <TextField fx:id="path" onMouseClicked="#onPathClicked" text="~/" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <tooltip>
-                        <Tooltip text="Path to db file. Double click to choose." />
+                        <Tooltip text="%ToolTipPathToDb" />
                     </tooltip></TextField>
-                <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="107.0" text="Path:" GridPane.rowIndex="2">
+                <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="107.0" text="%Path" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets right="5.0" />
                     </GridPane.margin></Label>
-                <Hyperlink onAction="#onPath" prefHeight="30.0" prefWidth="90.0" text="Open path" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                <Hyperlink onAction="#onPath" text="%OpenPath" GridPane.columnIndex="2" GridPane.rowIndex="2">
                     <tooltip>
-                        <Tooltip text="Open local database file" />
+                        <Tooltip text="%ToolTipOpenLocalDatabaseFile" />
                     </tooltip>
                     <GridPane.margin>
                         <Insets left="10.0" />
                     </GridPane.margin>
                 </Hyperlink>
-            <Label text="DB name:" GridPane.rowIndex="3">
+            <Label text="%DbName" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin>
@@ -115,7 +115,7 @@
         </GridPane>
     </content>
    <header>
-      <Label alignment="CENTER" text="Setting up new database" textAlignment="CENTER">
+      <Label alignment="CENTER" text="%SettingUpNewDatabase" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>

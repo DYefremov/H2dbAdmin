@@ -47,6 +47,9 @@ public class PropertiesController {
         //Ui settings
         String promptIfExit = st.get(Settings.SHOW_PROMPT_IF_EXIT);
         properties.put(Settings.SHOW_PROMPT_IF_EXIT, promptIfExit != null ? promptIfExit : String.valueOf(true));
+        String defaultLang = settings.get(Settings.LANG);
+        boolean defLang = defaultLang == null || defaultLang.equals(Settings.DEFAULT_LANG);
+        properties.put(Settings.LANG, defLang ? Settings.DEFAULT_LANG : Settings.SECOND_LANG);
         // Save to file
         save();
     }

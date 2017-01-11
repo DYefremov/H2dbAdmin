@@ -1,5 +1,6 @@
 package by.post.ui;
 
+import by.post.control.Context;
 import by.post.control.ui.DatabaseDialogController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonBar;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -29,6 +31,7 @@ public class DatabaseDialog extends Dialog<Map<String, String>> {
 
         try {
             FXMLLoader loader = new FXMLLoader(DatabaseDialog.class.getResource("DatabaseDialogPane.fxml"));
+            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             this.setDialogPane(loader.load());
             controller = loader.getController();
         } catch (IOException e) {

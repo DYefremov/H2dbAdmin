@@ -31,8 +31,8 @@
          <ListView fx:id="settingsList" maxWidth="-Infinity" minWidth="-Infinity" onKeyReleased="#onSettingsKeyReleased" onMouseClicked="#onSettingsMouseClicked" prefWidth="150.0">
             <items>
                <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="Database" />
-                  <String fx:value="User interface" />
+                  <Label text="%Database" />
+                  <Label text="%UserInterface" />
                </FXCollections>
             </items>
             <opaqueInsets>
@@ -47,13 +47,13 @@
                <Insets />
             </HBox.margin>
             <children>
-               <VBox fx:id="dbSettingsPane" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="430.0" visible="false">
+               <VBox fx:id="dbSettingsPane" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="430.0">
                   <children>
                      <GridPane>
                         <columnConstraints>
-                           <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="100.0" minWidth="-Infinity" prefWidth="100.0" />
+                           <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="85.0" minWidth="-Infinity" prefWidth="85.0" />
                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="-Infinity" prefWidth="170.0" />
-                           <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="150.0" minWidth="-Infinity" prefWidth="150.0" />
+                           <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="165.0" minWidth="-Infinity" prefWidth="165.0" />
                         </columnConstraints>
                         <rowConstraints>
                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -64,22 +64,22 @@
                            <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
-                           <Label text="Host:" GridPane.rowIndex="1">
+                           <Label text="%Host" GridPane.rowIndex="1">
                               <GridPane.margin>
                                  <Insets right="5.0" top="2.0" />
                               </GridPane.margin>
                            </Label>
-                           <Label text="Login:" GridPane.rowIndex="3">
+                           <Label text="%Login" GridPane.rowIndex="3">
                               <GridPane.margin>
                                  <Insets right="5.0" />
                               </GridPane.margin>
                            </Label>
-                           <Label text="Password:" GridPane.rowIndex="4">
+                           <Label text="%Password" GridPane.rowIndex="4">
                               <GridPane.margin>
                                  <Insets right="5.0" />
                               </GridPane.margin>
                            </Label>
-                           <Label text="Driver:" GridPane.rowIndex="5">
+                           <Label text="%Driver" GridPane.rowIndex="5">
                               <GridPane.margin>
                                  <Insets right="5.0" />
                               </GridPane.margin>
@@ -91,14 +91,14 @@
                            </TextField>
                            <TextField fx:id="login" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            <TextField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                           <CheckBox fx:id="showPassword" mnemonicParsing="false" text="Show password" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                           <CheckBox fx:id="showPassword" mnemonicParsing="false" text="%ShowPassword" GridPane.columnIndex="2" GridPane.rowIndex="4">
                               <GridPane.margin>
                                  <Insets left="10.0" />
                               </GridPane.margin>
                            </CheckBox>
                            <ComboBox fx:id="driver" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                            <PasswordField fx:id="maskedPassword" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                           <Label text="Path" GridPane.rowIndex="2">
+                           <Label text="%Path" GridPane.rowIndex="2">
                               <GridPane.margin>
                                  <Insets right="5.0" />
                               </GridPane.margin>
@@ -106,7 +106,7 @@
                            <TextField fx:id="path" onMouseClicked="#onPathClicked" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="1">
                               <children>
-                                 <Label text="Port:">
+                                 <Label text="%Port">
                                     <padding>
                                        <Insets right="5.0" />
                                     </padding>
@@ -117,12 +117,12 @@
                                  <TextField fx:id="port" maxWidth="-Infinity" prefWidth="60.0" />
                               </children>
                            </HBox>
-                           <Label text="Mode:">
+                           <Label text="%Mode">
                               <GridPane.margin>
                                  <Insets right="5.0" />
                               </GridPane.margin>
                            </Label>
-                           <ChoiceBox fx:id="mode" prefWidth="170.0" value="Server" GridPane.columnIndex="1">
+                           <ChoiceBox fx:id="mode" onAction="#onModeChange" prefWidth="170.0" value="Server" GridPane.columnIndex="1">
                               <items>
                                  <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Server" />
@@ -130,22 +130,20 @@
                                  </FXCollections>
                               </items>
                            </ChoiceBox>
-                           <Hyperlink onAction="#onOpenDbFile" text="Open db file" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <Hyperlink onAction="#onOpenDbFile" text="%OpenDbFile" GridPane.columnIndex="2" GridPane.rowIndex="2">
                               <GridPane.margin>
                                  <Insets left="10.0" />
                               </GridPane.margin>
                            </Hyperlink>
                         </children>
                      </GridPane>
-      
                   </children>
                </VBox>
-               <VBox fx:id="uiSettingsPane" prefHeight="245.0" prefWidth="430.0">
+               <VBox fx:id="uiSettingsPane" prefHeight="245.0" prefWidth="430.0" visible="false">
                   <children>
                      <GridPane>
                        <columnConstraints>
-                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="315.0" minWidth="10.0" prefWidth="315.0" />
-                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="363.0" minWidth="10.0" prefWidth="115.0" />
+                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                        </columnConstraints>
                        <rowConstraints>
                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -158,17 +156,17 @@
                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                        </rowConstraints>
                         <children>
-                           <CheckBox fx:id="promptClosingProgram" mnemonicParsing="false" prefHeight="18.0" prefWidth="279.0" text="Show prompt before closing program" GridPane.rowIndex="3">
+                           <CheckBox fx:id="promptClosingProgram" mnemonicParsing="false" prefHeight="18.0" text="%ShowPrompt" GridPane.rowIndex="3">
                               <GridPane.margin>
                                  <Insets left="20.0" />
                               </GridPane.margin></CheckBox>
                            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                               <children>
-                                 <Label text="Language">
+                                 <Label text="%Language">
                                     <HBox.margin>
                                        <Insets left="20.0" right="10.0" />
                                     </HBox.margin></Label>
-                                 <ChoiceBox prefWidth="150.0" value="English">
+                                 <ChoiceBox fx:id="language" prefWidth="150.0" value="English">
                                     <items>
                                        <FXCollections fx:factory="observableArrayList">
                                           <String fx:value="English" />
@@ -193,7 +191,7 @@
       </HBox>
    </content>
    <header>
-      <Label alignment="CENTER" text="Settings">
+      <Label alignment="CENTER" text="%Settings">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>

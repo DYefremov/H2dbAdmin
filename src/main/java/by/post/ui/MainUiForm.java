@@ -1,5 +1,6 @@
 package by.post.ui;
 
+import by.post.control.Context;
 import by.post.control.PropertiesController;
 import by.post.control.Settings;
 import by.post.control.db.DbControl;
@@ -80,7 +81,9 @@ public class MainUiForm extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("MainUiForm.fxml"));
         //Set language
-        loader.setResources(ResourceBundle.getBundle("bundles.Lang", new Locale("en", "US")));
+        Locale locale = getLocale();
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", locale));
+        Context.setLocale(locale);
 
         mainPane = loader.load();
         controller = loader.getController();
@@ -135,5 +138,16 @@ public class MainUiForm extends Application {
     private void closeConnection() {
         DbControl dbControl = DbController.getInstance();
         dbControl.closeConnection();
+    }
+
+    private Locale getLocale() {
+
+        boolean defLang = true;
+
+        if (properties != null && properties.getProperty(Settings.LANG) != null) {
+           defLang = properties.getProperty(Settings.LANG).equals(Settings.DEFAULT_LANG);
+        }
+
+        return defLang ? new Locale(Settings.DEFAULT_LANG, "US") : new Locale("ru");
     }
 }

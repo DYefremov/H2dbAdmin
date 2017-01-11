@@ -47,6 +47,8 @@ public class SettingsDialogController {
     VBox uiSettingsPane;
     @FXML
     CheckBox promptClosingProgram;
+    @FXML
+    ChoiceBox language;
     //Main elements
     @FXML
     StackPane stackPane;
@@ -99,6 +101,14 @@ public class SettingsDialogController {
         }
     }
 
+    @FXML
+    public void onModeChange() {
+
+        int index = mode.getSelectionModel().getSelectedIndex();
+        host.setDisable(index == 1);
+        port.setDisable(index == 1);
+    }
+
     /**
      *
      */
@@ -113,8 +123,11 @@ public class SettingsDialogController {
             settings.put(Settings.USER, login.getText());
             settings.put(Settings.PASSWORD, showPassword.isSelected() ? password.getText() : maskedPassword.getText());
             settings.put(Settings.DRIVER, driver.getSelectionModel().getSelectedItem().toString());
-            settings.put(Settings.MODE, mode.getSelectionModel().getSelectedIndex() == 0 ? Settings.SERVER_MODE : Settings.EMBEDDED_MODE);
+            settings.put(Settings.MODE, mode.getSelectionModel().getSelectedIndex() == 0
+                    ? Settings.SERVER_MODE : Settings.EMBEDDED_MODE);
             //Ui
+            settings.put(Settings.LANG, language.getSelectionModel().getSelectedIndex() == 0
+                    ? Settings.DEFAULT_LANG : Settings.SECOND_LANG);
             settings.put(Settings.SHOW_PROMPT_IF_EXIT, String.valueOf(promptClosingProgram.isSelected()));
 
             PropertiesController.setProperties(settings);
@@ -139,7 +152,7 @@ public class SettingsDialogController {
     }
 
     @FXML
-    private void initialize() {
+    public void initialize() {
 
         properties = PropertiesController.getProperties();
 
@@ -174,6 +187,11 @@ public class SettingsDialogController {
      * Initialize ui properties
      */
     private void initUiProperties() {
+
+        String defaultLang = properties.getProperty(Settings.LANG);
+        boolean defLang = defaultLang == null || defaultLang.equals(Settings.DEFAULT_LANG);
+        language.getSelectionModel().select(defLang ? 0 : 1);
+
         promptClosingProgram.setSelected(Boolean.valueOf(properties.getProperty(Settings.SHOW_PROMPT_IF_EXIT)));
     }
 
@@ -188,20 +206,15 @@ public class SettingsDialogController {
             model.select(0);
         }
 
-        setSettings(model.getSelectedItem().toString());
+        setSettings(model.getSelectedIndex());
     }
 
     /**
-     * @param name
+     * @param index
      */
-    private void setSettings(String name) {
+    private void setSettings(int index) {
 
-        if (name.equals(settingsList.getItems().get(0))) {
-            dbSettingsPane.setVisible(true);
-            uiSettingsPane.setVisible(false);
-        } else  if (name.equals(settingsList.getItems().get(1))) {
-            dbSettingsPane.setVisible(false);
-            uiSettingsPane.setVisible(true);
-        }
+        dbSettingsPane.setVisible(index == 0);
+        uiSettingsPane.setVisible(index != 0);
     }
 }

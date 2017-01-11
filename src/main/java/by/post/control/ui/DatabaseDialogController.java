@@ -92,8 +92,8 @@ public class DatabaseDialogController {
     @FXML
     public void onModeSelection() {
 
-        boolean serverMode = mode.getValue().equals("Server");
-        port.setDisable(!serverMode);
-        host.setDisable(!serverMode);
+        int index = mode.getSelectionModel().getSelectedIndex();
+        port.setDisable(index == 1);
+        host.setDisable(index == 1);
     }
 }
