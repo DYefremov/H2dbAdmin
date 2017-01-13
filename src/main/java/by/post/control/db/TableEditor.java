@@ -324,7 +324,11 @@ public class TableEditor {
 
         items.forEach(item -> {
             try {
-                dbControl.update(Queries.deleteRow(getRow(Commands.DELETE, 0, item)));
+                if (rows.contains(item)) {
+                    rows.remove(item);
+                } else {
+                    dbControl.update(Queries.deleteRow(getRow(Commands.DELETE, 0, item)));
+                }
             } catch (SQLException e) {
                 logger.error("Table editor error[deleteRow]: " + e);
                 new Alert(Alert.AlertType.ERROR, "Failure to delete the row.\nSee more info in console!").showAndWait();

@@ -11,12 +11,15 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -267,6 +270,7 @@ public class MainUiController {
         tableEditor.setTable(mainTable);
 
         tableTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
             if (newValue == null) {
                 return;
             }
@@ -277,8 +281,12 @@ public class MainUiController {
                 return;
             }
 
+            tableEditor.clearSavedData();
             selectTable(item);
         });
+
+        tableTree.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> checkIsDataStored(event));
+        tableTree.addEventFilter(KeyEvent.KEY_PRESSED, event -> checkIsDataStored(event));
         //Set multiple selection in table view
         mainTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
@@ -304,6 +312,18 @@ public class MainUiController {
 
         tableTree.setRoot(root);
         tableTree.setContextMenu(treeContextMenu);
+    }
+
+    /**
+     * @param event
+     */
+    private void checkIsDataStored(Event event) {
+        if (tableEditor.hasNotSavedData()) {
+            Optional<ButtonType> result = new ConfirmationDialog("You have unsaved data. Continue?").showAndWait();
+            if (result.get() != ButtonType.OK) {
+                event.consume();
+            }
+        }
     }
 
     /**
@@ -363,15 +383,6 @@ public class MainUiController {
      */
     private void selectTable(TypedTreeItem item) {
 
-        if (tableEditor.hasNotSavedData()) {
-            Optional<ButtonType> result = new ConfirmationDialog("You have unsaved data. Continue?").showAndWait();
-
-            if (result.get() != ButtonType.OK) {
-                return;
-            }
-        }
-
-        tableEditor.clearSavedData();
         showIndicator(true);
 
         Task<Void> task = new Task<Void>() {
