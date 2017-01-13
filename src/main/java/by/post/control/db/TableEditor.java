@@ -17,10 +17,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -30,6 +27,7 @@ public class TableEditor {
     private DbControl dbControl = null;
     private TableView mainTable;
     private Row lastSelectedRow;
+    private Deque<Object> rows;
 
     private static TableEditor instance = new TableEditor();
 
@@ -39,6 +37,7 @@ public class TableEditor {
 
     private TableEditor() {
         dbControl = DbController.getInstance();
+        rows = new ArrayDeque<>();
     }
 
     public static TableEditor getInstance() {
@@ -47,44 +46,6 @@ public class TableEditor {
 
     public void setTable(TableView mainTable) {
         this.mainTable = mainTable;
-    }
-
-    /**
-     * Save changes after row editing
-     *
-     * @param rowIndex
-     */
-    public void saveRow(int rowIndex) {
-
-        try {
-            if (mainTable.getItems().size() == getDbRowsCount()) {
-                changeRow();
-            } else {
-                dbControl.update(Queries.addRow(getRow(Commands.ADD, rowIndex)));
-            }
-        } catch (SQLException e) {
-            logger.error("Table editor error[saveRow]: " + e);
-            new Alert(Alert.AlertType.ERROR, "Failed to save the row..\nSee more info in console!").showAndWait();
-        }
-        logger.info("Save changes for row to database.");
-    }
-
-    /**
-     * Save the currently selected row.
-     */
-    public void saveCurrentRow() {
-
-        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-
-        if (lastSelectedRow != null && !lastSelectedRow.getTableName().equals(mainTable.getId())) {
-            lastSelectedRow = null;
-        }
-
-        if (selectedIndex != -1) {
-            if (lastSelectedRow == null || lastSelectedRow.getNum() != selectedIndex) {
-                lastSelectedRow = getRow(Commands.CHANGE, selectedIndex);
-            }
-        }
     }
 
     /**
@@ -277,6 +238,60 @@ public class TableEditor {
     }
 
     /**
+     * Save changes after row editing
+     *
+     * @param rowIndex
+     */
+    public void saveRow(int rowIndex) {
+
+        try {
+            if (mainTable.getItems().size() == getDbRowsCount()) {
+                changeRow();
+            } else {
+               while (!rows.isEmpty()) {
+                   dbControl.update(Queries.addRow(getRow(Commands.ADD, rowIndex, rows.pollLast())));
+               }
+            }
+        } catch (SQLException e) {
+            logger.error("Table editor error[saveRow]: " + e);
+            new Alert(Alert.AlertType.ERROR, "Failed to save the row..\nSee more info in console!").showAndWait();
+        }
+        logger.info("Save changes for row to database.");
+    }
+
+    /**
+     * Save the currently selected row.
+     */
+    public void saveCurrentRow() {
+
+        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
+
+        if (lastSelectedRow != null && !lastSelectedRow.getTableName().equals(mainTable.getId())) {
+            lastSelectedRow = null;
+        }
+
+        if (selectedIndex != -1) {
+            if (lastSelectedRow == null || lastSelectedRow.getNum() != selectedIndex) {
+                lastSelectedRow = getRow(Commands.CHANGE, selectedIndex, null);
+            }
+        }
+    }
+
+    /**
+     * @return true if there is unsaved data
+     */
+    public boolean hasNotSavedData() {
+        return !rows.isEmpty();
+    }
+
+    /**
+     *
+     */
+    public void clearSavedData() {
+        rows.clear();
+    }
+
+    /**
      * Add new row to the table
      */
     public void addRow() throws IOException, SQLException {
@@ -301,21 +316,22 @@ public class TableEditor {
      */
     public void deleteRow() {
 
-        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
+        ObservableList items = mainTable.getSelectionModel().getSelectedItems();
 
-        if (selectedIndex == -1) {
+        if (items.isEmpty()) {
             return;
         }
 
-        Row row = getRow(Commands.DELETE, selectedIndex);
+        items.forEach(item -> {
+            try {
+                dbControl.update(Queries.deleteRow(getRow(Commands.DELETE, 0, item)));
+            } catch (SQLException e) {
+                logger.error("Table editor error[deleteRow]: " + e);
+                new Alert(Alert.AlertType.ERROR, "Failure to delete the row.\nSee more info in console!").showAndWait();
+            }
+        });
 
-        try {
-            dbControl.update(Queries.deleteRow(row));
-            mainTable.getItems().remove(selectedIndex);
-        } catch (SQLException e) {
-            logger.error("Table editor error[deleteRow]: " + e);
-            new Alert(Alert.AlertType.ERROR, "Failure to delete the row.\nSee more info in console!").showAndWait();
-        }
+        mainTable.getItems().removeAll(items);
     }
 
     /**
@@ -329,7 +345,7 @@ public class TableEditor {
             return;
         }
 
-        Row row = getRow(Commands.CHANGE, selectedIndex);
+        Row row = getRow(Commands.CHANGE, selectedIndex, null);
 
         if (!lastSelectedRow.equals(row)) {
             try {
@@ -349,20 +365,14 @@ public class TableEditor {
     private void createNewRow() throws SQLException {
 
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-
-
-        if (mainTable.getItems().size() != getDbRowsCount()) {
-            new Alert(Alert.AlertType.ERROR, "Please, save previous row!").showAndWait();
-            return;
-        }
-
-        Row row = getRow(Commands.ADD, selectedIndex);
+        Row row = getRow(Commands.ADD, selectedIndex, null);
         int columnCount = row.getCells().size();
 
         selectedIndex = selectedIndex == -1 ? ++selectedIndex : selectedIndex;
 
         mainTable.getItems().add(selectedIndex, FXCollections.observableArrayList(Collections.nCopies(columnCount, DEFAULT_CELL_VALUE)));
         mainTable.getSelectionModel().select(selectedIndex, null);
+        rows.add(mainTable.getSelectionModel().getSelectedItem());
     }
 
     /**
@@ -371,11 +381,17 @@ public class TableEditor {
      * @param command
      * @return needed row
      */
-    private Row getRow(Commands command, int selectedIndex) {
+    private Row getRow(Commands command, int selectedIndex, Object rowItem) {
 
         boolean add = command.equals(Commands.ADD);
+        List<String> rowValues;
 
-        List<String> rowValues = selectedIndex != -1 ? (List<String>) mainTable.getItems().get(selectedIndex) : null;
+        if (rowItem != null) {
+            rowValues = (List<String>) rowItem;
+        } else {
+            rowValues = selectedIndex != -1 ? (List<String>) mainTable.getItems().get(selectedIndex) : null;
+        }
+
         List<TableColumn> columns = mainTable.getColumns();
         List<Cell> cells = new ArrayList<>();
 

@@ -68,7 +68,6 @@ public class MainUiController {
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
-
     public MainUiController() {
     }
 
@@ -209,16 +208,10 @@ public class MainUiController {
     @FXML
     public void onAddRow() {
 
-        if (!currentTableName.getText().equals("")) {
-            Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
-
-            if (result.get() == ButtonType.OK) {
-                try {
-                    tableEditor.addRow();
-                } catch (Exception e) {
-                    logger.error("MainUiController error onAddRowButton: " + e);
-                }
-            }
+        try {
+            tableEditor.addRow();
+        } catch (Exception e) {
+            logger.error("MainUiController error [onAddRow]: " + e);
         }
     }
 
@@ -238,7 +231,7 @@ public class MainUiController {
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex != -1) {
-            Optional<ButtonType> result = new ConfirmationDialog("Save current row to database?").showAndWait();
+            Optional<ButtonType> result = new ConfirmationDialog("Save entered data to database?").showAndWait();
 
             if (result.get() == ButtonType.OK) {
                 tableEditor.saveRow(selectedIndex);
@@ -286,6 +279,8 @@ public class MainUiController {
 
             selectTable(item);
         });
+        //Set multiple selection in table view
+        mainTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     /**
@@ -368,6 +363,15 @@ public class MainUiController {
      */
     private void selectTable(TypedTreeItem item) {
 
+        if (tableEditor.hasNotSavedData()) {
+            Optional<ButtonType> result = new ConfirmationDialog("You have unsaved data. Continue?").showAndWait();
+
+            if (result.get() != ButtonType.OK) {
+                return;
+            }
+        }
+
+        tableEditor.clearSavedData();
         showIndicator(true);
 
         Task<Void> task = new Task<Void>() {
