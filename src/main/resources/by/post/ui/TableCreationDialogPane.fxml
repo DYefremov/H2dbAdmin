@@ -25,7 +25,7 @@
          <top>
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="430.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label contentDisplay="CENTER" text="Table name :">
+                  <Label contentDisplay="CENTER" text="%TableName">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
@@ -43,7 +43,7 @@
          <center>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="Setup columns:">
+                  <Label text="%SetupColumns">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
@@ -56,35 +56,35 @@
                   </Label>
                   <TableView fx:id="tableView" editable="true" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
                       <placeholder>
-                          <Label text="Add columns!" />
+                          <Label text="%AddColumnsPlaceHolder" />
                       </placeholder>
                       <columns>
-                        <TableColumn fx:id="nameColumn" onEditCommit="#onEditName" prefWidth="106.0" sortable="false" text="Name">
+                        <TableColumn fx:id="nameColumn" onEditCommit="#onEditName" prefWidth="106.0" sortable="false" text="%Name">
                             <cellValueFactory>
                                 <PropertyValueFactory property="columnName" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="typeColumn" onEditCommit="#onEditType" prefWidth="75.0" sortable="false" text="Type">
+                        <TableColumn fx:id="typeColumn" onEditCommit="#onEditType" prefWidth="75.0" sortable="false" text="%Type">
                             <cellValueFactory>
                                 <PropertyValueFactory property="type" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="lengthColumn" maxWidth="65.0" minWidth="65.0" onEditCommit="#onEditLength" prefWidth="65.0" sortable="false" text="Length">
+                        <TableColumn fx:id="lengthColumn" maxWidth="65.0" minWidth="65.0" onEditCommit="#onEditLength" prefWidth="65.0" sortable="false" text="%Length">
                             <cellValueFactory>
                                 <PropertyValueFactory property="length" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="keyColumn" maxWidth="65.0" minWidth="65.0" onEditCommit="#onEditKey" prefWidth="65.0" sortable="false" text="Key">
+                        <TableColumn fx:id="keyColumn" maxWidth="67.0" minWidth="52.0" onEditCommit="#onEditKey" prefWidth="67.0" sortable="false" text="%Key">
                             <cellValueFactory>
                                 <PropertyValueFactory property="primaryKey" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="notNullColumn" maxWidth="65.0" minWidth="65.0" onEditCommit="#onEditNotNull" prefWidth="65.0" sortable="false" text="Not null">
+                        <TableColumn fx:id="notNullColumn" maxWidth="65.0" minWidth="65.0" onEditCommit="#onEditNotNull" prefWidth="65.0" sortable="false" text="%NotNull">
                             <cellValueFactory>
                                 <PropertyValueFactory property="notNull" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="defaultValueColumn" onEditCommit="#onEditDefaultValue" prefWidth="89.0" sortable="false" text="Default value">
+                        <TableColumn fx:id="defaultValueColumn" onEditCommit="#onEditDefaultValue" prefWidth="89.0" sortable="false" text="%DefaultValue">
                             <cellValueFactory>
                                 <PropertyValueFactory property="defaultValue" />
                             </cellValueFactory>
@@ -96,8 +96,8 @@
                   </TableView>
                   <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
                     <buttons>
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteButton" text="Delete" />
-                      <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onAddButton" text="Add" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteButton" text="%Delete" />
+                        <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onAddButton" text="%Add" />
                     </buttons>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -109,7 +109,7 @@
       </BorderPane>
    </content>
    <header>
-      <Label alignment="CENTER" text="New table configuration">
+      <Label alignment="CENTER" text="%NewTableConfiguration">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>

@@ -53,7 +53,7 @@ public class Context {
     }
 
     public static Locale getLocale() {
-        return locale;
+        return locale == null ? new Locale(Settings.DEFAULT_LANG) : locale;
     }
 
     public static synchronized void setLocale(Locale locale) {

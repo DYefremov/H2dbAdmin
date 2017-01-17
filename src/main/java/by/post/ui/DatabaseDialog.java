@@ -1,9 +1,12 @@
 package by.post.ui;
 
 import by.post.control.Context;
+import by.post.control.Settings;
 import by.post.control.ui.DatabaseDialogController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -45,5 +48,12 @@ public class DatabaseDialog extends Dialog<Map<String, String>> {
 
         Stage stage = (Stage) getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(Resources.LOGO_PATH));
+
+        //Setting translation
+        boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
+        Button okButton = (Button) getDialogPane().lookupButton(ButtonType.OK);
+        Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
+        okButton.setText(defLang ? ButtonType.OK.getText() : "Создать");
+        cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
     }
 }

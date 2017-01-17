@@ -148,6 +148,6 @@ public class MainUiForm extends Application {
            defLang = properties.getProperty(Settings.LANG).equals(Settings.DEFAULT_LANG);
         }
 
-        return defLang ? new Locale(Settings.DEFAULT_LANG, "US") : new Locale("ru");
+        return defLang ? new Locale(Settings.DEFAULT_LANG) : new Locale(Settings.SECOND_LANG);
     }
 }
