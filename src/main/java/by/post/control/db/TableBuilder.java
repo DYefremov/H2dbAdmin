@@ -1,6 +1,7 @@
 package by.post.control.db;
 
 import by.post.data.*;
+import by.post.data.type.DefaultColumnDataType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -92,8 +93,8 @@ public class TableBuilder {
         int count = metaData.getColumnCount();
 
         for (int i = 1; i <= count; i++) {
-            ColumnDataType type = ColumnDataType.valueOf(metaData.getColumnTypeName(i));
-            if (type.equals(ColumnDataType.CLOB) || type.equals(ColumnDataType.BLOB)) {
+            DefaultColumnDataType type = DefaultColumnDataType.valueOf(metaData.getColumnTypeName(i));
+            if (type.equals(DefaultColumnDataType.CLOB) || type.equals(DefaultColumnDataType.BLOB)) {
                 cells.add(new Cell(null, null, "value"));
             } else {
                 cells.add(getCell(i, rs));

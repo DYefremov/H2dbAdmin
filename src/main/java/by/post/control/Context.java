@@ -1,6 +1,9 @@
 package by.post.control;
 
 import by.post.control.ui.TypedTreeItem;
+import by.post.data.type.ColumnDataType;
+import by.post.data.type.DataTypeFactory;
+import by.post.data.type.Dbms;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
@@ -8,7 +11,7 @@ import javafx.scene.control.TreeView;
 import java.util.Locale;
 
 /**
- * Class for storing the application context
+ * Class for storing and init the application context
  *
  * @author Dmitriy V.Yefremov
  */
@@ -19,12 +22,15 @@ public class Context {
     private static TreeView mainTableTree;
     private static ObservableList<ObservableList> currentData;
     private static Locale locale;
+    //Data types for database columns
+    private static ColumnDataType currentDataType;
+    private static Dbms CURRENT_DBMS = Dbms.DEFAULT;
 
     public static TypedTreeItem getTablesTreeItem() {
         return tablesTreeItem;
     }
 
-    public static synchronized void setTablesTreeItem(TypedTreeItem tablesTreeItem) {
+    public static void setTablesTreeItem(TypedTreeItem tablesTreeItem) {
         Context.tablesTreeItem = tablesTreeItem;
     }
 
@@ -32,7 +38,7 @@ public class Context {
         return mainTableView;
     }
 
-    public static synchronized void setMainTableView(TableView mainTableView) {
+    public static void setMainTableView(TableView mainTableView) {
         Context.mainTableView = mainTableView;
     }
 
@@ -40,15 +46,15 @@ public class Context {
         return mainTableTree;
     }
 
-    public static synchronized void setMainTableTree(TreeView mainTableTree) {
+    public static void setMainTableTree(TreeView mainTableTree) {
         Context.mainTableTree = mainTableTree;
     }
 
-    public static synchronized ObservableList<ObservableList> getCurrentData() {
+    public static ObservableList<ObservableList> getCurrentData() {
         return currentData;
     }
 
-    public static synchronized void setCurrentData(ObservableList<ObservableList> currentData) {
+    public static void setCurrentData(ObservableList<ObservableList> currentData) {
         Context.currentData = currentData;
     }
 
@@ -56,11 +62,33 @@ public class Context {
         return locale == null ? new Locale(Settings.DEFAULT_LANG) : locale;
     }
 
-    public static synchronized void setLocale(Locale locale) {
+    public static void setLocale(Locale locale) {
         Context.locale = locale;
+    }
+
+    public static Dbms getCurrentDbms() {
+        return CURRENT_DBMS;
+    }
+
+    public static void setCurrentDbms(Dbms currentDbms) {
+        CURRENT_DBMS = currentDbms;
+    }
+
+    public static void setCurrentDataType(ColumnDataType currentDataType) {
+        Context.currentDataType = currentDataType;
+    }
+
+    public static ColumnDataType getCurrentDataType() {
+
+        if (currentDataType == null) {
+            currentDataType = DataTypeFactory.getInstance().getColumnDataType(CURRENT_DBMS);
+        }
+
+        return currentDataType;
     }
 
     private Context() {
 
     }
+
 }

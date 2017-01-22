@@ -2,6 +2,7 @@ package by.post.control.db;
 
 import by.post.control.ui.OpenFileDialogProvider;
 import by.post.data.*;
+import by.post.data.type.DefaultColumnDataType;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,8 +82,8 @@ public class LobDataManager {
                     if (file != null) {
                         while (resultSet.next()) {
                             String columnName = column.getColumnName();
-                            ColumnDataType type = ColumnDataType.valueOf(column.getType());
-                            boolean isBlob = type.equals(ColumnDataType.BLOB);
+                            DefaultColumnDataType type = DefaultColumnDataType.valueOf(column.getType());
+                            boolean isBlob = type.equals(DefaultColumnDataType.BLOB);
                             saveData(file, resultSet, columnName, isBlob);
                         }
                     }

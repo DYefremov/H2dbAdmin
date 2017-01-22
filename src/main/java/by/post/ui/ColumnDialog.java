@@ -2,7 +2,7 @@ package by.post.ui;
 
 import by.post.control.ui.ColumnDialogController;
 import by.post.data.Column;
-import by.post.data.ColumnDataType;
+import by.post.data.type.DefaultColumnDataType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -31,7 +31,7 @@ public class ColumnDialog extends Dialog<Column> {
     private static final Logger logger = LogManager.getLogger(ColumnDialog.class);
 
     public ColumnDialog() {
-        column = new Column("","New", ColumnDataType.VARCHAR.name());
+        column = new Column("","New", DefaultColumnDataType.VARCHAR.name());
         init();
     }
 

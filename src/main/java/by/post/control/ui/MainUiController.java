@@ -6,6 +6,7 @@ import by.post.control.Settings;
 import by.post.control.db.*;
 import by.post.data.Table;
 import by.post.data.View;
+import by.post.data.type.Dbms;
 import by.post.ui.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -254,6 +255,7 @@ public class MainUiController {
         logger.info("Starting application...");
         init();
         initData();
+        initDbmsType();
         //Set context
         Context.setMainTableTree(tableTree);
         Context.setMainTableView(mainTable);
@@ -314,6 +316,18 @@ public class MainUiController {
         tableTree.setContextMenu(treeContextMenu);
     }
 
+    /**
+     * Init DBMS type
+     */
+    private void initDbmsType() {
+
+        String driver = PropertiesController.getProperties().getProperty(Settings.DRIVER);
+
+        if (driver.equals(Settings.DEFAULT_DRIVER)) {
+            Context.setCurrentDbms(Dbms.H2);
+        }
+
+    }
     /**
      * @param event
      */

@@ -1,7 +1,9 @@
 package by.post.control.ui;
 
+import by.post.control.Context;
 import by.post.data.Column;
-import by.post.data.ColumnDataType;
+import by.post.data.type.ColumnDataType;
+import by.post.data.type.DefaultColumnDataType;
 import by.post.data.Table;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -11,6 +13,9 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.DataFormat;
 import javafx.util.converter.IntegerStringConverter;
+
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -104,7 +109,7 @@ public class TableCreationDialogController {
     }
 
     @FXML
-    private void initialize() {
+    public void initialize() {
 
         initColumnsCellFactory();
     }
@@ -125,8 +130,10 @@ public class TableCreationDialogController {
      */
     private void initColumnsCellFactory() {
 
+        Collection<String> columnTypes = Context.getCurrentDataType().getValues();
+
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(ColumnDataType.getTypes().values())));
+        typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(columnTypes)));
         lengthColumn.setCellFactory(TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter()));
         keyColumn.setCellFactory(CheckBoxTableCell.forTableColumn(keyColumn));
         notNullColumn.setCellFactory(CheckBoxTableCell.forTableColumn(notNullColumn));
@@ -138,7 +145,7 @@ public class TableCreationDialogController {
      */
     private Column getColumn() {
 
-        Column column = new Column(tableName.getText(), "ColumnName", ColumnDataType.VARCHAR.name());
+        Column column = new Column(tableName.getText(), "ColumnName", DefaultColumnDataType.VARCHAR.name());
         column.setLength(255);
 
         return column;

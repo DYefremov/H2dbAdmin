@@ -1,7 +1,8 @@
 package by.post.control.ui;
 
+import by.post.control.Context;
 import by.post.data.Column;
-import by.post.data.ColumnDataType;
+import by.post.data.type.DefaultColumnDataType;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -53,12 +54,12 @@ public class ColumnDialogController {
         name.setText(column.getColumnName());
         isKey.setSelected(column.isPrimaryKey());
         isNotNull.setSelected(column.isNotNull());
-        type.getSelectionModel().select(column != null ? column.getType() : ColumnDataType.VARCHAR.name());
+        type.getSelectionModel().select(column != null ? column.getType() : DefaultColumnDataType.VARCHAR.name());
     }
 
     @FXML
-    private void initialize() {
-        type.setItems(FXCollections.observableArrayList(ColumnDataType.getTypes().values()));
-        type.getSelectionModel().select(ColumnDataType.VARCHAR.name());
+    public void initialize() {
+        type.setItems(FXCollections.observableArrayList(Context.getCurrentDataType().getValues()));
+        type.getSelectionModel().select(DefaultColumnDataType.VARCHAR.name());
     }
 }

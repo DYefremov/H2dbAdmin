@@ -2,7 +2,7 @@ package by.post.control.db;
 
 import by.post.control.ui.MultipleTableColumnController;
 import by.post.data.Column;
-import by.post.data.ColumnDataType;
+import by.post.data.type.DefaultColumnDataType;
 import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.MainUiForm;
@@ -103,9 +103,9 @@ public class TableDataResolver {
     public TableColumn getColumn(Column column) {
 
         TableColumn<ObservableList, String> tableColumn = getTableColumn(column);
-        ColumnDataType type = ColumnDataType.valueOf(column.getType());
+        DefaultColumnDataType type = DefaultColumnDataType.valueOf(column.getType());
 
-        if (type.equals(ColumnDataType.BLOB) || type.equals(ColumnDataType.CLOB)) {
+        if (type.equals(DefaultColumnDataType.BLOB) || type.equals(DefaultColumnDataType.CLOB)) {
             return getBlobClobTableColumn(tableColumn);
         }
 

@@ -1,4 +1,4 @@
-package by.post.data;
+package by.post.data.type;
 
 import java.sql.Types;
 import java.util.HashMap;
@@ -7,7 +7,8 @@ import java.util.Map;
 /**
  * @author Dmitry V.Yefremov
  */
-public enum ColumnDataType {
+public enum DefaultColumnDataType {
+
     BIT, TINYINT, SMALLINT, INTEGER, BIGINT, FLOAT, REAL, DOUBLE, NUMERIC, DECIMAL,
     CHAR, VARCHAR, LONGVARCHAR, DATE, TIME, TIMESTAMP, BINARY, VARBINARY, LONGVARBINARY,
     NULL, OTHER, JAVA_OBJECT, DISTINCT, STRUCT, ARRAY, BLOB, CLOB, REF, DATALINK,
