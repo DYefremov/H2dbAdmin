@@ -20,8 +20,14 @@ public class LobDataManager {
 
     private static final Logger logger = LogManager.getLogger(LobDataManager.class);
 
-    public LobDataManager() {
+    private static final LobDataManager INSTANCE = new LobDataManager();
 
+    private LobDataManager() {
+
+    }
+
+    public static LobDataManager getInstance() {
+        return INSTANCE;
     }
 
     /**

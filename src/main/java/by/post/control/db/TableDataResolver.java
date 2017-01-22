@@ -1,10 +1,11 @@
 package by.post.control.db;
 
+import by.post.control.Context;
 import by.post.control.ui.MultipleTableColumnController;
 import by.post.data.Column;
-import by.post.data.type.DefaultColumnDataType;
 import by.post.data.Row;
 import by.post.data.Table;
+import by.post.data.type.ColumnDataType;
 import by.post.ui.MainUiForm;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -29,14 +30,16 @@ public class TableDataResolver {
     private Table table;
     private ObservableList tableColumns;
     private ObservableList<ObservableList> items;
+    private ColumnDataType columnDataType;
 
     private static final Logger logger = LogManager.getLogger(TableDataResolver.class);
 
     public TableDataResolver() {
-
+        columnDataType = Context.getCurrentDataType();
     }
 
     public TableDataResolver(Table table) {
+        this();
         this.table = table;
         resolve();
     }
@@ -66,9 +69,7 @@ public class TableDataResolver {
         if (rows != null && !rows.isEmpty()) {
             rows.stream().forEach(row -> {
                 ObservableList<String> newRow = FXCollections.observableArrayList();
-                row.getCells().forEach(cell -> {
-                    newRow.add(cell.getValue() != null ? cell.getValue().toString() : "");
-                });
+                row.getCells().forEach(cell -> newRow.add(cell.getValue() != null ? cell.getValue().toString() : ""));
                 items.add(newRow);
             });
         }
@@ -103,9 +104,8 @@ public class TableDataResolver {
     public TableColumn getColumn(Column column) {
 
         TableColumn<ObservableList, String> tableColumn = getTableColumn(column);
-        DefaultColumnDataType type = DefaultColumnDataType.valueOf(column.getType());
 
-        if (type.equals(DefaultColumnDataType.BLOB) || type.equals(DefaultColumnDataType.CLOB)) {
+        if (columnDataType.isLargeObject(columnDataType.getNumType(column.getType()))) {
             return getBlobClobTableColumn(tableColumn);
         }
 
@@ -132,7 +132,7 @@ public class TableDataResolver {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainUiForm.class.getResource("MultipleTableColumn.fxml"));
-            tableColumn = (TableColumn) loader.load();
+            tableColumn = loader.load();
             MultipleTableColumnController columnController = loader.getController();
             tableColumn.setUserData(column);
             columnController.setName(column.getColumnName());
@@ -158,7 +158,7 @@ public class TableDataResolver {
             Hyperlink hyperlink = new Hyperlink("download");
             hyperlink.setOnAction(event -> {
                 int rowIndex = cell.getTableRow().getIndex();
-                new LobDataManager().save(rowIndex, (Column) tableColumn.getUserData(), table);
+                LobDataManager.getInstance().save(rowIndex, (Column) tableColumn.getUserData(), table);
             });
 
             cell.setGraphic(hyperlink);

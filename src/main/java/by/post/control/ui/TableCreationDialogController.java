@@ -2,7 +2,6 @@ package by.post.control.ui;
 
 import by.post.control.Context;
 import by.post.data.Column;
-import by.post.data.type.ColumnDataType;
 import by.post.data.type.DefaultColumnDataType;
 import by.post.data.Table;
 import javafx.collections.FXCollections;
@@ -15,7 +14,6 @@ import javafx.scene.input.DataFormat;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.util.Collection;
-import java.util.List;
 
 
 /**

@@ -1,7 +1,11 @@
 package by.post.control.db;
 
-import by.post.data.*;
-import by.post.data.type.DefaultColumnDataType;
+import by.post.control.Context;
+import by.post.data.Cell;
+import by.post.data.Column;
+import by.post.data.Row;
+import by.post.data.Table;
+import by.post.data.type.ColumnDataType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +18,13 @@ import java.util.List;
  */
 public class TableBuilder {
 
+    private  ColumnDataType columnDataType;
+
     private static final Logger logger = LogManager.getLogger(TableBuilder.class);
+
+    public TableBuilder() {
+        columnDataType = Context.getCurrentDataType();
+    }
 
     /**
      * @param name
@@ -93,8 +103,7 @@ public class TableBuilder {
         int count = metaData.getColumnCount();
 
         for (int i = 1; i <= count; i++) {
-            DefaultColumnDataType type = DefaultColumnDataType.valueOf(metaData.getColumnTypeName(i));
-            if (type.equals(DefaultColumnDataType.CLOB) || type.equals(DefaultColumnDataType.BLOB)) {
+            if (columnDataType.isLargeObject(metaData.getColumnType(i))) {
                 cells.add(new Cell(null, null, "value"));
             } else {
                 cells.add(getCell(i, rs));
@@ -123,7 +132,8 @@ public class TableBuilder {
         Column column = new Column();
         column.setTableName(rsMetaData.getTableName(index));
         column.setColumnName(rsMetaData.getColumnName(index));
-        column.setType(rsMetaData.getColumnTypeName(index));
+        int type = columnDataType.getValueTypeFromResultSet(rsMetaData, index);
+        column.setType(columnDataType.typeName(type));
         column.setNotNull(rsMetaData.isNullable(index) != 1);
         column.setAutoIncrement(rsMetaData.isAutoIncrement(index));
         column.setReadOnly(rsMetaData.isReadOnly(index));

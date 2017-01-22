@@ -81,7 +81,7 @@ public class Context {
     public static ColumnDataType getCurrentDataType() {
 
         if (currentDataType == null) {
-            currentDataType = DataTypeFactory.getInstance().getColumnDataType(CURRENT_DBMS);
+            currentDataType = new DataTypeFactory().getColumnDataType(CURRENT_DBMS);
         }
 
         return currentDataType;

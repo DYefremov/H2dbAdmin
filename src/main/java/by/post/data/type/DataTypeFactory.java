@@ -5,13 +5,7 @@ package by.post.data.type;
  */
 public class DataTypeFactory {
 
-    private static final DataTypeFactory INSTANCE = new DataTypeFactory();
-
-    public static DataTypeFactory getInstance() {
-        return INSTANCE;
-    }
-
-    private DataTypeFactory() {
+    public DataTypeFactory() {
 
     }
 
