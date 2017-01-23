@@ -2,8 +2,7 @@ package by.post.data.type;
 
 import org.h2.value.DataType;
 
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -12,13 +11,41 @@ import java.util.stream.Collectors;
  */
 public class H2Type  implements ColumnDataType {
 
-    public H2Type() {
-
-    }
+    public static final String INTEGER = "INTEGER";
+    public static final String BOOLEAN = "BOOLEAN";
+    public static final String TINYINT = "TINYINT";
+    public static final String SMALLINT = "SMALLINT";
+    public static final String BIGINT = "BIGINT";
+    public static final String IDENTITY = "IDENTITY";
+    public static final String DECIMAL = "DECIMAL";
+    public static final String DOUBLE = "DOUBLE";
+    public static final String REAL = "REAL";
+    public static final String TIME = "TIME";
+    public static final String DATE = "DATE";
+    public static final String TIMESTAMP = "TIMESTAMP";
+    public static final String TIMESTAMP_WITH_TIMEZONE = "TIMESTAMP WITH TIMEZONE";
+    public static final String BINARY = "BINARY";
+    public static final String OTHER = "OTHER";
+    public static final String VARCHAR = "VARCHAR";
+    public static final String VARCHAR_IGNORECASE = "VARCHAR_IGNORECASE";
+    public static final String CHAR = "CHAR";
+    public static final String BLOB = "BLOB";
+    public static final String CLOB = "CLOB";
+    public static final String UUID = "UUID";
+    public static final String ARRAY = "ARRAY";
+    public static final String GEOMETRY = "GEOMETRY";
 
     @Override
     public Collection<String> getValues() {
-        return DataType.getTypes().stream().map(t -> t.name).collect(Collectors.toList());
+        return Arrays.asList(this.getClass().getFields()).stream().map(f -> {
+            Object value = null;
+            try {
+                value = f.get(this);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return String.valueOf(value);
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -29,11 +56,6 @@ public class H2Type  implements ColumnDataType {
     @Override
     public String typeName(int type) {
         return DataType.getDataType(type).name;
-    }
-
-    @Override
-    public int getValueTypeFromResultSet(ResultSetMetaData meta, int columnIndex) throws SQLException {
-        return DataType.getValueTypeFromResultSet(meta, columnIndex);
     }
 
     @Override

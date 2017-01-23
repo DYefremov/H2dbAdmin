@@ -31,7 +31,7 @@ public class ColumnDialog extends Dialog<Column> {
     private static final Logger logger = LogManager.getLogger(ColumnDialog.class);
 
     public ColumnDialog() {
-        column = new Column("","New", DefaultColumnDataType.VARCHAR.name());
+        column = new Column("","New", DefaultColumnDataType.VARCHAR);
         init();
     }
 

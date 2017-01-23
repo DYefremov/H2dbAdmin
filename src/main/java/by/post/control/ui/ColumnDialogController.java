@@ -54,12 +54,12 @@ public class ColumnDialogController {
         name.setText(column.getColumnName());
         isKey.setSelected(column.isPrimaryKey());
         isNotNull.setSelected(column.isNotNull());
-        type.getSelectionModel().select(column != null ? column.getType() : DefaultColumnDataType.VARCHAR.name());
+        type.getSelectionModel().select(column != null ? column.getType() : DefaultColumnDataType.VARCHAR);
     }
 
     @FXML
     public void initialize() {
         type.setItems(FXCollections.observableArrayList(Context.getCurrentDataType().getValues()));
-        type.getSelectionModel().select(DefaultColumnDataType.VARCHAR.name());
+        type.getSelectionModel().select(DefaultColumnDataType.VARCHAR);
     }
 }

@@ -132,8 +132,7 @@ public class TableBuilder {
         Column column = new Column();
         column.setTableName(rsMetaData.getTableName(index));
         column.setColumnName(rsMetaData.getColumnName(index));
-        int type = columnDataType.getValueTypeFromResultSet(rsMetaData, index);
-        column.setType(columnDataType.typeName(type));
+        column.setType(rsMetaData.getColumnTypeName(index));
         column.setNotNull(rsMetaData.isNullable(index) != 1);
         column.setAutoIncrement(rsMetaData.isAutoIncrement(index));
         column.setReadOnly(rsMetaData.isReadOnly(index));

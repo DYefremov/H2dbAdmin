@@ -1,7 +1,5 @@
 package by.post.data.type;
 
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.Collection;
 
 /**
@@ -24,13 +22,6 @@ public interface ColumnDataType {
      * @return type name by int value
      */
     String typeName(int type);
-
-    /**
-     * @param meta
-     * @param columnIndex
-     * @return
-     */
-    int getValueTypeFromResultSet(ResultSetMetaData meta, int columnIndex) throws SQLException;
 
     /**
      * @param type

@@ -88,7 +88,7 @@ public class LobDataManager {
                     if (file != null) {
                         while (resultSet.next()) {
                             String columnName = column.getColumnName();
-                            DefaultColumnDataType type = DefaultColumnDataType.valueOf(column.getType());
+                            String type = column.getType();
                             boolean isBlob = type.equals(DefaultColumnDataType.BLOB);
                             saveData(file, resultSet, columnName, isBlob);
                         }
