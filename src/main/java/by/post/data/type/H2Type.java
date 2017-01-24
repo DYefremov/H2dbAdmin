@@ -62,4 +62,14 @@ public class H2Type  implements ColumnDataType {
     public boolean isLargeObject(int type) {
         return DataType.isLargeObject(type);
     }
+
+    @Override
+    public boolean isStringType(int type) {
+        return  DataType.isStringType(type);
+    }
+
+    @Override
+    public boolean isNumericType(int type) {
+        return DataType.supportsAdd(type);
+    }
 }

@@ -28,4 +28,8 @@ public interface ColumnDataType {
      * @return
      */
     boolean isLargeObject(int type);
+
+    boolean isStringType(int type);
+
+    boolean isNumericType(int type);
 }

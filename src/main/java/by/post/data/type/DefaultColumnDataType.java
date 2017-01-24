@@ -116,4 +116,14 @@ public class DefaultColumnDataType implements  ColumnDataType {
     public boolean isLargeObject(int type) {
         return false;
     }
+
+    @Override
+    public boolean isStringType(int type) {
+        return false;
+    }
+
+    @Override
+    public boolean isNumericType(int type) {
+        return false;
+    }
 }

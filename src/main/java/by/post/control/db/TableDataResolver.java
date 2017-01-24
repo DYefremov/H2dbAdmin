@@ -8,6 +8,7 @@ import by.post.data.Table;
 import by.post.data.type.ColumnDataType;
 import by.post.ui.MainUiForm;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +32,7 @@ public class TableDataResolver {
     private Table table;
     private ObservableList tableColumns;
     private ObservableList<ObservableList> items;
-    private ColumnDataType columnDataType;
+    private static ColumnDataType columnDataType;
 
     private static final Logger logger = LogManager.getLogger(TableDataResolver.class);
 
@@ -103,18 +105,17 @@ public class TableDataResolver {
      */
     public TableColumn getColumn(Column column) {
 
-        TableColumn<ObservableList, String> tableColumn = getTableColumn(column);
+        int columnType =  columnDataType.getNumType(column.getType());
 
-        if (columnDataType.isLargeObject(columnDataType.getNumType(column.getType()))) {
+        TableColumn tableColumn = getTableColumn(column);
+
+        if (columnDataType.isLargeObject(columnType)) {
             return getBlobClobTableColumn(tableColumn);
         }
 
-        tableColumn.setCellValueFactory(cellData -> {
-            int index = tableColumn.getTableView().getColumns().indexOf(tableColumn);
-            return new SimpleStringProperty(String.valueOf(cellData.getValue().get(index)));
-        });
+        tableColumn.setCellValueFactory(new TypedCellValueFactory(tableColumn, columnType));
         // Add for enable editing
-        tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        tableColumn.setCellFactory(getCellFactory(columnType));
 
         return tableColumn;
     }
@@ -167,6 +168,45 @@ public class TableDataResolver {
         });
 
         return tableColumn;
+    }
+
+    /**
+     * @param columnType
+     * @return
+     */
+    private Callback getCellFactory(int columnType) {
+
+//        if (columnDataType.isNumericType(columnType)) {
+//            return TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter());
+//        }
+
+        return TextFieldTableCell.forTableColumn();
+    }
+
+    /**
+     *Implementation of CellValueFactory
+     */
+    private class TypedCellValueFactory implements Callback<TableColumn.CellDataFeatures<ObservableList, ?>, ObservableValue<?>> {
+
+        private int columnType;
+        private TableColumn tableColumn;
+
+        TypedCellValueFactory(TableColumn tableColumn, int columnType) {
+            this.tableColumn = tableColumn;
+            this.columnType =columnType;
+        }
+
+        @Override
+        public ObservableValue<?> call(TableColumn.CellDataFeatures<ObservableList, ?> cellData) {
+
+            int index = tableColumn.getTableView().getColumns().indexOf(tableColumn);
+
+            if (columnDataType.isLargeObject(columnType)) {
+                return null;
+            }
+
+            return new SimpleStringProperty(String.valueOf(cellData.getValue().get(index)));
+        }
     }
 
 }
