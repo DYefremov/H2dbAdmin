@@ -12,7 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
@@ -31,6 +31,7 @@ public class TableDataResolver {
     private ObservableList tableColumns;
     private ObservableList<ObservableList> items;
     private static ColumnDataType columnDataType;
+    private static final String LARGE_OBJECT_VALUE = "Object";
 
     private static final Logger logger = LogManager.getLogger(TableDataResolver.class);
 
@@ -69,7 +70,7 @@ public class TableDataResolver {
         if (rows != null && !rows.isEmpty()) {
             rows.stream().forEach(row -> {
                 ObservableList<String> newRow = FXCollections.observableArrayList();
-                row.getCells().forEach(cell -> newRow.add(cell.getValue() != null ? cell.getValue().toString() : ""));
+                row.getCells().forEach(cell -> newRow.add(cell.getValue() != null ? String.valueOf(cell.getValue()) : null));
                 items.add(newRow);
             });
         }
@@ -103,7 +104,7 @@ public class TableDataResolver {
      */
     public TableColumn getColumn(Column column) {
 
-        int columnType =  columnDataType.getNumType(column.getType());
+        int columnType = columnDataType.getNumType(column.getType());
 
         TableColumn tableColumn = getTableColumn(column);
         tableColumn.setCellValueFactory(getValueFactory(columnType));
@@ -149,25 +150,21 @@ public class TableDataResolver {
             return LargeObjectCell.forTableColumn(table);
         }
 
-//        if (columnDataType.isNumericType(columnType)) {
-//            return TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter());
-//        }
-
         return TextFieldTableCell.forTableColumn();
     }
 
     /**
-     *Implementation of CellValueFactory
+     * Implementation of CellValueFactory
      */
     private Callback<TableColumn.CellDataFeatures<ObservableList, ?>, ObservableValue<?>> getValueFactory(int columnType) {
 
         if (columnDataType.isLargeObject(columnType)) {
-            return null;
+            return cellData -> new SimpleStringProperty(LARGE_OBJECT_VALUE);
         }
 
         return cellData -> {
             TableColumn column = cellData.getTableColumn();
-            int index =column.getTableView().getColumns().indexOf(column);
+            int index = column.getTableView().getColumns().indexOf(column);
             return new SimpleStringProperty(String.valueOf(cellData.getValue().get(index)));
         };
 

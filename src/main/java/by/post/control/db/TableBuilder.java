@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class TableBuilder {
 
-    private  ColumnDataType columnDataType;
+    private ColumnDataType columnDataType;
 
     private static final Logger logger = LogManager.getLogger(TableBuilder.class);
 
@@ -40,11 +40,11 @@ public class TableBuilder {
         try (Statement st = connection.createStatement()) {
             DatabaseMetaData dbMetaData = connection.getMetaData();
             st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTable(name));
-             try (ResultSet rs = st.getResultSet()) {
-                 ResultSetMetaData rsMetaData = rs.getMetaData();
-                 table.setRows(getRows(rs));
-                 table.setColumns(getColumns(rsMetaData));
-             }
+            try (ResultSet rs = st.getResultSet()) {
+                ResultSetMetaData rsMetaData = rs.getMetaData();
+                table.setRows(getRows(rs));
+                table.setColumns(getColumns(rsMetaData));
+            }
 
             try (ResultSet keys = dbMetaData.getPrimaryKeys("", "", name)) {
                 table.setPrimaryKey(keys.next() ? keys.getString("COLUMN_NAME") : "");
@@ -103,11 +103,8 @@ public class TableBuilder {
         int count = metaData.getColumnCount();
 
         for (int i = 1; i <= count; i++) {
-            if (columnDataType.isLargeObject(metaData.getColumnType(i))) {
-                cells.add(new Cell(null, null, "value"));
-            } else {
-                cells.add(getCell(i, rs));
-            }
+            int type = columnDataType.getNumType(metaData.getColumnTypeName(i));
+            cells.add(getCell(i, type, rs));
         }
 
         return cells;
@@ -160,10 +157,15 @@ public class TableBuilder {
     /**
      * @return one cell
      */
-    private Cell getCell(int num, ResultSet rs) throws SQLException {
+    private Cell getCell(int num, int columnType, ResultSet rs) throws SQLException {
 
         Cell cell = new Cell();
-        cell.setValue(rs.getNString(num));
+
+        if (columnDataType.isLargeObject(columnType)) {
+            return cell;
+        } else {
+            cell.setValue(rs.getNString(num));
+        }
 
         return cell;
     }

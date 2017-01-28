@@ -8,10 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -42,25 +39,9 @@ public class LobDataManager {
             return;
         }
 
-        Cell keyCell = null;
-        String query = null;
-        String keyColumnName = null;
-        Row row = table.getRows().get(rowIndex);
+        String query = getQuery(rowIndex, column, table, false);
 
-        for (Column pKeyColumn : table.getColumns()) {
-            if (pKeyColumn.isPrimaryKey() || pKeyColumn.isAutoIncrement()) {
-                int keyIndex = table.getColumns().indexOf(pKeyColumn);
-                keyCell = row.getCells().get(keyIndex);
-                keyColumnName = pKeyColumn.getColumnName();
-                break;
-            }
-        }
-
-        if (keyCell != null) {
-            query = "SELECT " + column.getColumnName() + " FROM " +
-                    table.getName() + " WHERE " + keyColumnName + "=" + keyCell.getValue();
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Implemented only for tables with primary key!").showAndWait();
+        if (query == null) {
             return;
         }
 
@@ -73,9 +54,52 @@ public class LobDataManager {
         }
     }
 
-
+    /**
+     * @param rowIndex
+     * @param column
+     * @param table
+     */
     public void upload(int rowIndex, Column column, Table table) {
-        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
+
+        if (column == null || table == null) {
+            logger.error("LobDataManager error[upload]: Invalid arguments!");
+            return;
+        }
+
+        File file = new OpenFileDialogProvider().getFileDialog("Select a file", false, false);
+
+        if (file == null) {
+            return;
+        }
+
+        String query = getQuery(rowIndex, column, table, true);
+
+        Connection connection = DbController.getInstance().getCurrentConnection();
+
+        if (query == null || connection == null) {
+            logger.error("LobDataManager error[upload] : query = " + query + " connection = " + connection);
+            return;
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            if (column.getType().equals(DefaultColumnDataType.BLOB)) {
+                InputStream fis = new BufferedInputStream(new FileInputStream(file));
+                ps.setBinaryStream(1, fis, file.length());
+                ps.execute();
+                connection.commit();
+            } else if (column.getType().equals(DefaultColumnDataType.CLOB)) {
+                Reader reader = new BufferedReader(new FileReader(file));
+                ps.setCharacterStream(1, reader, file.length());
+                ps.execute();
+                connection.commit();
+            }
+            logger.info("File " + file + " was uploaded.");
+        } catch (SQLException e) {
+            logger.error("LobDataManager error[upload (SQL)]: " + e);
+        } catch (FileNotFoundException e) {
+            logger.error("LobDataManager error[upload (FileNotFound)]: " + e);
+        }
+
     }
 
     /**
@@ -88,7 +112,7 @@ public class LobDataManager {
 
         try (Statement statement = connection.createStatement()) {
             statement.execute(query);
-            try (ResultSet resultSet = statement.getResultSet()){
+            try (ResultSet resultSet = statement.getResultSet()) {
                 if (resultSet != null) {
                     if (file != null) {
                         while (resultSet.next()) {
@@ -114,7 +138,13 @@ public class LobDataManager {
     private void saveData(File file, ResultSet resultSet, String columnName, boolean isBlob) {
 
         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file)); InputStream is = isBlob ?
-                resultSet.getBinaryStream(columnName) : resultSet.getAsciiStream(columnName) ){
+                resultSet.getBinaryStream(columnName) : resultSet.getAsciiStream(columnName)) {
+
+            if (is == null) {
+                new Alert(Alert.AlertType.ERROR, "No data for save!").showAndWait();
+                return;
+            }
+
             int b;
             while ((b = is.read()) != -1) {
                 os.write(b);
@@ -127,5 +157,40 @@ public class LobDataManager {
         } catch (IOException e) {
             logger.error("LobDataManager error[saveBlobData (IO)]: " + e);
         }
+    }
+
+    /**
+     * @return query string
+     */
+    private String getQuery(int rowIndex, Column column, Table table, boolean upload) {
+
+        Cell keyCell = null;
+        String query = null;
+        String keyColumnName = null;
+        Row row = table.getRows().get(rowIndex);
+
+        for (Column pKeyColumn : table.getColumns()) {
+            if (pKeyColumn.isPrimaryKey() || pKeyColumn.isAutoIncrement()) {
+                int keyIndex = table.getColumns().indexOf(pKeyColumn);
+                keyCell = row.getCells().get(keyIndex);
+                keyColumnName = pKeyColumn.getColumnName();
+                break;
+            }
+        }
+
+        if (keyCell == null) {
+            new Alert(Alert.AlertType.INFORMATION, "Implemented only for tables with primary key!").showAndWait();
+            return null;
+        }
+
+        if (upload) {
+            query = "UPDATE " + table.getName() + " SET " + column.getColumnName() + "=(?) " +
+                    " WHERE " + keyColumnName + "=" + keyCell.getValue();
+        } else {
+            query = "SELECT " + column.getColumnName() + " FROM " +
+                    table.getName() + " WHERE " + keyColumnName + "=" + keyCell.getValue();
+        }
+
+        return query;
     }
 }
