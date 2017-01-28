@@ -3,10 +3,15 @@ package by.post.control.db;
 import by.post.data.Column;
 import by.post.data.Table;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 /**
@@ -45,10 +50,8 @@ class LargeObjectCell extends ChoiceBoxTableCell {
 
             if (index == 0) {
                 dataManager.download(rowIndex, column, table);
-                cancelEdit();
             } else {
-                dataManager.upload(rowIndex, column, table);
-                cancelEdit();
+                setCellBackground(dataManager.upload(rowIndex, column, table));
             }
         });
 
@@ -63,6 +66,7 @@ class LargeObjectCell extends ChoiceBoxTableCell {
     @Override
     public void cancelEdit() {
         super.cancelEdit();
+        this.setBackground(Background.EMPTY);
         setText(String.valueOf(getItem()));
         setGraphic(null);
         choiceBox = null;
@@ -73,6 +77,14 @@ class LargeObjectCell extends ChoiceBoxTableCell {
      */
     public static Callback<TableColumn, TableCell> forTableColumn(final Table table) {
         return list -> new LargeObjectCell(table);
+    }
+
+    /**
+     * Sets background for cell
+     */
+    private void setCellBackground(boolean isError) {
+        this.setBackground(new Background(new BackgroundFill(isError ? Color.LIME : Color.RED,
+                CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
 }

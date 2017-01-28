@@ -1,7 +1,10 @@
 package by.post.control.db;
 
 import by.post.control.ui.OpenFileDialogProvider;
-import by.post.data.*;
+import by.post.data.Cell;
+import by.post.data.Column;
+import by.post.data.Row;
+import by.post.data.Table;
 import by.post.data.type.DefaultColumnDataType;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
@@ -42,6 +45,7 @@ public class LobDataManager {
         String query = getQuery(rowIndex, column, table, false);
 
         if (query == null) {
+            logger.error("LobDataManager error[download]: query = null");
             return;
         }
 
@@ -59,17 +63,17 @@ public class LobDataManager {
      * @param column
      * @param table
      */
-    public void upload(int rowIndex, Column column, Table table) {
+    public boolean upload(int rowIndex, Column column, Table table) {
 
         if (column == null || table == null) {
             logger.error("LobDataManager error[upload]: Invalid arguments!");
-            return;
+            return false;
         }
 
         File file = new OpenFileDialogProvider().getFileDialog("Select a file", false, false);
 
         if (file == null) {
-            return;
+            return false;
         }
 
         String query = getQuery(rowIndex, column, table, true);
@@ -78,7 +82,7 @@ public class LobDataManager {
 
         if (query == null || connection == null) {
             logger.error("LobDataManager error[upload] : query = " + query + " connection = " + connection);
-            return;
+            return false;
         }
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -94,12 +98,14 @@ public class LobDataManager {
                 connection.commit();
             }
             logger.info("File " + file + " was uploaded.");
+            return true;
         } catch (SQLException e) {
             logger.error("LobDataManager error[upload (SQL)]: " + e);
         } catch (FileNotFoundException e) {
             logger.error("LobDataManager error[upload (FileNotFound)]: " + e);
         }
 
+        return false;
     }
 
     /**
