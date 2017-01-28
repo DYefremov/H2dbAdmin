@@ -13,23 +13,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.ChoiceBoxTableCell;
-import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
-import javafx.util.converter.BigIntegerStringConverter;
-import javafx.util.converter.DefaultStringConverter;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.NumberStringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -113,15 +103,10 @@ public class TableDataResolver {
      */
     public TableColumn getColumn(Column column) {
 
-        int columnType = columnDataType.getNumType(column.getType());
+        int columnType =  columnDataType.getNumType(column.getType());
 
         TableColumn tableColumn = getTableColumn(column);
-
-//        if (columnDataType.isLargeObject(columnType)) {
-//            return getBlobClobTableColumn(tableColumn);
-//        }
-
-        tableColumn.setCellValueFactory(new TypedCellValueFactory(tableColumn, columnType));
+        tableColumn.setCellValueFactory(getValueFactory(columnType));
         // Add for enable editing
         tableColumn.setCellFactory(getCellFactory(columnType));
 
@@ -155,66 +140,37 @@ public class TableDataResolver {
     }
 
     /**
-     * @param column
-     * @return table column with blob or clob type
-     */
-    private TableColumn getBlobClobTableColumn(TableColumn column) {
-
-        TableColumn tableColumn = column;
-
-        column.setCellFactory(param -> {
-            final TableCell cell = new TableCell();
-            final Hyperlink hyperlink = new Hyperlink("download");
-            hyperlink.setOnAction(event -> {
-                int rowIndex = cell.getTableRow().getIndex();
-                LobDataManager.getInstance().save(rowIndex, (Column) tableColumn.getUserData(), table);
-            });
-
-            cell.setGraphic(hyperlink);
-
-            return cell;
-        });
-
-        return tableColumn;
-    }
-
-    /**
      * @param columnType
      * @return
      */
     private Callback getCellFactory(int columnType) {
 
         if (columnDataType.isLargeObject(columnType)) {
-            return ChoiceBoxTableCell.forTableColumn();
+            return LargeObjectCell.forTableColumn(table);
         }
+
+//        if (columnDataType.isNumericType(columnType)) {
+//            return TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter());
+//        }
 
         return TextFieldTableCell.forTableColumn();
     }
 
     /**
-     * Implementation of CellValueFactory
+     *Implementation of CellValueFactory
      */
-    private class TypedCellValueFactory implements Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<?>> {
+    private Callback<TableColumn.CellDataFeatures<ObservableList, ?>, ObservableValue<?>> getValueFactory(int columnType) {
 
-        private int columnType;
-        private TableColumn tableColumn;
-
-        TypedCellValueFactory(TableColumn tableColumn, int columnType) {
-            this.tableColumn = tableColumn;
-            this.columnType = columnType;
+        if (columnDataType.isLargeObject(columnType)) {
+            return null;
         }
 
-        @Override
-        public ObservableValue<?> call(TableColumn.CellDataFeatures<ObservableList, String> cellData) {
-
-            int index = tableColumn.getTableView().getColumns().indexOf(tableColumn);
-
-            if (columnDataType.isLargeObject(columnType)) {
-               return null;
-            }
-
+        return cellData -> {
+            TableColumn column = cellData.getTableColumn();
+            int index =column.getTableView().getColumns().indexOf(column);
             return new SimpleStringProperty(String.valueOf(cellData.getValue().get(index)));
-        }
+        };
+
     }
 
 }

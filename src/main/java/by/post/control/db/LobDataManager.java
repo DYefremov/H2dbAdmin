@@ -35,10 +35,10 @@ public class LobDataManager {
      * @param column
      * @param table
      */
-    public void save(int rowIndex, Column column, Table table) {
+    public void download(int rowIndex, Column column, Table table) {
 
         if (column == null || table == null) {
-            logger.error("LobDataManager error[save]: Invalid arguments!");
+            logger.error("LobDataManager error[download]: Invalid arguments!");
             return;
         }
 
@@ -71,6 +71,11 @@ public class LobDataManager {
         if (connection != null) {
             saveData(column, query, file, connection);
         }
+    }
+
+
+    public void upload(int rowIndex, Column column, Table table) {
+        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet!").showAndWait();
     }
 
     /**
