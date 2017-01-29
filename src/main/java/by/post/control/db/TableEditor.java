@@ -1,7 +1,9 @@
 package by.post.control.db;
 
+import by.post.control.Context;
 import by.post.control.ui.TypedTreeItem;
 import by.post.data.*;
+import by.post.data.type.ColumnDataType;
 import by.post.ui.ColumnDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -32,6 +35,7 @@ public class TableEditor {
     private static TableEditor instance = new TableEditor();
 
     private static final String DEFAULT_CELL_VALUE = "value";
+    private static final String DEFAULT_NUM_CELL_VALUE = "0";
 
     private static final Logger logger = LogManager.getLogger(TableEditor.class);
 
@@ -369,12 +373,12 @@ public class TableEditor {
     private void createNewRow() throws SQLException {
 
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-        Row row = getRow(Commands.ADD, selectedIndex, null);
-        int columnCount = row.getCells().size();
-
         selectedIndex = selectedIndex == -1 ? ++selectedIndex : selectedIndex;
 
-        mainTable.getItems().add(selectedIndex, FXCollections.observableArrayList(Collections.nCopies(columnCount, DEFAULT_CELL_VALUE)));
+        Row row = getRow(Commands.ADD, selectedIndex, null);
+        List values = row.getCells().stream().map(cell -> cell.getValue()).collect(Collectors.toList());
+
+        mainTable.getItems().add(selectedIndex, FXCollections.observableArrayList(values));
         mainTable.getSelectionModel().select(selectedIndex, null);
         rows.add(mainTable.getSelectionModel().getSelectedItem());
     }
@@ -399,10 +403,25 @@ public class TableEditor {
         List<TableColumn> columns = mainTable.getColumns();
         List<Cell> cells = new ArrayList<>();
 
+        ColumnDataType columnDataType = Context.getCurrentDataType();
+
         columns.forEach(c -> {
-            int index = columns.indexOf(c);
             Column column = (Column) c.getUserData();
-            String value = rowValues == null ? DEFAULT_CELL_VALUE : rowValues.get(index);
+            int index = columns.indexOf(c);
+            int dataType = columnDataType.getNumType(column.getType());
+
+            String value;
+
+            if (columnDataType.isLargeObject(dataType)) {
+                value = rowValues == null ? "" : rowValues.get(index);
+            } else if (columnDataType.isNumericType(dataType)) {
+                value = rowValues == null ? DEFAULT_NUM_CELL_VALUE : rowValues.get(index);
+            } else {
+                value = rowValues == null ? DEFAULT_CELL_VALUE : rowValues.get(index);
+            }
+
+            System.out.println(value);
+
             cells.add(new Cell(column.getColumnName(), column.getType(), value));
         });
 
