@@ -60,12 +60,10 @@ public class TableEditor {
     public void addTable(TreeView tableTree, Table table, ImageView icon, TableType type) {
 
         try {
-            String name = table.getName();
-
             dbControl.update(Queries.createTable(table));
 
+            String name = table.getName();
             addTableTreeItem(tableTree, icon, type, name);
-
             logger.info("Added new  table: " + name);
         } catch (SQLException e) {
             logger.error("Table editor error[addTable]: " + e);
@@ -92,12 +90,10 @@ public class TableEditor {
         }
 
         try {
-            String name = view.getName();
-
             dbControl.update(Queries.createView(view));
 
+            String name = view.getName();
             addTableTreeItem(tableTree, icon, type, name);
-
             logger.info("Added new  table: " + name);
         } catch (SQLException e) {
             logger.error("Table editor error[addTable]: " + e);
@@ -195,8 +191,9 @@ public class TableEditor {
 
             TableColumn tableColumn = new TableDataResolver().getColumn(column);
             mainTable.getColumns().add(tableColumn);
-
+            
             ObservableList<ObservableList> items = mainTable.getItems();
+
             if (items != null && !items.isEmpty()) {
                 // Fill in the data.
                 items.parallelStream().forEach(item -> item.add(""));
@@ -373,10 +370,11 @@ public class TableEditor {
     private void createNewRow() throws SQLException {
 
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-        selectedIndex = selectedIndex == -1 ? ++selectedIndex : selectedIndex;
 
         Row row = getRow(Commands.ADD, selectedIndex, null);
         List values = row.getCells().stream().map(cell -> cell.getValue()).collect(Collectors.toList());
+
+        selectedIndex = selectedIndex == -1 ? ++selectedIndex : selectedIndex;
 
         mainTable.getItems().add(selectedIndex, FXCollections.observableArrayList(values));
         mainTable.getSelectionModel().select(selectedIndex, null);

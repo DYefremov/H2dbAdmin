@@ -1,9 +1,11 @@
 package by.post.control.db;
 
 import by.post.data.*;
+import by.post.data.type.DefaultColumnDataType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -36,7 +38,7 @@ public class Queries {
         String tableName = table.getName();
 
         if (columns == null || columns.isEmpty()) {
-            return    "CREATE TABLE " + tableName;
+            return "CREATE TABLE " + tableName;
         }
 
         StringBuilder sb = new StringBuilder("CREATE TABLE " + tableName + "(\n");
@@ -49,7 +51,7 @@ public class Queries {
             String defValue = column.getDefaultValue();
 
             sb.append(column.getColumnName());
-            sb.append(length > 0 ? " " + type + "(" + length +")" : " " + type);
+            sb.append(length > 0 ? " " + type + "(" + length + ")" : " " + type);
             sb.append(defValue == null ? "" : " DEFAULT " + "'" + defValue + "'");
             sb.append(column.isNotNull() ? " NOT NULL" : "");
             sb.append(column.isPrimaryKey() ? " PRIMARY KEY" : "");
@@ -69,7 +71,7 @@ public class Queries {
 
         StringBuilder sb = new StringBuilder("CREATE VIEW " + view.getName() + " AS\n");
         //Only for one table
-        if (tables !=null && tables.size() == 1) {
+        if (tables != null && tables.size() == 1) {
             Table table = tables.get(0);
             List<Column> columns = table.getColumns();
 
@@ -100,7 +102,7 @@ public class Queries {
                 int lastCondIndex = withConditions.size() - 1;
                 sb.append("WHERE ");
                 withConditions.forEach(column -> {
-                    sb.append(column.getColumnName() + "='" + column.getCondition() +"'");
+                    sb.append(column.getColumnName() + "='" + column.getCondition() + "'");
                     sb.append(columns.indexOf(column) != lastCondIndex ? " AND " : "\n");
                 });
             }
@@ -113,9 +115,10 @@ public class Queries {
 
     /**
      * DROP ALL OBJECTS
-     * @see "http://www.h2database.com/html/grammar.html#drop_all_objects"
+     *
      * @param dropOnly
      * @return
+     * @see "http://www.h2database.com/html/grammar.html#drop_all_objects"
      */
     public static String dropDatabase(boolean dropOnly) {
         return "DROP ALL OBJECTS" + (dropOnly ? "" : " DELETE FILES");
@@ -125,7 +128,7 @@ public class Queries {
      * @param tableName
      * @return
      */
-    public static String deleteTable(String tableName){
+    public static String deleteTable(String tableName) {
         return "DROP TABLE " + tableName.toUpperCase();
     }
 
@@ -161,9 +164,9 @@ public class Queries {
         sb.append(" " + column.getType());
         sb.append(column.isNotNull() || column.isPrimaryKey() ? " NOT NULL" : "");
         sb.append(column.isPrimaryKey() ? "; ALTER TABLE " + column.getTableName() +
-                " ADD PRIMARY KEY (" + column.getColumnName() + ")": "" );
+                " ADD PRIMARY KEY (" + column.getColumnName() + ")" : "");
 
-        return sb.toString() ;
+        return sb.toString();
     }
 
     /**
@@ -177,7 +180,7 @@ public class Queries {
         String tableName = oldColumn.getTableName();
         String columnName = oldColumn.getColumnName();
         String type = newColumn.getType();
-        String alterQuery = "ALTER TABLE " + tableName  + " ALTER COLUMN ";
+        String alterQuery = "ALTER TABLE " + tableName + " ALTER COLUMN ";
 
         boolean nameIsChanged = !columnName.equals(newColumn.getColumnName());
         boolean notNullIsChanged = oldColumn.isNotNull() != newColumn.isNotNull();
@@ -187,7 +190,7 @@ public class Queries {
         // Add column name to the query
         alterQuery = nameIsChanged ? alterQuery + newColumn.getColumnName() : alterQuery + columnName;
 
-        sb.append(typeIsChanged ? alterQuery + " " + type +";\n" : "");
+        sb.append(typeIsChanged ? alterQuery + " " + type + ";\n" : "");
         sb.append(notNullIsChanged ? newColumn.isNotNull() ? alterQuery + " SET NOT NULL;\n" : alterQuery + " SET NULL;\n" : "");
 
         return sb.toString();
@@ -209,13 +212,13 @@ public class Queries {
 
         StringBuilder sb = new StringBuilder("INSERT INTO " + row.getTableName() + " (");
         cells.forEach(c -> {
-            sb.append(cells.indexOf(c) != lastIndex ? c.getName() +", " : c.getName());
+            sb.append(cells.indexOf(c) != lastIndex ? c.getName() + ", " : c.getName());
         });
 
         sb.append(")\nVALUES (");
 
         cells.forEach(c -> {
-            String value = "'" +  c.getValue() + "'";
+            String value = "'" + c.getValue() + "'";
             sb.append(cells.indexOf(c) != lastIndex ? value + ", " : value);
         });
 
@@ -226,23 +229,26 @@ public class Queries {
 
     /**
      * @param row
-     * @return  string query for deleting row
+     * @return string query for deleting row
      */
     public static String deleteRow(Row row) {
-
         // TODO Think may be add delete by row number (by index)
-
         List<Cell> cells = row.getCells();
 
         if (cells == null || cells.isEmpty()) {
             return "";
         }
 
-        int lastIndex = cells.size() - 1;
-
         StringBuilder sb = new StringBuilder("DELETE FROM " + row.getTableName() + "\nWHERE ");
+        //Searching and storing only cells without LOB types
+        List<Cell> filteredCells = cells.stream()
+                .filter(c -> !c.getType().equals(DefaultColumnDataType.BLOB) &&
+                        !c.getType().equals(DefaultColumnDataType.CLOB))
+                .collect(Collectors.toList());
 
-        cells.forEach(c -> {
+        int lastIndex = filteredCells.size() - 1;
+
+        filteredCells.forEach(c -> {
             String value = c.getName() + "='" + c.getValue() + "'";
             sb.append(cells.indexOf(c) != lastIndex ? value + " AND " : value + ";");
         });
@@ -271,8 +277,8 @@ public class Queries {
         int lastChangedIndex = changedCells.size() - 1;
 
         changedCells.forEach(cc -> {
-            String value = cc.getName() + "='" + cc.getValue() +"'";
-            sb.append(changedCells.indexOf(cc) != lastChangedIndex ? value +"," : value + " \nWHERE ");
+            String value = cc.getName() + "='" + cc.getValue() + "'";
+            sb.append(changedCells.indexOf(cc) != lastChangedIndex ? value + "," : value + " \nWHERE ");
         });
 
         int lastOldIndex = oldCells.size() - 1;
@@ -281,7 +287,7 @@ public class Queries {
             String columnName = c.getName();
             String value = (String) c.getValue();
             System.out.println("value = " + value);
-            value = value.equals("") ? columnName + " IS NULL OR " + columnName + "=''" : columnName + "='"+ value + "'";
+            value = value.equals("") ? columnName + " IS NULL OR " + columnName + "=''" : columnName + "='" + value + "'";
             sb.append(oldCells.indexOf(c) != lastOldIndex ? value + " AND " : value + ";");
         });
 
@@ -292,8 +298,8 @@ public class Queries {
      * @param tableName
      * @return columns names
      */
-    public static  String getTableColumnNames(String tableName) {
-        return "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='"+ tableName + "';";
+    public static String getTableColumnNames(String tableName) {
+        return "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='" + tableName + "';";
     }
 
 }
