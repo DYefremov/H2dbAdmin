@@ -143,10 +143,11 @@ public class LobDataManager {
      */
     private void saveData(File file, ResultSet resultSet, String columnName, boolean isBlob) {
 
-        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file)); InputStream is = isBlob ?
-                resultSet.getBinaryStream(columnName) : resultSet.getAsciiStream(columnName)) {
+        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+        PushbackInputStream is = new PushbackInputStream(isBlob ? resultSet.getBinaryStream(columnName) :
+                resultSet.getAsciiStream(columnName))) {
 
-            if (is == null) {
+            if (is == null || is.available() < 1) {
                 new Alert(Alert.AlertType.ERROR, "No data for save!").showAndWait();
                 return;
             }

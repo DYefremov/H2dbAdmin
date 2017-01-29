@@ -420,8 +420,6 @@ public class TableEditor {
                 value = rowValues == null ? DEFAULT_CELL_VALUE : rowValues.get(index);
             }
 
-            System.out.println(value);
-
             cells.add(new Cell(column.getColumnName(), column.getType(), value));
         });
 
