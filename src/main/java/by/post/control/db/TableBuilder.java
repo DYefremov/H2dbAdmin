@@ -159,7 +159,7 @@ public class TableBuilder {
      */
     private Cell getCell(int num, int columnType, ResultSet rs) throws SQLException {
 
-        Cell cell = new Cell();
+        Cell cell = new Cell(columnType, null, null);
 
         if (columnDataType.isLargeObject(columnType)) {
             return cell;

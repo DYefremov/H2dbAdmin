@@ -29,7 +29,7 @@ public class TableDataResolver {
 
     private Table table;
     private ObservableList tableColumns;
-    private ObservableList<ObservableList> items;
+    private ObservableList<Row> items;
     private static ColumnDataType columnDataType;
     private static final String LARGE_OBJECT_VALUE = "Object";
 
@@ -64,16 +64,7 @@ public class TableDataResolver {
         // Add columns
         tableColumns = getColumns(table.getColumns() != null ? table.getColumns() : new ArrayList<Column>());
         // Add data
-        items = FXCollections.observableArrayList();
-        List<Row> rows = table.getRows();
-
-        if (rows != null && !rows.isEmpty()) {
-            rows.stream().forEach(row -> {
-                ObservableList<String> newRow = FXCollections.observableArrayList();
-                row.getCells().forEach(cell -> newRow.add(cell.getValue() != null ? String.valueOf(cell.getValue()) : null));
-                items.add(newRow);
-            });
-        }
+        items = FXCollections.observableArrayList(table.getRows());
     }
 
     /**
@@ -156,7 +147,7 @@ public class TableDataResolver {
     /**
      * Implementation of CellValueFactory
      */
-    private Callback<TableColumn.CellDataFeatures<ObservableList, ?>, ObservableValue<?>> getValueFactory(int columnType) {
+    private Callback<TableColumn.CellDataFeatures<Row, ?>, ObservableValue<?>> getValueFactory(int columnType) {
 
         if (columnDataType.isLargeObject(columnType)) {
             return cellData -> new SimpleStringProperty(LARGE_OBJECT_VALUE);
@@ -165,7 +156,7 @@ public class TableDataResolver {
         return cellData -> {
             TableColumn column = cellData.getTableColumn();
             int index = column.getTableView().getColumns().indexOf(column);
-            return new SimpleStringProperty(String.valueOf(cellData.getValue().get(index)));
+            return new SimpleStringProperty(String.valueOf(cellData.getValue().getCells().get(index).getValue()));
         };
 
     }

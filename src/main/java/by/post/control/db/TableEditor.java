@@ -5,7 +5,6 @@ import by.post.control.ui.TypedTreeItem;
 import by.post.data.*;
 import by.post.data.type.ColumnDataType;
 import by.post.ui.ColumnDialog;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
@@ -20,7 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -28,9 +26,10 @@ import java.util.stream.Collectors;
 public class TableEditor {
 
     private DbControl dbControl = null;
-    private TableView mainTable;
+    private TableView<Row> mainTable;
     private Row lastSelectedRow;
-    private Deque<Object> rows;
+    private Deque<Row> rows;
+    ColumnDataType columnDataType;
 
     private static TableEditor instance = new TableEditor();
 
@@ -42,6 +41,7 @@ public class TableEditor {
     private TableEditor() {
         dbControl = DbController.getInstance();
         rows = new ArrayDeque<>();
+        columnDataType = Context.getCurrentDataType();
     }
 
     public static TableEditor getInstance() {
@@ -191,20 +191,19 @@ public class TableEditor {
 
             TableColumn tableColumn = new TableDataResolver().getColumn(column);
             mainTable.getColumns().add(tableColumn);
-            
-            ObservableList<ObservableList> items = mainTable.getItems();
+
+            ObservableList<Row> items = mainTable.getItems();
 
             if (items != null && !items.isEmpty()) {
                 // Fill in the data.
-                items.parallelStream().forEach(item -> item.add(""));
-                mainTable.setItems(items);
+//                items.parallelStream().forEach(item -> item.getCells().add(getCell(item, items.indexOf(item) - 1, column)));
+//                mainTable.setItems(items);
             }
+            logger.info("Add column in table: " + column.getColumnName());
         } catch (Exception e) {
             logger.error("Table editor error[addColumn]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to create the column.\nSee more info in console!").showAndWait();
         }
-
-        logger.info("Add column in table: " + column.getColumnName());
     }
 
     /**
@@ -224,14 +223,13 @@ public class TableEditor {
             }
 
             mainTable.getColumns().remove(index);
-            ObservableList<ObservableList> items = mainTable.getItems();
+            ObservableList<Row> items = mainTable.getItems();
 
             if (items != null && !items.isEmpty()) {
                 // Remove cell from rows by index.
-                items.parallelStream().forEach(item -> item.remove(index));
+                items.parallelStream().forEach(item -> item.getCells().remove(index));
+                logger.info("Column deleted.");
             }
-
-            logger.info("Column deleted.");
         } catch (Exception e) {
             logger.error("Table editor error[deleteColumn]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to remove the column.\nSee more info in console!").showAndWait();
@@ -239,19 +237,17 @@ public class TableEditor {
     }
 
     /**
-     * Save changes after row editing
-     *
-     * @param rowIndex
+     * Save changes after rows editing
      */
-    public void saveRow(int rowIndex) {
+    public void saveRow() {
 
         try {
             if (mainTable.getItems().size() == getDbRowsCount()) {
                 changeRow();
             } else {
-               while (!rows.isEmpty()) {
-                   dbControl.update(Queries.addRow(getRow(Commands.ADD, rowIndex, rows.pollLast())));
-               }
+                while (!rows.isEmpty()) {
+                    dbControl.update(Queries.addRow(rows.pollLast()));
+                }
             }
         } catch (SQLException e) {
             logger.error("Table editor error[saveRow]: " + e);
@@ -317,7 +313,7 @@ public class TableEditor {
      */
     public void deleteRow() {
 
-        ObservableList items = mainTable.getSelectionModel().getSelectedItems();
+        ObservableList<Row> items = mainTable.getSelectionModel().getSelectedItems();
 
         if (items.isEmpty()) {
             return;
@@ -330,13 +326,12 @@ public class TableEditor {
                 } else {
                     dbControl.update(Queries.deleteRow(getRow(Commands.DELETE, 0, item)));
                 }
+                mainTable.getItems().removeAll(items);
             } catch (SQLException e) {
                 logger.error("Table editor error[deleteRow]: " + e);
                 new Alert(Alert.AlertType.ERROR, "Failure to delete the row.\nSee more info in console!").showAndWait();
             }
         });
-
-        mainTable.getItems().removeAll(items);
     }
 
     /**
@@ -370,13 +365,10 @@ public class TableEditor {
     private void createNewRow() throws SQLException {
 
         int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-
         Row row = getRow(Commands.ADD, selectedIndex, null);
-        List values = row.getCells().stream().map(cell -> cell.getValue()).collect(Collectors.toList());
-
         selectedIndex = selectedIndex == -1 ? ++selectedIndex : selectedIndex;
 
-        mainTable.getItems().add(selectedIndex, FXCollections.observableArrayList(values));
+        mainTable.getItems().add(selectedIndex, row);
         mainTable.getSelectionModel().select(selectedIndex, null);
         rows.add(mainTable.getSelectionModel().getSelectedItem());
     }
@@ -387,46 +379,56 @@ public class TableEditor {
      * @param command
      * @return needed row
      */
-    private Row getRow(Commands command, int selectedIndex, Object rowItem) {
+    private Row getRow(Commands command, int selectedIndex, Row rowItem) {
 
         boolean add = command.equals(Commands.ADD);
-        List<String> rowValues;
+
+        Row row;
 
         if (rowItem != null) {
-            rowValues = (List<String>) rowItem;
+            row = rowItem;
         } else {
-            rowValues = selectedIndex != -1 ? (List<String>) mainTable.getItems().get(selectedIndex) : null;
+            row = selectedIndex != -1 ? mainTable.getItems().get(selectedIndex) : new Row();
         }
 
-        List<TableColumn> columns = mainTable.getColumns();
+        ObservableList<TableColumn<Row, ?>> columns = mainTable.getColumns();
         List<Cell> cells = new ArrayList<>();
-
-        ColumnDataType columnDataType = Context.getCurrentDataType();
 
         columns.forEach(c -> {
             Column column = (Column) c.getUserData();
             int index = columns.indexOf(c);
-            int dataType = columnDataType.getNumType(column.getType());
-
-            String value;
-
-            if (columnDataType.isLargeObject(dataType)) {
-                value = rowValues == null ? "" : rowValues.get(index);
-            } else if (columnDataType.isNumericType(dataType)) {
-                value = rowValues == null ? DEFAULT_NUM_CELL_VALUE : rowValues.get(index);
-            } else {
-                value = rowValues == null ? DEFAULT_CELL_VALUE : rowValues.get(index);
-            }
-
-            cells.add(new Cell(column.getColumnName(), column.getType(), value));
+            cells.add(getCell(row, index, column));
         });
 
-        Row row = new Row();
         row.setCells(cells);
         row.setNum(add ? ++selectedIndex : selectedIndex);
         row.setTableName(mainTable.getId());
 
         return row;
+    }
+
+    /**
+     * @param row
+     * @param index
+     * @param column
+     * @return
+     */
+    private Cell getCell(Row row, int index, Column column) {
+
+        int dataType = columnDataType.getNumType(column.getType());
+        List<Cell> cells = row.getCells();
+
+        String value;
+
+        if (columnDataType.isLargeObject(dataType)) {
+            value = "";
+        } else if (columnDataType.isNumericType(dataType)) {
+            value = cells == null ? DEFAULT_NUM_CELL_VALUE : String.valueOf(cells.get(index).getValue());
+        } else {
+            value = cells == null ? DEFAULT_CELL_VALUE :  String.valueOf(cells.get(index).getValue());
+        }
+
+        return new Cell(dataType, column.getColumnName(), value);
     }
 
     /**

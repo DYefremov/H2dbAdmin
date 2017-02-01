@@ -4,6 +4,7 @@ import by.post.control.Context;
 import by.post.control.PropertiesController;
 import by.post.control.Settings;
 import by.post.control.db.*;
+import by.post.data.Row;
 import by.post.data.Table;
 import by.post.data.View;
 import by.post.data.type.Dbms;
@@ -30,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller class for main ui form
@@ -199,11 +201,11 @@ public class MainUiController {
      */
     @FXML
     public void onMouseClicked() {
-        tableEditor.saveCurrentRow();
+
     }
 
     public void onKeyReleased() {
-        tableEditor.saveCurrentRow();
+
     }
 
     /**
@@ -211,6 +213,10 @@ public class MainUiController {
      */
     @FXML
     public void onAddRow() {
+
+        if (mainTable.getColumns().size() < 1) {
+            return;
+        }
 
         try {
             tableEditor.addRow();
@@ -221,6 +227,10 @@ public class MainUiController {
 
     @FXML
     public void onRemoveRow() {
+
+        if (mainTable.getColumns().size() < 1) {
+            return;
+        }
 
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
@@ -238,7 +248,7 @@ public class MainUiController {
             Optional<ButtonType> result = new ConfirmationDialog("Save entered data to database?").showAndWait();
 
             if (result.get() == ButtonType.OK) {
-                tableEditor.saveRow(selectedIndex);
+                tableEditor.saveRow();
             }
         }
     }
@@ -253,9 +263,9 @@ public class MainUiController {
         // Set log messages output to the text area
         LogArea.setArea(console);
         logger.info("Starting application...");
+        initDbmsType();
         init();
         initData();
-        initDbmsType();
         //Set context
         Context.setMainTableTree(tableTree);
         Context.setMainTableView(mainTable);
@@ -326,8 +336,8 @@ public class MainUiController {
         if (driver.equals(Settings.DEFAULT_DRIVER)) {
             Context.setCurrentDbms(Dbms.H2);
         }
-
     }
+
     /**
      * @param event
      */
@@ -426,6 +436,7 @@ public class MainUiController {
     private void selectTable(Table table) {
 
         logger.info("Select table: " + table.getName());
+        inFiltering = false;
         clearMainTable();
         // Set text for current table name label by selected tree item.
         TypedTreeItem item = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
@@ -438,7 +449,7 @@ public class MainUiController {
         if (!resolver.getTableColumns().isEmpty()) {
             mainTable.refresh();
             mainTable.getColumns().addAll(resolver.getTableColumns());
-            ObservableList<ObservableList> items = resolver.getItems();
+            ObservableList<Row> items = resolver.getItems();
             Context.setCurrentData(items);
             mainTable.setItems(items);
         }
@@ -465,7 +476,7 @@ public class MainUiController {
      */
     private void addNewTable() {
 
-        Optional<Table> result =  new TableCreationDialog().showAndWait();
+        Optional<Table> result = new TableCreationDialog().showAndWait();
 
         if (result.isPresent()) {
             tableEditor.addTable(tableTree, result.get(), getItemImage("table.png"), TableType.TABLE);
@@ -524,13 +535,13 @@ public class MainUiController {
     }
 
     /**
-     *Filter data without default sorting replacement
+     * Filter data without default sorting replacement
      */
     private void filterData() {
 
         //TODO Think about the limitation of the minimum number of characters or the time delay
 
-        ObservableList<ObservableList> data = Context.getCurrentData();
+        ObservableList<Row> data = Context.getCurrentData();
 
         if (inFiltering || data == null || data.isEmpty()) {
             return;
@@ -540,14 +551,10 @@ public class MainUiController {
 
         String searchText = filterTextField.getText();
 
-        List<ObservableList> filtered = new ArrayList<>();
-
         Platform.runLater(() -> {
-            data.stream().forEach(row -> {
-                if (row.toString().toUpperCase().contains(searchText.toUpperCase())) {
-                    filtered.add(row);
-                }
-            });
+            List<Row> filtered = data.stream()
+                    .filter(row -> row.toString().toUpperCase().contains(searchText.toUpperCase()))
+                    .collect(Collectors.toList());
 
             if (!filtered.isEmpty()) {
                 mainTable.setItems(FXCollections.observableArrayList(filtered));

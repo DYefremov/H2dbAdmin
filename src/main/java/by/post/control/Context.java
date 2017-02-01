@@ -1,6 +1,7 @@
 package by.post.control;
 
 import by.post.control.ui.TypedTreeItem;
+import by.post.data.Row;
 import by.post.data.type.ColumnDataType;
 import by.post.data.type.DataTypeFactory;
 import by.post.data.type.Dbms;
@@ -20,7 +21,7 @@ public class Context {
     private static TypedTreeItem tablesTreeItem;
     private static TableView mainTableView;
     private static TreeView mainTableTree;
-    private static ObservableList<ObservableList> currentData;
+    private static ObservableList<Row> currentData;
     private static Locale locale;
     //Data types for database columns
     private static ColumnDataType currentDataType;
@@ -50,11 +51,11 @@ public class Context {
         Context.mainTableTree = mainTableTree;
     }
 
-    public static ObservableList<ObservableList> getCurrentData() {
+    public static ObservableList<Row> getCurrentData() {
         return currentData;
     }
 
-    public static void setCurrentData(ObservableList<ObservableList> currentData) {
+    public static void setCurrentData(ObservableList<Row> currentData) {
         Context.currentData = currentData;
     }
 

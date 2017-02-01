@@ -2,9 +2,9 @@ package by.post.control.ui;
 
 import by.post.control.db.TableEditor;
 import by.post.data.Column;
+import by.post.data.Row;
 import by.post.ui.ColumnDialog;
 import by.post.ui.Resources;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -22,7 +22,7 @@ public class MultipleTableColumnController {
     @FXML
     private Label type;
     @FXML
-    private TableColumn tableColumn;
+    private TableColumn<Row, ?> tableColumn;
     private TableEditor tableEditor;
     private Column oldColumn;
 
@@ -82,13 +82,13 @@ public class MultipleTableColumnController {
      * Called while maintaining the cell changes.
      */
     @FXML
-    public void onEditCommit(TableColumn.CellEditEvent<ObservableList, String> event) {
+    public void onEditCommit(TableColumn.CellEditEvent<Row, String> event) {
 
         int rowPos = event.getTablePosition().getRow();
         int colPos = event.getTablePosition().getColumn();
 
-        ObservableList<String> rowValues = event.getTableView().getItems().get(rowPos);
-        rowValues.set(colPos, event.getNewValue());
+        Row row = event.getTableView().getItems().get(rowPos);
+        row.getCells().get(colPos).setValue(event.getNewValue());
 
         event.getTableView().refresh();
         event.consume();
@@ -113,7 +113,7 @@ public class MultipleTableColumnController {
     }
 
     @FXML
-    private void initialize() {
+    public void initialize() {
         tableEditor = TableEditor.getInstance();
     }
 

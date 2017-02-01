@@ -1,7 +1,8 @@
 package by.post.control.db;
 
+import by.post.control.Context;
 import by.post.data.*;
-import by.post.data.type.DefaultColumnDataType;
+import by.post.data.type.ColumnDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -239,11 +240,12 @@ public class Queries {
             return "";
         }
 
+        ColumnDataType type = Context.getCurrentDataType();
+
         StringBuilder sb = new StringBuilder("DELETE FROM " + row.getTableName() + "\nWHERE ");
         //Searching and storing only cells without LOB types
         List<Cell> filteredCells = cells.stream()
-                .filter(c -> !c.getType().equals(DefaultColumnDataType.BLOB) &&
-                        !c.getType().equals(DefaultColumnDataType.CLOB))
+                .filter(c -> !type.isLargeObject(c.getType()))
                 .collect(Collectors.toList());
 
         int lastIndex = filteredCells.size() - 1;
@@ -286,7 +288,6 @@ public class Queries {
         oldCells.forEach(c -> {
             String columnName = c.getName();
             String value = (String) c.getValue();
-            System.out.println("value = " + value);
             value = value.equals("") ? columnName + " IS NULL OR " + columnName + "=''" : columnName + "='" + value + "'";
             sb.append(oldCells.indexOf(c) != lastOldIndex ? value + " AND " : value + ";");
         });

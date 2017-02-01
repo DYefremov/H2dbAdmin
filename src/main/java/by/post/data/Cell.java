@@ -1,52 +1,47 @@
 package by.post.data;
 
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 /**
  * @author Dmitriy V.Yefremov
  */
 public class Cell implements Data {
-
-    private SimpleStringProperty name;
-    private SimpleStringProperty type;
-    private SimpleObjectProperty value;
+    // 0 == NULL
+    private int type;
+    private String columnName;
+    private Object value;
 
     public Cell() {
-        this.name = new SimpleStringProperty();
-        this.type = new SimpleStringProperty();
-        this.value = new SimpleObjectProperty();
+
     }
 
-    public Cell(String name, String type, Object value) {
-        this.name = new SimpleStringProperty(name);
-        this.type = new SimpleStringProperty(type);
-        this.value = new SimpleObjectProperty(value);
+    public Cell(int type, String columnName,  Object value) {
+        this.type = type;
+        this.columnName = columnName;
+        this.value = value;
     }
 
     public String getName() {
-        return name.get();
+        return columnName;
     }
 
     public void setName(String name) {
-        this.name.set(name != null ? name : "");
+        this.columnName = name;
     }
 
-    public String getType() {
-        return type.get();
+    public int getType() {
+        return type;
     }
 
-    public void setType(String type) {
-        this.type.set(type);
+    public void setType(int type) {
+        this.type = type;
     }
 
     public Object getValue() {
-        return value.get();
+        return value;
     }
 
 
     public void setValue(Object value) {
-        this.value.set(value);
+        this.value = value;
     }
 
     @Override
@@ -62,18 +57,17 @@ public class Cell implements Data {
 
         Cell cell = (Cell) o;
 
-        if (name != null && name.getValue() != null ? !name.getValue().equals(cell.name.getValue()) : cell.name != null)
+        if (type != cell.type) return false;
+        if (columnName != null ? !columnName.equals(cell.columnName) : cell.columnName != null)
             return false;
-        if (type != null && type.getValue() != null ? !type.getValue().equals(cell.type.getValue()) : cell.type != null)
-            return false;
-        return value != null && value.getValue() != null ? value.getValue().equals(cell.value.getValue()) : cell.value == null;
+        return value != null ? value.equals(cell.value) : cell.value == null;
     }
 
     @Override
     public int hashCode() {
 
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
+        int result = type;
+        result = 31 * result + (columnName != null ? columnName.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
 
         return result;
@@ -81,9 +75,10 @@ public class Cell implements Data {
 
     @Override
     public String toString() {
+
         return "Cell{" +
-                "name=" + name +
-                ", type=" + type +
+                "type=" + type +
+                ", columnName='" + columnName + '\'' +
                 ", value=" + value +
                 '}';
     }
