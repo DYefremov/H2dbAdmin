@@ -159,11 +159,14 @@ public class Queries {
      */
     public static String addColumn(Column column) {
 
+        boolean notNull = column.isNotNull();
+
         StringBuilder sb = new StringBuilder("ALTER TABLE ");
         sb.append(column.getTableName());
         sb.append(" ADD " + column.getColumnName());
         sb.append(" " + column.getType());
-        sb.append(column.isNotNull() || column.isPrimaryKey() ? " NOT NULL" : "");
+        sb.append(notNull || column.isPrimaryKey() ? " NOT NULL" : "");
+        sb.append(column.getDefaultValue() == null ? "" : " DEFAULT '" + column.getDefaultValue() + "'");
         sb.append(column.isPrimaryKey() ? "; ALTER TABLE " + column.getTableName() +
                 " ADD PRIMARY KEY (" + column.getColumnName() + ")" : "");
 
@@ -219,7 +222,7 @@ public class Queries {
         sb.append(")\nVALUES (");
 
         cells.forEach(c -> {
-            String value = "'" + c.getValue() + "'";
+            String value = c.getValue() == null ? "NULL" : "'" +  c.getValue() + "'";
             sb.append(cells.indexOf(c) != lastIndex ? value + ", " : value);
         });
 
@@ -233,7 +236,7 @@ public class Queries {
      * @return string query for deleting row
      */
     public static String deleteRow(Row row) {
-        // TODO Think may be add delete by row number (by index)
+
         List<Cell> cells = row.getCells();
 
         if (cells == null || cells.isEmpty()) {
@@ -251,8 +254,9 @@ public class Queries {
         int lastIndex = filteredCells.size() - 1;
 
         filteredCells.forEach(c -> {
-            String value = c.getName() + "='" + c.getValue() + "'";
-            sb.append(cells.indexOf(c) != lastIndex ? value + " AND " : value + ";");
+            boolean isNull = c.getValue() == null;
+            String value = c.getName() + (isNull ? " IS NULL" :  "='" + c.getValue() + "'");
+            sb.append(filteredCells.indexOf(c) != lastIndex ? value + " AND " : value + ";");
         });
 
         return sb.toString();

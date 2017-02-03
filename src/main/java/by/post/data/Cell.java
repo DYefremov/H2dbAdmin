@@ -7,13 +7,13 @@ public class Cell implements Data {
     // 0 == NULL
     private int type;
     private String columnName;
-    private Object value;
+    private String value;
 
     public Cell() {
 
     }
 
-    public Cell(int type, String columnName,  Object value) {
+    public Cell(int type, String columnName,  String value) {
         this.type = type;
         this.columnName = columnName;
         this.value = value;
@@ -35,12 +35,11 @@ public class Cell implements Data {
         this.type = type;
     }
 
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
-
-    public void setValue(Object value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -79,7 +78,7 @@ public class Cell implements Data {
         return "Cell{" +
                 "type=" + type +
                 ", columnName='" + columnName + '\'' +
-                ", value=" + value +
+                ", value='" + value + '\'' +
                 '}';
     }
 }

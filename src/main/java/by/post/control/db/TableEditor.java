@@ -29,7 +29,7 @@ public class TableEditor {
     private TableView<Row> mainTable;
     private Row lastSelectedRow;
     private Deque<Row> rows;
-    ColumnDataType columnDataType;
+    private ColumnDataType columnDataType;
 
     private static TableEditor instance = new TableEditor();
 
@@ -186,6 +186,9 @@ public class TableEditor {
 
         try {
             column.setTableName(mainTable.getId());
+            //Get default cell  for this column
+            Cell cell = getCell(column);
+            column.setDefaultValue(cell.getValue());
 
             dbControl.update(Queries.addColumn(column));
 
@@ -196,8 +199,8 @@ public class TableEditor {
 
             if (items != null && !items.isEmpty()) {
                 // Fill in the data.
-//                items.parallelStream().forEach(item -> item.getCells().add(getCell(item, items.indexOf(item) - 1, column)));
-//                mainTable.setItems(items);
+                items.parallelStream().forEach(item -> item.getCells().add(cell));
+                mainTable.setItems(items);
             }
             logger.info("Add column in table: " + column.getColumnName());
         } catch (Exception e) {
@@ -248,12 +251,12 @@ public class TableEditor {
                 while (!rows.isEmpty()) {
                     dbControl.update(Queries.addRow(rows.pollLast()));
                 }
+                logger.info("Save changes for row to database.");
             }
         } catch (SQLException e) {
             logger.error("Table editor error[saveRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failed to save the row..\nSee more info in console!").showAndWait();
         }
-        logger.info("Save changes for row to database.");
     }
 
     /**
@@ -309,7 +312,7 @@ public class TableEditor {
     }
 
     /**
-     * Remove  selected row from the table
+     * Remove  selected rows from the table
      */
     public void deleteRow() {
 
@@ -381,51 +384,84 @@ public class TableEditor {
      */
     private Row getRow(Commands command, int selectedIndex, Row rowItem) {
 
-        boolean add = command.equals(Commands.ADD);
+        Row row = null;
 
-        Row row;
-
-        if (rowItem != null) {
-            row = rowItem;
-        } else {
-            row = selectedIndex != -1 ? mainTable.getItems().get(selectedIndex) : new Row();
+        switch (command) {
+            case ADD:
+                row = getNewRow(selectedIndex);
+                break;
+            case CHANGE:
+                break;
+            case DELETE:
+                row = rowItem == null ? null: getRowForDeleting(rowItem);
+                break;
+                default:
+                    break;
         }
+
+        return row;
+    }
+
+    /**
+     * @param rowItem
+     * @return prepared row object for deleting
+     */
+    private Row getRowForDeleting(Row rowItem) {
+
+        ObservableList<TableColumn<Row, ?>> columns = mainTable.getColumns();
+
+        List<Cell> cells = rowItem.getCells();
+        columns.forEach(c -> {
+            Column column = (Column) c.getUserData();
+            cells.get(columns.indexOf(c)).setName(column.getColumnName());
+        });
+
+        rowItem.setTableName(mainTable.getId());
+
+        return rowItem;
+    }
+
+    /**
+     * @param selectedIndex
+     * @return new row object
+     */
+    private Row getNewRow(int selectedIndex) {
+
+        Row row = new Row();
 
         ObservableList<TableColumn<Row, ?>> columns = mainTable.getColumns();
         List<Cell> cells = new ArrayList<>();
 
         columns.forEach(c -> {
             Column column = (Column) c.getUserData();
-            int index = columns.indexOf(c);
-            cells.add(getCell(row, index, column));
+            Cell cell = getCell(column);
+            cells.add(columns.indexOf(c), cell);
         });
 
         row.setCells(cells);
-        row.setNum(add ? ++selectedIndex : selectedIndex);
+        row.setNum(++selectedIndex );
         row.setTableName(mainTable.getId());
 
         return row;
     }
 
     /**
-     * @param row
-     * @param index
      * @param column
      * @return
      */
-    private Cell getCell(Row row, int index, Column column) {
+    private Cell getCell(Column column) {
 
         int dataType = columnDataType.getNumType(column.getType());
-        List<Cell> cells = row.getCells();
+        boolean isNotNull = column.isNotNull();
 
         String value;
 
         if (columnDataType.isLargeObject(dataType)) {
-            value = "";
+            value = null;
         } else if (columnDataType.isNumericType(dataType)) {
-            value = cells == null ? DEFAULT_NUM_CELL_VALUE : String.valueOf(cells.get(index).getValue());
+            value = isNotNull ? DEFAULT_NUM_CELL_VALUE : null;
         } else {
-            value = cells == null ? DEFAULT_CELL_VALUE :  String.valueOf(cells.get(index).getValue());
+            value = isNotNull ? DEFAULT_CELL_VALUE : null;
         }
 
         return new Cell(dataType, column.getColumnName(), value);
