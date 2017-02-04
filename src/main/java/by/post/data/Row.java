@@ -15,6 +15,12 @@ public class Row implements Data {
 
     }
 
+    public Row(int num, String tableName, List<Cell> cells) {
+        this.num = num;
+        this.tableName = tableName;
+        this.cells = cells;
+    }
+
     public int getNum() {
         return num;
     }
@@ -50,6 +56,7 @@ public class Row implements Data {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 

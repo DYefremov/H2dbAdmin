@@ -1,6 +1,7 @@
 package by.post.control.ui;
 
 import by.post.control.db.TableEditor;
+import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.data.Row;
 import by.post.ui.ColumnDialog;
@@ -10,6 +11,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -88,7 +91,9 @@ public class MultipleTableColumnController {
         int colPos = event.getTablePosition().getColumn();
 
         Row row = event.getTableView().getItems().get(rowPos);
+        Row keyRow = getKeyRow(row);
         row.getCells().get(colPos).setValue(event.getNewValue());
+        tableEditor.saveCurrentChangedRow(keyRow, row);
 
         event.getTableView().refresh();
         event.consume();
@@ -137,5 +142,18 @@ public class MultipleTableColumnController {
         oldColumn.setSearchable(column.isSearchable());
         oldColumn.setWritable(column.isWritable());
         oldColumn.setSigned(column.isSigned());
+    }
+
+    /**
+     * @param row
+     * @return
+     */
+    private Row getKeyRow(Row row) {
+
+        List<Cell> cells = new ArrayList<>();
+        row.getCells().forEach(c -> cells.add(new Cell(c.getType(), c.getName(), c.getValue())));
+        Row keyRow = new Row(row.getNum(), row.getTableName(), cells);
+
+        return keyRow;
     }
 }

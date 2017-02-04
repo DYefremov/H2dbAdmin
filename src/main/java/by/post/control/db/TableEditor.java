@@ -27,8 +27,8 @@ public class TableEditor {
 
     private DbControl dbControl = null;
     private TableView<Row> mainTable;
-    private Row lastSelectedRow;
     private Deque<Row> rows;
+    private NavigableMap<Row, Row> changedRows;
     private ColumnDataType columnDataType;
 
     private static TableEditor instance = new TableEditor();
@@ -41,6 +41,7 @@ public class TableEditor {
     private TableEditor() {
         dbControl = DbController.getInstance();
         rows = new ArrayDeque<>();
+        changedRows = new TreeMap<>(Comparator.comparingInt(Row::getNum));
         columnDataType = Context.getCurrentDataType();
     }
 
@@ -61,7 +62,6 @@ public class TableEditor {
 
         try {
             dbControl.update(Queries.createTable(table));
-
             String name = table.getName();
             addTableTreeItem(tableTree, icon, type, name);
             logger.info("Added new  table: " + name);
@@ -91,7 +91,6 @@ public class TableEditor {
 
         try {
             dbControl.update(Queries.createView(view));
-
             String name = view.getName();
             addTableTreeItem(tableTree, icon, type, name);
             logger.info("Added new  table: " + name);
@@ -153,7 +152,6 @@ public class TableEditor {
             }
 
             tableTree.refresh();
-
             logger.info("Deleted table: " + name);
         } catch (Exception e) {
             logger.error("Table editor error[deleteTable]: " + e);
@@ -260,28 +258,10 @@ public class TableEditor {
     }
 
     /**
-     * Save the currently selected row.
-     */
-    public void saveCurrentRow() {
-
-        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-
-        if (lastSelectedRow != null && !lastSelectedRow.getTableName().equals(mainTable.getId())) {
-            lastSelectedRow = null;
-        }
-
-        if (selectedIndex != -1) {
-            if (lastSelectedRow == null || lastSelectedRow.getNum() != selectedIndex) {
-                lastSelectedRow = getRow(Commands.CHANGE, selectedIndex, null);
-            }
-        }
-    }
-
-    /**
      * @return true if there is unsaved data
      */
     public boolean hasNotSavedData() {
-        return !rows.isEmpty();
+        return !rows.isEmpty() || !changedRows.isEmpty();
     }
 
     /**
@@ -289,6 +269,7 @@ public class TableEditor {
      */
     public void clearSavedData() {
         rows.clear();
+        changedRows.clear();
     }
 
     /**
@@ -316,7 +297,7 @@ public class TableEditor {
      */
     public void deleteRow() {
 
-        ObservableList<Row> items = mainTable.getSelectionModel().getSelectedItems();
+        List<Row> items = new ArrayList<>(mainTable.getSelectionModel().getSelectedItems());
 
         if (items.isEmpty()) {
             return;
@@ -329,7 +310,7 @@ public class TableEditor {
                 } else {
                     dbControl.update(Queries.deleteRow(getRow(Commands.DELETE, 0, item)));
                 }
-                mainTable.getItems().removeAll(items);
+                mainTable.getItems().remove(item);
             } catch (SQLException e) {
                 logger.error("Table editor error[deleteRow]: " + e);
                 new Alert(Alert.AlertType.ERROR, "Failure to delete the row.\nSee more info in console!").showAndWait();
@@ -338,27 +319,39 @@ public class TableEditor {
     }
 
     /**
-     * Changing the row.
+     * Saving changed rows.
      */
     public void changeRow() {
 
-        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex == -1 || lastSelectedRow == null) {
+        if (changedRows.isEmpty()) {
             return;
         }
 
-        Row row = getRow(Commands.CHANGE, selectedIndex, null);
+        while (!changedRows.isEmpty()) {
+            Map.Entry<Row, Row> entry = changedRows.pollLastEntry();
+            Row oldRowValue = getRow(Commands.CHANGE, 0, entry.getKey());
+            Row newRowValue = getRow(Commands.CHANGE, 0, entry.getValue());
 
-        if (!lastSelectedRow.equals(row)) {
             try {
-                String query = Queries.changeRow(lastSelectedRow, row);
+                String query = Queries.changeRow(oldRowValue, newRowValue);
                 dbControl.update(query);
-                lastSelectedRow = row;
             } catch (SQLException e) {
                 logger.error("Table editor error[changeRow]: " + e);
                 new Alert(Alert.AlertType.ERROR, "Failure to change the row.\nSee more info in console!").showAndWait();
             }
+        }
+    }
+
+    /**
+     * @param oldValue
+     * @param newValue
+     */
+    public void saveCurrentChangedRow(Row oldValue, Row newValue) {
+
+        if (changedRows.containsKey(oldValue)) {
+            changedRows.replace(oldValue, oldValue, newValue);
+        } else {
+            changedRows.put(oldValue, newValue);
         }
     }
 
@@ -391,12 +384,11 @@ public class TableEditor {
                 row = getNewRow(selectedIndex);
                 break;
             case CHANGE:
-                break;
             case DELETE:
-                row = rowItem == null ? null: getRowForDeleting(rowItem);
+                row = rowItem == null ? null : getRowForDeleting(rowItem);
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
 
         return row;
@@ -439,7 +431,7 @@ public class TableEditor {
         });
 
         row.setCells(cells);
-        row.setNum(++selectedIndex );
+        row.setNum(++selectedIndex);
         row.setTableName(mainTable.getId());
 
         return row;

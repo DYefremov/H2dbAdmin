@@ -291,8 +291,8 @@ public class Queries {
 
         oldCells.forEach(c -> {
             String columnName = c.getName();
-            String value = (String) c.getValue();
-            value = value.equals("") ? columnName + " IS NULL OR " + columnName + "=''" : columnName + "='" + value + "'";
+            String value = c.getValue();
+            value = value == null ? columnName + " IS NULL OR " + columnName + "=''" : columnName + "='" + value + "'";
             sb.append(oldCells.indexOf(c) != lastOldIndex ? value + " AND " : value + ";");
         });
 
