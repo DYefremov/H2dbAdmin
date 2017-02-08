@@ -38,7 +38,6 @@ public class SearchProvider {
     public Collection<String> getSearchResult(String searchValue) {
 
         Set<String> tableNames = new HashSet<>();
-
         DbControl control = DbController.getInstance();
         Connection connection = control.getCurrentConnection();
 
@@ -47,12 +46,12 @@ public class SearchProvider {
             return tableNames;
         }
 
+        final String searchText = searchValue.toUpperCase();
         ColumnDataType dataType = Context.getCurrentDataType();
-
         List<String> tables = control.getTablesList(TableType.TABLE.name());
 
         tables.parallelStream().forEach(name -> {
-
+            
             if (terminate) {
                 return;
             }
@@ -70,7 +69,7 @@ public class SearchProvider {
 
                             if (!dataType.isLargeObject(type)) {
                                 String data = rs.getNString(i);
-                                if (data != null && data.toUpperCase().contains(searchValue.toUpperCase())) {
+                                if (data != null && data.toUpperCase().contains(searchText)) {
                                     tableNames.add(name);
                                 }
                             }
