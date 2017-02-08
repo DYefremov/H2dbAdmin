@@ -1,9 +1,9 @@
 package by.post.control.ui;
 
 import by.post.control.Context;
+import by.post.data.Row;
 import by.post.search.SearchProvider;
 import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -14,7 +14,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -101,10 +102,10 @@ public class SearchToolDialogController {
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                List<String> tablesNames = searchProvider.getSearchResult(searchField.getText());
+                Collection tablesNames = searchProvider.getSearchResult(searchField.getText());
                 Platform.runLater(() -> {
                     listView.getItems().clear();
-                    listView.getItems().addAll(FXCollections.observableList(tablesNames));
+                    listView.getItems().addAll(FXCollections.observableList(new ArrayList<>(tablesNames)));
                 });
 
                 return !tablesNames.isEmpty();
@@ -154,7 +155,7 @@ public class SearchToolDialogController {
      *
      */
     @FXML
-    private void initialize() {
+    public void initialize() {
         //Remove icon from window
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.setIconified(false);
@@ -206,9 +207,9 @@ public class SearchToolDialogController {
             return;
         }
 
-        ObservableList<ObservableList> rows = mainTableView.getItems();
+        ObservableList<Row> rows = mainTableView.getItems();
 
-        for (Observable row : rows) {
+        for (Row row : rows) {
             if (row.toString().toUpperCase().contains(text.toUpperCase())) {
                 select(rows.indexOf(row));
                 return;
