@@ -69,6 +69,7 @@ public class MainUiController {
     private MainUiForm mainUiForm;
     private TableEditor tableEditor;
     private DatabaseManager databaseManager;
+    private  SimpleProgressIndicator progressIndicator;
     //Indicate if running filter data process
     private boolean inFiltering;
 
@@ -279,6 +280,7 @@ public class MainUiController {
         dbControl = DbController.getInstance();
         tableEditor = TableEditor.getInstance();
         databaseManager = DatabaseManager.getInstance();
+        progressIndicator = SimpleProgressIndicator.getInstance();
         tableEditor.setTable(mainTable);
 
         tableTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -523,15 +525,7 @@ public class MainUiController {
      * Show and work with search tool
      */
     private void showSearchTool() {
-        try {
-            FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("SearchToolDialog.fxml"));
-            Dialog dialog = loader.load();
-            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image(Resources.LOGO_PATH));
-            dialog.showAndWait();
-        } catch (IOException e) {
-            logger.error("MainUiController error showSearchTool: " + e);
-        }
+        new SearchToolDialog().showAndWait();
     }
 
     /**
@@ -572,12 +566,10 @@ public class MainUiController {
     private void showIndicator(boolean show) {
 
         Platform.runLater(() -> {
-            SimpleProgressIndicator sp = SimpleProgressIndicator.getInstance();
-
-            if (!sp.isShowing() && show) {
-                sp.showAndWait();
+            if (!progressIndicator.isShowing() && show) {
+                progressIndicator.showAndWait();
             } else {
-                sp.hide();
+                progressIndicator.hide();
             }
         });
     }

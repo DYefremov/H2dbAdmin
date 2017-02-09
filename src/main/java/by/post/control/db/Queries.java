@@ -307,4 +307,13 @@ public class Queries {
         return "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='" + tableName + "';";
     }
 
+    /**
+     * @param tableName
+     * @return columns names without LOB types
+     */
+    public static String getNotLobColumnNames(String tableName) {
+        return "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='" +
+                tableName + "' AND TYPE_NAME IS NOT 'CLOB' AND TYPE_NAME IS NOT 'BLOB';";
+    }
+
 }

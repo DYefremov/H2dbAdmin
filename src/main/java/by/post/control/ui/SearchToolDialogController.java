@@ -12,20 +12,14 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Dmitriy V.Yefremov
  */
 public class SearchToolDialogController {
 
-    @FXML
-    private Dialog dialog;
-    @FXML
-    private ListView listView;
     @FXML
     private TextField searchField;
     @FXML
@@ -34,38 +28,18 @@ public class SearchToolDialogController {
     private Label progressLabel;
     @FXML
     private DialogPane dialogPane;
+    @FXML
+    private ListView listView;
 
     private boolean searchRunning;
-
     private SearchProvider searchProvider;
-
     private TypedTreeItem tablesTreeItem;
     private TreeView mainTableTree;
     private TableView mainTableView;
 
+
     public SearchToolDialogController() {
 
-    }
-
-    /**
-     * Actions for list view
-     *
-     * @param event
-     */
-    @FXML
-    public void onListViewClicked(MouseEvent event) {
-
-        if (event.getClickCount() == 2) {
-            selectItem();
-        }
-    }
-
-    @FXML
-    public void onListViewKeyReleased(KeyEvent event) {
-
-        if (event.getCode() == KeyCode.ENTER) {
-            selectItem();
-        }
     }
 
     /**
@@ -80,32 +54,76 @@ public class SearchToolDialogController {
     }
 
     /**
-     * Action for search button
+     * Action for close dialog request or cancel button
      */
+    public void onCloseRequest() {
+        setProgressVisible(false);
+        searchProvider.setTerminate(true);
+    }
+
+    /**
+     * Action for Search button
+     */
+    @FXML
     public void onSearchButton() {
         search();
     }
 
     /**
+     *ListView actions for found tables
      *
+     * @param event
      */
+    @FXML
+    public void onListMouseClick(MouseEvent event) {
+
+        if (event.getClickCount() == 2) {
+            selectItem();
+        }
+    }
+
+    @FXML
+    public void onListKeyReleased(KeyEvent event) {
+
+        if (event.getCode() == KeyCode.ENTER) {
+            selectItem();
+        }
+    }
+
+    @FXML
+    public void initialize() {
+
+        tablesTreeItem = Context.getTablesTreeItem();
+        mainTableView = Context.getMainTableView();
+        mainTableTree = Context.getMainTableTree();
+
+        searchProvider = new SearchProvider();
+        dialogPane.setExpandableContent(null);
+    }
+
     private void search() {
 
-        if (searchRunning) {
-            new Alert(Alert.AlertType.ERROR, "Search is already running!").showAndWait();
+        String searchText = searchField.getText();
+
+        if (searchRunning || searchText.isEmpty()) {
+            String error = searchRunning ? "Search is already running!" : "Blank query";
+            new Alert(Alert.AlertType.ERROR, error).showAndWait();
             return;
         }
 
+        searchProvider.setTerminate(false);
         setProgressVisible(true);
-        setListViewVisible(false);
+        dialogPane.setExpanded(false);
+        dialogPane.setExpandableContent(null);
 
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                Collection tablesNames = searchProvider.getSearchResult(searchField.getText());
+                List<String> tablesNames = searchProvider.getSearchResult(searchText);
+
                 Platform.runLater(() -> {
                     listView.getItems().clear();
-                    listView.getItems().addAll(FXCollections.observableList(new ArrayList<>(tablesNames)));
+                    listView.getItems().addAll(FXCollections.observableList(tablesNames));
                 });
 
                 return !tablesNames.isEmpty();
@@ -113,58 +131,25 @@ public class SearchToolDialogController {
         };
 
         task.setOnSucceeded(event -> {
-            setListViewVisible(task.getValue());
+            dialogPane.setExpandableContent(listView);
+            dialogPane.setExpanded(true);
             setProgressVisible(false);
         });
 
-        new Thread(task).start();
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
      * @param visible
      */
     private void setProgressVisible(boolean visible) {
+
         progress.setVisible(visible);
+        progress.setDisable(!visible);
         progressLabel.setVisible(visible);
         searchRunning = visible;
-    }
-
-    /**
-     * @param visible
-     */
-    private void setListViewVisible(boolean visible) {
-
-        listView.setVisible(visible);
-        listView.setPrefHeight(visible ? Control.USE_COMPUTED_SIZE : Control.USE_PREF_SIZE);
-
-        if (dialogPane.getScene() != null) {
-            // Resize dialog pane
-            dialogPane.getScene().getWindow().sizeToScene();
-        }
-    }
-
-    /**
-     *
-     */
-    @FXML
-    private void onCloseRequest() {
-        searchProvider.setTerminate(true);
-    }
-
-    /**
-     *
-     */
-    @FXML
-    public void initialize() {
-        //Remove icon from window
-        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.setIconified(false);
-
-        tablesTreeItem = Context.getTablesTreeItem();
-        mainTableView = Context.getMainTableView();
-        mainTableTree = Context.getMainTableTree();
-
-        searchProvider = new SearchProvider();
     }
 
     /**
@@ -176,24 +161,13 @@ public class SearchToolDialogController {
             return;
         }
 
-        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                String tableName = String.valueOf(listView.getSelectionModel().getSelectedItem());
-                ObservableList<TypedTreeItem> typedTreeItems = tablesTreeItem.getChildren();
-                //Search first element with equal table name value
-                TypedTreeItem item = typedTreeItems.stream().filter(val -> tableName.equals(val.getValue())).findFirst().get();
-                mainTableTree.getSelectionModel().select(item);
+        String tableName = String.valueOf(listView.getSelectionModel().getSelectedItem());
+        ObservableList<TypedTreeItem> typedTreeItems = tablesTreeItem.getChildren();
+        //Search first element with equal table name value
+        TypedTreeItem item = typedTreeItems.stream().filter(val -> tableName.equals(val.getValue())).findFirst().get();
+        mainTableTree.getSelectionModel().select(item);
 
-                return null;
-            }
-        };
-
-        task.setOnSucceeded(event -> scrollToRow(searchField.getText()));
-
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
+        scrollToRow(searchField.getText());
     }
 
     /**
@@ -203,7 +177,7 @@ public class SearchToolDialogController {
      */
     private void scrollToRow(String text) {
 
-        if (mainTableView == null) {
+        if (mainTableView == null || mainTableView.getItems().isEmpty()) {
             return;
         }
 
@@ -212,7 +186,7 @@ public class SearchToolDialogController {
         for (Row row : rows) {
             if (row.toString().toUpperCase().contains(text.toUpperCase())) {
                 select(rows.indexOf(row));
-                return;
+                break;
             }
         }
     }
@@ -223,8 +197,8 @@ public class SearchToolDialogController {
     private void select(int index) {
 
         Platform.runLater(() -> {
-            mainTableView.scrollTo(index);
             mainTableView.layout();
+            mainTableView.scrollTo(index);
             mainTableView.getSelectionModel().clearSelection();
             mainTableView.getSelectionModel().select(index);
             mainTableView.getFocusModel().focus(index);
