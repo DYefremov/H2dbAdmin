@@ -35,18 +35,18 @@ public class LobDataManager {
      * @param column
      * @param table
      */
-    public void download(int rowIndex, Column column, Table table) {
+    public boolean download(int rowIndex, Column column, Table table) {
 
         if (column == null || table == null) {
             logger.error("LobDataManager error[download]: Invalid arguments!");
-            return;
+            return false;
         }
 
         String query = getQuery(rowIndex, column, table, false);
 
         if (query == null) {
             logger.error("LobDataManager error[download]: query = null");
-            return;
+            return false;
         }
 
         File file = new OpenFileDialogProvider().getSaveFileDialog("Set file name");
@@ -54,8 +54,16 @@ public class LobDataManager {
         Connection connection = DbController.getInstance().getCurrentConnection();
 
         if (connection != null) {
-            saveData(column, query, file, connection);
+            try {
+               return saveData(column, query, file, connection);
+            } catch (IOException e) {
+                logger.error("LobDataManager error[download]: " + e);
+            } catch (SQLException e) {
+                logger.error("LobDataManager error[download]: " + e);
+            }
         }
+
+        return false;
     }
 
     /**
@@ -114,25 +122,22 @@ public class LobDataManager {
      * @param file
      * @param connection
      */
-    private void saveData(Column column, String query, File file, Connection connection) {
+    private boolean saveData(Column column, String query, File file, Connection connection) throws IOException, SQLException {
 
         try (Statement statement = connection.createStatement()) {
             statement.execute(query);
             try (ResultSet resultSet = statement.getResultSet()) {
                 if (resultSet != null) {
-                    if (file != null) {
-                        while (resultSet.next()) {
-                            String columnName = column.getColumnName();
-                            String type = column.getType();
-                            boolean isBlob = type.equals(DefaultColumnDataType.BLOB);
-                            saveData(file, resultSet, columnName, isBlob);
-                        }
+                    while (resultSet.next()) {
+                        String columnName = column.getColumnName();
+                        String type = column.getType();
+                        boolean isBlob = type.equals(DefaultColumnDataType.BLOB);
+                        return saveData(file, resultSet, columnName, isBlob);
                     }
                 }
             }
-        } catch (SQLException e) {
-            logger.error("LobDataManager error[saveData]: " + e);
         }
+        return false;
     }
 
     /**
@@ -141,29 +146,25 @@ public class LobDataManager {
      * @param columnName
      * @param isBlob
      */
-    private void saveData(File file, ResultSet resultSet, String columnName, boolean isBlob) {
+    private boolean saveData(File file, ResultSet resultSet, String columnName, boolean isBlob) throws SQLException, IOException {
 
-        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-        PushbackInputStream is = new PushbackInputStream(isBlob ? resultSet.getBinaryStream(columnName) :
+        if (resultSet.getBinaryStream(columnName) == null) {
+            new Alert(Alert.AlertType.ERROR, "No data for save!").showAndWait();
+            return false;
+        }
+
+        try (InputStream is = new PushbackInputStream(isBlob ? resultSet.getBinaryStream(columnName) :
                 resultSet.getAsciiStream(columnName))) {
 
-            if (is == null || is.available() < 1) {
-                new Alert(Alert.AlertType.ERROR, "No data for save!").showAndWait();
-                return;
+            try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                int b;
+                while ((b = is.read()) != -1) {
+                    os.write(b);
+                }
+                os.flush();
             }
-
-            int b;
-            while ((b = is.read()) != -1) {
-                os.write(b);
-            }
-            os.flush();
-        } catch (SQLException e) {
-            logger.error("LobDataManager error[saveBlobData (SQL)]: " + e);
-        } catch (FileNotFoundException e) {
-            logger.error("LobDataManager error[saveBlobData (FileNotFound)]: " + e);
-        } catch (IOException e) {
-            logger.error("LobDataManager error[saveBlobData (IO)]: " + e);
         }
+        return true;
     }
 
     /**

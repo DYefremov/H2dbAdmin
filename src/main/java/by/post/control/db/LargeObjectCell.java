@@ -7,7 +7,8 @@ import javafx.geometry.Insets;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.ChoiceBoxTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -17,13 +18,32 @@ import javafx.util.Callback;
 /**
  *
  */
-class LargeObjectCell extends ChoiceBoxTableCell {
+class LargeObjectCell extends TableCell {
 
     private ChoiceBox choiceBox;
     private Table table;
+    private ImageView imageView;
 
     public LargeObjectCell(Table table) {
         this.table = table;
+        imageView = new ImageView(new Image("img/file.png"));
+        imageView.setFitHeight(16);
+        imageView.setFitWidth(16);
+    }
+
+    /**
+     * @param item
+     * @param empty
+     */
+    @Override
+    public void updateItem(Object item, boolean empty) {
+
+        super.updateItem(item, empty);
+
+        if (item != null) {
+            this.setGraphic(imageView);
+            this.setStyle("-fx-alignment: CENTER;");
+        }
     }
 
     /**
@@ -49,7 +69,7 @@ class LargeObjectCell extends ChoiceBoxTableCell {
             LobDataManager dataManager = LobDataManager.getInstance();
 
             if (index == 0) {
-                dataManager.download(rowIndex, column, table);
+                setCellBackground(dataManager.download(rowIndex, column, table));
             } else {
                 setCellBackground(dataManager.upload(rowIndex, column, table));
             }
@@ -65,10 +85,10 @@ class LargeObjectCell extends ChoiceBoxTableCell {
      */
     @Override
     public void cancelEdit() {
+
         super.cancelEdit();
         this.setBackground(Background.EMPTY);
-        setText(String.valueOf(getItem()));
-        setGraphic(null);
+        setGraphic(imageView);
         choiceBox = null;
     }
 
