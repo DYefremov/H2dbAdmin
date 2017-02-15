@@ -3,6 +3,7 @@ package by.post.control.db;
 import by.post.control.Context;
 import by.post.data.*;
 import by.post.data.type.ColumnDataType;
+import by.post.data.type.DefaultColumnDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -222,7 +223,7 @@ public class Queries {
         sb.append(")\nVALUES (");
 
         cells.forEach(c -> {
-            String value = c.getValue() == null ? "NULL" : "'" +  c.getValue() + "'";
+            String value = c.getValue() == null ? "NULL" : "'" + c.getValue() + "'";
             sb.append(cells.indexOf(c) != lastIndex ? value + ", " : value);
         });
 
@@ -242,21 +243,19 @@ public class Queries {
         if (cells == null || cells.isEmpty()) {
             return "";
         }
-
-        ColumnDataType type = Context.getCurrentDataType();
-
+        
         StringBuilder sb = new StringBuilder("DELETE FROM " + row.getTableName() + "\nWHERE ");
-        //Searching and storing only cells without LOB types
-        List<Cell> filteredCells = cells.stream()
-                .filter(c -> !type.isLargeObject(c.getType()))
-                .collect(Collectors.toList());
+        ColumnDataType dataType = Context.getCurrentDataType();
+        //Remove cells with a LOB and ARRAY data type
+        cells.removeIf(c -> dataType.isLargeObject(c.getType()) ||
+                dataType.typeName(c.getType()).equals(DefaultColumnDataType.ARRAY));
 
-        int lastIndex = filteredCells.size() - 1;
+        int lastIndex = cells.size() - 1;
 
-        filteredCells.forEach(c -> {
+        cells.forEach(c -> {
             boolean isNull = c.getValue() == null;
-            String value = c.getName() + (isNull ? " IS NULL" :  "='" + c.getValue() + "'");
-            sb.append(filteredCells.indexOf(c) != lastIndex ? value + " AND " : value + ";");
+            String value = c.getName() + (isNull ? " IS NULL" : "='" + c.getValue() + "'");
+            sb.append(cells.indexOf(c) != lastIndex ? value + " AND " : value + ";");
         });
 
         return sb.toString();
@@ -286,6 +285,10 @@ public class Queries {
             String value = cc.getName() + "='" + cc.getValue() + "'";
             sb.append(changedCells.indexOf(cc) != lastChangedIndex ? value + "," : value + " \nWHERE ");
         });
+        ColumnDataType dataType = Context.getCurrentDataType();
+        //Remove cells with a LOB and ARRAY data type
+        oldCells.removeIf(c -> dataType.isLargeObject(c.getType()) ||
+                dataType.typeName(c.getType()).equals(DefaultColumnDataType.ARRAY));
 
         int lastOldIndex = oldCells.size() - 1;
 
@@ -295,6 +298,8 @@ public class Queries {
             value = value == null ? columnName + " IS NULL OR " + columnName + "=''" : columnName + "='" + value + "'";
             sb.append(oldCells.indexOf(c) != lastOldIndex ? value + " AND " : value + ";");
         });
+
+        System.out.println(sb.toString());
 
         return sb.toString();
     }
