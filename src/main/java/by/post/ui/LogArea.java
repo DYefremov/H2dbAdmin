@@ -35,12 +35,7 @@ public class LogArea extends AbstractAppender {
     @Override
     public void append(LogEvent event) {
         if (Platform.isFxApplicationThread() && area != null) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    area.appendText(event.getMessage().getFormattedMessage() + "\n");
-                }
-            });
+            Platform.runLater(() -> area.appendText(event.getMessage().getFormattedMessage() + "\n"));
         }
     }
 

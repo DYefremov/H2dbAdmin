@@ -2,12 +2,10 @@ package by.post.ui;
 
 import by.post.control.ui.AboutDialogController;
 import javafx.application.HostServices;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -45,12 +43,7 @@ public class AboutDialog {
         loader.setLocation(AboutDialog.class.getResource("AboutDialog.fxml"));
         parent = loader.load();
         // Close dialog by mouse click
-        parent.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.close();
-            }
-        });
+        parent.setOnMouseClicked(event -> stage.close());
 
         controller = loader.getController();
         controller.setHostServices(hostServices);

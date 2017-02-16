@@ -7,7 +7,6 @@ import by.post.data.type.DefaultColumnDataType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -243,7 +242,7 @@ public class Queries {
         if (cells == null || cells.isEmpty()) {
             return "";
         }
-        
+
         StringBuilder sb = new StringBuilder("DELETE FROM " + row.getTableName() + "\nWHERE ");
         ColumnDataType dataType = Context.getCurrentDataType();
         //Remove cells with a LOB and ARRAY data type
@@ -298,8 +297,6 @@ public class Queries {
             value = value == null ? columnName + " IS NULL OR " + columnName + "=''" : columnName + "='" + value + "'";
             sb.append(oldCells.indexOf(c) != lastOldIndex ? value + " AND " : value + ";");
         });
-
-        System.out.println(sb.toString());
 
         return sb.toString();
     }

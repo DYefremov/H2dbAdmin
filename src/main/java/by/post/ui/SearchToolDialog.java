@@ -42,11 +42,14 @@ public class SearchToolDialog extends Dialog {
 
             this.initModality(Modality.NONE);
             this.setOnCloseRequest(event -> controller.onCloseRequest());
-            final Button cancel = (Button) this.getDialogPane().lookupButton(ButtonType.CANCEL);
-            cancel.addEventFilter(ActionEvent.ACTION, event -> {
+
+            final Button cancelButton = (Button) this.getDialogPane().lookupButton(ButtonType.CANCEL);
+            cancelButton.addEventFilter(ActionEvent.ACTION, event -> {
                 controller.onCloseRequest();
                 event.consume();
             });
+            //Sets not resizable after click on details
+            this.getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) -> this.setResizable(false));
         } catch (IOException e) {
             logger.error("RecoveryToolDialog error[init]: " + e);
         }

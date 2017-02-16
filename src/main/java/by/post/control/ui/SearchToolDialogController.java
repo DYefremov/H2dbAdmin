@@ -3,6 +3,9 @@ package by.post.control.ui;
 import by.post.control.Context;
 import by.post.data.Row;
 import by.post.search.SearchProvider;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 import java.util.List;
 
@@ -30,13 +34,19 @@ public class SearchToolDialogController {
     private DialogPane dialogPane;
     @FXML
     private ListView listView;
+    @FXML
+    private Label timeValueLabel;
+    @FXML
+    private Label timeLabel;
 
     private boolean searchRunning;
     private SearchProvider searchProvider;
     private TypedTreeItem tablesTreeItem;
     private TreeView mainTableTree;
     private TableView mainTableView;
-
+    //It is used to display the time spent on search
+    private Timeline timeline;
+    private long startSearchTime;
 
     public SearchToolDialogController() {
 
@@ -70,7 +80,7 @@ public class SearchToolDialogController {
     }
 
     /**
-     *ListView actions for found tables
+     * ListView actions for found tables
      *
      * @param event
      */
@@ -99,6 +109,14 @@ public class SearchToolDialogController {
 
         searchProvider = new SearchProvider();
         dialogPane.setExpandableContent(null);
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(0), event -> {
+                    if (searchRunning) {
+                        timeValueLabel.setText((System.currentTimeMillis() - startSearchTime) / 1000 + "s");
+                    }
+                }),  new KeyFrame(Duration.seconds(1)));
+
+        timeline.setCycleCount(Animation.INDEFINITE);
     }
 
     private void search() {
@@ -134,22 +152,31 @@ public class SearchToolDialogController {
             dialogPane.setExpandableContent(listView);
             dialogPane.setExpanded(true);
             setProgressVisible(false);
+            timeline.stop();
         });
 
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
+
+        startSearchTime = System.currentTimeMillis();
+        timeline.playFromStart();
     }
 
     /**
      * @param visible
      */
+
     private void setProgressVisible(boolean visible) {
 
         progress.setVisible(visible);
         progress.setDisable(!visible);
         progressLabel.setVisible(visible);
         searchRunning = visible;
+        //For first run
+        timeLabel.setVisible(visible ? visible : !visible);
+        timeValueLabel.setVisible(visible ? visible : !visible);
+
     }
 
     /**
