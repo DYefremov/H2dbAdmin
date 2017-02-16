@@ -62,9 +62,9 @@ public class TableDataResolver {
      */
     private void resolve() {
         // Add columns
-        tableColumns = getColumns(table.getColumns() != null ? table.getColumns() : new ArrayList<Column>());
+        tableColumns = getColumns(table.getColumns() != null ? table.getColumns() : new ArrayList<>());
         // Add data
-        items = FXCollections.observableArrayList(table.getRows());
+        items = FXCollections.observableArrayList(table.getRows() != null ? table.getRows() : new ArrayList<>());
     }
 
     /**
