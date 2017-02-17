@@ -69,7 +69,7 @@ public class MainUiController {
     private MainUiForm mainUiForm;
     private TableEditor tableEditor;
     private DatabaseManager databaseManager;
-    private  SimpleProgressIndicator progressIndicator;
+    private SimpleProgressIndicator progressIndicator;
     //Indicate if running filter data process
     private boolean inFiltering;
 
@@ -409,12 +409,16 @@ public class MainUiController {
      */
     private void selectTable(TypedTreeItem item) {
 
+        Context.setLoadData(false);
         showIndicator(true);
+        final String tableName = (String) item.getValue();
+        TableType type = item.getType();
+
 
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                Table table = dbControl.getTable((String) item.getValue(), item.getType());
+                Table table = dbControl.getTable(tableName, type);
                 Platform.runLater(() -> selectTable(table));
                 return null;
             }
@@ -425,7 +429,21 @@ public class MainUiController {
             logger.error("MainUiController error when selecting table: " + task.getException());
         });
 
-        task.setOnSucceeded(event -> showIndicator(false));
+        task.setOnSucceeded(event -> {
+            showIndicator(false);
+            if (mainTable.getItems().size() == TableBuilder.MAX_ROWS) {
+                new Thread(() -> {
+                    Context.setLoadData(true);
+                    List<Row> data = (List<Row>) dbControl.getTableData(tableName, type);
+                    if (Context.isLoadData()) {
+                        mainTable.getItems().addAll(data);
+                        logger.info("Load data for table " + tableName + " is done!");
+                        logger.info("Data size =  " + data.size() + TableBuilder.MAX_ROWS);
+                    }
+                    Context.setLoadData(false);
+                }).start();
+            }
+        });
 
         new Thread(task).start();
     }

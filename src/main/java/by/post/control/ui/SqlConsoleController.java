@@ -184,7 +184,7 @@ public class SqlConsoleController {
 
             try (ResultSet resultSet = statement.getResultSet()) {
                 ResultSetMetaData rsMetaData = resultSet.getMetaData();
-                table.setRows(tableBuilder.getRows(resultSet));
+                table.setRows(tableBuilder.getRows(resultSet, 0));
                 table.setColumns( tableBuilder.getColumns(rsMetaData));
             }
         } catch (SQLException e) {

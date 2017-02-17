@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,7 +20,8 @@ import java.util.List;
 public class TableBuilder {
 
     private ColumnDataType columnDataType;
-
+    //The limit for the maximum number of rows for the first request receiving table
+    public static final int  MAX_ROWS = 1000;
     private static final Logger logger = LogManager.getLogger(TableBuilder.class);
 
     public TableBuilder() {
@@ -39,11 +41,13 @@ public class TableBuilder {
 
         try (Statement st = connection.createStatement()) {
             DatabaseMetaData dbMetaData = connection.getMetaData();
+            st.setMaxRows(MAX_ROWS);
             st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTable(name));
+
             try (ResultSet rs = st.getResultSet()) {
                 ResultSetMetaData rsMetaData = rs.getMetaData();
-                table.setRows(getRows(rs));
                 table.setColumns(getColumns(rsMetaData));
+                table.setRows(getRows(rs, 0));
             }
 
             try (ResultSet keys = dbMetaData.getPrimaryKeys("", "", name)) {
@@ -54,6 +58,29 @@ public class TableBuilder {
         }
 
         return table;
+    }
+
+    /**
+     * @param name
+     * @param type
+     * @param connection
+     * @return
+     */
+    public Collection<?> getTableData(String name, TableType type, Connection connection) {
+
+        boolean isSysTable = type.equals(TableType.SYSTEM_TABLE);
+
+        try (Statement st = connection.createStatement()) {
+            st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTable(name));
+
+            try (ResultSet rs = st.getResultSet()) {
+                return getRows(rs, MAX_ROWS);
+            }
+        } catch (SQLException e) {
+            logger.error("TableBuilder error in getTable: " + e);
+        }
+
+        return new ArrayList<>();
     }
 
     /**
@@ -76,15 +103,21 @@ public class TableBuilder {
 
     /**
      * @param rs
+     * @param fromIndex
      * @return rows list for table
      * @throws SQLException
      */
-    public List<Row> getRows(ResultSet rs) throws SQLException {
+    public List<Row> getRows(ResultSet rs, int fromIndex) throws SQLException {
 
         List<Row> rows = new ArrayList<>();
 
-        while (rs.next()) {
-            rows.add(getRow(rs.getRow(), rs));
+        int counter = 0;
+
+        while (rs.next() && (Context.isLoadData() || fromIndex == 0)) {
+            if (counter >= fromIndex) {
+                rows.add(getRow(rs.getRow(), rs));
+            }
+            counter++;
         }
 
         return rows;

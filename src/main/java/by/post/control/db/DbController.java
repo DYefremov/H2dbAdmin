@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,13 +18,14 @@ import java.util.List;
 public class DbController implements DbControl {
 
     private Connection connection = null;
+    private TableBuilder tableBuilder;
 
     private static final DbController instance = new DbController();
 
     private static final Logger logger = LogManager.getLogger(DbController.class);
 
     private DbController() {
-
+            tableBuilder = new TableBuilder();
     }
 
     /**
@@ -142,6 +144,11 @@ public class DbController implements DbControl {
         Table table = new TableBuilder().getTable(name, type, connection);
 
         return table != null ? table : new Table(name);
+    }
+
+    @Override
+    public Collection<?> getTableData(String tableName, TableType type) {
+        return new TableBuilder().getTableData(tableName, type, connection);
     }
 
     /**

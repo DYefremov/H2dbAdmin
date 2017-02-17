@@ -5,6 +5,7 @@ import by.post.data.Table;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -47,6 +48,13 @@ public interface DbControl {
      * @return table by name
      */
     Table getTable(String name, TableType type);
+
+    /**
+     * @param tableName
+     * @param type
+     * @return data for table
+     */
+    Collection<?> getTableData(String tableName, TableType type);
 
     /**
      * @param table

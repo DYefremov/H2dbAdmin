@@ -26,6 +26,8 @@ public class Context {
     //Data types for database columns
     private static ColumnDataType currentDataType;
     private static Dbms CURRENT_DBMS = Dbms.DEFAULT;
+    //Indicate if running load data in table process
+    private static boolean isLoadData;
 
     public static TypedTreeItem getTablesTreeItem() {
         return tablesTreeItem;
@@ -86,6 +88,14 @@ public class Context {
         }
 
         return currentDataType;
+    }
+
+    public static boolean isLoadData() {
+        return isLoadData;
+    }
+
+    public static  synchronized void setLoadData(boolean loadData) {
+        isLoadData = loadData;
     }
 
     private Context() {
