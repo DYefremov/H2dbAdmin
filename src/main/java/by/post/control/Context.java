@@ -5,6 +5,7 @@ import by.post.data.Row;
 import by.post.data.type.ColumnDataType;
 import by.post.data.type.DataTypeFactory;
 import by.post.data.type.Dbms;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
@@ -28,6 +29,8 @@ public class Context {
     private static Dbms CURRENT_DBMS = Dbms.DEFAULT;
     //Indicate if running load data in table process
     private static boolean isLoadData;
+    //For bind with {isLoadData} (in status bar)
+    private static SimpleBooleanProperty isLoadDataProperty = new SimpleBooleanProperty(isLoadData());
 
     public static TypedTreeItem getTablesTreeItem() {
         return tablesTreeItem;
@@ -96,6 +99,11 @@ public class Context {
 
     public static  synchronized void setLoadData(boolean loadData) {
         isLoadData = loadData;
+        isLoadDataProperty.setValue(loadData);
+    }
+
+    public static SimpleBooleanProperty getIsLoadDataProperty() {
+        return isLoadDataProperty;
     }
 
     private Context() {

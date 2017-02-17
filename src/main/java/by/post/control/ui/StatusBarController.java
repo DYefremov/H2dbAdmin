@@ -1,8 +1,10 @@
 package by.post.control.ui;
 
+import by.post.control.Context;
 import by.post.ui.Resources;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -13,15 +15,18 @@ public class StatusBarController {
     private Label info;
     @FXML
     private Label host;
+    @FXML
+    private ProgressBar loadDataStatus;
 
     public StatusBarController() {
 
     }
 
     @FXML
-    private void initialize() {
+    public void initialize() {
         host.setText("Host: " + Resources.HOST_NAME);
         info.setText("Program version: " + Resources.PROGRAM_VERSION);
+        loadDataStatus.visibleProperty().bind(Context.getIsLoadDataProperty());
     }
 
 }

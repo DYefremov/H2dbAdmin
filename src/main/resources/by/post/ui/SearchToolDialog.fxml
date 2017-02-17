@@ -42,7 +42,7 @@
                   <Insets right="5.0" />
                </GridPane.margin>
          </Label>
-         <ProgressBar fx:id="progress" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="140.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+         <ProgressBar fx:id="progress" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="140.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <HBox fx:id="time" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
                   <Label fx:id="timeLabel" text="%Consumed" visible="false" />
