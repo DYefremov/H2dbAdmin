@@ -437,8 +437,6 @@ public class MainUiController {
                     List<Row> data = (List<Row>) dbControl.getTableData(tableName, type);
                     if (Context.isLoadData()) {
                         mainTable.getItems().addAll(data);
-                        logger.info("Load data for table " + tableName + " is done!");
-                        logger.info("Data size =  " + data.size() + TableBuilder.MAX_ROWS);
                     }
                     Context.setLoadData(false);
                 }).start();

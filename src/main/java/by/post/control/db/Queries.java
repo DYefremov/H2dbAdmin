@@ -215,9 +215,7 @@ public class Queries {
         int lastIndex = cells.size() - 1;
 
         StringBuilder sb = new StringBuilder("INSERT INTO " + row.getTableName() + " (");
-        cells.forEach(c -> {
-            sb.append(cells.indexOf(c) != lastIndex ? c.getName() + ", " : c.getName());
-        });
+        cells.forEach(c -> sb.append(cells.indexOf(c) != lastIndex ? c.getName() + ", " : c.getName()));
 
         sb.append(")\nVALUES (");
 
@@ -246,8 +244,7 @@ public class Queries {
         StringBuilder sb = new StringBuilder("DELETE FROM " + row.getTableName() + "\nWHERE ");
         ColumnDataType dataType = Context.getCurrentDataType();
         //Remove cells with a LOB and ARRAY data type
-        cells.removeIf(c -> dataType.isLargeObject(c.getType()) ||
-                dataType.typeName(c.getType()).equals(DefaultColumnDataType.ARRAY));
+        cells.removeIf(c -> typeInBlackList(dataType, c.getType()));
 
         int lastIndex = cells.size() - 1;
 
@@ -281,13 +278,13 @@ public class Queries {
         int lastChangedIndex = changedCells.size() - 1;
 
         changedCells.forEach(cc -> {
-            String value = cc.getName() + "='" + cc.getValue() + "'";
+            String data = cc.getValue();
+            String value = cc.getName() + "=" + (data.equals("null") || data.equals("NULL") ? "NULL" : "'" + cc.getValue() + "'");
             sb.append(changedCells.indexOf(cc) != lastChangedIndex ? value + "," : value + " \nWHERE ");
         });
         ColumnDataType dataType = Context.getCurrentDataType();
         //Remove cells with a LOB and ARRAY data type
-        oldCells.removeIf(c -> dataType.isLargeObject(c.getType()) ||
-                dataType.typeName(c.getType()).equals(DefaultColumnDataType.ARRAY));
+        oldCells.removeIf(c -> typeInBlackList(dataType, c.getType()));
 
         int lastOldIndex = oldCells.size() - 1;
 
@@ -297,6 +294,9 @@ public class Queries {
             value = value == null ? columnName + " IS NULL OR " + columnName + "=''" : columnName + "='" + value + "'";
             sb.append(oldCells.indexOf(c) != lastOldIndex ? value + " AND " : value + ";");
         });
+
+
+        System.out.println(sb.toString());
 
         return sb.toString();
     }
@@ -316,6 +316,15 @@ public class Queries {
     public static String getNotLobColumnNames(String tableName) {
         return "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='" +
                 tableName + "' AND TYPE_NAME IS NOT 'CLOB' AND TYPE_NAME IS NOT 'BLOB';";
+    }
+
+    /**
+     * @return true if type in black list
+     */
+    private static boolean typeInBlackList(ColumnDataType dataType, int columnType) {
+        return dataType.isLargeObject(columnType) ||
+                dataType.typeName(columnType).equals(DefaultColumnDataType.ARRAY) ||
+                dataType.typeName(columnType).equals("GEOMETRY");
     }
 
 }

@@ -29,6 +29,7 @@ public class Resources {
     public final static String USED_RESOURCES = "Used components: \t\t\t\t\t\t\t\t\n" +
             "H2 Database Engine - http://www.h2database.com\n" +
             "Apache Log4j 2 - http://logging.apache.org/log4j/2.x/\n" +
+            "Jts library - http://www.vividsolutions.com\n" +
             "All icons are taken from the standard Linux Mint icon sets  or taken away from http://icons8.com\n" +
             "To building the project uses Gradle - https://gradle.org\n\n";
 
