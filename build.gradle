@@ -16,7 +16,7 @@ dependencies {
 }
 
 jar {
-	manifest.attributes("Main-Class": mainClassName);
+	manifest.attributes("Main-Class": mainClassName)
 }
 
 task wrapper(type: Wrapper) {

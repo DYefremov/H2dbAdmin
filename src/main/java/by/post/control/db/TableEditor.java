@@ -251,6 +251,10 @@ public class TableEditor {
                 }
                 logger.info("Save changes for row to database.");
             }
+
+            if (!changedRows.isEmpty()) {
+                changedRows.clear();
+            }
         } catch (SQLException e) {
             logger.error("Table editor error[saveRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failed to save the row..\nSee more info in console!").showAndWait();
