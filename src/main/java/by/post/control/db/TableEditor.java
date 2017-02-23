@@ -15,9 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 /**
@@ -41,7 +39,16 @@ public class TableEditor {
     private TableEditor() {
         dbControl = DbController.getInstance();
         rows = new ArrayDeque<>();
-        changedRows = new TreeMap<>(Comparator.comparingInt(Row::getNum));
+        changedRows = new TreeMap<>((o1, o2) -> {
+            int num1 = o1.getNum();
+            int num2 = o2.getNum();
+
+            if (num1 == num2) {
+                return o1.getCells() != null && o1.getCells().equals(o2.getCells()) ? 0 : -1;
+            }
+
+            return num1 > num2 ? 1 : -1;
+        });
         columnDataType = Context.getCurrentDataType();
     }
 
@@ -110,7 +117,7 @@ public class TableEditor {
      */
     private void addTableTreeItem(TreeView tableTree, ImageView icon, TableType type, String name) {
 
-        TypedTreeItem treeItem = new TypedTreeItem(name, icon, type);
+        TypedTreeItem treeItem = new TypedTreeItem(name.toUpperCase(), icon, type);
         ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
 
         for (TypedTreeItem item : items) {
@@ -238,23 +245,32 @@ public class TableEditor {
     }
 
     /**
-     * Save changes after rows editing
+     * Save changes after rows adding or editing
      */
     public void saveRow() {
 
         try {
-            if (mainTable.getItems().size() == getDbRowsCount()) {
-                changeRow();
-            } else {
-                while (!rows.isEmpty()) {
-                    dbControl.update(Queries.addRow(rows.pollLast()));
+            Set<Row> keys = new HashSet<>();
+            while (!rows.isEmpty()) {
+                Row row = rows.pollLast();
+                dbControl.update(Queries.addRow(row));
+
+                if (changedRows.containsValue(row)) {
+                   for (Map.Entry entry : changedRows.entrySet()) {
+                       if ( entry.getValue().equals(row)) {
+                           keys.add((Row) entry.getKey());
+                       }
+                   }
                 }
-                logger.info("Save changes for row to database.");
             }
 
+            keys.forEach(key -> changedRows.remove(key));
+
             if (!changedRows.isEmpty()) {
-                changedRows.clear();
+                changeRows();
             }
+
+            logger.info("Save changes for row to database.");
         } catch (SQLException e) {
             logger.error("Table editor error[saveRow]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failed to save the row..\nSee more info in console!").showAndWait();
@@ -320,16 +336,14 @@ public class TableEditor {
                 new Alert(Alert.AlertType.ERROR, "Failure to delete the row.\nSee more info in console!").showAndWait();
             }
         });
+
+        mainTable.refresh();
     }
 
     /**
      * Saving changed rows.
      */
-    public void changeRow() {
-
-        if (changedRows.isEmpty()) {
-            return;
-        }
+    public void changeRows() {
 
         while (!changedRows.isEmpty()) {
             Map.Entry<Row, Row> entry = changedRows.pollLastEntry();
@@ -463,17 +477,4 @@ public class TableEditor {
         return new Cell(dataType, column.getColumnName(), value);
     }
 
-    /**
-     * Get record count in database.
-     *
-     * @return
-     */
-    private int getDbRowsCount() throws SQLException {
-
-        try (Statement statement = dbControl.execute(Queries.getRecordsCount(mainTable.getId()));
-             ResultSet resultSet = statement.getResultSet()) {
-            resultSet.next();
-            return resultSet.getInt(1);
-        }
-    }
 }

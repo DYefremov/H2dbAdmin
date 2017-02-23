@@ -125,6 +125,7 @@ public class MainUiController {
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
+            clearMainTable();
             tableEditor.deleteTable(tableTree);
         }
     }
@@ -214,11 +215,6 @@ public class MainUiController {
      */
     @FXML
     public void onAddRow() {
-
-        if (mainTable.getColumns().size() < 1) {
-            return;
-        }
-
         try {
             tableEditor.addRow();
         } catch (Exception e) {
