@@ -278,6 +278,8 @@ public class MainUiController {
         databaseManager = DatabaseManager.getInstance();
         progressIndicator = SimpleProgressIndicator.getInstance();
         tableEditor.setTable(mainTable);
+        //Disable field if load data in progress
+        filterTextField.disableProperty().bind(Context.getIsLoadDataProperty());
 
         tableTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 

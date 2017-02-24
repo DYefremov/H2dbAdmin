@@ -17,6 +17,8 @@ public class StatusBarController {
     private Label host;
     @FXML
     private ProgressBar loadDataStatus;
+    @FXML
+    private Label loadDataLabel;
 
     public StatusBarController() {
 
@@ -27,6 +29,7 @@ public class StatusBarController {
         host.setText("Host: " + Resources.HOST_NAME);
         info.setText("Program version: " + Resources.PROGRAM_VERSION);
         loadDataStatus.visibleProperty().bind(Context.getIsLoadDataProperty());
+        loadDataLabel.visibleProperty().bind(Context.getIsLoadDataProperty());
     }
 
 }

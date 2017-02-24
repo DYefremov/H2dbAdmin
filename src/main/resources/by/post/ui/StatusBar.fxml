@@ -5,13 +5,14 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
 <GridPane alignment="CENTER_LEFT" prefHeight="22.0" prefWidth="400.0" styleClass="status-bar" stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.StatusBarController">
    <columnConstraints>
       <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" percentWidth="40.0" />
       <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" percentWidth="35.0" />
-      <ColumnConstraints halignment="CENTER" percentWidth="25.0" />
+      <ColumnConstraints halignment="RIGHT" percentWidth="25.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints />
@@ -25,10 +26,19 @@
          <GridPane.margin>
             <Insets left="10.0" />
          </GridPane.margin></Label>
-      <ProgressBar fx:id="loadDataStatus" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="30.0" visible="false" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-         <GridPane.margin>
-            <Insets right="20.0" />
-         </GridPane.margin>
-      </ProgressBar>
+      <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+         <children>
+            <Label fx:id="loadDataLabel" contentDisplay="CENTER" text="Loading data...">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Label>
+            <ProgressBar fx:id="loadDataStatus" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="30.0">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </ProgressBar>
+         </children>
+      </HBox>
    </children>
 </GridPane>
