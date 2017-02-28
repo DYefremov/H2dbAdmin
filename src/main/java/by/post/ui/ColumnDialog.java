@@ -1,5 +1,6 @@
 package by.post.ui;
 
+import by.post.control.Context;
 import by.post.control.ui.ColumnDialogController;
 import by.post.data.Column;
 import by.post.data.type.DefaultColumnDataType;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * Column dialog for add and edit
@@ -44,6 +46,7 @@ public class ColumnDialog extends Dialog<Column> {
 
         try {
             loader = new FXMLLoader(ColumnDialog.class.getResource("ColumnDialog.fxml"));
+            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             parent = loader.<DialogPane>load();
             controller = loader.getController();
             controller.setColumn(column);

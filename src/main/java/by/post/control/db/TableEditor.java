@@ -100,7 +100,7 @@ public class TableEditor {
             dbControl.update(Queries.createView(view));
             String name = view.getName();
             addTableTreeItem(tableTree, icon, type, name);
-            logger.info("Added new  table: " + name);
+            logger.info("Added new  view: " + name);
         } catch (SQLException e) {
             logger.error("Table editor error[addTable]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failure to add  the table.\nSee more info in console!").showAndWait();

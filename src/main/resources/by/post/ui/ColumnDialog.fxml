@@ -25,16 +25,16 @@
          <children>
             <ComboBox fx:id="type" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="name" GridPane.columnIndex="1" />
-            <Label alignment="CENTER_RIGHT" text="Column columnName:" textAlignment="CENTER" GridPane.halignment="RIGHT">
+            <Label alignment="CENTER_RIGHT" text="%ColumnName" textAlignment="CENTER" GridPane.halignment="RIGHT">
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin></Label>
-            <Label alignment="BOTTOM_RIGHT" text="Column type:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <Label alignment="BOTTOM_RIGHT" text="%ColumnType" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin></Label>
-            <CheckBox fx:id="isKey" mnemonicParsing="false" text="Primary key" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-            <CheckBox fx:id="isNotNull" mnemonicParsing="false" text="Not null" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <CheckBox fx:id="isKey" mnemonicParsing="false" text="%PrimaryKey" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <CheckBox fx:id="isNotNull" mnemonicParsing="false" text="%NotNull" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>

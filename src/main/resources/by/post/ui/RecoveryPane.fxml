@@ -18,12 +18,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane headerText="Recovery tool" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.RecoveryPaneController">
+<DialogPane headerText="Recovery tool" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.RecoveryPaneController">
     <content>
         <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="480.0" style="-fx-background-color: lightgray;">
             <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="195.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="180.0" />
                 <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
             </columnConstraints>
             <rowConstraints>
@@ -44,7 +44,7 @@
                     <Font size="14.0" />
                 </font>
             </Label>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onRun" prefHeight="28.0" prefWidth="87.0" text="Run" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onRun" prefHeight="28.0" prefWidth="87.0" text="%Start" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                 <GridPane.margin>
                     <Insets right="2.0" />
                 </GridPane.margin>
@@ -54,9 +54,9 @@
             </Button>
             <TextField fx:id="dbPath" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" />
             <TextField fx:id="savePath" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <CheckBox fx:id="isFiltered" mnemonicParsing="false" selected="true" text="Show only db files" GridPane.columnIndex="2" />
+            <CheckBox fx:id="isFiltered" allowIndeterminate="true" contentDisplay="CENTER" maxWidth="-Infinity" mnemonicParsing="false" selected="true" text="%ShowOnlyDbFiles" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" />
             <TextField fx:id="userField" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="User:" GridPane.rowIndex="2">
+            <Label text="%Login" GridPane.rowIndex="2">
                 <opaqueInsets>
                     <Insets />
                 </opaqueInsets>
@@ -64,13 +64,13 @@
                     <Insets right="5.0" />
                 </GridPane.margin>
             </Label>
-            <Label text="Password:" GridPane.rowIndex="3">
+            <Label text="%Password" GridPane.rowIndex="3">
                 <GridPane.margin>
                     <Insets right="5.0" />
                 </GridPane.margin>
             </Label>
-            <Hyperlink onAction="#onDbPath" text="Database file" />
-            <Hyperlink onAction="#onSavePath" text="Save path" GridPane.rowIndex="1" />
+            <Hyperlink onAction="#onDbPath" text="%DatabaseFile" />
+            <Hyperlink onAction="#onSavePath" text="%SavePath" GridPane.rowIndex="1" />
             <ImageView fitHeight="90.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
                 <image>
                     <Image url="/img/logo.png" />
@@ -91,7 +91,7 @@
     </content>
     <ButtonType fx:constant="CANCEL" />
     <header>
-        <Label alignment="CENTER" text="Recovery tool">
+        <Label alignment="CENTER" text="%RecoveryToolHeader">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>

@@ -1,5 +1,7 @@
 package by.post.ui;
 
+import by.post.control.Context;
+import by.post.control.Settings;
 import by.post.control.ui.ViewCreationDialogController;
 import by.post.data.View;
 import javafx.event.ActionEvent;
@@ -15,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -32,6 +35,7 @@ public class ViewCreationDialog extends Dialog<View> {
     private void init() {
         try {
             FXMLLoader loader = new FXMLLoader(ViewCreationDialog.class.getResource("ViewCreationDialogPane.fxml"));
+            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             this.setDialogPane(loader.load());
             controller = loader.getController();
             Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
@@ -52,5 +56,11 @@ public class ViewCreationDialog extends Dialog<View> {
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
             return data == ButtonBar.ButtonData.OK_DONE ? controller.getView() : null;
         });
+
+        //Setting translation
+        boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
+        Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
+        okButton.setText(defLang ? ButtonType.OK.getText() : "Создать");
+        cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
     }
 }

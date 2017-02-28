@@ -28,7 +28,7 @@
             <top>
                 <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="430.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Label contentDisplay="CENTER" text="View name :">
+                        <Label contentDisplay="CENTER" text="%ViewName">
                             <HBox.margin>
                                 <Insets left="10.0" right="10.0" />
                             </HBox.margin>
@@ -50,7 +50,7 @@
                      <items>
                         <VBox>
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" text="Tables selection" textAlignment="CENTER">
+                              <Label alignment="CENTER" contentDisplay="CENTER" text="%TablesSelection" textAlignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -60,12 +60,12 @@
                               </Label>
                               <ListView fx:id="tablesListView" onMouseClicked="#onTableListMouseClicked" prefWidth="150.0">
                                  <tooltip>
-                                    <Tooltip text="Select needed tables!" />
+                                    <Tooltip text="%TooltipNeededTables" />
                                  </tooltip>
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#onAdd" text="Add" />
+                                        <MenuItem mnemonicParsing="false" onAction="#onAdd" text="%Add" />
                                       </items>
                                     </ContextMenu>
                                  </contextMenu>
@@ -74,7 +74,7 @@
                         </VBox>
                         <VBox>
                            <children>
-                              <Label text="Selecting and setting the columns">
+                              <Label text="%SelectingAndSettingTheColumns">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -97,8 +97,8 @@
          <bottom>
                   <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                       <buttons>
-                          <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteButton" text="Delete" />
-                          <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onAdd" text="Add" />
+                          <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteButton" text="%Delete" />
+                          <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onAdd" text="%Add" />
                       </buttons>
                <BorderPane.margin>
                   <Insets left="10.0" />
@@ -111,7 +111,7 @@
         </BorderPane>
     </content>
     <header>
-        <Label alignment="CENTER" text="New view configuration">
+        <Label alignment="CENTER" text="%NewViewConfiguration">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>

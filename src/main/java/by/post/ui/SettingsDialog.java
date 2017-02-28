@@ -1,6 +1,7 @@
 package by.post.ui;
 
 import by.post.control.Context;
+import by.post.control.Settings;
 import by.post.control.ui.SettingsDialogController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -50,5 +51,10 @@ public class SettingsDialog extends Dialog {
             }
             event.consume();
         });
+        //Setting translation
+        boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
+        Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
+        applyButton.setText(defLang ? ButtonType.APPLY.getText() : "Применить");
+        cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
     }
 }

@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -118,6 +119,7 @@ public class TableDataResolver {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainUiForm.class.getResource("MultipleTableColumn.fxml"));
+            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             tableColumn = loader.load();
             MultipleTableColumnController columnController = loader.getController();
             tableColumn.setUserData(column);

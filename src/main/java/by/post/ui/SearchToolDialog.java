@@ -1,6 +1,7 @@
 package by.post.ui;
 
 import by.post.control.Context;
+import by.post.control.Settings;
 import by.post.control.ui.SearchToolDialogController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -48,6 +49,9 @@ public class SearchToolDialog extends Dialog {
                 controller.onCloseRequest();
                 event.consume();
             });
+            //Setting translation for Cancel button
+            boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
+            cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
             //Sets not resizable after click on details
             this.getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) -> this.setResizable(false));
         } catch (IOException e) {
