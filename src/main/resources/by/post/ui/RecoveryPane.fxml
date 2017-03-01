@@ -24,7 +24,7 @@
             <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="180.0" />
-                <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
+                <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="165.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -44,7 +44,7 @@
                     <Font size="14.0" />
                 </font>
             </Label>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onRun" prefHeight="28.0" prefWidth="87.0" text="%Start" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onRun" prefHeight="27.0" prefWidth="75.0" text="%Start" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                 <GridPane.margin>
                     <Insets right="2.0" />
                 </GridPane.margin>

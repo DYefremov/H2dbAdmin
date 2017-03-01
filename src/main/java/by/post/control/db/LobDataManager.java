@@ -42,7 +42,7 @@ public class LobDataManager {
             return false;
         }
 
-        String query = getQuery(rowIndex, column, table, false);
+        String query = getQuery(rowIndex, column, table, Commands.DOWNLOAD);
 
         if (query == null) {
             logger.error("LobDataManager error[download]: query = null");
@@ -84,7 +84,7 @@ public class LobDataManager {
             return false;
         }
 
-        String query = getQuery(rowIndex, column, table, true);
+        String query = getQuery(rowIndex, column, table, Commands.UPLOAD);
 
         Connection connection = DbController.getInstance().getCurrentConnection();
 
@@ -111,6 +111,35 @@ public class LobDataManager {
             logger.error("LobDataManager error[upload (SQL)]: " + e);
         } catch (FileNotFoundException e) {
             logger.error("LobDataManager error[upload (FileNotFound)]: " + e);
+        }
+
+        return false;
+    }
+
+    /**
+     * Deleting data from cell
+     *
+     * @param rowIndex
+     * @param column
+     * @param table
+     * @return
+     */
+    public boolean delete(int rowIndex, Column column, Table table) {
+
+        String query = getQuery(rowIndex, column, table, Commands.DELETE);
+        DbControl dbControl = DbController.getInstance();
+
+        if (query == null) {
+            logger.error("LobDataManager error[delete] : query = " + query);
+            return false;
+        }
+
+        try {
+            dbControl.execute(query);
+            logger.info("Deleting data from the cell is completed!");
+            return true;
+        } catch (SQLException e) {
+            logger.error("LobDataManager error[delete] : " + e );
         }
 
         return false;
@@ -170,7 +199,7 @@ public class LobDataManager {
     /**
      * @return query string
      */
-    private String getQuery(int rowIndex, Column column, Table table, boolean upload) {
+    private String getQuery(int rowIndex, Column column, Table table, Commands command) {
 
         Cell keyCell = null;
         String query = null;
@@ -191,14 +220,18 @@ public class LobDataManager {
             return null;
         }
 
-        if (upload) {
+        if (command.equals(Commands.UPLOAD)) {
             query = "UPDATE " + table.getName() + " SET " + column.getColumnName() + "=(?) " +
                     " WHERE " + keyColumnName + "=" + keyCell.getValue();
-        } else {
+        } else if (command.equals(Commands.DOWNLOAD)){
             query = "SELECT " + column.getColumnName() + " FROM " +
                     table.getName() + " WHERE " + keyColumnName + "=" + keyCell.getValue();
+        } else if (command.equals(Commands.DELETE)) {
+            query = "UPDATE " + table.getName() + " SET " + column.getColumnName() + "=NULL " +
+                    " WHERE " + keyColumnName + "=" + keyCell.getValue();
         }
 
         return query;
     }
+
 }

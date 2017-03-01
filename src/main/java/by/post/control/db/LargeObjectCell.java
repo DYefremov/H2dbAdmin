@@ -57,7 +57,7 @@ class LargeObjectCell extends TableCell {
         }
 
         if (choiceBox == null) {
-            choiceBox = new ChoiceBox(FXCollections.observableArrayList("Download", "Upload"));
+            choiceBox = new ChoiceBox(FXCollections.observableArrayList("Download", "Upload", "Delete"));
         }
 
         choiceBox.setOnAction(event -> {
@@ -70,8 +70,10 @@ class LargeObjectCell extends TableCell {
 
             if (index == 0) {
                 setCellBackground(dataManager.download(rowIndex, column, table));
-            } else {
+            } else if (index == 1) {
                 setCellBackground(dataManager.upload(rowIndex, column, table));
+            } else {
+                setCellBackground(dataManager.delete(rowIndex, column, table));
             }
         });
 
