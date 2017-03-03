@@ -51,11 +51,15 @@ public class LobDataManager {
 
         File file = new OpenFileDialogProvider().getSaveFileDialog("Set file name");
 
+        if (file == null) {
+            return false;
+        }
+
         Connection connection = DbController.getInstance().getCurrentConnection();
 
         if (connection != null) {
             try {
-               return saveData(column, query, file, connection);
+                return saveData(column, query, file, connection);
             } catch (IOException e) {
                 logger.error("LobDataManager error[download]: " + e);
             } catch (SQLException e) {
@@ -139,7 +143,7 @@ public class LobDataManager {
             logger.info("Deleting data from the cell is completed!");
             return true;
         } catch (SQLException e) {
-            logger.error("LobDataManager error[delete] : " + e );
+            logger.error("LobDataManager error[delete] : " + e);
         }
 
         return false;
@@ -223,7 +227,7 @@ public class LobDataManager {
         if (command.equals(Commands.UPLOAD)) {
             query = "UPDATE " + table.getName() + " SET " + column.getColumnName() + "=(?) " +
                     " WHERE " + keyColumnName + "=" + keyCell.getValue();
-        } else if (command.equals(Commands.DOWNLOAD)){
+        } else if (command.equals(Commands.DOWNLOAD)) {
             query = "SELECT " + column.getColumnName() + " FROM " +
                     table.getName() + " WHERE " + keyColumnName + "=" + keyCell.getValue();
         } else if (command.equals(Commands.DELETE)) {

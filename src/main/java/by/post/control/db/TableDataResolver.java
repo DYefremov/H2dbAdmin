@@ -151,14 +151,12 @@ public class TableDataResolver {
      */
     private Callback<TableColumn.CellDataFeatures<Row, ?>, ObservableValue<?>> getValueFactory(int columnType) {
 
-        if (columnDataType.isLargeObject(columnType)) {
-            return cellData -> new SimpleStringProperty(LARGE_OBJECT_VALUE);
-        }
-
         return cellData -> {
             TableColumn column = cellData.getTableColumn();
             int index = column.getTableView().getColumns().indexOf(column);
-            return new SimpleStringProperty(String.valueOf(cellData.getValue().getCells().get(index).getValue()));
+            Object data = cellData.getValue().getCells().get(index).getValue();
+            boolean largeObject = columnDataType.isLargeObject(columnType);
+            return data != null || !largeObject ? new SimpleStringProperty(String.valueOf(data)) : null;
         };
 
     }

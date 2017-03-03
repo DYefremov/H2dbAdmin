@@ -21,7 +21,8 @@ public class TableBuilder {
 
     private ColumnDataType columnDataType;
     //The limit for the maximum number of rows for the first request receiving table
-    public static final int  MAX_ROWS = 1000;
+    public static final int MAX_ROWS = 1000;
+    public static final String DEF_VALUE = "";
     private static final Logger logger = LogManager.getLogger(TableBuilder.class);
 
     public TableBuilder() {
@@ -195,6 +196,8 @@ public class TableBuilder {
         Cell cell = new Cell(columnType, null, null);
 
         if (columnDataType.isLargeObject(columnType)) {
+            rs.getObject(num);
+            cell.setValue(rs.wasNull() ? null : DEF_VALUE);
             return cell;
         } else {
             cell.setValue(rs.getNString(num));

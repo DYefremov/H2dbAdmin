@@ -39,11 +39,8 @@ class LargeObjectCell extends TableCell {
     public void updateItem(Object item, boolean empty) {
 
         super.updateItem(item, empty);
-
-        if (item != null) {
-            this.setGraphic(imageView);
-            this.setStyle("-fx-alignment: CENTER;");
-        }
+        this.setGraphic(item != null ? imageView : null);
+        this.setStyle(item != null ? "-fx-alignment: CENTER;" : null);
     }
 
     /**
@@ -69,11 +66,16 @@ class LargeObjectCell extends TableCell {
             LobDataManager dataManager = LobDataManager.getInstance();
 
             if (index == 0) {
-                setCellBackground(dataManager.download(rowIndex, column, table));
+                boolean downloaded = dataManager.download(rowIndex, column, table);
+                setCellBackground(downloaded);
+                updateItem(downloaded);
             } else if (index == 1) {
-                setCellBackground(dataManager.upload(rowIndex, column, table));
+                boolean uploaded = dataManager.upload(rowIndex, column, table);
+                setCellBackground(uploaded);
+                updateItem(uploaded);
             } else {
                 setCellBackground(dataManager.delete(rowIndex, column, table));
+                setItem(null);
             }
         });
 
@@ -90,7 +92,7 @@ class LargeObjectCell extends TableCell {
 
         super.cancelEdit();
         this.setBackground(Background.EMPTY);
-        setGraphic(imageView);
+        setGraphic(getItem() != null ? imageView : null);
         choiceBox = null;
     }
 
@@ -107,6 +109,18 @@ class LargeObjectCell extends TableCell {
     private void setCellBackground(boolean isError) {
         this.setBackground(new Background(new BackgroundFill(isError ? Color.LIME : Color.RED,
                 CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+
+
+    /**
+     * Update item if needed
+     *
+     * @param update
+     */
+    private void updateItem(boolean update) {
+        if (update) {
+            updateItem(getItem() != null ? getItem() : "", false);
+        }
     }
 
 }
