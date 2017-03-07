@@ -5,9 +5,8 @@ import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.data.Row;
 import by.post.ui.ColumnDialog;
-import by.post.ui.Resources;
+import by.post.ui.ColumnPropertiesDialog;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 
@@ -48,20 +47,7 @@ public class MultipleTableColumnController {
 
     @FXML
     public void onShowProperties() {
-
-        //TODO add extra dialog
-        Column column = (Column) tableColumn.getUserData();
-        StringBuilder sb = new StringBuilder();
-        sb.append("TABLE NAME:     " + column.getTableName() +"\n");
-        sb.append("NAME:           " + column.getColumnName() + "\n");
-        sb.append("TYPE:           " + column.getType() + "\n");
-        sb.append("AUTO_INCREMENT: " + column.isAutoIncrement() + "\n");
-        sb.append("NOT NULL:       " + column.isNotNull() + "\n");
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, sb.toString());
-        alert.setTitle(Resources.TITLE);
-        alert.setHeaderText("Column: " + column.getColumnName());
-        alert.showAndWait();
+        new ColumnPropertiesDialog((Column) tableColumn.getUserData()).showAndWait();
     }
 
     @FXML
