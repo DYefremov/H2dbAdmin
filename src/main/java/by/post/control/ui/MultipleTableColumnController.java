@@ -1,5 +1,6 @@
 package by.post.control.ui;
 
+import by.post.control.Context;
 import by.post.control.db.TableEditor;
 import by.post.data.Cell;
 import by.post.data.Column;
@@ -7,6 +8,7 @@ import by.post.data.Row;
 import by.post.ui.ColumnDialog;
 import by.post.ui.ColumnPropertiesDialog;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 
@@ -65,6 +67,21 @@ public class MultipleTableColumnController {
                 setName(data.getColumnName());
             }
         }
+    }
+
+    /**
+     * Called while starting the cell changes.
+     */
+    @FXML
+    public void onEditStart(TableColumn.CellEditEvent<Row, String> event) {
+        
+        if (Context.isLoadData()) {
+            event.consume();
+            event.getTableView().refresh();
+            new Alert(Alert.AlertType.ERROR, "During data loading, editing is not allowed!").showAndWait();
+            return;
+        }
+
     }
 
     /**
