@@ -74,7 +74,7 @@ public class MultipleTableColumnController {
      */
     @FXML
     public void onEditStart(TableColumn.CellEditEvent<Row, String> event) {
-        
+
         if (Context.isLoadData()) {
             event.consume();
             event.getTableView().refresh();

@@ -191,10 +191,6 @@ public class TableEditor {
 
         try {
             column.setTableName(mainTable.getId());
-            //Get default cell  for this column
-            Cell cell = getCell(column);
-            column.setDefaultValue(cell.getValue());
-
             dbControl.update(Queries.addColumn(column));
 
             TableColumn tableColumn = new TableDataResolver().getColumn(column);
@@ -204,7 +200,12 @@ public class TableEditor {
 
             if (items != null && !items.isEmpty()) {
                 // Fill in the data.
-                items.parallelStream().forEach(item -> item.getCells().add(cell));
+                items.parallelStream().forEach(item -> {
+                    //Get default cell  for this column
+                    Cell cell = getCell(column);
+                    column.setDefaultValue(cell.getValue());
+                    item.getCells().add(cell);
+                });
                 mainTable.setItems(items);
             }
             logger.info("Add column in table: " + column.getColumnName());

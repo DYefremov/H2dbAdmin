@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonType?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Hyperlink?>
@@ -28,16 +29,16 @@
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="CENTER_RIGHT" prefHeight="30.0" text="Host:">
+            <Label alignment="CENTER_RIGHT" prefHeight="30.0" text="%Host">
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="User:" GridPane.rowIndex="2">
+            <Label text="%Login" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin></Label>
-            <Label text="Password:" GridPane.rowIndex="3">
+            <Label text="%Password" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin></Label>
@@ -55,7 +56,7 @@
                </tooltip></TextField>
             <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2">
                <children>
-                  <Label prefHeight="30.0" text="Port:">
+                  <Label prefHeight="30.0" text="%Port">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
@@ -73,11 +74,11 @@
                </tooltip></TextField>
             <HBox GridPane.rowIndex="1">
                <children>
-                  <Hyperlink onAction="#onPath" prefHeight="30.0" prefWidth="100.0" text="Open db file">
+                  <Hyperlink onAction="#onPath" prefHeight="30.0" prefWidth="100.0" text="%OpenDbFile">
                      <tooltip>
                         <Tooltip text="Open local database file" />
                      </tooltip></Hyperlink>
-                  <Label prefHeight="30.0" prefWidth="45.0" text="Path:" />
+                  <Label prefHeight="30.0" prefWidth="45.0" text="%Path" />
                </children>
             </HBox>
             <CheckBox fx:id="embedded" mnemonicParsing="false" onAction="#onMode" prefHeight="17.0" prefWidth="116.0" selected="true" text="Embedded" GridPane.columnIndex="2" GridPane.rowIndex="1">
@@ -91,4 +92,8 @@
          </children>
       </GridPane>
    </content>
+   <buttonTypes>
+      <ButtonType fx:constant="OK" />
+      <ButtonType fx:constant="CANCEL" />
+   </buttonTypes>
 </DialogPane>

@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -22,34 +21,15 @@ public class PropertiesController {
      */
     public static void setProperties(Map<String, String> settings) {
 
-        Map<String, String> st = settings;
-        //Database settings
-        String user =  st.get(Settings.USER);
-        String password = st.get(Settings.PASSWORD);
-        String host = st.get(Settings.HOST);
-        String port = st.get(Settings.PORT);
-        String path = st.get(Settings.PATH);
-        String mode = st.get(Settings.MODE);
-        String exist = st.get(Settings.EXIST);
-        String driver = st.get(Settings.DRIVER);
-
+        settings.entrySet().forEach(e -> properties.setProperty(e.getKey(), e.getValue()));
+        //Database settings for url
+        String host = settings.get(Settings.HOST);
+        String port = settings.get(Settings.PORT);
+        String path = settings.get(Settings.PATH);
+        String mode = settings.get(Settings.MODE);
         boolean embedded = mode != null ? mode.equals(Settings.EMBEDDED_MODE) : true;
         String url = getConnectionUrl(host, port, path, embedded);
-
-        properties.put(Settings.DRIVER, driver != null ? driver : Settings.DEFAULT_DRIVER);
-        properties.put(Settings.USER, user != null ? user : Settings.DEFAULT_USER);
-        properties.put(Settings.PASSWORD, password != null ?password : Settings.DEFAULT_PASSWORD);
-        properties.put(Settings.HOST, host != null ? host : Settings.DEFAULT_HOST);
-        properties.put(Settings.PATH, path != null ? path : Settings.DEFAULT_PATH);
-        properties.put(Settings.URL, url != null ? url : Settings.DEFAULT_URL);
-        properties.put(Settings.MODE, mode != null ? mode : Settings.EMBEDDED_MODE);
-        properties.put(Settings.EXIST, exist != null ? exist : String.valueOf(true));
-        //Ui settings
-        String promptIfExit = st.get(Settings.SHOW_PROMPT_IF_EXIT);
-        properties.put(Settings.SHOW_PROMPT_IF_EXIT, promptIfExit != null ? promptIfExit : String.valueOf(true));
-        String defaultLang = settings.get(Settings.LANG);
-        boolean defLang = defaultLang == null || defaultLang.equals(Settings.DEFAULT_LANG);
-        properties.put(Settings.LANG, defLang ? Settings.DEFAULT_LANG : Settings.SECOND_LANG);
+        properties.setProperty(Settings.URL, url != null ? url : Settings.DEFAULT_URL);
         // Save to file
         save();
     }
@@ -66,7 +46,7 @@ public class PropertiesController {
         File file = new File("config.properties");
 
         if (!file.exists()) {
-            setProperties(new HashMap<>());
+            initDefaultProperties();
         }
 
         try (InputStream in = new FileInputStream("config.properties")) {
@@ -76,6 +56,26 @@ public class PropertiesController {
         }
 
         return properties;
+    }
+
+    /**
+     * Initialize default properties
+     */
+    private static void initDefaultProperties() {
+        //Database settings
+        properties.put(Settings.DRIVER, Settings.DEFAULT_DRIVER);
+        properties.put(Settings.USER, Settings.DEFAULT_USER);
+        properties.put(Settings.PASSWORD, Settings.DEFAULT_PASSWORD);
+        properties.put(Settings.HOST, Settings.DEFAULT_HOST);
+        properties.put(Settings.PATH, Settings.DEFAULT_PATH);
+        properties.put(Settings.URL, Settings.DEFAULT_URL);
+        properties.put(Settings.MODE, Settings.EMBEDDED_MODE);
+        properties.put(Settings.EXIST, String.valueOf(true));
+        //Ui settings
+        properties.put(Settings.SHOW_PROMPT_IF_EXIT, String.valueOf(true));
+        properties.put(Settings.LANG, Settings.DEFAULT_LANG);
+        // Save to file
+        save();
     }
 
     /**

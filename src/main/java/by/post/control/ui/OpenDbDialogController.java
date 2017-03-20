@@ -86,7 +86,7 @@ public class OpenDbDialogController {
      * initialize on creation
      */
     @FXML
-    private void initialize() {
+    public void initialize() {
 
         settings = new HashMap<>();
         setEmbedded(embedded.isSelected());
