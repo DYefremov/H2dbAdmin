@@ -9,7 +9,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
-import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -81,19 +80,13 @@ public class RecoveryPaneController {
             }
         };
 
-        task.setOnSucceeded(event -> {
-            setProgressVisible(false);
-        });
+        task.setOnSucceeded(event -> setProgressVisible(false));
+        task.setOnFailed(event -> setProgressVisible(false));
+        task.setOnCancelled(event -> setProgressVisible(false));
 
-        task.setOnFailed(event -> {
-            setProgressVisible(false);
-        });
-
-        task.setOnCancelled(event -> {
-            setProgressVisible(false);
-        });
-
-        new Thread(task).start();
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @FXML
@@ -107,7 +100,7 @@ public class RecoveryPaneController {
     }
 
     @FXML
-    private void initialize() {
+    public void initialize() {
 
     }
 
@@ -118,20 +111,14 @@ public class RecoveryPaneController {
      * @param password
      */
     private boolean recovery(Path dbFile, Path savePath, String user, String password) {
-        Recovery recovery = new RecoveryManager();
 
-        recovery.recover(dbFile, savePath, user, password, new Callback<Boolean, Boolean>() {
-            @Override
-            public Boolean call(Boolean param) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.setText(param.booleanValue() ? "Done!" : "Error...");
-                        progressBar.setVisible(false);
-                    }
-                });
-                return param.booleanValue();
-            }
+        Recovery recovery = new RecoveryManager();
+        recovery.recover(dbFile, savePath, user, password, param -> {
+            Platform.runLater(() -> {
+                progress.setText(param.booleanValue() ? "Done!" : "Error...");
+                progressBar.setVisible(false);
+            });
+            return param.booleanValue();
         });
 
         return false;

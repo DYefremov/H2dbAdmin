@@ -64,6 +64,8 @@ public class MainUiController {
     private MenuItem contextMenuItemView;
     @FXML
     private TextField filterTextField;
+    @FXML
+    private ToolBar tableViewToolBar;
 
     private DbControl dbControl;
     private MainUiForm mainUiForm;
@@ -301,6 +303,8 @@ public class MainUiController {
         tableTree.addEventFilter(KeyEvent.KEY_PRESSED, event -> checkIsDataStored(event));
         //Set multiple selection in table view
         mainTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        //Show toolbar only if any table selected
+        tableViewToolBar.visibleProperty().bind(currentTableName.textProperty().isNotEmpty());
     }
 
     /**

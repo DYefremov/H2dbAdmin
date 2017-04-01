@@ -23,7 +23,7 @@
         <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="480.0" style="-fx-background-color: lightgray;">
             <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="180.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="175.0" />
                 <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="165.0" />
             </columnConstraints>
             <rowConstraints>
@@ -52,10 +52,13 @@
                     <Insets right="5.0" />
                 </padding>
             </Button>
-            <TextField fx:id="dbPath" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" />
-            <TextField fx:id="savePath" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <CheckBox fx:id="isFiltered" allowIndeterminate="true" contentDisplay="CENTER" maxWidth="-Infinity" mnemonicParsing="false" selected="true" text="%ShowOnlyDbFiles" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" />
-            <TextField fx:id="userField" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="dbPath" GridPane.columnIndex="1" />
+            <TextField fx:id="savePath" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <CheckBox fx:id="isFiltered" allowIndeterminate="true" contentDisplay="CENTER" maxWidth="-Infinity" mnemonicParsing="false" selected="true" text="%ShowOnlyDbFiles" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2">
+            <GridPane.margin>
+               <Insets left="10.0" />
+            </GridPane.margin></CheckBox>
+            <TextField fx:id="userField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="%Login" GridPane.rowIndex="2">
                 <opaqueInsets>
                     <Insets />
@@ -75,18 +78,20 @@
                 <image>
                     <Image url="/img/logo.png" />
                 </image>
+            <GridPane.margin>
+               <Insets left="10.0" />
+            </GridPane.margin>
             </ImageView>
-            <VBox alignment="CENTER" prefHeight="14.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                <ProgressBar fx:id="progressBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="12.0" prefWidth="155.0" visible="false">
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <VBox.margin>
-                        <Insets right="25.0" />
-                    </VBox.margin>
-                </ProgressBar>
+         <PasswordField fx:id="passwordField" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <children>
+                   <ProgressBar fx:id="progressBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="155.0" visible="false">
+                       <opaqueInsets>
+                           <Insets />
+                       </opaqueInsets>
+                   </ProgressBar>
+            </children>
             </VBox>
-         <PasswordField fx:id="passwordField" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
         </GridPane>
     </content>
     <ButtonType fx:constant="CANCEL" />

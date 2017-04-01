@@ -106,25 +106,15 @@ public class DbController implements DbControl {
     public List<String> getTablesList(String type) {
 
         List<String> tables = new ArrayList<>();
-        ResultSet rs = null;
 
         if (connection != null) {
-            try {
-                rs = connection.getMetaData().getTables(null, null, "%", new String[]{type});
+            try (ResultSet rs = connection.getMetaData().getTables(null, null, "%", new String[]{type})){
                 while (rs.next()) {
                     tables.add(rs.getString("TABLE_NAME"));
                 }
             } catch (SQLException e) {
                 logger.error("DbController error in getTablesList: " + e);
-            } finally {
-                if (rs != null) {
-                    try {
-                        rs.close();
-                    } catch (SQLException e) {
-                        logger.error("DbController error in getTablesList[finally]: " + e);
-                    }
-                }
-            }
+            } 
         }
 
         return tables;
