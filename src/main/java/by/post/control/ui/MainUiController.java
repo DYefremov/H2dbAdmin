@@ -9,6 +9,7 @@ import by.post.data.Table;
 import by.post.data.View;
 import by.post.data.type.Dbms;
 import by.post.ui.*;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -74,6 +76,9 @@ public class MainUiController {
     private SimpleProgressIndicator progressIndicator;
     //Indicate if running filter data process
     private boolean inFiltering;
+    //Used to delay before filtering begins
+    private PauseTransition filterPause;
+    private static final double FILTER_TIMEOUT = 1;
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
@@ -254,7 +259,7 @@ public class MainUiController {
 
     @FXML
     public void onFilter() {
-        filterData();
+        filterPause.playFromStart();
     }
 
     @FXML
@@ -282,6 +287,8 @@ public class MainUiController {
         tableEditor.setTable(mainTable);
         //Disable field if load data in progress
         filterTextField.disableProperty().bind(Context.getIsLoadDataProperty());
+        filterPause = new PauseTransition(Duration.seconds(FILTER_TIMEOUT));
+        filterPause.setOnFinished(event -> filterData());
 
         tableTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -457,6 +464,7 @@ public class MainUiController {
 
         logger.info("Select table: " + table.getName());
         inFiltering = false;
+        filterTextField.clear();
         clearMainTable();
         // Set text for current table name label by selected tree item.
         TypedTreeItem item = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
@@ -550,8 +558,6 @@ public class MainUiController {
      * Filter data without default sorting replacement
      */
     private void filterData() {
-
-        //TODO Think about the limitation of the minimum number of characters or the time delay
 
         ObservableList<Row> data = Context.getCurrentData();
 
