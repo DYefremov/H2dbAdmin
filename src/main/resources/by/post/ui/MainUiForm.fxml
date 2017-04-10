@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
@@ -157,35 +158,70 @@
                 </MenuBar>
                 <ToolBar prefHeight="25.0" prefWidth="650.0">
                     <items>
+                        <MenuButton mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/document-new.png);" styleClass="button" stylesheets="@Ui.css">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#onNewDbAdd" text="%Database">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/database.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#onAddNewTable" text="%Table">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/table.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#onAddNewView" text="%View">
+                                    <graphic>
+                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                            <image>
+                                                <Image url="/img/view.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                            </items>
+                        </MenuButton>
+                        <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onExplorer" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/manager.png);" stylesheets="@Ui.css">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                            <cursor>
+                                 <Cursor fx:constant="HAND" />
+                            </cursor></Button>
                         <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onSqlConsole" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/terminal.png);" stylesheets="@Ui.css">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                             <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></Button>
                         <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onSearchTool" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/search.png);" stylesheets="@Ui.css">
-                     <cursor>
+                             <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                            </cursor></Button>
                         <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onRecoveryTool" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/recovery.png);" stylesheets="@Ui.css">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                            <cursor>
+                               <Cursor fx:constant="HAND" />
+                            </cursor></Button>
                         <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onSettings" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/preferences.png);" stylesheets="@Ui.css">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                             <cursor>
+                                <Cursor fx:constant="HAND" />
+                             </cursor></Button>
                         <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onExit" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/exit.png);" stylesheets="@Ui.css">
-                     <cursor>
+                            <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                            </cursor></Button>
                         <Separator layoutX="114.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                     </items>
                     <VBox.margin>

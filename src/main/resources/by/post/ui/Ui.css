@@ -61,6 +61,15 @@
     -fx-background-color: transparent, transparent, transparent, transparent;
 }
 
+/* Style for insert objects button on button bar (remove arrow !!!) */
+.menu-button .arrow-button {
+    -fx-padding: 0;
+}
+
+.menu-button .arrow-button .arrow {
+    -fx-padding: 0;
+}
+
 /* Style for Status bar */
 .status-bar {
     -fx-border-insets: 1;
