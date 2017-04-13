@@ -158,7 +158,7 @@
                 </MenuBar>
                 <ToolBar prefHeight="25.0" prefWidth="650.0">
                     <items>
-                        <MenuButton mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/document-new.png);" styleClass="button" stylesheets="@Ui.css">
+                        <MenuButton mnemonicParsing="false" onMouseClicked="#onExplorer" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/document-new.png);" styleClass="button" stylesheets="@Ui.css">
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor>
@@ -190,6 +190,8 @@
                                         </ImageView>
                                     </graphic>
                                 </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#onTrigger" text="Trigger" />
                             </items>
                         </MenuButton>
                         <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
@@ -200,6 +202,11 @@
                         <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onSqlConsole" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/terminal.png);" stylesheets="@Ui.css">
                              <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></Button>
+                        <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                        <Button mnemonicParsing="false" onAction="#onTrigger" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/insert-object.png);" stylesheets="@Ui.css">
+                            <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor></Button>
                         <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
@@ -246,7 +253,7 @@
          <items>
               <SplitPane fx:id="explorerSplitPane" dividerPositions="0.3" prefHeight="330.0" style="-fx-background-color: lightgray;">
                   <items>
-                      <TreeView fx:id="tableTree" minWidth="-Infinity" onContextMenuRequested="#onContextMenuRequested" prefHeight="330.0" prefWidth="100.0" style="-fx-background-color: gray;">
+                      <TreeView fx:id="tableTree" minWidth="-Infinity" onContextMenuRequested="#onContextMenuRequested" prefWidth="100.0" style="-fx-background-color: gray;">
                           <contextMenu>
                               <ContextMenu fx:id="treeContextMenu">
                                   <items>

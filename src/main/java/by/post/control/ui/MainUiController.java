@@ -162,6 +162,11 @@ public class MainUiController {
     }
 
     @FXML
+    public void onTrigger() throws IOException {
+        setCenter(FXMLLoader.load(MainUiForm.class.getResource("TriggersToolPane.fxml")));
+    }
+
+    @FXML
     public void onSqlConsole() throws IOException {
         setCenter(FXMLLoader.load(MainUiForm.class.getResource("SqlConsole.fxml")));
     }

@@ -1,4 +1,4 @@
-package by.post.search;
+package by.post.control.search;
 
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;

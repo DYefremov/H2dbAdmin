@@ -2,7 +2,7 @@ package by.post.control.ui;
 
 import by.post.control.Context;
 import by.post.data.Row;
-import by.post.search.SearchProvider;
+import by.post.control.search.SearchProvider;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

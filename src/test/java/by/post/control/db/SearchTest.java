@@ -3,7 +3,7 @@ package by.post.control.db;
 import by.post.control.PropertiesController;
 import by.post.data.type.ColumnDataType;
 import by.post.data.type.H2Type;
-import by.post.search.SearchProvider;
+import by.post.control.search.SearchProvider;
 import org.junit.Ignore;
 import org.junit.Test;
 
