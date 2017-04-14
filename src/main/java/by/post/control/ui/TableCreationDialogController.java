@@ -42,8 +42,6 @@ public class TableCreationDialogController {
     @FXML
     private DialogPane dialogPane;
 
-    private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
-
     public TableCreationDialogController() {
 
     }

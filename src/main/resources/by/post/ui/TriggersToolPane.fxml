@@ -1,49 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <TableView fx:id="tableView" prefHeight="330.0" prefWidth="600.0" tableMenuButtonVisible="true">
-        <columns>
-          <TableColumn prefWidth="75.0" text="Name" />
-          <TableColumn prefWidth="75.0" text="Type" />
-            <TableColumn prefWidth="75.0" text="Table name" />
-            <TableColumn prefWidth="75.0" text="Before" />
-            <TableColumn prefWidth="75.0" text="Java class" />
-            <TableColumn prefWidth="75.0" text="Queue size" />
-            <TableColumn prefWidth="75.0" text="No white" />
-            <TableColumn prefWidth="75.0" text="Remarks" />
-            <TableColumn prefWidth="75.0" text="Id" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-   </center>
-   <top>
-      <Label text="Triggers tool" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="5.0" top="5.0" />
-         </BorderPane.margin>
-         <font>
-            <Font name="System Bold" size="13.0" />
-         </font>
-      </Label>
-   </top>
-   <bottom>
-      <ToolBar maxHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <items>
-          <Button mnemonicParsing="false" text="Add" />
-            <Button mnemonicParsing="false" text="Delete" />
-        </items>
-      </ToolBar>
-   </bottom>
+<BorderPane style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TriggersToolController">
+    <center>
+        <TableView fx:id="tableView" editable="true">
+            <placeholder>
+                <Label text=""/>
+            </placeholder>
+            <columns>
+                <TableColumn text="Name">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="name"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Type">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="type"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Table name">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="tableName"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="beforeColumn" style="-fx-alignment: center;"
+                             text="Before">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="before"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Java class">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="javaClass"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Queue size">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="queueSize"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="noWaitColumn" style="-fx-alignment: center;"
+                             text="No wait">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="noWait"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Remarks">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="remarks"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Id">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id"/>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+    </center>
+    <top>
+        <Label text="Triggers tool" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets bottom="5.0" top="5.0"/>
+            </BorderPane.margin>
+            <font>
+                <Font name="System Bold" size="13.0"/>
+            </font>
+        </Label>
+    </top>
+    <bottom>
+        <ToolBar maxHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0"
+                 prefWidth="200.0" styleClass="bar" stylesheets="@Ui.css"
+                 BorderPane.alignment="CENTER">
+            <items>
+                <Button mnemonicParsing="false" onAction="#onAdd"
+                        prefHeight="24.0" prefWidth="24.0"
+                        style="-fx-background-image: url(/img/document-new.png);"
+                        stylesheets="@Ui.css">
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </Button>
+                <Separator orientation="VERTICAL" prefHeight="24.0"
+                           prefWidth="5.0" visible="false"/>
+                <Button mnemonicParsing="false" onAction="#onDelete"
+                        prefHeight="24.0" prefWidth="24.0"
+                        style="-fx-background-image: url(/img/trash.png);"
+                        stylesheets="@Ui.css">
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </Button>
+                <Separator orientation="VERTICAL" prefHeight="24.0"
+                           prefWidth="5.0" visible="false"/>
+            </items>
+        </ToolBar>
+    </bottom>
 </BorderPane>
