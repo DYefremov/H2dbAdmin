@@ -288,39 +288,44 @@
                           <bottom>
                               <ToolBar fx:id="tableViewToolBar" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" style="-fx-background-color: lightgray;" styleClass="bar" stylesheets="@Ui.css" BorderPane.alignment="CENTER">
                                   <items>
-                                      <Button mnemonicParsing="false" onAction="#onAddRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/list-add.png);">
-                                          <tooltip>
-                                              <Tooltip text="%AddNewRow" />
-                                          </tooltip>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                      </Button>
-                                      <Button mnemonicParsing="false" onAction="#onRemoveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/list-remove.png);">
-                                          <tooltip>
-                                              <Tooltip text="%DeleteRow" />
-                                          </tooltip>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                      </Button>
-                                      <Button mnemonicParsing="false" onAction="#onSaveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/enter.png);">
-                                          <tooltip>
-                                              <Tooltip text="%SaveChanges" />
-                                          </tooltip>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                      </Button>
+                              <HBox fx:id="toolBarButtonsHBox" alignment="CENTER_LEFT">
+                                 <children>
+                                     <Button mnemonicParsing="false" onAction="#onAddRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/list-add.png);">
+                                         <tooltip>
+                                             <Tooltip text="%AddNewRow" />
+                                         </tooltip>
+                                         <opaqueInsets>
+                                            <Insets />
+                                         </opaqueInsets>
+                                         <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                         </cursor>
+                                     </Button>
+                                     <Button mnemonicParsing="false" onAction="#onRemoveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/list-remove.png);">
+                                         <tooltip>
+                                             <Tooltip text="%DeleteRow" />
+                                         </tooltip>
+                                         <opaqueInsets>
+                                             <Insets />
+                                         </opaqueInsets>
+                                         <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                         </cursor>
+                                     </Button>
+                                     <Button mnemonicParsing="false" onAction="#onSaveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/enter.png);">
+                                         <tooltip>
+                                             <Tooltip text="%SaveChanges" />
+                                         </tooltip>
+                                         <opaqueInsets>
+                                             <Insets />
+                                         </opaqueInsets>
+                                         <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                         </cursor>
+                                     </Button>
+                                 </children>
+                              </HBox>
+
                               <HBox spacing="5.0">
                                  <children>
                                     <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/filter.png);">

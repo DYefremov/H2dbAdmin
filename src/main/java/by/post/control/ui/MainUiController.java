@@ -11,6 +11,7 @@ import by.post.data.type.Dbms;
 import by.post.ui.*;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -24,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -68,6 +70,8 @@ public class MainUiController {
     private TextField filterTextField;
     @FXML
     private ToolBar tableViewToolBar;
+    @FXML
+    private HBox toolBarButtonsHBox;
 
     private DbControl dbControl;
     private MainUiForm mainUiForm;
@@ -76,6 +80,8 @@ public class MainUiController {
     private SimpleProgressIndicator progressIndicator;
     //Indicate if running filter data process
     private boolean inFiltering;
+    //Indicate if table type is selected (for disabling editing in system tables and views)
+    private SimpleBooleanProperty isTableType;
     //Used to delay before filtering begins
     private PauseTransition filterPause;
     private static final double FILTER_TIMEOUT = 1;
@@ -290,6 +296,9 @@ public class MainUiController {
         databaseManager = DatabaseManager.getInstance();
         progressIndicator = SimpleProgressIndicator.getInstance();
         tableEditor.setTable(mainTable);
+        isTableType = new SimpleBooleanProperty();
+        //disabling editing in system tables and views
+        mainTable.editableProperty().bind(isTableType);
         //Disable field if load data in progress
         filterTextField.disableProperty().bind(Context.getIsLoadDataProperty());
         filterPause = new PauseTransition(Duration.seconds(FILTER_TIMEOUT));
@@ -307,6 +316,7 @@ public class MainUiController {
                 return;
             }
 
+            isTableType.set(item.getType() != null && item.getType().equals(TableType.TABLE));
             tableEditor.clearSavedData();
             selectTable(item);
         });
@@ -317,6 +327,8 @@ public class MainUiController {
         mainTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         //Show toolbar only if any table selected
         tableViewToolBar.visibleProperty().bind(currentTableName.textProperty().isNotEmpty());
+        //Show buttons only if no system table or view selected
+        toolBarButtonsHBox.visibleProperty().bind(isTableType);
     }
 
     /**
