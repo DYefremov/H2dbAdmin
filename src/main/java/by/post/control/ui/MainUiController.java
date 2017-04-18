@@ -69,7 +69,7 @@ public class MainUiController {
     @FXML
     private TextField filterTextField;
     @FXML
-    private ToolBar tableViewToolBar;
+    private HBox tableViewToolBar;
     @FXML
     private HBox toolBarButtonsHBox;
 

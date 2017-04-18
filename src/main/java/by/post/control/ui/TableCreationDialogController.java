@@ -2,16 +2,17 @@ package by.post.control.ui;
 
 import by.post.control.Context;
 import by.post.data.Column;
-import by.post.data.type.DefaultColumnDataType;
 import by.post.data.Table;
+import by.post.data.type.DefaultColumnDataType;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.DataFormat;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.util.Collection;
 
@@ -75,7 +76,9 @@ public class TableCreationDialogController {
 
     @FXML
     public void onEditLength(TableColumn.CellEditEvent<Column, Integer> event) {
-        event.getRowValue().setLength(event.getNewValue());
+        Integer value = event.getNewValue();
+        event.getRowValue().setLength(value != null ? value : event.getOldValue());
+        tableView.refresh();
     }
 
     @FXML
@@ -130,7 +133,7 @@ public class TableCreationDialogController {
 
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(columnTypes)));
-        lengthColumn.setCellFactory(TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter()));
+        lengthColumn.setCellFactory(TextFieldTableCell.forTableColumn(new CheckedIntegerStringConverter()));
         keyColumn.setCellFactory(CheckBoxTableCell.forTableColumn(keyColumn));
         notNullColumn.setCellFactory(CheckBoxTableCell.forTableColumn(notNullColumn));
         defaultValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -146,44 +149,6 @@ public class TableCreationDialogController {
 
         return column;
     }
-
-    /**
-     * Custom implementation of IntegerStringConverter
-     */
-    class CustomIntegerStringConverter extends IntegerStringConverter {
-
-        private int defaultValue;
-
-        public CustomIntegerStringConverter() {
-
-        }
-
-        public CustomIntegerStringConverter(int defaultValue) {
-            this.defaultValue = defaultValue;
-        }
-
-        @Override
-        public Integer fromString(String value) {
-
-            if (value == null) {
-                return defaultValue > 0 ? defaultValue : null;
-            }
-
-            value = value.trim();
-
-            if (value.length() < 1) {
-                return defaultValue > 0 ? defaultValue : null;
-            }
-
-            if (!value.matches("\\d+")) {
-                new Alert(Alert.AlertType.ERROR, "Please specify correct value!").showAndWait();
-                return defaultValue > 0 ? defaultValue : null;
-            }
-
-            return Integer.valueOf(value);
-        }
-    }
-
 }
 
 

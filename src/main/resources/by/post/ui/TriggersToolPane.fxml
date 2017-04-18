@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.cell.TextFieldTableCell?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
@@ -16,97 +17,113 @@
     <center>
         <TableView fx:id="tableView" editable="true">
             <placeholder>
-                <Label text=""/>
+                <Label text="" />
             </placeholder>
             <columns>
                 <TableColumn text="Name">
                     <cellValueFactory>
-                        <PropertyValueFactory property="name"/>
+                        <PropertyValueFactory property="name" />
                     </cellValueFactory>
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn" />
+                    </cellFactory>
                 </TableColumn>
                 <TableColumn text="Type">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="type"/>
-                    </cellValueFactory>
+                    <columns>
+                        <TableColumn fx:id="typeInsertColumn" prefWidth="75.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="INSERT">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="typeInsert" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="typeUpdateColumn" prefWidth="75.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="UPDATE">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="typeUpdate" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="typeDeleteColumn" prefWidth="75.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="DELETE">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="typeDelete" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="typeSelectColumn" prefWidth="75.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="SELECT">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="typeSelect" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
                 </TableColumn>
                 <TableColumn text="Table name">
                     <cellValueFactory>
-                        <PropertyValueFactory property="tableName"/>
+                        <PropertyValueFactory property="tableName" />
                     </cellValueFactory>
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn" />
+                    </cellFactory>
                 </TableColumn>
-                <TableColumn fx:id="beforeColumn" style="-fx-alignment: center;"
-                             text="Before">
+                <TableColumn fx:id="beforeColumn" style="-fx-alignment: center;" text="Before">
                     <cellValueFactory>
-                        <PropertyValueFactory property="before"/>
+                        <PropertyValueFactory property="before" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn text="Java class">
                     <cellValueFactory>
-                        <PropertyValueFactory property="javaClass"/>
+                        <PropertyValueFactory property="javaClass" />
+                    </cellValueFactory>
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn" />
+                    </cellFactory>
+                </TableColumn>
+                <TableColumn fx:id="queueSizeColumn" text="Queue size">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="queueSize" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Queue size">
+                <TableColumn fx:id="noWaitColumn" style="-fx-alignment: center;" text="No wait">
                     <cellValueFactory>
-                        <PropertyValueFactory property="queueSize"/>
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="noWaitColumn" style="-fx-alignment: center;"
-                             text="No wait">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="noWait"/>
+                        <PropertyValueFactory property="noWait" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn text="Remarks">
                     <cellValueFactory>
-                        <PropertyValueFactory property="remarks"/>
+                        <PropertyValueFactory property="remarks" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn text="Id">
                     <cellValueFactory>
-                        <PropertyValueFactory property="id"/>
+                        <PropertyValueFactory property="id" />
                     </cellValueFactory>
                 </TableColumn>
             </columns>
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
         </TableView>
     </center>
     <top>
         <Label text="Triggers tool" BorderPane.alignment="CENTER">
             <BorderPane.margin>
-                <Insets bottom="5.0" top="5.0"/>
+                <Insets bottom="5.0" top="5.0" />
             </BorderPane.margin>
             <font>
-                <Font name="System Bold" size="13.0"/>
+                <Font name="System Bold" size="13.0" />
             </font>
         </Label>
     </top>
     <bottom>
-        <ToolBar maxHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0"
-                 prefWidth="200.0" styleClass="bar" stylesheets="@Ui.css"
-                 BorderPane.alignment="CENTER">
+        <ToolBar maxHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" styleClass="bar" stylesheets="@Ui.css" BorderPane.alignment="CENTER">
             <items>
-                <Button mnemonicParsing="false" onAction="#onAdd"
-                        prefHeight="24.0" prefWidth="24.0"
-                        style="-fx-background-image: url(/img/document-new.png);"
-                        stylesheets="@Ui.css">
+                <Button mnemonicParsing="false" onAction="#onAdd" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/document-new.png);" stylesheets="@Ui.css">
                     <cursor>
-                        <Cursor fx:constant="HAND"/>
+                        <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Separator orientation="VERTICAL" prefHeight="24.0"
-                           prefWidth="5.0" visible="false"/>
-                <Button mnemonicParsing="false" onAction="#onDelete"
-                        prefHeight="24.0" prefWidth="24.0"
-                        style="-fx-background-image: url(/img/trash.png);"
-                        stylesheets="@Ui.css">
+                <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                <Button mnemonicParsing="false" onAction="#onDelete" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/trash.png);" stylesheets="@Ui.css">
                     <cursor>
-                        <Cursor fx:constant="HAND"/>
+                        <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Separator orientation="VERTICAL" prefHeight="24.0"
-                           prefWidth="5.0" visible="false"/>
+                <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
             </items>
         </ToolBar>
     </bottom>

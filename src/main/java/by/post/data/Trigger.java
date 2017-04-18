@@ -12,7 +12,10 @@ import javafx.beans.property.SimpleStringProperty;
 public class Trigger {
 
     private SimpleStringProperty name;
-    private SimpleStringProperty type;
+    private SimpleBooleanProperty typeInsert;
+    private SimpleBooleanProperty typeUpdate;
+    private SimpleBooleanProperty typeDelete;
+    private SimpleBooleanProperty typeSelect;
     private SimpleStringProperty tableName;
     private SimpleStringProperty javaClass;
     private SimpleStringProperty remarks;
@@ -23,13 +26,21 @@ public class Trigger {
 
     public Trigger() {
 
-        this.name = new SimpleStringProperty();
-        this.type = new SimpleStringProperty();
-        this.tableName = new SimpleStringProperty();
-        this.javaClass = new SimpleStringProperty();
+        this("Trigger_name", "Table_name", "ClassName");
+    }
+
+    public Trigger(String name, String tableName, String javaClass) {
+
+        this.name = new SimpleStringProperty(name);
+        this.typeInsert = new SimpleBooleanProperty(false);
+        this.typeUpdate = new SimpleBooleanProperty(false);
+        this.typeDelete = new SimpleBooleanProperty(false);
+        this.typeSelect = new SimpleBooleanProperty(false);
+        this.tableName = new SimpleStringProperty(tableName);
+        this.javaClass = new SimpleStringProperty(javaClass);
         this.remarks = new SimpleStringProperty();
         this.id = new SimpleIntegerProperty();
-        this.queueSize = new SimpleIntegerProperty();
+        this.queueSize = new SimpleIntegerProperty(1024);
         this.before = new SimpleBooleanProperty(false);
         this.noWait = new SimpleBooleanProperty(false);
     }
@@ -46,16 +57,52 @@ public class Trigger {
         this.name.set(name);
     }
 
-    public String getType() {
-        return type.get();
+    public boolean isTypeInsert() {
+        return typeInsert.get();
     }
 
-    public SimpleStringProperty typeProperty() {
-        return type;
+    public SimpleBooleanProperty typeInsertProperty() {
+        return typeInsert;
     }
 
-    public void setType(String type) {
-        this.type.set(type);
+    public void setTypeInsert(boolean typeInsert) {
+        this.typeInsert.set(typeInsert);
+    }
+
+    public boolean isTypeUpdate() {
+        return typeUpdate.get();
+    }
+
+    public SimpleBooleanProperty typeUpdateProperty() {
+        return typeUpdate;
+    }
+
+    public void setTypeUpdate(boolean typeUpdate) {
+        this.typeUpdate.set(typeUpdate);
+    }
+
+    public boolean isTypeDelete() {
+        return typeDelete.get();
+    }
+
+    public SimpleBooleanProperty typeDeleteProperty() {
+        return typeDelete;
+    }
+
+    public void setTypeDelete(boolean typeDelete) {
+        this.typeDelete.set(typeDelete);
+    }
+
+    public boolean isTypeSelect() {
+        return typeSelect.get();
+    }
+
+    public SimpleBooleanProperty typeSelectProperty() {
+        return typeSelect;
+    }
+
+    public void setTypeSelect(boolean typeSelect) {
+        this.typeSelect.set(typeSelect);
     }
 
     public String getTableName() {
@@ -144,6 +191,7 @@ public class Trigger {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -151,7 +199,13 @@ public class Trigger {
 
         if (name != null ? !name.equals(trigger.name) : trigger.name != null)
             return false;
-        if (type != null ? !type.equals(trigger.type) : trigger.type != null)
+        if (typeInsert != null ? !typeInsert.equals(trigger.typeInsert) : trigger.typeInsert != null)
+            return false;
+        if (typeUpdate != null ? !typeUpdate.equals(trigger.typeUpdate) : trigger.typeUpdate != null)
+            return false;
+        if (typeDelete != null ? !typeDelete.equals(trigger.typeDelete) : trigger.typeDelete != null)
+            return false;
+        if (typeSelect != null ? !typeSelect.equals(trigger.typeSelect) : trigger.typeSelect != null)
             return false;
         if (tableName != null ? !tableName.equals(trigger.tableName) : trigger.tableName != null)
             return false;
@@ -172,7 +226,10 @@ public class Trigger {
     public int hashCode() {
 
         int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (typeInsert != null ? typeInsert.hashCode() : 0);
+        result = 31 * result + (typeUpdate != null ? typeUpdate.hashCode() : 0);
+        result = 31 * result + (typeDelete != null ? typeDelete.hashCode() : 0);
+        result = 31 * result + (typeSelect != null ? typeSelect.hashCode() : 0);
         result = 31 * result + (tableName != null ? tableName.hashCode() : 0);
         result = 31 * result + (javaClass != null ? javaClass.hashCode() : 0);
         result = 31 * result + (remarks != null ? remarks.hashCode() : 0);
@@ -186,9 +243,13 @@ public class Trigger {
 
     @Override
     public String toString() {
+
         return "Trigger{" +
                 "name=" + name +
-                ", type=" + type +
+                ", typeInsert=" + typeInsert +
+                ", typeUpdate=" + typeUpdate +
+                ", typeDelete=" + typeDelete +
+                ", typeSelect=" + typeSelect +
                 ", tableName=" + tableName +
                 ", javaClass=" + javaClass +
                 ", remarks=" + remarks +
