@@ -316,6 +316,52 @@ public class Queries {
     }
 
     /**
+     * @param trigger
+     * @return
+     */
+    public static String addTrigger(Trigger trigger) {
+
+        StringBuilder sb = new StringBuilder("CREATE FORCE TRIGGER ");
+        sb.append(trigger.getName());
+        sb.append(trigger.isBefore() ? " BEFORE " : " AFTER ");
+
+        List<String> types = new ArrayList<>(4);
+
+        if (trigger.isTypeInsert()) {
+            types.add("INSERT");
+        }
+
+        if (trigger.isTypeUpdate()) {
+            types.add("UPDATE");
+        }
+
+        if (trigger.isTypeDelete()) {
+            types.add("DELETE");
+        }
+
+        //TODO @see "https://www.h2database.com/javadoc/org/h2/api/ErrorCode.html#c90005"
+        if (trigger.isTypeSelect()) {
+//            types.add("SELECT");
+        }
+
+        sb.append(types.toString().replaceAll("[ \\[\\]]",""));
+        sb.append(" ON " + trigger.getTableName());
+        sb.append(" FOR EACH ROW ");
+//        sb.append(trigger.getQueueSize() > 0 ? "QUEUE " + trigger.getQueueSize() : "");
+        sb.append(" CALL \"" + trigger.getJavaClass() + "\"");
+
+        return sb.toString();
+    }
+
+    /**
+     * @param trigger
+     * @return
+     */
+    public static String deleteTrigger(Trigger trigger) {
+        return "DROP TRIGGER IF EXISTS " + trigger.getName();
+    }
+
+    /**
      * @return true if type in black list
      */
     private static boolean typeInBlackList(ColumnDataType dataType, int columnType) {

@@ -73,22 +73,22 @@
                         <TextFieldTableCell fx:factory="forTableColumn" />
                     </cellFactory>
                 </TableColumn>
-                <TableColumn fx:id="queueSizeColumn" text="Queue size">
+                <TableColumn fx:id="queueSizeColumn" editable="false" text="Queue size">
                     <cellValueFactory>
                         <PropertyValueFactory property="queueSize" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="noWaitColumn" style="-fx-alignment: center;" text="No wait">
+                <TableColumn fx:id="noWaitColumn" editable="false" style="-fx-alignment: center;" text="No wait">
                     <cellValueFactory>
                         <PropertyValueFactory property="noWait" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Remarks">
+                <TableColumn editable="false" text="Remarks">
                     <cellValueFactory>
                         <PropertyValueFactory property="remarks" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Id">
+                <TableColumn editable="false" text="Id">
                     <cellValueFactory>
                         <PropertyValueFactory property="id" />
                     </cellValueFactory>
@@ -119,6 +119,12 @@
                 </Button>
                 <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                 <Button mnemonicParsing="false" onAction="#onDelete" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/trash.png);" stylesheets="@Ui.css">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                <Button mnemonicParsing="false" onAction="#onSave" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/save.png);" stylesheets="@Ui.css">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>

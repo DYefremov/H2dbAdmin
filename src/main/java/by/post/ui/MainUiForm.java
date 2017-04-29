@@ -48,11 +48,6 @@ public class MainUiForm extends Application {
         launch(args);
     }
 
-    @Override
-    public void init() throws Exception {
-        super.init();
-    }
-
     /**
      * @param stage
      * @throws IOException
