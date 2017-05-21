@@ -462,14 +462,16 @@ public class MainUiController {
                     Context.setLoadData(true);
                     List<Row> data = (List<Row>) dbControl.getTableData(tableName, type);
                     if (Context.isLoadData()) {
-                        mainTable.getItems().addAll(data);
+                        Platform.runLater(() -> mainTable.getItems().addAll(data));
                     }
                     Context.setLoadData(false);
                 }).start();
             }
         });
 
-        new Thread(task).start();
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**

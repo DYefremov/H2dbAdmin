@@ -131,14 +131,14 @@ public class DbController implements DbControl {
             return new Table(name);
         }
 
-        Table table = new TableBuilder().getTable(name, type, connection);
+        Table table = tableBuilder.getTable(name, type, connection);
 
         return table != null ? table : new Table(name);
     }
 
     @Override
     public Collection<?> getTableData(String tableName, TableType type) {
-        return new TableBuilder().getTableData(tableName, type, connection);
+        return tableBuilder.getTableData(tableName, type, connection);
     }
 
     /**
@@ -151,8 +151,7 @@ public class DbController implements DbControl {
             return;
         }
 
-        TableBuilder builder = new TableBuilder();
-        builder.update(table, connection);
+        tableBuilder.update(table, connection);
     }
 
     /**
