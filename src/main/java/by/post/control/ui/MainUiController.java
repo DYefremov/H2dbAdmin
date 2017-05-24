@@ -18,13 +18,13 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -47,8 +47,6 @@ public class MainUiController {
     @FXML
     private TreeView tableTree;
     @FXML
-    private BorderPane mainPane;
-    @FXML
     private TextArea console;
     @FXML
     private TableView mainTable;
@@ -58,8 +56,6 @@ public class MainUiController {
     private SplitPane mainSplitPane;
     @FXML
     private SplitPane explorerSplitPane;
-    @FXML
-    private TitledPane infoPane;
     @FXML
     private ContextMenu treeContextMenu;
     @FXML
@@ -77,7 +73,6 @@ public class MainUiController {
     private MainUiForm mainUiForm;
     private TableEditor tableEditor;
     private DatabaseManager databaseManager;
-    private SimpleProgressIndicator progressIndicator;
     //Indicate if running filter data process
     private boolean inFiltering;
     //Indicate if table type is selected (for disabling editing in system tables and views)
@@ -294,7 +289,6 @@ public class MainUiController {
         dbControl = DbController.getInstance();
         tableEditor = TableEditor.getInstance();
         databaseManager = DatabaseManager.getInstance();
-        progressIndicator = SimpleProgressIndicator.getInstance();
         tableEditor.setTable(mainTable);
         isTableType = new SimpleBooleanProperty();
         //disabling editing in system tables and views
@@ -435,11 +429,15 @@ public class MainUiController {
      */
     private void selectTable(TypedTreeItem item) {
 
+        setBusy(true);
+
+        if (Context.getCurrentSelectTableTask() != null) {
+            Context.getCurrentSelectTableTask().cancel();
+        }
+
         Context.setLoadData(false);
-        showIndicator(true);
         final String tableName = (String) item.getValue();
         TableType type = item.getType();
-
 
         Task<Void> task = new Task<Void>() {
             @Override
@@ -451,24 +449,27 @@ public class MainUiController {
         };
 
         task.setOnFailed(event -> {
-            showIndicator(false);
+            setBusy(false);
             logger.error("MainUiController error when selecting table: " + task.getException());
         });
 
         task.setOnSucceeded(event -> {
-            showIndicator(false);
+            setBusy(false);
             if (mainTable.getItems().size() == TableBuilder.MAX_ROWS) {
-                new Thread(() -> {
-                    Context.setLoadData(true);
-                    List<Row> data = (List<Row>) dbControl.getTableData(tableName, type);
-                    if (Context.isLoadData()) {
-                        Platform.runLater(() -> mainTable.getItems().addAll(data));
-                    }
-                    Context.setLoadData(false);
-                }).start();
+                List<Row> data = (List<Row>) dbControl.getTableData(tableName, type);
+                while (Context.isLoadData()) {
+                    /**NOP*/
+                }
+
+                if (!task.isCancelled()) {
+                    mainTable.getItems().addAll(data);
+                }
             }
         });
 
+
+
+        Context.setCurrentSelectTableTask(task);
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
@@ -602,18 +603,15 @@ public class MainUiController {
     }
 
     /**
-     * Show/hide simple progress indicator
+     * Show/hide wait cursor and
+     * Enable/Disable table tree
      *
      * @param show
      */
-    private void showIndicator(boolean show) {
-
+    private void setBusy(boolean show) {
         Platform.runLater(() -> {
-            if (!progressIndicator.isShowing() && show) {
-                progressIndicator.showAndWait();
-            } else {
-                progressIndicator.hide();
-            }
+            tableTree.setDisable(show);
+            tableTree.setCursor(show ? Cursor.WAIT : Cursor.DEFAULT);
         });
     }
 

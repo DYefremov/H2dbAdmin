@@ -356,7 +356,7 @@
                       </BorderPane>
                   </items>
               </SplitPane>
-                <TitledPane fx:id="infoPane" expanded="false" text="%MoreInfo">
+                <TitledPane fx:id="infoPane" cache="true" expanded="false" text="%MoreInfo">
                     <content>
                         <TextArea fx:id="console" editable="false" prefWidth="650.0" styleClass="console" stylesheets="@Ui.css" />
                     </content>

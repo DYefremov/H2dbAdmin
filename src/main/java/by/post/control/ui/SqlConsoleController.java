@@ -184,7 +184,7 @@ public class SqlConsoleController {
 
             try (ResultSet resultSet = statement.getResultSet()) {
                 ResultSetMetaData rsMetaData = resultSet.getMetaData();
-                table.setRows(tableBuilder.getRows(resultSet, 0));
+                table.setRows(tableBuilder.getRows(resultSet));
                 table.setColumns( tableBuilder.getColumns(rsMetaData));
             }
         } catch (SQLException e) {
@@ -232,22 +232,6 @@ public class SqlConsoleController {
             }
         }
         return false;
-    }
-
-    /**
-     * @param values
-     * @return max length of value for cell
-     */
-    private List<Integer> getMaxCellValuesLengths(List<List<Cell>> values) {
-
-        List<Integer> lengths = new ArrayList<>();
-
-        values.forEach(column -> {
-            Cell max = column.parallelStream().max(Comparator.comparing(item -> item.getValue() != null ? item.getValue().toString().length() : 0)).get();
-            lengths.add(String.valueOf(max.getValue()).length());
-        });
-
-        return lengths;
     }
 
 }

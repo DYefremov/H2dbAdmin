@@ -21,6 +21,25 @@ public class Queries {
         return "SELECT * FROM " + tableName.toUpperCase();
     }
 
+
+    /**
+     *
+     * @param tableName
+     * @param start
+     * @param end
+     * @param toMax
+     * @return Table with rows from start to end indexes. If toMax - from start to max count of rows in given table.
+     */
+    public static String getTableWithLimit(String tableName, int start, int end, boolean toMax) {
+
+        StringBuilder sb = new StringBuilder(getTable(tableName));
+        sb.append(" LIMIT " + start +",(");
+        sb.append(toMax ? getRecordsCount(tableName) : end);
+        sb.append(")");
+
+        return sb.toString();
+    }
+
     /**
      * @param tableName
      * @return return system table from schema

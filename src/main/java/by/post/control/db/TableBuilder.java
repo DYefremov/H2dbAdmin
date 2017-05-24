@@ -21,7 +21,7 @@ public class TableBuilder {
 
     private ColumnDataType columnDataType;
     //The limit for the maximum number of rows for the first request receiving table
-    public static final int MAX_ROWS = 1000;
+    public static final int MAX_ROWS = 100;
     public static final String DEF_VALUE = "";
     private static final Logger logger = LogManager.getLogger(TableBuilder.class);
 
@@ -48,7 +48,7 @@ public class TableBuilder {
             try (ResultSet rs = st.getResultSet()) {
                 ResultSetMetaData rsMetaData = rs.getMetaData();
                 table.setColumns(getColumns(rsMetaData));
-                table.setRows(getRows(rs, 0));
+                table.setRows(getRows(rs));
             }
 
             try (ResultSet keys = dbMetaData.getPrimaryKeys("", "", name)) {
@@ -72,10 +72,10 @@ public class TableBuilder {
         boolean isSysTable = type.equals(TableType.SYSTEM_TABLE);
 
         try (Statement st = connection.createStatement()) {
-            st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTable(name));
+            st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTableWithLimit(name, MAX_ROWS, 0, true));
 
             try (ResultSet rs = st.getResultSet()) {
-                return getRows(rs, MAX_ROWS);
+                return getRows(rs);
             }
         } catch (SQLException e) {
             logger.error("TableBuilder error in getTable: " + e);
@@ -104,22 +104,20 @@ public class TableBuilder {
 
     /**
      * @param rs
-     * @param fromIndex
      * @return rows list for table
      * @throws SQLException
      */
-    public List<Row> getRows(ResultSet rs, int fromIndex) throws SQLException {
+    public List<Row> getRows(ResultSet rs) throws SQLException {
+
+        Context.setLoadData(true);
 
         List<Row> rows = new ArrayList<>();
 
-        int counter = 0;
-
-        while (rs.next() && (Context.isLoadData() || fromIndex == 0)) {
-            if (counter >= fromIndex) {
-                rows.add(getRow(rs.getRow(), rs));
-            }
-            counter++;
+        while (rs.next() && Context.isLoadData()) {
+            rows.add(getRow(rs.getRow(), rs));
         }
+
+        Context.setLoadData(false);
 
         return rows;
     }
