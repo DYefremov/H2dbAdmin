@@ -1,4 +1,4 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import by.post.control.Context;
 import by.post.data.Column;
@@ -58,7 +58,7 @@ public class ColumnDialogController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         type.setItems(FXCollections.observableArrayList(Context.getCurrentDataType().getValues()));
         type.getSelectionModel().select(DefaultColumnDataType.VARCHAR);
     }

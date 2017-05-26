@@ -2,7 +2,7 @@ package by.post.ui;
 
 import by.post.control.Context;
 import by.post.control.Settings;
-import by.post.control.ui.ViewCreationDialogController;
+import by.post.control.ui.dialogs.ViewCreationDialogController;
 import by.post.data.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +34,7 @@ public class ViewCreationDialog extends Dialog<View> {
 
     private void init() {
         try {
-            FXMLLoader loader = new FXMLLoader(ViewCreationDialog.class.getResource("ViewCreationDialogPane.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/ViewCreationDialogPane.fxml"));
             loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             this.setDialogPane(loader.load());
             controller = loader.getController();

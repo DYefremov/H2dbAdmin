@@ -2,7 +2,7 @@ package by.post.ui;
 
 import by.post.control.Context;
 import by.post.control.Settings;
-import by.post.control.ui.TableCreationDialogController;
+import by.post.control.ui.dialogs.TableCreationDialogController;
 import by.post.data.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +34,7 @@ public class TableCreationDialog extends Dialog<Table> {
 
     private void init() {
         try {
-            FXMLLoader loader = new FXMLLoader(TableCreationDialog.class.getResource("TableCreationDialogPane.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/TableCreationDialogPane.fxml"));
             loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             this.setDialogPane(loader.load());
             controller = loader.getController();

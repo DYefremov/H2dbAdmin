@@ -9,33 +9,25 @@ import by.post.data.Table;
 import by.post.data.View;
 import by.post.data.type.Dbms;
 import by.post.ui.*;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Controller class for main ui form
@@ -45,41 +37,20 @@ import java.util.stream.Collectors;
 public class MainUiController {
 
     @FXML
-    private TreeView tableTree;
-    @FXML
     private TextArea console;
-    @FXML
-    private TableView mainTable;
-    @FXML
-    private Label currentTableName;
     @FXML
     private SplitPane mainSplitPane;
     @FXML
     private SplitPane explorerSplitPane;
     @FXML
-    private ContextMenu treeContextMenu;
+    MainTableTreeController mainTableTreeController;
     @FXML
-    private MenuItem contextMenuItemTable;
-    @FXML
-    private MenuItem contextMenuItemView;
-    @FXML
-    private TextField filterTextField;
-    @FXML
-    private HBox tableViewToolBar;
-    @FXML
-    private HBox toolBarButtonsHBox;
+    MainTableController mainTableController;
 
     private DbControl dbControl;
     private MainUiForm mainUiForm;
     private TableEditor tableEditor;
     private DatabaseManager databaseManager;
-    //Indicate if running filter data process
-    private boolean inFiltering;
-    //Indicate if table type is selected (for disabling editing in system tables and views)
-    private SimpleBooleanProperty isTableType;
-    //Used to delay before filtering begins
-    private PauseTransition filterPause;
-    private static final double FILTER_TIMEOUT = 1;
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
@@ -102,7 +73,7 @@ public class MainUiController {
             databaseManager.addDatabase(result.get());
             Platform.runLater(() -> {
                 clearMainTable();
-                initData();
+                mainTableTreeController.initData();
             });
         }
     }
@@ -127,14 +98,13 @@ public class MainUiController {
         databaseDelete(true);
     }
 
-    @FXML
     public void onTableDelete() {
 
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
             clearMainTable();
-            tableEditor.deleteTable(tableTree);
+            tableEditor.deleteTable(Context.getMainTableTree());
         }
     }
 
@@ -164,12 +134,12 @@ public class MainUiController {
 
     @FXML
     public void onTrigger() throws IOException {
-        setCenter(FXMLLoader.load(MainUiForm.class.getResource("TriggersToolPane.fxml")));
+        setCenter(FXMLLoader.load(MainUiForm.class.getResource("tools/TriggersToolPane.fxml")));
     }
 
     @FXML
     public void onSqlConsole() throws IOException {
-        setCenter(FXMLLoader.load(MainUiForm.class.getResource("SqlConsole.fxml")));
+        setCenter(FXMLLoader.load(MainUiForm.class.getResource("tools/SqlConsole.fxml")));
     }
 
     @FXML
@@ -189,96 +159,23 @@ public class MainUiController {
     }
 
     /**
-     * Actions for tree context menu
+     * @param item
      */
-    @FXML
-    public void onContextMenuRequested() {
-
-        TypedTreeItem treeItem = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
-
-        if (treeItem == null) {
-            treeContextMenu.hide();
-            return;
-        }
-
-        TableType type = treeItem.getType();
-
-        contextMenuItemView.setVisible(type == null || type.equals(TableType.VIEW));
-        contextMenuItemTable.setVisible(type == null || type.equals(TableType.TABLE));
-
-        if (type != null && type.equals(TableType.SYSTEM_TABLE)) {
-            treeContextMenu.hide();
-        }
-    }
-
-    /**
-     * Actions for selections in the table
-     */
-    @FXML
-    public void onMouseClicked() {
-
-    }
-
-    public void onKeyReleased() {
-
-    }
-
-    /**
-     * Actions for work with rows
-     */
-    @FXML
-    public void onAddRow() {
-        try {
-            tableEditor.addRow();
-        } catch (Exception e) {
-            logger.error("MainUiController error [onAddRow]: " + e);
-        }
+    public void onTableSelect(TypedTreeItem item) {
+        mainTableController.setTableType(item.getType() != null && item.getType().equals(TableType.TABLE));
+        tableEditor.clearSavedData();
+        selectTable(item);
     }
 
     @FXML
-    public void onRemoveRow() {
+    private void initialize() {
 
-        if (mainTable.getColumns().size() < 1) {
-            return;
-        }
-
-        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
-
-        if (result.get() == ButtonType.OK) {
-            tableEditor.deleteRow();
-        }
-    }
-
-    @FXML
-    public void onSaveRow() {
-
-        int selectedIndex = mainTable.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex != -1) {
-            Optional<ButtonType> result = new ConfirmationDialog("Save entered data to database?").showAndWait();
-
-            if (result.get() == ButtonType.OK) {
-                tableEditor.saveRow();
-            }
-        }
-    }
-
-    @FXML
-    public void onFilter() {
-        filterPause.playFromStart();
-    }
-
-    @FXML
-    public void initialize() {
+        mainTableTreeController.setMainController(this);
         // Set log messages output to the text area
         LogArea.setArea(console);
         logger.info("Starting application...");
         initDbmsType();
         init();
-        initData();
-        //Set context
-        Context.setMainTableTree(tableTree);
-        Context.setMainTableView(mainTable);
     }
 
     /**
@@ -289,63 +186,6 @@ public class MainUiController {
         dbControl = DbController.getInstance();
         tableEditor = TableEditor.getInstance();
         databaseManager = DatabaseManager.getInstance();
-        tableEditor.setTable(mainTable);
-        isTableType = new SimpleBooleanProperty();
-        //disabling editing in system tables and views
-        mainTable.editableProperty().bind(isTableType);
-        //Disable field if load data in progress
-        filterTextField.disableProperty().bind(Context.getIsLoadDataProperty());
-        filterPause = new PauseTransition(Duration.seconds(FILTER_TIMEOUT));
-        filterPause.setOnFinished(event -> filterData());
-
-        tableTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (newValue == null) {
-                return;
-            }
-
-            TypedTreeItem item = (TypedTreeItem) newValue;
-            // A TreeItem is a leaf if it has no children
-            if (!item.isLeaf()) {
-                return;
-            }
-
-            isTableType.set(item.getType() != null && item.getType().equals(TableType.TABLE));
-            tableEditor.clearSavedData();
-            selectTable(item);
-        });
-
-        tableTree.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> checkIsDataStored(event));
-        tableTree.addEventFilter(KeyEvent.KEY_PRESSED, event -> checkIsDataStored(event));
-        //Set multiple selection in table view
-        mainTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        //Show toolbar only if any table selected
-        tableViewToolBar.visibleProperty().bind(currentTableName.textProperty().isNotEmpty());
-        //Show buttons only if no system table or view selected
-        toolBarButtonsHBox.visibleProperty().bind(isTableType);
-    }
-
-    /**
-     * Init data
-     */
-    private void initData() {
-
-        List<TypedTreeItem> tables = getRootItems();
-
-        if (tables.isEmpty()) {
-            tableTree.setRoot(new TreeItem("Database is not present..."));
-            tableTree.setContextMenu(null);
-            return;
-        }
-        // Sorting
-//        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
-        ObservableList<TypedTreeItem> list = FXCollections.observableList(tables);
-
-        TypedTreeItem root = new TypedTreeItem(dbControl.getCurrentDbName(), getItemImage("database.png"), null);
-        root.getChildren().addAll(list);
-
-        tableTree.setRoot(root);
-        tableTree.setContextMenu(treeContextMenu);
     }
 
     /**
@@ -363,46 +203,14 @@ public class MainUiController {
     /**
      * @param event
      */
-    private void checkIsDataStored(Event event) {
+    public void checkIsDataStored(Event event) {
+
         if (tableEditor.hasNotSavedData()) {
             Optional<ButtonType> result = new ConfirmationDialog("You have unsaved data. Continue?").showAndWait();
             if (result.get() != ButtonType.OK) {
                 event.consume();
             }
         }
-    }
-
-    /**
-     * Get tables items for root element
-     *
-     * @return items list
-     */
-    private List<TypedTreeItem> getRootItems() {
-
-        List<TypedTreeItem> tables = new ArrayList<>();
-
-        for (TableType tType : TableType.values()) {
-            String iconName = tType.name().toLowerCase() + ".png";
-            boolean isSchema = tType.equals(TableType.SYSTEM_TABLE);
-            String name = isSchema ? "INFORMATION_SCHEMA" : tType.preparedName() + "S";
-            ImageView image = getItemImage(isSchema ? "info.png" : iconName);
-
-            TypedTreeItem item = new TypedTreeItem(name, image, tType);
-            tables.add(item);
-            //Set tables tree item for using in search tool and view creation dialog
-            if (item.getType().equals(TableType.TABLE)) {
-                Context.setTablesTreeItem(item);
-            }
-            List<TypedTreeItem> items = new ArrayList<>();
-
-            getDbTablesList(tType.preparedName()).stream().forEach(t -> {
-                items.add(new TypedTreeItem(t, getItemImage(iconName), tType));
-            });
-
-            item.getChildren().addAll(items);
-        }
-
-        return tables;
     }
 
     /**
@@ -417,7 +225,7 @@ public class MainUiController {
 
             Platform.runLater(() -> {
                 clearMainTable();
-                initData();
+                mainTableTreeController.initData();
             });
         }
     }
@@ -444,6 +252,7 @@ public class MainUiController {
             protected Void call() throws Exception {
                 Table table = dbControl.getTable(tableName, type);
                 Platform.runLater(() -> selectTable(table));
+                Context.setLoadData(false);
                 return null;
             }
         };
@@ -455,19 +264,20 @@ public class MainUiController {
 
         task.setOnSucceeded(event -> {
             setBusy(false);
-            if (mainTable.getItems().size() == TableBuilder.MAX_ROWS) {
-                List<Row> data = (List<Row>) dbControl.getTableData(tableName, type);
-                while (Context.isLoadData()) {
-                    /**NOP*/
-                }
 
-                if (!task.isCancelled()) {
-                    mainTable.getItems().addAll(data);
-                }
+            if (mainTableController.getDataSize() == TableBuilder.MAX_ROWS) {
+                new Thread(() -> {
+                    List<Row> data = (List<Row>) dbControl.getTableData(tableName, type);
+                    while (Context.isLoadData()) {
+                        /**NOP*/
+                    }
+
+                    if (!task.isCancelled()) {
+                        mainTableController.addData(data);
+                    }
+                }) .start();
             }
         });
-
-
 
         Context.setCurrentSelectTableTask(task);
         Thread thread = new Thread(task);
@@ -481,42 +291,7 @@ public class MainUiController {
      * @param table
      */
     private void selectTable(Table table) {
-
-        logger.info("Select table: " + table.getName());
-        inFiltering = false;
-        filterTextField.clear();
-        clearMainTable();
-        // Set text for current table name label by selected tree item.
-        TypedTreeItem item = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
-        String name = item.getValue() != null ? item.getValue().toString() : "";
-        currentTableName.setText(name);
-        mainTable.setId(name);
-
-        TableDataResolver resolver = new TableDataResolver(table);
-
-        if (!resolver.getTableColumns().isEmpty()) {
-            mainTable.refresh();
-            mainTable.getColumns().addAll(resolver.getTableColumns());
-            ObservableList<Row> items = resolver.getItems();
-            Context.setCurrentData(items);
-            mainTable.setItems(items);
-        }
-    }
-
-    /**
-     * @return list of db tables
-     */
-    private List<String> getDbTablesList(String type) {
-
-        Properties properties = PropertiesController.getProperties();
-        String user = properties.getProperty(Settings.USER);
-        String password = properties.getProperty(Settings.PASSWORD);
-        String url = properties.getProperty(Settings.URL);
-
-        dbControl.connect(url, user, password);
-        List tables = dbControl.getTablesList(type);
-
-        return tables != null ? tables : new ArrayList<>();
+        mainTableController.setTable(table);
     }
 
     /**
@@ -527,7 +302,7 @@ public class MainUiController {
         Optional<Table> result = new TableCreationDialog().showAndWait();
 
         if (result.isPresent()) {
-            tableEditor.addTable(tableTree, result.get(), getItemImage("table.png"), TableType.TABLE);
+            mainTableTreeController.addNewTable(result.get());
         }
     }
 
@@ -539,7 +314,7 @@ public class MainUiController {
         Optional<View> result = new ViewCreationDialog().showAndWait();
 
         if (result.isPresent()) {
-            tableEditor.addView(tableTree, result.get(), getItemImage("view.png"), TableType.VIEW);
+            mainTableTreeController.addNewView(result.get());
         }
     }
 
@@ -561,45 +336,10 @@ public class MainUiController {
     }
 
     /**
-     * @return view with item image
-     */
-    private ImageView getItemImage(String name) {
-        return new ImageView(new Image("/img/" + name, 16, 16, false, false));
-    }
-
-    /**
      * Show and work with search tool
      */
     private void showSearchTool() {
         new SearchToolDialog().showAndWait();
-    }
-
-    /**
-     * Filter data without default sorting replacement
-     */
-    private void filterData() {
-
-        ObservableList<Row> data = Context.getCurrentData();
-
-        if (inFiltering || data == null || data.isEmpty()) {
-            return;
-        }
-
-        inFiltering = true;
-
-        String searchText = filterTextField.getText();
-
-        Platform.runLater(() -> {
-            List<Row> filtered = data.stream()
-                    .filter(row -> row.toString().toUpperCase().contains(searchText.toUpperCase()))
-                    .collect(Collectors.toList());
-
-            if (!filtered.isEmpty()) {
-                mainTable.setItems(FXCollections.observableArrayList(filtered));
-            }
-
-            inFiltering = false;
-        });
     }
 
     /**
@@ -609,19 +349,14 @@ public class MainUiController {
      * @param show
      */
     private void setBusy(boolean show) {
-        Platform.runLater(() -> {
-            tableTree.setDisable(show);
-            tableTree.setCursor(show ? Cursor.WAIT : Cursor.DEFAULT);
-        });
+       mainTableTreeController.setBusy(show);
     }
 
     /**
      * Clear main table
      */
     private void clearMainTable() {
-        currentTableName.setText("");
-        mainTable.getColumns().clear();
-        mainTable.getItems().clear();
+        mainTableController.clearMainTable();
     }
 
     /**
@@ -638,10 +373,10 @@ public class MainUiController {
 
                 Platform.runLater(() -> {
                     clearMainTable();
-                    tableTree.setRoot(null);
+                    Context.getMainTableTree().setRoot(null);
 
                     if (dropOnly) {
-                        initData();
+                        mainTableTreeController.initData();
                     }
                 });
             } catch (SQLException e) {

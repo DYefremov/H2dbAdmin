@@ -1,9 +1,10 @@
-package by.post.control.ui;
+package by.post.control.ui.tools;
 
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import by.post.control.db.Queries;
 import by.post.control.db.TableType;
+import by.post.control.ui.CheckedIntegerStringConverter;
 import by.post.data.Cell;
 import by.post.data.Table;
 import by.post.data.Trigger;

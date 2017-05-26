@@ -1,4 +1,4 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import by.post.data.Column;
 import javafx.fxml.FXML;

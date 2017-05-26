@@ -2,7 +2,7 @@ package by.post.ui;
 
 import by.post.control.Context;
 import by.post.control.Settings;
-import by.post.control.ui.OpenDbDialogController;
+import by.post.control.ui.dialogs.OpenDbDialogController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,7 +34,7 @@ public class OpenDbDialog extends Dialog<Map<String, String>> {
 
     private void init() {
 
-        loader = new FXMLLoader(OpenDbDialog.class.getResource("OpenDbDialog.fxml"));
+        loader = new FXMLLoader(getClass().getResource("dialogs/OpenDbDialog.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
 
         try {

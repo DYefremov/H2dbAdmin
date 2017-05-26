@@ -1,4 +1,4 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import by.post.ui.Resources;
 import javafx.application.HostServices;

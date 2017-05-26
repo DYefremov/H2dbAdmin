@@ -1,7 +1,6 @@
-package by.post.control.ui;
+package by.post.control.ui.tools;
 
 import by.post.control.db.*;
-import by.post.data.Cell;
 import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.ConfirmationDialog;
@@ -21,7 +20,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 

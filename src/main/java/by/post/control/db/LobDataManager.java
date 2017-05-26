@@ -1,6 +1,6 @@
 package by.post.control.db;
 
-import by.post.control.ui.OpenFileDialogProvider;
+import by.post.control.ui.dialogs.OpenFileDialogProvider;
 import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.data.Row;

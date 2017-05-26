@@ -2,7 +2,7 @@ package by.post.ui;
 
 import by.post.control.Context;
 import by.post.control.Settings;
-import by.post.control.ui.SettingsDialogController;
+import by.post.control.ui.dialogs.SettingsDialogController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -33,7 +33,7 @@ public class SettingsDialog extends Dialog {
     private void init() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SettingsDialog.class.getResource("SettingsDialogPane.fxml"));
+            loader.setLocation(getClass().getResource("dialogs/SettingsDialogPane.fxml"));
             loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             this.setDialogPane(loader.load());
             controller = loader.getController();

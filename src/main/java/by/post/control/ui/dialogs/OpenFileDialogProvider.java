@@ -1,4 +1,4 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;

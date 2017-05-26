@@ -1,4 +1,4 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import by.post.control.PropertiesController;
 import by.post.control.Settings;
@@ -152,7 +152,7 @@ public class SettingsDialogController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
 
         properties = PropertiesController.getProperties();
 

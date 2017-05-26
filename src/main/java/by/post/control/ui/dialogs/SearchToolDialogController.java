@@ -1,6 +1,7 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import by.post.control.Context;
+import by.post.control.ui.TypedTreeItem;
 import by.post.data.Row;
 import by.post.control.search.SearchProvider;
 import javafx.animation.Animation;
@@ -101,7 +102,7 @@ public class SearchToolDialogController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
 
         tablesTreeItem = Context.getTablesTreeItem();
         mainTableView = Context.getMainTableView();

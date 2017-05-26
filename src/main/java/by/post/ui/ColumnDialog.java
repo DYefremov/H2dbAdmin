@@ -1,7 +1,7 @@
 package by.post.ui;
 
 import by.post.control.Context;
-import by.post.control.ui.ColumnDialogController;
+import by.post.control.ui.dialogs.ColumnDialogController;
 import by.post.data.Column;
 import by.post.data.type.DefaultColumnDataType;
 import javafx.fxml.FXMLLoader;
@@ -45,7 +45,7 @@ public class ColumnDialog extends Dialog<Column> {
     private void init() {
 
         try {
-            loader = new FXMLLoader(ColumnDialog.class.getResource("ColumnDialog.fxml"));
+            loader = new FXMLLoader(getClass().getResource("dialogs/ColumnDialog.fxml"));
             loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             parent = loader.<DialogPane>load();
             controller = loader.getController();

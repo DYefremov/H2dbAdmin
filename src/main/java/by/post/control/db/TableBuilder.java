@@ -117,6 +117,10 @@ public class TableBuilder {
             rows.add(getRow(rs.getRow(), rs));
         }
 
+        if (!Context.isLoadData()) {
+            rows.clear();
+        }
+
         Context.setLoadData(false);
 
         return rows;

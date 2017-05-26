@@ -62,7 +62,7 @@ public class MainUiForm extends Application {
         try {
             initApp();
         } catch (Exception e) {
-            logger.error("MainUiForm error: " + e);
+            logger.error("MainUiForm error [start]: " + e);
         }
     }
 
@@ -115,9 +115,11 @@ public class MainUiForm extends Application {
      * Actions for close program
      */
     private void close() {
-        closeConnection();
-        Platform.exit();
-        System.exit(0);
+        new Thread(() -> {
+            closeConnection();
+            Platform.exit();
+            System.exit(0);
+        }).start();
     }
 
     /**

@@ -121,7 +121,7 @@ public class MultipleTableColumnController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         tableEditor = TableEditor.getInstance();
     }
 

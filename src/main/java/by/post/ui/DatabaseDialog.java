@@ -2,7 +2,7 @@ package by.post.ui;
 
 import by.post.control.Context;
 import by.post.control.Settings;
-import by.post.control.ui.DatabaseDialogController;
+import by.post.control.ui.dialogs.DatabaseDialogController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -33,7 +33,7 @@ public class DatabaseDialog extends Dialog<Map<String, String>> {
     private void init() {
 
         try {
-            FXMLLoader loader = new FXMLLoader(DatabaseDialog.class.getResource("DatabaseDialogPane.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/DatabaseDialogPane.fxml"));
             loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             this.setDialogPane(loader.load());
             controller = loader.getController();

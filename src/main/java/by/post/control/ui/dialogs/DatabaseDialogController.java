@@ -1,8 +1,8 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import by.post.control.Settings;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author Dmitriy V.Yefremov
  */
-public class OpenDbDialogController {
+public class DatabaseDialogController {
 
     @FXML
     private TextField host;
@@ -23,15 +23,17 @@ public class OpenDbDialogController {
     @FXML
     private TextField path;
     @FXML
+    private TextField dbName;
+    @FXML
     private TextField user;
     @FXML
     private PasswordField password;
     @FXML
-    private CheckBox embedded;
+    private ChoiceBox mode;
 
     private Map<String, String> settings;
 
-    public OpenDbDialogController() {
+    public DatabaseDialogController() {
 
     }
 
@@ -40,14 +42,14 @@ public class OpenDbDialogController {
      */
     public Map<String, String> getSettings() {
 
+        boolean serverMode = mode.getValue().equals("Server");
+
+        settings.put(Settings.MODE, serverMode ? Settings.SERVER_MODE : Settings.EMBEDDED_MODE);
+        settings.put(Settings.HOST, host.getText());
         settings.put(Settings.PORT, port.getText());
-        settings.put(Settings.PATH, path.getText());
+        settings.put(Settings.PATH, path.getText() + File.separator +  dbName.getText());
         settings.put(Settings.USER, user.getText());
         settings.put(Settings.PASSWORD, password.getText());
-        boolean emb = embedded.isSelected();
-        settings.put(Settings.EMBEDDED_MODE, String.valueOf(emb));
-        settings.put(Settings.MODE, emb ? Settings.EMBEDDED_MODE : Settings.SERVER_MODE );
-        settings.put(Settings.HOST, emb ? Settings.DEFAULT_HOST : host.getText());
 
         return settings;
     }
@@ -57,11 +59,10 @@ public class OpenDbDialogController {
      */
     public void onPath() {
 
-        File dbFile = new OpenFileDialogProvider().getFileDialog("Select db file...", false, true);
+        File dbFile = new OpenFileDialogProvider().getFileDialog("", true, false);
 
         if (dbFile != null) {
             path.setText(dbFile.getPath());
-            setEmbedded(true);
         }
     }
 
@@ -73,37 +74,23 @@ public class OpenDbDialogController {
     @FXML
     public void onPathClicked(MouseEvent event) {
         if (event.getClickCount() == 2) {
-           onPath();
+            onPath();
         }
-    }
-
-    @FXML
-    public void onMode() {
-        setEmbedded(embedded.isSelected());
     }
 
     /**
      * initialize on creation
      */
     @FXML
-    public void initialize() {
-
+    private void initialize() {
         settings = new HashMap<>();
-        setEmbedded(embedded.isSelected());
     }
 
-    /**
-     * On/Off embedded mode
-     *
-     * @param mode
-     */
-    private void setEmbedded(boolean mode) {
+    @FXML
+    public void onModeSelection() {
 
-        embedded.setSelected(mode);
-        host.setEditable(!mode);
-        host.setText(mode ? "Embedded mode is on!" : "localhost");
-        host.getTooltip().setText(mode ? "Turn off the embedded mode for editing." : "Host name");
-        host.setDisable(mode);
-        port.setDisable(mode);
+        int index = mode.getSelectionModel().getSelectedIndex();
+        port.setDisable(index == 1);
+        host.setDisable(index == 1);
     }
 }

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.SqlConsoleController">
+<GridPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.tools.SqlConsoleController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -24,7 +24,7 @@
    <children>
       <SplitPane dividerPositions="0.5" orientation="VERTICAL" style="-fx-background-color: black;">
          <items>
-            <TextArea fx:id="console" onKeyPressed="#onEnterKey" styleClass="console" stylesheets="@Ui.css" />
+            <TextArea fx:id="console" onKeyPressed="#onEnterKey" styleClass="console" stylesheets="@../Ui.css" />
              <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" visible="false">
                  <placeholder>
                      <Label fx:id="viewLabel" text=" " />
@@ -32,9 +32,9 @@
              </TableView>
          </items>
       </SplitPane>
-      <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="430.0" styleClass="bar" stylesheets="@Ui.css" GridPane.rowIndex="1">
+      <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="430.0" styleClass="bar" stylesheets="@../Ui.css" GridPane.rowIndex="1">
         <items>
-           <Button mnemonicParsing="false" onAction="#onExecuteAction" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/enter.png);" stylesheets="@Ui.css">
+           <Button mnemonicParsing="false" onAction="#onExecuteAction" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/enter.png);" stylesheets="@../Ui.css">
                <tooltip>
                   <Tooltip text="Execute query" />
                </tooltip>
@@ -42,7 +42,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
            <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-           <Button mnemonicParsing="false" onAction="#onClearAction" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/clear.png);" stylesheets="@Ui.css">
+           <Button mnemonicParsing="false" onAction="#onClearAction" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/clear.png);" stylesheets="@../Ui.css">
                <tooltip>
                   <Tooltip text="Clear" />
                </tooltip>

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TriggersToolController">
+<BorderPane style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.tools.TriggersToolController">
     <center>
         <TableView fx:id="tableView" editable="true">
             <placeholder>
@@ -110,21 +110,21 @@
         </Label>
     </top>
     <bottom>
-        <ToolBar maxHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" styleClass="bar" stylesheets="@Ui.css" BorderPane.alignment="CENTER">
+        <ToolBar maxHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" styleClass="bar" stylesheets="@../Ui.css" BorderPane.alignment="CENTER">
             <items>
-                <Button mnemonicParsing="false" onAction="#onAdd" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/document-new.png);" stylesheets="@Ui.css">
+                <Button mnemonicParsing="false" onAction="#onAdd" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/document-new.png);" stylesheets="@../Ui.css">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
                 <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                <Button mnemonicParsing="false" onAction="#onDelete" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/trash.png);" stylesheets="@Ui.css">
+                <Button mnemonicParsing="false" onAction="#onDelete" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/trash.png);" stylesheets="@../Ui.css">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
                 <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
-                <Button mnemonicParsing="false" onAction="#onSave" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/save.png);" stylesheets="@Ui.css">
+                <Button mnemonicParsing="false" onAction="#onSave" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/save.png);" stylesheets="@../Ui.css">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>

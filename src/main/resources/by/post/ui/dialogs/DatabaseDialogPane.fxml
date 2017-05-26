@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane prefHeight="221.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.DatabaseDialogController">
+<DialogPane prefHeight="221.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.DatabaseDialogController">
     <buttonTypes>
         <ButtonType fx:constant="OK" />
         <ButtonType fx:constant="CANCEL" />

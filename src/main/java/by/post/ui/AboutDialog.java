@@ -1,6 +1,7 @@
 package by.post.ui;
 
-import by.post.control.ui.AboutDialogController;
+import by.post.control.ui.dialogs.AboutDialogController;
+import by.post.ui.Resources;
 import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,7 +41,7 @@ public class AboutDialog {
     private void init() throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(AboutDialog.class.getResource("AboutDialog.fxml"));
+        loader.setLocation(getClass().getResource("dialogs/AboutDialog.fxml"));
         parent = loader.load();
         // Close dialog by mouse click
         parent.setOnMouseClicked(event -> stage.close());

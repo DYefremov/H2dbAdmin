@@ -2,7 +2,7 @@ package by.post.ui;
 
 import by.post.control.Context;
 import by.post.control.Settings;
-import by.post.control.ui.ColumnPropertiesDialogController;
+import by.post.control.ui.dialogs.ColumnPropertiesDialogController;
 import by.post.data.Column;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -29,7 +29,7 @@ public class ColumnPropertiesDialog extends Dialog {
 
     private void init(){
 
-        FXMLLoader loader = new FXMLLoader(ColumnPropertiesDialog.class.getResource("ColumnPropertiesDialogPane.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/ColumnPropertiesDialogPane.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
         try {
             this.setDialogPane(loader.load());

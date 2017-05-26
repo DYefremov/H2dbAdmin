@@ -1,6 +1,7 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import by.post.control.Context;
+import by.post.control.ui.CheckedIntegerStringConverter;
 import by.post.data.Column;
 import by.post.data.Table;
 import by.post.data.type.DefaultColumnDataType;

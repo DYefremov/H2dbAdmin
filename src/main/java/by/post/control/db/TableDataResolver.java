@@ -32,7 +32,6 @@ public class TableDataResolver {
     private ObservableList tableColumns;
     private ObservableList<Row> items;
     private static ColumnDataType columnDataType;
-    private static final String LARGE_OBJECT_VALUE = "Object";
 
     private static final Logger logger = LogManager.getLogger(TableDataResolver.class);
 

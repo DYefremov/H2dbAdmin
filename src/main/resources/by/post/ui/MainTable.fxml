@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTableController">
+    <center>
+        <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked" prefHeight="330.0" prefWidth="400.0" stylesheets="@Ui.css">
+            <placeholder>
+                <Label text="" />
+            </placeholder>
+            <contextMenu>
+                <ContextMenu>
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onAddRow" text="%AddNewRow" />
+                        <MenuItem mnemonicParsing="false" onAction="#onRemoveRow" text="%DeleteRow" />
+                    </items>
+                </ContextMenu>
+            </contextMenu>
+        </TableView>
+    </center>
+    <bottom>
+        <HBox fx:id="tableViewToolBar" alignment="BOTTOM_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" styleClass="bar">
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+            <children>
+                <HBox fx:id="toolBarButtonsHBox" alignment="CENTER_LEFT">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#onAddRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/list-add.png);">
+                            <tooltip>
+                                <Tooltip text="%AddNewRow" />
+                            </tooltip>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#onRemoveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/list-remove.png);">
+                            <tooltip>
+                                <Tooltip text="%DeleteRow" />
+                            </tooltip>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#onSaveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/enter.png);">
+                            <tooltip>
+                                <Tooltip text="%SaveChanges" />
+                            </tooltip>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </Button>
+                    </children>
+                </HBox>
+                <Pane prefHeight="26.0" prefWidth="60.0" HBox.hgrow="SOMETIMES" />
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <children>
+                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/filter.png);">
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                        </Button>
+                        <TextField fx:id="filterTextField" onKeyReleased="#onFilter" prefHeight="26.0" prefWidth="150.0" />
+                    </children>
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </HBox>
+                <Pane prefHeight="30.0" prefWidth="165.0" HBox.hgrow="SOMETIMES" />
+            </children>
+        </HBox>
+    </bottom>
+    <top>
+        <Label fx:id="currentTableName" textAlignment="CENTER" BorderPane.alignment="CENTER">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font></Label>
+    </top>
+</BorderPane>

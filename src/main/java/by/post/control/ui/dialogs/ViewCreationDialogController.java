@@ -1,9 +1,11 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import by.post.control.Context;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import by.post.control.db.Queries;
+import by.post.control.ui.ConditionTableViewController;
+import by.post.control.ui.TypedTreeItem;
 import by.post.data.Column;
 import by.post.data.ConditionRow;
 import by.post.data.Table;

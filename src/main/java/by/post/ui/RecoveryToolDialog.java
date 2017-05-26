@@ -27,7 +27,7 @@ public class RecoveryToolDialog extends Dialog {
 
     private void init() {
         try {
-            FXMLLoader loader = new FXMLLoader(RecoveryToolDialog.class.getResource("RecoveryPane.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/RecoveryDialogPane.fxml"));
             loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             this.setDialogPane(loader.load());
             Stage stage = (Stage)this.getDialogPane().getScene().getWindow();

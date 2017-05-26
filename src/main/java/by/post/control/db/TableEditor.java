@@ -65,12 +65,12 @@ public class TableEditor {
      *
      * @param tableTree
      */
-    public void addTable(TreeView tableTree, Table table, ImageView icon, TableType type) {
+    public void addTable(TreeView tableTree, Table table, ImageView icon) {
 
         try {
             dbControl.update(Queries.createTable(table));
             String name = table.getName();
-            addTableTreeItem(tableTree, icon, type, name);
+            addTableTreeItem(tableTree, icon, TableType.TABLE, name);
             logger.info("Added new  table: " + name);
         } catch (SQLException e) {
             logger.error("Table editor error[addTable]: " + e);
@@ -82,9 +82,8 @@ public class TableEditor {
      * @param tableTree
      * @param view
      * @param icon
-     * @param type
      */
-    public void addView(TreeView tableTree, View view, ImageView icon, TableType type) {
+    public void addView(TreeView tableTree, View view, ImageView icon) {
 
         if (view.getTables() == null) {
             new Alert(Alert.AlertType.INFORMATION, "No table is present!").showAndWait();
@@ -99,7 +98,7 @@ public class TableEditor {
         try {
             dbControl.update(Queries.createView(view));
             String name = view.getName();
-            addTableTreeItem(tableTree, icon, type, name);
+            addTableTreeItem(tableTree, icon, TableType.VIEW, name);
             logger.info("Added new  view: " + name);
         } catch (SQLException e) {
             logger.error("Table editor error[addTable]: " + e);

@@ -38,7 +38,7 @@ public class Context {
         return tablesTreeItem;
     }
 
-    public static void setTablesTreeItem(TypedTreeItem tablesTreeItem) {
+    public static synchronized void setTablesTreeItem(TypedTreeItem tablesTreeItem) {
         Context.tablesTreeItem = tablesTreeItem;
     }
 
@@ -46,7 +46,7 @@ public class Context {
         return mainTableView;
     }
 
-    public static void setMainTableView(TableView mainTableView) {
+    public static synchronized void setMainTableView(TableView mainTableView) {
         Context.mainTableView = mainTableView;
     }
 
@@ -54,7 +54,7 @@ public class Context {
         return mainTableTree;
     }
 
-    public static void setMainTableTree(TreeView mainTableTree) {
+    public static synchronized void setMainTableTree(TreeView mainTableTree) {
         Context.mainTableTree = mainTableTree;
     }
 
@@ -62,7 +62,7 @@ public class Context {
         return currentData;
     }
 
-    public static void setCurrentData(ObservableList<Row> currentData) {
+    public static synchronized void setCurrentData(ObservableList<Row> currentData) {
         Context.currentData = currentData;
     }
 
@@ -70,7 +70,7 @@ public class Context {
         return locale == null ? new Locale(Settings.DEFAULT_LANG) : locale;
     }
 
-    public static void setLocale(Locale locale) {
+    public static synchronized void setLocale(Locale locale) {
         Context.locale = locale;
     }
 
@@ -78,18 +78,19 @@ public class Context {
         return CURRENT_DBMS;
     }
 
-    public static void setCurrentDbms(Dbms currentDbms) {
+    public static synchronized void setCurrentDbms(Dbms currentDbms) {
         CURRENT_DBMS = currentDbms;
+        setCurrentDataType(new DataTypeFactory().getColumnDataType(currentDbms));
     }
 
-    public static void setCurrentDataType(ColumnDataType currentDataType) {
+    public static synchronized void setCurrentDataType(ColumnDataType currentDataType) {
         Context.currentDataType = currentDataType;
     }
 
     public static ColumnDataType getCurrentDataType() {
 
         if (currentDataType == null) {
-            currentDataType = new DataTypeFactory().getColumnDataType(CURRENT_DBMS);
+            currentDataType = new DataTypeFactory().getColumnDataType(getCurrentDbms());
         }
 
         return currentDataType;

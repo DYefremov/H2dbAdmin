@@ -1,4 +1,4 @@
-package by.post.control.ui;
+package by.post.control.ui.dialogs;
 
 import by.post.control.db.Recovery;
 import by.post.control.db.RecoveryManager;
@@ -100,7 +100,7 @@ public class RecoveryPaneController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
 
     }
 
