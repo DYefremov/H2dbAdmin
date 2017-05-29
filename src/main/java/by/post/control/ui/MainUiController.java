@@ -10,6 +10,7 @@ import by.post.data.View;
 import by.post.data.type.Dbms;
 import by.post.ui.*;
 import javafx.application.Platform;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -51,6 +52,7 @@ public class MainUiController {
     private MainUiForm mainUiForm;
     private TableEditor tableEditor;
     private DatabaseManager databaseManager;
+    private DataService dataService;
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
@@ -186,6 +188,7 @@ public class MainUiController {
         dbControl = DbController.getInstance();
         tableEditor = TableEditor.getInstance();
         databaseManager = DatabaseManager.getInstance();
+        dataService = new DataService();
     }
 
     /**
@@ -238,51 +241,25 @@ public class MainUiController {
     private void selectTable(TypedTreeItem item) {
 
         setBusy(true);
+        Context.setLoadData(false);
 
-        if (Context.getCurrentSelectTableTask() != null) {
-            Context.getCurrentSelectTableTask().cancel();
+        if (dataService.isRunning()) {
+            dataService.cancel();
+            System.out.println("CANCEL!!!!!!");
         }
 
-        Context.setLoadData(false);
-        final String tableName = (String) item.getValue();
-        TableType type = item.getType();
+        Table table = dbControl.getTable((String) item.getValue(), item.getType());
 
-        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                Table table = dbControl.getTable(tableName, type);
-                Platform.runLater(() -> selectTable(table));
-                Context.setLoadData(false);
-                return null;
-            }
-        };
-
-        task.setOnFailed(event -> {
-            setBusy(false);
-            logger.error("MainUiController error when selecting table: " + task.getException());
-        });
-
-        task.setOnSucceeded(event -> {
+        Platform.runLater(() -> {
+            selectTable(table);
+            Context.setLoadData(false);
             setBusy(false);
 
             if (mainTableController.getDataSize() == TableBuilder.MAX_ROWS) {
-                new Thread(() -> {
-                    List<Row> data = (List<Row>) dbControl.getTableData(tableName, type);
-                    while (Context.isLoadData()) {
-                        /**NOP*/
-                    }
-
-                    if (!task.isCancelled()) {
-                        mainTableController.addData(data);
-                    }
-                }) .start();
+                dataService.setItem(item);
+                dataService.restart();
             }
         });
-
-        Context.setCurrentSelectTableTask(task);
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
     }
 
     /**
@@ -382,6 +359,41 @@ public class MainUiController {
             } catch (SQLException e) {
                 logger.error("MainUiController error [databaseDelete]: " + e);
             }
+        }
+    }
+
+    /**
+     * Service for adding data to main table.
+     * Used for big tables.
+     */
+    private class DataService extends Service<Void> {
+
+        private TypedTreeItem item;
+
+        public void setItem(TypedTreeItem item) {
+            this.item = item;
+        }
+
+        public DataService() {
+            setOnSucceeded(event -> setBusy(false));
+            setOnFailed(event -> {
+                setBusy(false);
+                logger.error("DataService error [onFailed]: " + event.getSource().getException());
+            });
+        }
+
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    if (item != null) {
+                        List<Row> data = (List<Row>) dbControl.getTableData(String.valueOf(item.getValue()), item.getType());
+                        mainTableController.addData(data);
+                    }
+                    return null;
+                }
+            };
         }
     }
 

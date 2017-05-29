@@ -32,7 +32,6 @@ public class Context {
     private static boolean isLoadData;
     //For bind with {isLoadData} (in status bar)
     private static SimpleBooleanProperty isLoadDataProperty = new SimpleBooleanProperty(isLoadData());
-    private static Task currentSelectTableTask;
 
     public static TypedTreeItem getTablesTreeItem() {
         return tablesTreeItem;
@@ -107,14 +106,6 @@ public class Context {
 
     public static SimpleBooleanProperty getIsLoadDataProperty() {
         return isLoadDataProperty;
-    }
-
-    public static synchronized Task getCurrentSelectTableTask() {
-        return currentSelectTableTask;
-    }
-
-    public static synchronized void setCurrentSelectTableTask(Task task) {
-        currentSelectTableTask = task;
     }
 
     private Context() {
