@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TreeView?>
-
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TreeView?>
 
 <TreeView fx:id="tableTree" minWidth="-Infinity" onContextMenuRequested="#onContextMenuRequested" prefWidth="100.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTableTreeController">
     <contextMenu>
         <ContextMenu fx:id="treeContextMenu">
             <items>
-                <Menu mnemonicParsing="false" text="%New">
+                <Menu fx:id="menuNew" mnemonicParsing="false" text="%New">
                     <items>
                         <MenuItem fx:id="contextMenuItemTable" mnemonicParsing="false" onAction="#onAddNewTable" text="%Table" />
                         <MenuItem fx:id="contextMenuItemView" mnemonicParsing="false" onAction="#onAddNewView" text="%View" />
                     </items>
                 </Menu>
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" onAction="#onTableDelete" text="%Delete" />
+            <MenuItem fx:id="contextMenuItemOpen" mnemonicParsing="false" onAction="#onOpenDb" text="%Open" />
+                <SeparatorMenuItem fx:id="separatorDelete" mnemonicParsing="false" />
+                <MenuItem fx:id="contextMenuItemDelete" mnemonicParsing="false" onAction="#onTableDelete" text="%Delete" />
             </items>
         </ContextMenu>
     </contextMenu>

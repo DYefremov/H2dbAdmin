@@ -14,10 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -40,6 +37,12 @@ public class MainTableTreeController {
     private MenuItem contextMenuItemTable;
     @FXML
     private MenuItem contextMenuItemView;
+    @FXML
+    private MenuItem contextMenuItemDelete;
+    @FXML
+    private SeparatorMenuItem separatorDelete;
+    @FXML
+    private Menu menuNew;
 
     private DbControl dbControl;
     private TableEditor tableEditor;
@@ -51,6 +54,11 @@ public class MainTableTreeController {
 
     public void setMainController(MainUiController mainController) {
         this.mainController = mainController;
+    }
+
+    @FXML
+    public void onOpenDb() {
+        mainController.onOpenDb();
     }
 
     @FXML
@@ -82,6 +90,13 @@ public class MainTableTreeController {
     @FXML
     public void onContextMenuRequested() {
 
+        if (tableTree.getRoot().isLeaf()) {
+            menuNew.setVisible(false);
+            separatorDelete.setVisible(false);
+            contextMenuItemDelete.setVisible(false);
+            return;
+        }
+
         TypedTreeItem treeItem = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
 
         if (treeItem == null) {
@@ -111,17 +126,30 @@ public class MainTableTreeController {
     }
 
     /**
+     * Init settings and database connection
+     */
+    public void initDb() {
+
+        Properties properties = PropertiesController.getProperties();
+        String user = properties.getProperty(Settings.USER);
+        String password = properties.getProperty(Settings.PASSWORD);
+        String url = properties.getProperty(Settings.URL);
+
+        dbControl.connect(url, user, password);
+    }
+
+    /**
      * Init data
      */
     public void initData() {
 
-        List<TypedTreeItem> tables = getRootItems();
-
-        if (tables.isEmpty()) {
+        if (dbControl.getCurrentConnection() == null) {
             tableTree.setRoot(new TreeItem("Database is not present..."));
-            tableTree.setContextMenu(null);
             return;
         }
+
+        initSelectionModel();
+        List<TypedTreeItem> tables = getRootItems();
         // Sorting
 //        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
         ObservableList<TypedTreeItem> list = FXCollections.observableList(tables);
@@ -138,13 +166,16 @@ public class MainTableTreeController {
 
         dbControl = DbController.getInstance();
         tableEditor = TableEditor.getInstance();
-        init();
+        initDb();
         initData();
         //Set context
         Context.setMainTableTree(tableTree);
     }
 
-    private void init() {
+    /**
+     * Initialization of selection properties
+     */
+    private void initSelectionModel() {
 
         tableTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -170,13 +201,7 @@ public class MainTableTreeController {
      */
     private List<String> getDbTablesList(String type) {
 
-        Properties properties = PropertiesController.getProperties();
-        String user = properties.getProperty(Settings.USER);
-        String password = properties.getProperty(Settings.PASSWORD);
-        String url = properties.getProperty(Settings.URL);
-
-        dbControl.connect(url, user, password);
-        List tables = dbControl.getTablesList(type);
+        List<String> tables = dbControl.getTablesList(type);
 
         return tables != null ? tables : new ArrayList<>();
     }

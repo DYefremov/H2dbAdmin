@@ -228,6 +228,7 @@ public class MainUiController {
 
             Platform.runLater(() -> {
                 clearMainTable();
+                mainTableTreeController.initDb();
                 mainTableTreeController.initData();
             });
         }
@@ -245,7 +246,6 @@ public class MainUiController {
 
         if (dataService.isRunning()) {
             dataService.cancel();
-            System.out.println("CANCEL!!!!!!");
         }
 
         Table table = dbControl.getTable((String) item.getValue(), item.getType());
