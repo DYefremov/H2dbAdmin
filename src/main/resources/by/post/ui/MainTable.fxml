@@ -74,7 +74,7 @@
                     </children>
                 </HBox>
                 <Pane prefHeight="26.0" prefWidth="60.0" HBox.hgrow="SOMETIMES" />
-                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                <HBox fx:id="filterBox" alignment="CENTER_LEFT" spacing="5.0">
                     <children>
                         <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/filter.png);">
                             <opaqueInsets>
