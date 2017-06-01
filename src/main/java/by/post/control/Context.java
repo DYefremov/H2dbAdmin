@@ -7,7 +7,6 @@ import by.post.data.type.DataTypeFactory;
 import by.post.data.type.Dbms;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
 

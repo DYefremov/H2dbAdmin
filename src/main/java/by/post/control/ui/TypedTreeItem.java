@@ -9,14 +9,20 @@ import javafx.scene.image.ImageView;
  */
 public class TypedTreeItem extends TreeItem {
 
-    TableType type;
+    private TableType type;
+    private boolean root;
 
-    public TypedTreeItem(final String value, final ImageView graphic, final TableType type) {
+    public TypedTreeItem(final String value, final ImageView graphic, final TableType type, final boolean root) {
         super(value, graphic);
         this.type = type;
+        this.root = root;
     }
 
     public TableType getType() {
         return type;
+    }
+
+    public boolean isRoot() {
+        return root;
     }
 }

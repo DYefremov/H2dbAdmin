@@ -116,7 +116,7 @@ public class TableEditor {
      */
     private void addTableTreeItem(TreeView tableTree, ImageView icon, TableType type, String name) {
 
-        TypedTreeItem treeItem = new TypedTreeItem(name.toUpperCase(), icon, type);
+        TypedTreeItem treeItem = new TypedTreeItem(name.toUpperCase(), icon, type, false);
         ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
 
         for (TypedTreeItem item : items) {

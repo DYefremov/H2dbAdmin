@@ -157,11 +157,11 @@ public class MainTableTreeController {
     public void initData() {
 
         if (dbControl.isClosed()) {
-            tableTree.setRoot(new TreeItem("Database is not present..."));
+            tableTree.setRoot(new TypedTreeItem("Database is not present...", null, null, true));
             return;
         }
 
-        TypedTreeItem root = new TypedTreeItem(dbControl.getCurrentDbName(), getItemImage("database.png"), null);
+        TypedTreeItem root = new TypedTreeItem(dbControl.getCurrentDbName(), getItemImage("database.png"), null, true);
         root.getChildren().addAll(FXCollections.observableList(getRootItems()));
         tableTree.setRoot(root);
     }
@@ -211,14 +211,14 @@ public class MainTableTreeController {
             boolean isSchema = tType.equals(TableType.SYSTEM_TABLE);
             String name = isSchema ? "INFORMATION_SCHEMA" : tType.preparedName() + "S";
             ImageView image = getItemImage(isSchema ? "info.png" : iconName);
-            TypedTreeItem item = new TypedTreeItem(name, image, tType);
+            TypedTreeItem item = new TypedTreeItem(name, image, tType, true);
             //Set tables tree item for using in search tool and view creation dialog
             if (item.getType().equals(TableType.TABLE)) {
                 Context.setTablesTreeItem(item);
             }
 
             item.getChildren().addAll(getDbTablesList(tType.preparedName()).stream()
-                    .map(t -> new TypedTreeItem(t, getItemImage(iconName), tType))
+                    .map(t -> new TypedTreeItem(t, getItemImage(iconName), tType, false))
                     .collect(Collectors.toList()));
 
             tables.add(item);
@@ -241,13 +241,9 @@ public class MainTableTreeController {
 
         return (observable, oldValue, newValue) -> {
 
-            if (tableTree.getRoot() == null || tableTree.getRoot().isLeaf()) {
-                return;
-            }
-
             TypedTreeItem item = newValue == null ? null : (TypedTreeItem) newValue;
-            // A TreeItem is a leaf if it has no children
-            if (item == null || !item.isLeaf()) {
+
+            if (item == null || item.isRoot()) {
                 return;
             }
 

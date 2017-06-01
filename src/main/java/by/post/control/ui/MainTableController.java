@@ -37,7 +37,12 @@ public class MainTableController {
     private HBox tableViewToolBar;
     @FXML
     private HBox toolBarButtonsHBox;
+    @FXML
+    private HBox filterBox;
 
+    private TableEditor tableEditor;
+    //Used to disable the filter field for empty tables
+    private SimpleBooleanProperty tableNotEmpty;
     //Indicate if running filter data process
     private boolean inFiltering;
     //Indicate if table type is selected (for disabling editing in system tables and views)
@@ -47,9 +52,6 @@ public class MainTableController {
     private static final double FILTER_TIMEOUT = 1;
 
     private static final Logger logger = LogManager.getLogger(MainTableController.class);
-
-    private TableEditor tableEditor;
-
 
     public MainTableController() {
 
@@ -137,6 +139,7 @@ public class MainTableController {
             ObservableList<Row> items = resolver.getItems();
             Context.setCurrentData(items);
             mainTable.setItems(items);
+            tableNotEmpty.set(!items.isEmpty());
         }
     }
 
@@ -169,14 +172,16 @@ public class MainTableController {
         tableEditor = TableEditor.getInstance();
         tableEditor.setTable(mainTable);
 
+        tableNotEmpty = new SimpleBooleanProperty();
         isTableType = new SimpleBooleanProperty();
         //disabling editing in system tables and views
         mainTable.editableProperty().bind(isTableType);
+
+        filterBox.visibleProperty().bind(tableNotEmpty);
         //Disable field if load data in progress
         filterTextField.disableProperty().bind(Context.getIsLoadDataProperty());
         filterPause = new PauseTransition(Duration.seconds(FILTER_TIMEOUT));
         filterPause.setOnFinished(event -> filterData());
-
         //Set multiple selection in table view
         mainTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         //Show toolbar only if any table selected
