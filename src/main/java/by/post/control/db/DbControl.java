@@ -77,4 +77,9 @@ public interface DbControl {
      * Close opened connection
      */
     void closeConnection();
+
+    /**
+     * @return true if connection is closed
+     */
+    boolean isClosed();
 }

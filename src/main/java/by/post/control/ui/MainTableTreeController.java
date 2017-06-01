@@ -10,8 +10,10 @@ import by.post.control.db.TableType;
 import by.post.data.Table;
 import by.post.data.View;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -23,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -47,6 +50,7 @@ public class MainTableTreeController {
     private DbControl dbControl;
     private TableEditor tableEditor;
     private MainUiController mainController;
+    private final InitService initService = new InitService();
 
     public MainTableTreeController() {
 
@@ -90,10 +94,12 @@ public class MainTableTreeController {
     @FXML
     public void onContextMenuRequested() {
 
-        if (tableTree.getRoot().isLeaf()) {
-            menuNew.setVisible(false);
-            separatorDelete.setVisible(false);
-            contextMenuItemDelete.setVisible(false);
+        boolean visible = tableTree.getRoot() != null && !tableTree.getRoot().isLeaf();
+        menuNew.setVisible(visible);
+        separatorDelete.setVisible(visible);
+        contextMenuItemDelete.setVisible(visible);
+
+        if (!visible) {
             return;
         }
 
@@ -126,6 +132,13 @@ public class MainTableTreeController {
     }
 
     /**
+     * Initialization for first db opening
+     */
+    public void init() {
+        initService.restart();
+    }
+
+    /**
      * Init settings and database connection
      */
     public void initDb() {
@@ -143,22 +156,14 @@ public class MainTableTreeController {
      */
     public void initData() {
 
-        if (dbControl.getCurrentConnection() == null) {
+        if (dbControl.isClosed()) {
             tableTree.setRoot(new TreeItem("Database is not present..."));
             return;
         }
 
-        initSelectionModel();
-        List<TypedTreeItem> tables = getRootItems();
-        // Sorting
-//        tables.sort(Comparator.comparing(t -> t.getValue().toString()));
-        ObservableList<TypedTreeItem> list = FXCollections.observableList(tables);
-
         TypedTreeItem root = new TypedTreeItem(dbControl.getCurrentDbName(), getItemImage("database.png"), null);
-        root.getChildren().addAll(list);
-
+        root.getChildren().addAll(FXCollections.observableList(getRootItems()));
         tableTree.setRoot(root);
-        tableTree.setContextMenu(treeContextMenu);
     }
 
     @FXML
@@ -166,8 +171,8 @@ public class MainTableTreeController {
 
         dbControl = DbController.getInstance();
         tableEditor = TableEditor.getInstance();
-        initDb();
-        initData();
+        initSelectionModel();
+        init();
         //Set context
         Context.setMainTableTree(tableTree);
     }
@@ -177,21 +182,7 @@ public class MainTableTreeController {
      */
     private void initSelectionModel() {
 
-        tableTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (newValue == null) {
-                return;
-            }
-
-            TypedTreeItem item = (TypedTreeItem) newValue;
-            // A TreeItem is a leaf if it has no children
-            if (!item.isLeaf()) {
-                return;
-            }
-
-            mainController.onTableSelect(item);
-        });
-
+        tableTree.getSelectionModel().selectedItemProperty().addListener(getChangeListener());
         tableTree.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> mainController.checkIsDataStored(event));
         tableTree.addEventFilter(KeyEvent.KEY_PRESSED, event -> mainController.checkIsDataStored(event));
     }
@@ -220,20 +211,17 @@ public class MainTableTreeController {
             boolean isSchema = tType.equals(TableType.SYSTEM_TABLE);
             String name = isSchema ? "INFORMATION_SCHEMA" : tType.preparedName() + "S";
             ImageView image = getItemImage(isSchema ? "info.png" : iconName);
-
             TypedTreeItem item = new TypedTreeItem(name, image, tType);
-            tables.add(item);
             //Set tables tree item for using in search tool and view creation dialog
             if (item.getType().equals(TableType.TABLE)) {
                 Context.setTablesTreeItem(item);
             }
-            List<TypedTreeItem> items = new ArrayList<>();
 
-            getDbTablesList(tType.preparedName()).stream().forEach(t -> {
-                items.add(new TypedTreeItem(t, getItemImage(iconName), tType));
-            });
+            item.getChildren().addAll(getDbTablesList(tType.preparedName()).stream()
+                    .map(t -> new TypedTreeItem(t, getItemImage(iconName), tType))
+                    .collect(Collectors.toList()));
 
-            item.getChildren().addAll(items);
+            tables.add(item);
         }
 
         return tables;
@@ -244,6 +232,48 @@ public class MainTableTreeController {
      */
     private ImageView getItemImage(String name) {
         return new ImageView(new Image("/img/" + name, 16, 16, false, false));
+    }
+
+    /**
+     * @return listener for table tree
+     */
+    private ChangeListener getChangeListener() {
+
+        return (observable, oldValue, newValue) -> {
+
+            if (tableTree.getRoot() == null || tableTree.getRoot().isLeaf()) {
+                return;
+            }
+
+            TypedTreeItem item = newValue == null ? null : (TypedTreeItem) newValue;
+            // A TreeItem is a leaf if it has no children
+            if (item == null || !item.isLeaf()) {
+                return;
+            }
+
+            mainController.onTableSelect(item);
+        };
+    }
+
+    /**
+     *Service for first db opening
+     */
+    private class InitService extends Service<Void> {
+
+        @Override
+        protected Task<Void> createTask() {
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    initDb();
+                    return null;
+                }
+            };
+
+            task.setOnSucceeded(event -> initData());
+
+            return task;
+        }
     }
 
 }

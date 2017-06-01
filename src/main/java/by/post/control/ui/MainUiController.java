@@ -72,11 +72,13 @@ public class MainUiController {
         Optional<Map<String, String>> result = new DatabaseDialog().showAndWait();
 
         if (result.isPresent()) {
-            databaseManager.addDatabase(result.get());
-            Platform.runLater(() -> {
-                clearMainTable();
-                mainTableTreeController.initData();
-            });
+            new Thread(() -> {
+                databaseManager.addDatabase(result.get());
+                Platform.runLater(() -> {
+                    clearMainTable();
+                    mainTableTreeController.init();
+                });
+            }).start();
         }
     }
 
@@ -225,12 +227,8 @@ public class MainUiController {
 
         if (result.isPresent()) {
             PropertiesController.setProperties(result.get());
-
-            Platform.runLater(() -> {
-                clearMainTable();
-                mainTableTreeController.initDb();
-                mainTableTreeController.initData();
-            });
+            clearMainTable();
+            mainTableTreeController.init();
         }
     }
 
@@ -345,20 +343,17 @@ public class MainUiController {
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            try {
-                databaseManager.deleteDatabase(dropOnly);
-
-                Platform.runLater(() -> {
-                    clearMainTable();
-                    Context.getMainTableTree().setRoot(null);
-
-                    if (dropOnly) {
+            new Thread(() -> {
+                try {
+                    databaseManager.deleteDatabase(dropOnly);
+                    Platform.runLater(() -> {
+                        clearMainTable();
                         mainTableTreeController.initData();
-                    }
-                });
-            } catch (SQLException e) {
-                logger.error("MainUiController error [databaseDelete]: " + e);
-            }
+                    });
+                } catch (SQLException e) {
+                    logger.error("MainUiController error [databaseDelete]: " + e);
+                }
+            }).start();
         }
     }
 

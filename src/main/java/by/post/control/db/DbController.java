@@ -32,6 +32,7 @@ public class DbController implements DbControl {
      * @return instance for DbControl
      */
     public static DbControl getInstance() {
+
         return instance;
     }
 
@@ -50,16 +51,18 @@ public class DbController implements DbControl {
                 Class.forName(PropertiesController.getProperties().getProperty("driver"));
                 connection = DriverManager.getConnection(url, user, password);
             } catch (ClassNotFoundException e) {
-                logger.error("DbController error in connect: " + e);
+                logger.error("DbController error [connect]: " + e);
             } catch (SQLException e) {
-                logger.error("DbController error in connect: " + e);
+                logger.error("DbController error [connect]: " + e);
             }
         } else {
             try {
-                connection.close();
+                if (!connection.isClosed()) {
+                    connection.close();
+                }
                 connection = DriverManager.getConnection(url, user, password);
             } catch (SQLException e) {
-                logger.error("DbController error in connect: " + e);
+                logger.error("DbController error [connect]: " + e);
             }
         }
     }
@@ -92,7 +95,7 @@ public class DbController implements DbControl {
             try {
                 name = connection.getCatalog();
             } catch (SQLException e) {
-                logger.error("DbController error in getCurrentDbName: " + e);
+                logger.error("DbController error [getCurrentDbName]: " + e);
             }
         }
 
@@ -113,7 +116,7 @@ public class DbController implements DbControl {
                     tables.add(rs.getString("TABLE_NAME"));
                 }
             } catch (SQLException e) {
-                logger.error("DbController error in getTablesList: " + e);
+                logger.error("DbController error [getTablesList]: " + e);
             } 
         }
 
@@ -187,13 +190,25 @@ public class DbController implements DbControl {
      */
     @Override
     public void closeConnection() {
+
         if (connection != null) {
             try {
                 connection.close();
             } catch (SQLException e) {
-                logger.error("DbController error in closeConnection: " + e);
+                logger.error("DbController error [closeConnection]: " + e);
             }
         }
+    }
+
+    @Override
+    public boolean isClosed() {
+
+        try {
+            return connection == null ? true : connection.isClosed();
+        } catch (SQLException e) {
+            logger.error("DbController error [isClosed]: " + e);
+        }
+        return false;
     }
 
 }
