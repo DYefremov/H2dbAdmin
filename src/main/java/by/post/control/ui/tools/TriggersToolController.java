@@ -11,10 +11,7 @@ import by.post.data.Trigger;
 import by.post.ui.ConfirmationDialog;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import org.apache.logging.log4j.LogManager;
@@ -47,9 +44,12 @@ public class TriggersToolController {
     TableColumn<Trigger, Boolean> noWaitColumn;
     @FXML
     TableColumn<Trigger, Integer> queueSizeColumn;
+    @FXML
+    private ContextMenu contextMenu;
 
     private DbControl dbControl;
     private List<Trigger> addedTriggers;
+
     private static final Logger logger = LogManager.getLogger(TriggersToolController.class);
 
     public TriggersToolController() {
@@ -107,6 +107,14 @@ public class TriggersToolController {
     }
 
     @FXML
+    public void onContextMenuRequested() {
+
+        if (tableView.getItems().isEmpty()) {
+            contextMenu.hide();
+        }
+    }
+
+    @FXML
     public void onSave() {
         saveTrigger();
     }
@@ -130,6 +138,19 @@ public class TriggersToolController {
         beforeColumn.setCellFactory(CheckBoxTableCell.forTableColumn(beforeColumn));
         noWaitColumn.setCellFactory(CheckBoxTableCell.forTableColumn(noWaitColumn));
         queueSizeColumn.setCellFactory(TextFieldTableCell.forTableColumn(new CheckedIntegerStringConverter()));
+
+        tableView.setRowFactory(tv -> {
+            TableRow<Trigger> row = new TableRow<>();
+            row.setOnMouseEntered(event -> {
+               tableView.setEditable(false);
+
+                if (addedTriggers != null && addedTriggers.contains(row.getItem())) {
+                    tableView.setEditable(true);
+                }
+            });
+
+            return row;
+        });
     }
 
     /**
@@ -153,7 +174,6 @@ public class TriggersToolController {
         if (data == null || data.getRows() == null) {
             return triggers;
         }
-
         //TODO Maybe temporarily. To think up more universally.
         try {
             data.getRows().forEach(r -> {
