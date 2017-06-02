@@ -1,6 +1,5 @@
 # H2dbAdmin
 Small GUI for working with H2 database based on JavaFX library.
-For correct operation requires the latest version of Java 8.
 
 Features:
 
@@ -11,6 +10,8 @@ Features:
 5. Basic recovery tool.
 6. Simple SQL console.
 7. Basic functionality for working with views and triggers.
+
+For correct operation requires the latest version of Java 8.
 
 
 
