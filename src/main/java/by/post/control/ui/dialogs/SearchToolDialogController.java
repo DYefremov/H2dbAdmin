@@ -112,10 +112,10 @@ public class SearchToolDialogController {
         dialogPane.setExpandableContent(null);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0), event -> {
-                    if (searchRunning) {
-                        timeValueLabel.setText((System.currentTimeMillis() - startSearchTime) / 1000 + "s");
-                    }
-                }),  new KeyFrame(Duration.seconds(1)));
+            if (searchRunning) {
+                timeValueLabel.setText((System.currentTimeMillis() - startSearchTime) / 1000 + "s");
+            }
+        }),  new KeyFrame(Duration.seconds(1)));
 
         timeline.setCycleCount(Animation.INDEFINITE);
     }

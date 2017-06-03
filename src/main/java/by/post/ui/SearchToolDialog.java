@@ -3,6 +3,7 @@ package by.post.ui;
 import by.post.control.Context;
 import by.post.control.Settings;
 import by.post.control.ui.dialogs.SearchToolDialogController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -53,7 +54,8 @@ public class SearchToolDialog extends Dialog {
             boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
             cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
             //Sets not resizable after click on details
-            this.getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) -> this.setResizable(false));
+            this.getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) ->
+                    Platform.runLater(() -> this.setResizable(false)));
         } catch (IOException e) {
             logger.error("RecoveryToolDialog error[init]: " + e);
         }

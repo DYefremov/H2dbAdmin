@@ -96,7 +96,7 @@
                   </TableView>
                   <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
                     <buttons>
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteButton" text="%Delete" />
+                        <Button mnemonicParsing="false" onAction="#onDeleteButton" text="%Delete" />
                         <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onAddButton" text="%Add" />
                     </buttons>
                      <VBox.margin>

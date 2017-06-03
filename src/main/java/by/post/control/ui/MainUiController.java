@@ -314,7 +314,7 @@ public class MainUiController {
      * Show and work with search tool
      */
     private void showSearchTool() {
-        new SearchToolDialog().showAndWait();
+        new SearchToolDialog().show();
     }
 
     /**
