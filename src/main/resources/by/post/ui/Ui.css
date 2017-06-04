@@ -18,10 +18,10 @@
    -fx-background-size: 20px;
 }
 
-.table-view {
-   -fx-background-image: url(/img/logo.png);
-   -fx-background-size:  cover;
-}
+/*.table-view {*/
+   /*-fx-background-image: url(/img/logo.png);*/
+   /*-fx-background-size:  cover;*/
+/*}*/
 
 /* SplitPane style for divider  */
 .split-pane  .split-pane-divider {

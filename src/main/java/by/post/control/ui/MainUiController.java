@@ -3,21 +3,22 @@ package by.post.control.ui;
 import by.post.control.Context;
 import by.post.control.PropertiesController;
 import by.post.control.Settings;
-import by.post.control.db.*;
-import by.post.data.Row;
+import by.post.control.db.DatabaseManager;
+import by.post.control.db.DbControl;
+import by.post.control.db.DbController;
+import by.post.control.db.TableEditor;
 import by.post.data.Table;
 import by.post.data.View;
 import by.post.data.type.Dbms;
 import by.post.ui.*;
 import javafx.application.Platform;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -26,7 +27,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,15 +44,15 @@ public class MainUiController {
     @FXML
     private SplitPane explorerSplitPane;
     @FXML
-    MainTableTreeController mainTableTreeController;
+    private MainTableTreeController mainTableTreeController;
     @FXML
-    MainTableController mainTableController;
+    private MainTabPaneController mainTabPaneController;
 
+    private TabPane tabPane;
     private DbControl dbControl;
     private MainUiForm mainUiForm;
     private TableEditor tableEditor;
     private DatabaseManager databaseManager;
-    private DataService dataService;
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
@@ -166,15 +166,32 @@ public class MainUiController {
      * @param item
      */
     public void onTableSelect(TypedTreeItem item) {
-        mainTableController.setTableType(item.getType() != null && item.getType().equals(TableType.TABLE));
+
+        mainTabPaneController.setTableType(item.getType());
         tableEditor.clearSavedData();
         selectTable(item);
+    }
+
+    /**
+     * Show/Hide tab pane
+     * @param show
+     */
+    public void showTabPane(boolean show) {
+
+        if (show && !explorerSplitPane.getItems().contains(tabPane)) {
+            explorerSplitPane.getItems().add(tabPane);
+        } else if (!show) {
+            explorerSplitPane.getItems().remove(tabPane);
+        }
     }
 
     @FXML
     private void initialize() {
 
         mainTableTreeController.setMainController(this);
+        mainTabPaneController.setMainController(this);
+        tabPane = mainTabPaneController.getTabPane();
+        showTabPane(false);
         // Set log messages output to the text area
         LogArea.setArea(console);
         logger.info("Starting application...");
@@ -190,7 +207,6 @@ public class MainUiController {
         dbControl = DbController.getInstance();
         tableEditor = TableEditor.getInstance();
         databaseManager = DatabaseManager.getInstance();
-        dataService = new DataService();
     }
 
     /**
@@ -242,21 +258,12 @@ public class MainUiController {
         setBusy(true);
         Context.setLoadData(false);
 
-        if (dataService.isRunning()) {
-            dataService.cancel();
-        }
-
         Table table = dbControl.getTable((String) item.getValue(), item.getType());
 
         Platform.runLater(() -> {
             selectTable(table);
             Context.setLoadData(false);
             setBusy(false);
-
-            if (mainTableController.getDataSize() == TableBuilder.MAX_ROWS) {
-                dataService.setItem(item);
-                dataService.restart();
-            }
         });
     }
 
@@ -266,7 +273,8 @@ public class MainUiController {
      * @param table
      */
     private void selectTable(Table table) {
-        mainTableController.setTable(table);
+        showTabPane(true);
+        mainTabPaneController.selectTable(table);
     }
 
     /**
@@ -331,7 +339,9 @@ public class MainUiController {
      * Clear main table
      */
     private void clearMainTable() {
-        mainTableController.clearMainTable();
+
+        showTabPane(false);
+        mainTabPaneController.clearTabs();
     }
 
     /**
@@ -354,41 +364,6 @@ public class MainUiController {
                     logger.error("MainUiController error [databaseDelete]: " + e);
                 }
             }).start();
-        }
-    }
-
-    /**
-     * Service for adding data to main table.
-     * Used for big tables.
-     */
-    private class DataService extends Service<Void> {
-
-        private TypedTreeItem item;
-
-        public void setItem(TypedTreeItem item) {
-            this.item = item;
-        }
-
-        public DataService() {
-            setOnSucceeded(event -> setBusy(false));
-            setOnFailed(event -> {
-                setBusy(false);
-                logger.error("DataService error [onFailed]: " + event.getSource().getException());
-            });
-        }
-
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    if (item != null) {
-                        List<Row> data = (List<Row>) dbControl.getTableData(String.valueOf(item.getValue()), item.getType());
-                        mainTableController.addData(data);
-                    }
-                    return null;
-                }
-            };
         }
     }
 

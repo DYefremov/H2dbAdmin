@@ -247,8 +247,8 @@
                   <items>
                       <!--Include main table tree!-->
                       <fx:include fx:id="mainTableTree" source="MainTableTree.fxml" />
-                      <!--Include main table!-->
-                      <fx:include fx:id="mainTable" source="MainTable.fxml" />
+                      <!--Include main tab pane!-->
+                      <fx:include fx:id="mainTabPane" source="MainTabPane.fxml" />
                   </items>
               </SplitPane>
                  <TitledPane fx:id="infoPane" cache="true" expanded="false" text="%MoreInfo">

@@ -6,7 +6,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TreeView?>
 
-<TreeView fx:id="tableTree" minWidth="-Infinity" onContextMenuRequested="#onContextMenuRequested" prefWidth="100.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTableTreeController">
+<TreeView fx:id="tableTree" minWidth="-Infinity" onContextMenuRequested="#onContextMenuRequested" prefWidth="100.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTableTreeController">
     <contextMenu>
         <ContextMenu fx:id="treeContextMenu">
             <items>
