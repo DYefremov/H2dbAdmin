@@ -7,6 +7,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -48,6 +50,9 @@ public class MainTabPaneController {
 
     }
 
+    /**
+     * @param table
+     */
     public void selectTable(Table table) {
 
         FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("TableTab.fxml"));
@@ -61,21 +66,43 @@ public class MainTabPaneController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //Searching for whether the tab for this table is already been opened.
+        Tab tab = tabPane.getTabs().isEmpty() ? null : tabPane.getTabs().stream()
+                        .filter(t -> t.getText().equals(table.getName()))
+                        .findFirst().orElse(null);
 
-        Tab tab = new Tab(table.getName(), node);
+        if (tab == null) {
+            tab = getTab(table.getName(), node);
+            tabPane.getTabs().add(tab);
+        }
+
+        tabPane.getSelectionModel().select(tab);
+    }
+
+    /**
+     * @param name
+     * @param node
+     * @return
+     */
+    private Tab getTab(String name, Node node) {
+
+        Tab tab = new Tab(name, node);
         tab.setOnClosed(event -> {
             if (tabPane.getTabs().isEmpty()) {
                 Platform.runLater(() -> mainController.showTabPane(false));
             }
         });
 
-        Platform.runLater(() -> {
-            if (tabPane.getTabs().isEmpty()) {
-                tabPane.getTabs().add(tab);
-            } else {
-                tabPane.getTabs().set(0, tab);
-            }
-//            tabPane.getSelectionModel().select(tab);
-        });
+        MenuItem item = new MenuItem("Close all");
+        item.setOnAction(event ->
+            Platform.runLater(() -> {
+                tabPane.getTabs().clear();
+                Platform.runLater(() -> mainController.showTabPane(false));
+        }));
+
+        tab.setContextMenu(new ContextMenu(item));
+
+        return tab;
     }
+
 }

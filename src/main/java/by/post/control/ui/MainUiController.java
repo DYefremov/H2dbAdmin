@@ -180,6 +180,7 @@ public class MainUiController {
 
         if (show && !explorerSplitPane.getItems().contains(tabPane)) {
             explorerSplitPane.getItems().add(tabPane);
+            explorerSplitPane.setDividerPosition(0, 0.3);
         } else if (!show) {
             explorerSplitPane.getItems().remove(tabPane);
         }
@@ -273,6 +274,7 @@ public class MainUiController {
      * @param table
      */
     private void selectTable(Table table) {
+
         showTabPane(true);
         mainTabPaneController.selectTable(table);
     }

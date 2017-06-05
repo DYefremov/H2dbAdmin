@@ -21,7 +21,7 @@ public class TableBuilder {
 
     private ColumnDataType columnDataType;
     //The limit for the maximum number of rows for the first request receiving table
-    public static final int MAX_ROWS = 100;
+    public static final int MAX_ROWS = 10;
     public static final String DEF_VALUE = "";
     private static final Logger logger = LogManager.getLogger(TableBuilder.class);
 
@@ -54,6 +54,9 @@ public class TableBuilder {
             try (ResultSet keys = dbMetaData.getPrimaryKeys("", "", name)) {
                 table.setPrimaryKey(keys.next() ? keys.getString("COLUMN_NAME") : "");
             }
+            //Sets primary key if exist
+            String pk = table.getPrimaryKey();
+            table.getColumns().forEach(c -> c.setPrimaryKey(pk != null && pk.equals(c.getColumnName())));
         } catch (SQLException e) {
             logger.error("TableBuilder error in getTable: " + e);
         }

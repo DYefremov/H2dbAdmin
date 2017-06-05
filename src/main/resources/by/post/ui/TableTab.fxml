@@ -1,53 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.cell.TextFieldTableCell ?>
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableTabController">
+<VBox xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableTabController">
    <children>
-      <Label alignment="CENTER" text="Table clolumns">
-         <font>
-            <Font name="System Bold" size="13.0" />
-         </font>
-      </Label>
-      <TableView fx:id="columnsTable" editable="true" prefHeight="240.0">
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-         <columns>
-            <TableColumn prefWidth="75.0" text="Name">
-               <cellFactory>
-                  <TextFieldTableCell fx:factory="forTableColumn" />
-               </cellFactory>
-               <cellValueFactory>
-                  <PropertyValueFactory property="columnName" />
-               </cellValueFactory>
-            </TableColumn>
-            <TableColumn prefWidth="75.0" text="Type">
-               <cellFactory>
-                  <TextFieldTableCell fx:factory="forTableColumn" />
-               </cellFactory>
-               <cellValueFactory>
-                  <PropertyValueFactory property="type" />
-               </cellValueFactory>
-            </TableColumn>
-            <TableColumn prefWidth="75.0" text="Key">
-               <cellValueFactory>
-                  <PropertyValueFactory property="primaryKey" />
-               </cellValueFactory>
-            </TableColumn>
-         </columns>
-      </TableView>
-      <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: lightgray;" />
-      <TableView editable="true" prefHeight="200.0" prefWidth="200.0">
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy></TableView>
+      <BorderPane>
+         <center>
+                <TableView fx:id="columnsTable" editable="true" tableMenuButtonVisible="true">
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                    <columns>
+                        <TableColumn prefWidth="75.0" text="NAME">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="columnName" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="75.0" text="TYPE">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="type" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="75.0" text="PIMARY KEY">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="primaryKey" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="75.0" text="AUTO INCREMENT">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="autoIncrement" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="75.0" text="NOT NULL">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="notNull" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onNewColumnAdd" text="New" />
+                      <MenuItem mnemonicParsing="false" onAction="#onEditColumn" text="Edit" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#onDeleteColumn" text="Delete" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+                </TableView>
+         </center>
+         <top>
+                  <Label alignment="CENTER" maxHeight="-Infinity" prefHeight="30.0" text="Table clolumns:" BorderPane.alignment="CENTER">
+                      <font>
+                          <Font name="System Bold" size="13.0" />
+                      </font>
+                  </Label>
+         </top>
+      </BorderPane>
+        <TableView fx:id="dataTable" editable="true">
+            <placeholder>
+                <Label text="" />
+            </placeholder>
+        </TableView>
    </children>
 </VBox>

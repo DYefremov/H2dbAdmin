@@ -3,4 +3,4 @@
 <?import javafx.scene.control.TabPane?>
 
 
-<TabPane fx:id="tabPane" prefHeight="240.0" prefWidth="320.0" tabClosingPolicy="ALL_TABS" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTabPaneController" />
+<TabPane fx:id="tabPane" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" tabClosingPolicy="ALL_TABS" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTabPaneController" />
