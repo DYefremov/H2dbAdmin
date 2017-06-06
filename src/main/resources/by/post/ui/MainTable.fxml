@@ -9,14 +9,22 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTableController">
-    <center>
-        <TableView fx:id="mainTable" editable="true" minWidth="-Infinity" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked" prefHeight="330.0" prefWidth="400.0" stylesheets="@Ui.css">
+<VBox alignment="BOTTOM_LEFT" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTableController">
+    <children>
+        <Label text="Rows:">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+            <VBox.margin>
+                <Insets left="5.0" />
+            </VBox.margin>
+        </Label>
+        <TableView fx:id="mainTable" editable="true" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked" stylesheets="@Ui.css">
             <placeholder>
                 <Label text="" />
             </placeholder>
@@ -29,12 +37,7 @@
                 </ContextMenu>
             </contextMenu>
         </TableView>
-    </center>
-    <bottom>
         <HBox fx:id="tableViewToolBar" alignment="BOTTOM_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" styleClass="bar">
-            <BorderPane.margin>
-                <Insets />
-            </BorderPane.margin>
             <children>
                 <HBox fx:id="toolBarButtonsHBox" alignment="CENTER_LEFT">
                     <children>
@@ -42,45 +45,41 @@
                             <tooltip>
                                 <Tooltip text="%AddNewRow" />
                             </tooltip>
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor>
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" top="2.0" />
+                     </HBox.margin>
                         </Button>
                         <Button mnemonicParsing="false" onAction="#onRemoveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/list-remove.png);">
                             <tooltip>
                                 <Tooltip text="%DeleteRow" />
                             </tooltip>
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor>
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" top="2.0" />
+                     </HBox.margin>
                         </Button>
                         <Button mnemonicParsing="false" onAction="#onSaveRow" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/enter.png);">
                             <tooltip>
                                 <Tooltip text="%SaveChanges" />
                             </tooltip>
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor>
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" top="2.0" />
+                     </HBox.margin>
                         </Button>
                     </children>
                 </HBox>
                 <Pane prefHeight="26.0" prefWidth="60.0" HBox.hgrow="SOMETIMES" />
                 <HBox fx:id="filterBox" alignment="CENTER_LEFT" spacing="5.0">
                     <children>
-                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/filter.png);">
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
-                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" style="-fx-background-image: url(/img/filter.png);" />
                         <TextField fx:id="filterTextField" onKeyReleased="#onFilter" prefHeight="26.0" prefWidth="150.0" />
                     </children>
                     <padding>
@@ -90,11 +89,5 @@
                 <Pane prefHeight="30.0" prefWidth="165.0" HBox.hgrow="SOMETIMES" />
             </children>
         </HBox>
-    </bottom>
-    <top>
-        <Label fx:id="currentTableName" textAlignment="CENTER" BorderPane.alignment="CENTER">
-            <font>
-                <Font name="System Bold" size="13.0" />
-            </font></Label>
-    </top>
-</BorderPane>
+    </children>
+</VBox>

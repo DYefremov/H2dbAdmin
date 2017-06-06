@@ -1,6 +1,6 @@
 package by.post.control.ui;
 
-import by.post.control.db.TableType;
+import by.post.control.Context;
 import by.post.data.Table;
 import by.post.ui.MainUiForm;
 import javafx.application.Platform;
@@ -13,6 +13,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -37,13 +38,6 @@ public class MainTabPaneController {
     }
 
     /**
-     * @param tableType
-     */
-    public void setTableType(TableType tableType) {
-
-    }
-
-    /**
      * Clear all tabs
      */
     public void clearTabs() {
@@ -56,6 +50,7 @@ public class MainTabPaneController {
     public void selectTable(Table table) {
 
         FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("TableTab.fxml"));
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
         TableTabController controller;
 
         Node node = null;

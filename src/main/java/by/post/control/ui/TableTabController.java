@@ -1,14 +1,12 @@
 package by.post.control.ui;
 
-import by.post.control.db.TableDataResolver;
 import by.post.data.Column;
-import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.ColumnDialog;
 import by.post.ui.ConfirmationDialog;
 import javafx.fxml.FXML;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 
 import java.util.Optional;
 
@@ -20,11 +18,31 @@ public class TableTabController {
     @FXML
     private TableView<Column> columnsTable;
     @FXML
-    private TableView<Row> dataTable;
+    private TableColumn<Column, String> nameColumn;
+    @FXML
+    private TableColumn<Column, String> typeColumn;
+    @FXML
+    private TableColumn<Column, Boolean> keyColumn;
+    @FXML
+    private TableColumn<Column, Boolean> incrementColumn;
+    @FXML
+    private TableColumn<Column, Boolean> notNullColumn;
+    @FXML
+    private Label tableNameLabel;
+    @FXML
+    private Label typeLabel;
+    @FXML
+    private MainTableController mainTableController;
 
+    private Table table;
 
     public TableTabController() {
 
+    }
+
+    @FXML
+    public void onShowData() {
+        mainTableController.setTable(table);
     }
 
     @FXML
@@ -40,7 +58,14 @@ public class TableTabController {
     @FXML
     public void onEditColumn() {
 
-        Optional<Column> result = new ColumnDialog(columnsTable.getSelectionModel().getSelectedItem()).showAndWait();
+        Column column = columnsTable.getSelectionModel().getSelectedItem();
+
+        if (column == null) {
+            new Alert(Alert.AlertType.ERROR, "No item is selected!").showAndWait();
+            return;
+        }
+
+        Optional<Column> result = new ColumnDialog().showAndWait();
 
         if (result.isPresent()) {
             System.out.println(result.get());
@@ -57,16 +82,30 @@ public class TableTabController {
         }
     }
 
+    /**
+     * @param table
+     */
     public void setTable(Table table) {
 
-        TableDataResolver resolver = new TableDataResolver(table);
+        this.table = table;
+        tableNameLabel.setText(table.getName());
+        typeLabel.setText(table.getType() != null ? table.getType().name() : "");
         columnsTable.getItems().addAll(table.getColumns());
-        dataTable.getColumns().addAll(resolver.getTableColumns());
-        dataTable.getItems().addAll(resolver.getItems());
     }
 
     @FXML
     private void initialize() {
 
+        initColumns();
+    }
+
+    /**
+     * Initialize columns (sets cell factory)
+     */
+    private void initColumns() {
+
+        keyColumn.setCellFactory(CheckBoxTableCell.forTableColumn(keyColumn));
+        incrementColumn.setCellFactory(CheckBoxTableCell.forTableColumn(incrementColumn));
+        notNullColumn.setCellFactory(CheckBoxTableCell.forTableColumn(notNullColumn));
     }
 }

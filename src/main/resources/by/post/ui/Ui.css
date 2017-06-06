@@ -18,10 +18,10 @@
    -fx-background-size: 20px;
 }
 
-/*.table-view {*/
+.table-view {
    /*-fx-background-image: url(/img/logo.png);*/
    /*-fx-background-size:  cover;*/
-/*}*/
+}
 
 /* SplitPane style for divider  */
 .split-pane  .split-pane-divider {
@@ -56,9 +56,13 @@
 	-fx-background-color: black;
 }
 
-/* Style for buttons styled as icons.*/
+/* Styles for buttons styled as icons.*/
 .button {
     -fx-background-color: transparent, transparent, transparent, transparent;
+}
+
+.button:hover {
+    -fx-background-color: gray, lightgray, transparent, transparent;
 }
 
 /* Style for insert objects button on button bar (remove arrow !!!) */
@@ -73,7 +77,7 @@
 /* Style for Status bar */
 .status-bar {
     -fx-border-insets: 1;
-    -fx-border-color: -fx-text-box-border;
+   // -fx-border-color: -fx-text-box-border;
     -fx-border-width: 1;
     -fx-background-color:  -fx-background;
 }

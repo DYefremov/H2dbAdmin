@@ -3,6 +3,7 @@ package by.post.control.ui;
 import by.post.control.Context;
 import by.post.control.db.TableDataResolver;
 import by.post.control.db.TableEditor;
+import by.post.control.db.TableType;
 import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.ConfirmationDialog;
@@ -29,8 +30,6 @@ public class MainTableController {
 
     @FXML
     private TableView<Row> mainTable;
-    @FXML
-    private Label currentTableName;
     @FXML
     private TextField filterTextField;
     @FXML
@@ -114,23 +113,13 @@ public class MainTableController {
         filterPause.playFromStart();
     }
 
-    /**
-     * @param isType
-     */
-    public void setTableType(boolean isType) {
-        isTableType.set(isType);
-    }
-
     public void setTable(Table table) {
 
         logger.info("Select table: " + table.getName());
         inFiltering = false;
         filterTextField.clear();
         clearMainTable();
-        // Set text for current table name label by selected tree item.
-        String name = table.getName();
-        currentTableName.setText(name);
-        mainTable.setId(name);
+        setTableType(table.getType());
 
         TableDataResolver resolver = new TableDataResolver(table);
 
@@ -161,7 +150,6 @@ public class MainTableController {
      * Clear main table
      */
     public void clearMainTable() {
-        currentTableName.setText("");
         mainTable.getColumns().clear();
         mainTable.getItems().clear();
     }
@@ -185,11 +173,18 @@ public class MainTableController {
         //Set multiple selection in table view
         mainTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         //Show toolbar only if any table selected
-        tableViewToolBar.visibleProperty().bind(currentTableName.textProperty().isNotEmpty());
+//        tableViewToolBar.visibleProperty().bind(currentTableName.textProperty().isNotEmpty());
         //Show buttons only if no system table or view selected
         toolBarButtonsHBox.visibleProperty().bind(isTableType);
 
         Context.setMainTableView(mainTable);
+    }
+
+    /**
+     * @param type
+     */
+    private void setTableType(TableType type) {
+        isTableType.set(type != null && type.equals(TableType.TABLE));
     }
 
     /**

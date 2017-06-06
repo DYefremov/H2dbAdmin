@@ -167,7 +167,6 @@ public class MainUiController {
      */
     public void onTableSelect(TypedTreeItem item) {
 
-        mainTabPaneController.setTableType(item.getType());
         tableEditor.clearSavedData();
         selectTable(item);
     }

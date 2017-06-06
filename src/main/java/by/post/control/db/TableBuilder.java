@@ -37,7 +37,7 @@ public class TableBuilder {
      */
     public Table getTable(String name, TableType type, Connection connection) {
 
-        Table table = new Table(name);
+        Table table = new Table(name, type);
         boolean isSysTable = type.equals(TableType.SYSTEM_TABLE);
 
         try (Statement st = connection.createStatement()) {
