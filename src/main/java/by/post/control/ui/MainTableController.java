@@ -118,6 +118,7 @@ public class MainTableController {
         logger.info("Select table: " + table.getName());
         inFiltering = false;
         filterTextField.clear();
+        mainTable.setId(table.getName());
         clearMainTable();
         setTableType(table.getType());
 

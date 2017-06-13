@@ -2,6 +2,7 @@ package by.post.control.ui;
 
 import by.post.data.Table;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 
 /**
@@ -20,6 +21,10 @@ public class TableTabController {
 
     public TableTabController() {
 
+    }
+
+    public void onSearch() {
+        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet").showAndWait();
     }
 
     /**

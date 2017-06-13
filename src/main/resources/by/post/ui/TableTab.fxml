@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
@@ -46,11 +47,14 @@
             <items>
                 <Label text="Max Rows:" />
                 <TextField prefHeight="26.0" prefWidth="75.0" text="100" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
                 <Button mnemonicParsing="false" style="-fx-background-image: url(/img/go-previous.png);" />
                 <Button mnemonicParsing="false" style="-fx-background-image: url(/img/go-next.png);" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+                <Button mnemonicParsing="false" onAction="#onSearch" style="-fx-background-image: url(/img/search.png);" />
             </items>
         </ToolBar>
-        <!--Include main table for working with a data (rows) -->
+        <!--Include main table for working with a data -->
         <fx:include fx:id="mainTable" source="MainTable.fxml" />
     </children>
 </VBox>
