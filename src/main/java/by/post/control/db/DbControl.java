@@ -54,7 +54,7 @@ public interface DbControl {
      * @param type
      * @return data for table
      */
-    Collection<?> getTableData(String tableName, TableType type);
+    Collection<?> getTableData(String tableName, TableType type, int limit, int offset);
 
     /**
      * @param table

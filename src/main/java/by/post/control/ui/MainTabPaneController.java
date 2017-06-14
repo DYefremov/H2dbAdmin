@@ -1,7 +1,7 @@
 package by.post.control.ui;
 
 import by.post.control.Context;
-import by.post.data.Table;
+import by.post.control.db.TableType;
 import by.post.ui.MainUiForm;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -45,9 +45,10 @@ public class MainTabPaneController {
     }
 
     /**
-     * @param table
+     * @param tableName
+     * @param tableType
      */
-    public void selectTable(Table table) {
+    public void selectTable(String tableName, TableType tableType) {
 
         FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("TableTab.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
@@ -57,17 +58,17 @@ public class MainTabPaneController {
         try {
             node = loader.load();
             controller = loader.getController();
-            controller.setTable(table);
+            controller.selectTable(tableName, tableType);
         } catch (IOException e) {
             e.printStackTrace();
         }
         //Searching for whether the tab for this table is already been opened.
         Tab tab = tabPane.getTabs().isEmpty() ? null : tabPane.getTabs().stream()
-                        .filter(t -> t.getText().equals(table.getName()))
+                        .filter(t -> t.getText().equals(tableName))
                         .findFirst().orElse(null);
 
         if (tab == null) {
-            tab = getTab(table.getName(), node);
+            tab = getTab(tableName, node);
             tabPane.getTabs().add(tab);
         }
 

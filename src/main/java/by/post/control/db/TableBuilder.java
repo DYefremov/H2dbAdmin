@@ -21,7 +21,7 @@ public class TableBuilder {
 
     private ColumnDataType columnDataType;
     //The limit for the maximum number of rows for the first request receiving table
-    public static final int MAX_ROWS = 100;
+    public static final int MAX_ROWS = 1;
     public static final String DEF_VALUE = "";
     private static final Logger logger = LogManager.getLogger(TableBuilder.class);
 
@@ -65,17 +65,18 @@ public class TableBuilder {
     }
 
     /**
+     *
      * @param name
      * @param type
      * @param connection
      * @return
      */
-    public Collection<?> getTableData(String name, TableType type, Connection connection) {
+    public Collection<?> getTableData(String name, TableType type, Connection connection, int limit, int offset) {
 
         boolean isSysTable = type.equals(TableType.SYSTEM_TABLE);
 
         try (Statement st = connection.createStatement()) {
-            st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTableWithLimit(name, MAX_ROWS, 0, true));
+            st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTableWithLimit(name, limit, offset));
 
             try (ResultSet rs = st.getResultSet()) {
                 return getRows(rs);

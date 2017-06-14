@@ -19,6 +19,7 @@ import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -136,8 +137,15 @@ public class MainTableController {
     /**
      * @param data
      */
-    public void addData(List<Row> data) {
+    public void addData(Collection<Row> data) {
         mainTable.getItems().addAll(data);
+    }
+
+    public void setData(Collection<Row> data) {
+
+        mainTable.getItems().clear();
+        mainTable.getItems().addAll(data);
+        mainTable.refresh();
     }
 
     /**

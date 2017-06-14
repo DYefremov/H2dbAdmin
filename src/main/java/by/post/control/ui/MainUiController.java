@@ -4,8 +4,6 @@ import by.post.control.Context;
 import by.post.control.PropertiesController;
 import by.post.control.Settings;
 import by.post.control.db.DatabaseManager;
-import by.post.control.db.DbControl;
-import by.post.control.db.DbController;
 import by.post.control.db.TableEditor;
 import by.post.data.Table;
 import by.post.data.View;
@@ -49,7 +47,6 @@ public class MainUiController {
     private MainTabPaneController mainTabPaneController;
 
     private TabPane tabPane;
-    private DbControl dbControl;
     private MainUiForm mainUiForm;
     private TableEditor tableEditor;
     private DatabaseManager databaseManager;
@@ -204,7 +201,6 @@ public class MainUiController {
      */
     private void init() {
 
-        dbControl = DbController.getInstance();
         tableEditor = TableEditor.getInstance();
         databaseManager = DatabaseManager.getInstance();
     }
@@ -258,24 +254,11 @@ public class MainUiController {
         setBusy(true);
         Context.setLoadData(false);
 
-        Table table = dbControl.getTable((String) item.getValue(), item.getType());
-
         Platform.runLater(() -> {
-            selectTable(table);
-            Context.setLoadData(false);
+            showTabPane(true);
+            mainTabPaneController.selectTable(String.valueOf(item.getValue()), item.getType());
             setBusy(false);
         });
-    }
-
-    /**
-     * Select and display the selected table
-     *
-     * @param table
-     */
-    private void selectTable(Table table) {
-
-        showTabPane(true);
-        mainTabPaneController.selectTable(table);
     }
 
     /**

@@ -21,21 +21,15 @@ public class Queries {
         return "SELECT * FROM " + tableName.toUpperCase();
     }
 
-
     /**
-     *
      * @param tableName
-     * @param start
-     * @param end
-     * @param toMax
-     * @return Table with rows from start to end indexes. If toMax - from start to max count of rows in given table.
+     * @param limit
+     * @return Table with rows .
      */
-    public static String getTableWithLimit(String tableName, int start, int end, boolean toMax) {
+    public static String getTableWithLimit(String tableName, int limit, int offset) {
 
         StringBuilder sb = new StringBuilder(getTable(tableName));
-        sb.append(" LIMIT " + start +",(");
-        sb.append(toMax ? getRecordsCount(tableName) : end);
-        sb.append(")");
+        sb.append(" LIMIT " + limit + " OFFSET " + offset);
 
         return sb.toString();
     }

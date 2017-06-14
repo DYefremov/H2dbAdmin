@@ -140,8 +140,8 @@ public class DbController implements DbControl {
     }
 
     @Override
-    public Collection<?> getTableData(String tableName, TableType type) {
-        return tableBuilder.getTableData(tableName, type, connection);
+    public Collection<?> getTableData(String tableName, TableType type, int limit, int offset) {
+        return tableBuilder.getTableData(tableName, type, connection, limit, offset);
     }
 
     /**
