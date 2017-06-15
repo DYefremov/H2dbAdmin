@@ -7,7 +7,9 @@ import by.post.data.Row;
 import by.post.data.Table;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.util.Collection;
 
@@ -21,10 +23,17 @@ public class TableTabController {
     @FXML
     private Label typeLabel;
     @FXML
+    private TextField maxRowsTextField;
+    @FXML
+    private Button prevButton;
+    @FXML
+    private Button nextButton;
+    @FXML
     private MainTableController mainTableController;
 
-    private int offset = 0;
-    private int rowsLimit = 1;
+    private int offset;
+    private int rowsLimit;
+    private int dataSize;
     private Table table;
     private DbControl dbControl;
 
@@ -38,14 +47,26 @@ public class TableTabController {
 
     @FXML
     public void onNext() {
-        offset++;
-        setData();
+        updateData(true);
     }
 
     @FXML
     public void onPrevious() {
-        offset--;
-        setData();
+        updateData(false);
+    }
+
+    @FXML
+    public void onMaxRowsChanged() {
+
+        String value = maxRowsTextField.getText();
+
+        if (value == "" || !value.matches("\\d+")) {
+            maxRowsTextField.setStyle("-fx-border-color: red; -fx-border-width: 2px; -fx-border-radius: 3px");
+            return;
+        }
+
+        maxRowsTextField.setStyle(null);
+        rowsLimit = Integer.valueOf(value);
     }
 
     /**
@@ -58,20 +79,47 @@ public class TableTabController {
         typeLabel.setText(tableType != null ? tableType.name() : "");
         table = dbControl.getTable(tableName, tableType);
         mainTableController.setTable(table);
+        dataSize = table.getData().size();
+        updateNavigationButtons();
     }
 
     @FXML
     private void initialize() {
+
         dbControl = DbController.getInstance();
+        rowsLimit = Integer.valueOf(maxRowsTextField.getText());
     }
 
-    private void setData() {
+    /**
+     * Receiving and updating table data while navigating
+     *
+     * @param next
+     */
+    private void updateData(boolean next) {
+
+        if (next) {
+            offset += rowsLimit;
+        } else {
+            offset = offset < 0 ? 0 : offset - rowsLimit;
+        }
 
         Collection<Row> data = (Collection<Row>) dbControl.getTableData(table.getName(), table.getType(), rowsLimit, offset);
+
+        dataSize = data.size();
+        updateNavigationButtons();
 
         if (!data.isEmpty()) {
             mainTableController.setData(data);
         }
+    }
+
+    /**
+     * Updating disable property for navigation buttons
+     */
+    private void updateNavigationButtons() {
+
+        prevButton.setDisable(offset == 0);
+        nextButton.setDisable(dataSize < rowsLimit);
     }
 
 }

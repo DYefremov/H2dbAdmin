@@ -21,7 +21,7 @@ public class TableBuilder {
 
     private ColumnDataType columnDataType;
     //The limit for the maximum number of rows for the first request receiving table
-    public static final int MAX_ROWS = 1;
+    public static final int MAX_ROWS = 100;
     public static final String DEF_VALUE = "";
     private static final Logger logger = LogManager.getLogger(TableBuilder.class);
 
