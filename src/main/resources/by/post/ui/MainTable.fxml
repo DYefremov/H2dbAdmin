@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTableController">
+<BorderPane stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTableController">
    <center>
         <TableView fx:id="mainTable" editable="true" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked" stylesheets="@Ui.css">
             <placeholder>

@@ -7,54 +7,62 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableTabController">
-    <children>
-        <HBox alignment="BOTTOM_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" BorderPane.alignment="BOTTOM_CENTER">
-            <BorderPane.margin>
-                <Insets left="5.0" />
-            </BorderPane.margin>
+<BorderPane stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableTabController">
+    <top>
+        <VBox BorderPane.alignment="CENTER">
             <children>
-                <VBox alignment="CENTER" HBox.hgrow="SOMETIMES">
+                <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0">
                     <children>
                         <Label fx:id="tableNameLabel" text="Table name">
                             <font>
-                                <Font name="System Bold" size="14.0" />
+                                <Font name="System Bold" size="14.0"/>
                             </font>
                         </Label>
                         <Label fx:id="typeLabel" text="Type">
                             <font>
-                                <Font size="10.0" />
+                                <Font size="10.0"/>
                             </font>
                         </Label>
                     </children>
-                    <HBox.margin>
-                        <Insets />
-                    </HBox.margin>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                    <padding>
+                        <Insets bottom="2.0" top="5.0"/>
+                    </padding>
                 </VBox>
+                <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" styleClass="bar">
+                    <items>
+                        <Label text="Max rows:">
+                            <padding>
+                                <Insets left="5.0"/>
+                            </padding>
+                        </Label>
+                        <TextField fx:id="maxRowsTextField" onKeyReleased="#onMaxRowsChanged" prefHeight="26.0" prefWidth="75.0" text="100"/>
+                        <Separator orientation="VERTICAL" prefHeight="200.0"/>
+                        <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevious"
+                                style="-fx-background-image: url(/img/go-previous.png);"/>
+                        <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNext" style="-fx-background-image: url(/img/go-next.png);"/>
+                        <Separator orientation="VERTICAL" prefHeight="22.0" prefWidth="0.0"/>
+                        <Button mnemonicParsing="false" onAction="#onRefresh" style="-fx-background-image: url(/img/refresh.png);"/>
+                        <Separator orientation="VERTICAL" prefHeight="200.0"/>
+                        <Button mnemonicParsing="false" onAction="#onSearch" style="-fx-background-image: url(/img/search.png);"/>
+                    </items>
+                </ToolBar>
             </children>
-         <VBox.margin>
-            <Insets top="5.0" />
-         </VBox.margin>
-        </HBox>
-        <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" styleClass="bar">
-            <items>
-                <Label text="Max rows:" />
-                <TextField fx:id="maxRowsTextField" onKeyReleased="#onMaxRowsChanged" prefHeight="26.0" prefWidth="75.0" text="100" />
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-                <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevious" style="-fx-background-image: url(/img/go-previous.png);" />
-                <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNext" style="-fx-background-image: url(/img/go-next.png);" />
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-                <Button mnemonicParsing="false" onAction="#onSearch" style="-fx-background-image: url(/img/search.png);" />
-            </items>
-        </ToolBar>
+            <BorderPane.margin>
+                <Insets/>
+            </BorderPane.margin>
+        </VBox>
+    </top>
+    <center>
         <!--Include main table for working with a data -->
-        <fx:include fx:id="mainTable" source="MainTable.fxml" />
-    </children>
-</VBox>
+        <fx:include fx:id="mainTable" source="MainTable.fxml"/>
+    </center>
+</BorderPane>

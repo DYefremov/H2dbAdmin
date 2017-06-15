@@ -69,6 +69,11 @@ public class TableTabController {
         rowsLimit = Integer.valueOf(value);
     }
 
+    @FXML
+    public void onRefresh() {
+        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet").showAndWait();
+    }
+
     /**
      * @param tableName
      * @param tableType
