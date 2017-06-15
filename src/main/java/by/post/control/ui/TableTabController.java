@@ -7,13 +7,11 @@ import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.DataSelectionDialog;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -50,12 +48,16 @@ public class TableTabController {
 
     @FXML
     public void onNext() {
-        updateData(true);
+
+        offset += rowsLimit;
+        updateData();
     }
 
     @FXML
     public void onPrevious() {
-        updateData(false);
+
+        offset = offset < 0 ? 0 : offset - rowsLimit;
+        updateData();
     }
 
     @FXML
@@ -74,6 +76,7 @@ public class TableTabController {
 
     @FXML
     public void onRefresh() {
+
         new Alert(Alert.AlertType.INFORMATION, "Not implemented yet").showAndWait();
     }
 
@@ -100,16 +103,8 @@ public class TableTabController {
 
     /**
      * Receiving and updating table data while navigating
-     *
-     * @param next
      */
-    private void updateData(boolean next) {
-
-        if (next) {
-            offset += rowsLimit;
-        } else {
-            offset = offset < 0 ? 0 : offset - rowsLimit;
-        }
+    private void updateData() {
 
         Collection<Row> data = (Collection<Row>) dbControl.getTableData(table.getName(), table.getType(), rowsLimit, offset);
 
