@@ -5,12 +5,15 @@ import by.post.control.db.DbController;
 import by.post.control.db.TableType;
 import by.post.data.Row;
 import by.post.data.Table;
+import by.post.ui.DataSelectionDialog;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -42,7 +45,7 @@ public class TableTabController {
     }
 
     public void onSearch() {
-        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet").showAndWait();
+        new DataSelectionDialog().showAndWait();
     }
 
     @FXML
@@ -84,7 +87,7 @@ public class TableTabController {
         typeLabel.setText(tableType != null ? tableType.name() : "");
         table = dbControl.getTable(tableName, tableType);
         mainTableController.setTable(table);
-        dataSize = table.getData().size();
+        dataSize = table.getData() != null ? table.getData().size() : 0;
         updateNavigationButtons();
     }
 
