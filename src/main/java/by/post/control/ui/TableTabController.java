@@ -82,6 +82,10 @@ public class TableTabController {
         new Alert(Alert.AlertType.INFORMATION, "Not implemented yet").showAndWait();
     }
 
+    public boolean hasNotSavedData() {
+        return tableEditor.hasNotSavedData();
+    }
+
     /**
      * @param tableName
      * @param tableType

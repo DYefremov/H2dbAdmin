@@ -235,7 +235,11 @@ public class MainUiController {
 
         Platform.runLater(() -> {
             showTabPane(true);
-            mainTabPaneController.selectTable(String.valueOf(item.getValue()), item.getType());
+            try {
+                mainTabPaneController.selectTable(String.valueOf(item.getValue()), item.getType());
+            } catch (IOException e) {
+                logger.error("MainUiController error [selectTable]: " + e);
+            }
             setBusy(false);
         });
     }

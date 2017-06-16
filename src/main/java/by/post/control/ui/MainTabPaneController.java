@@ -2,17 +2,18 @@ package by.post.control.ui;
 
 import by.post.control.Context;
 import by.post.control.db.TableType;
+import by.post.ui.ConfirmationDialog;
 import by.post.ui.MainUiForm;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -48,41 +49,47 @@ public class MainTabPaneController {
      * @param tableName
      * @param tableType
      */
-    public void selectTable(String tableName, TableType tableType) {
+    public void selectTable(String tableName, TableType tableType) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("TableTab.fxml"));
-        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-        TableTabController controller;
-
-        Node node = null;
-        try {
-            node = loader.load();
-            controller = loader.getController();
-            controller.selectTable(tableName, tableType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         //Searching for whether the tab for this table is already been opened.
         Tab tab = tabPane.getTabs().isEmpty() ? null : tabPane.getTabs().stream()
-                        .filter(t -> t.getText().equals(tableName))
-                        .findFirst().orElse(null);
+                .filter(t -> t.getText().equals(tableName))
+                .findFirst().orElse(null);
 
-        if (tab == null) {
-            tab = getTab(tableName, node);
-            tabPane.getTabs().add(tab);
+        if (tab != null) {
+            tabPane.getSelectionModel().select(tab);
+            return;
         }
 
+        tab = getTab(tableName, tableType);
+        tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }
 
     /**
-     * @param name
-     * @param node
-     * @return
+     * @param tableName
+     * @param tableType
+     * @return new tab
      */
-    private Tab getTab(String name, Node node) {
+    private Tab getTab(String tableName, TableType tableType) throws IOException {
 
-        Tab tab = new Tab(name, node);
+        FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("TableTab.fxml"));
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
+        Node node = loader.load();
+        TableTabController controller = loader.getController();
+        controller.selectTable(tableName, tableType);
+
+        Tab tab = new Tab(tableName, node);
+        
+        tab.setOnCloseRequest(event -> {
+            if (controller.hasNotSavedData()) {
+                Optional<ButtonType> result = new ConfirmationDialog("You have unsaved data. Continue?").showAndWait();
+                if (result.get() != ButtonType.OK) {
+                    event.consume();
+                }
+            }
+        });
+
         tab.setOnClosed(event -> {
             if (tabPane.getTabs().isEmpty()) {
                 Platform.runLater(() -> mainController.showTabPane(false));
@@ -91,10 +98,10 @@ public class MainTabPaneController {
 
         MenuItem item = new MenuItem("Close all");
         item.setOnAction(event ->
-            Platform.runLater(() -> {
-                tabPane.getTabs().clear();
-                Platform.runLater(() -> mainController.showTabPane(false));
-        }));
+                Platform.runLater(() -> {
+                    tabPane.getTabs().clear();
+                    Platform.runLater(() -> mainController.showTabPane(false));
+                }));
 
         tab.setContextMenu(new ContextMenu(item));
 
