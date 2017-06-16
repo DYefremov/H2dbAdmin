@@ -2,6 +2,7 @@ package by.post.control.ui;
 
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
+import by.post.control.db.TableEditor;
 import by.post.control.db.TableType;
 import by.post.data.Row;
 import by.post.data.Table;
@@ -37,6 +38,7 @@ public class TableTabController {
     private int dataSize;
     private Table table;
     private DbControl dbControl;
+    private TableEditor tableEditor;
 
     public TableTabController() {
 
@@ -99,6 +101,7 @@ public class TableTabController {
 
         dbControl = DbController.getInstance();
         rowsLimit = Integer.valueOf(maxRowsTextField.getText());
+        tableEditor = mainTableController.getTableEditor();
     }
 
     /**

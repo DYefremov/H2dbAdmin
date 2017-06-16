@@ -5,10 +5,11 @@ import by.post.control.PropertiesController;
 import by.post.control.Settings;
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
-import by.post.control.db.TableEditor;
 import by.post.control.db.TableType;
+import by.post.control.db.TablesCommander;
 import by.post.data.Table;
 import by.post.data.View;
+import by.post.ui.ConfirmationDialog;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -19,11 +20,10 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -48,7 +48,7 @@ public class MainTableTreeController {
     private Menu menuNew;
 
     private DbControl dbControl;
-    private TableEditor tableEditor;
+    private TablesCommander tablesCommander;
     private MainUiController mainController;
     private final InitService initService = new InitService();
 
@@ -76,16 +76,22 @@ public class MainTableTreeController {
     }
 
     public void addNewTable(Table table) {
-        tableEditor.addTable(tableTree, table, getItemImage("table.png"));
+        tablesCommander.addTable(tableTree, table, getItemImage("table.png"));
     }
 
     public void addNewView(View view) {
-        tableEditor.addView(tableTree, view, getItemImage("view.png"));
+        tablesCommander.addView(tableTree, view, getItemImage("view.png"));
     }
 
     @FXML
     public void onTableDelete() {
-        mainController.onTableDelete();
+
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            mainController.clearMainTable();
+            tablesCommander.deleteTable(tableTree);
+        }
     }
 
     /**
@@ -170,21 +176,12 @@ public class MainTableTreeController {
     private void initialize() {
 
         dbControl = DbController.getInstance();
-        tableEditor = TableEditor.getInstance();
-        initSelectionModel();
+        tablesCommander = TablesCommander.getInstance();
+        //Initialization of selection property
+        tableTree.getSelectionModel().selectedItemProperty().addListener(getChangeListener());
         init();
         //Set context
         Context.setMainTableTree(tableTree);
-    }
-
-    /**
-     * Initialization of selection properties
-     */
-    private void initSelectionModel() {
-
-        tableTree.getSelectionModel().selectedItemProperty().addListener(getChangeListener());
-        tableTree.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> mainController.checkIsDataStored(event));
-        tableTree.addEventFilter(KeyEvent.KEY_PRESSED, event -> mainController.checkIsDataStored(event));
     }
 
     /**

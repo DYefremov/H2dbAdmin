@@ -4,13 +4,11 @@ import by.post.control.Context;
 import by.post.control.PropertiesController;
 import by.post.control.Settings;
 import by.post.control.db.DatabaseManager;
-import by.post.control.db.TableEditor;
 import by.post.data.Table;
 import by.post.data.View;
 import by.post.data.type.Dbms;
 import by.post.ui.*;
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -48,7 +46,6 @@ public class MainUiController {
 
     private TabPane tabPane;
     private MainUiForm mainUiForm;
-    private TableEditor tableEditor;
     private DatabaseManager databaseManager;
 
     private static final Logger logger = LogManager.getLogger(MainUiController.class);
@@ -97,16 +94,6 @@ public class MainUiController {
     @FXML
     public void onDbDrop() {
         databaseDelete(true);
-    }
-
-    public void onTableDelete() {
-
-        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
-
-        if (result.get() == ButtonType.OK) {
-            clearMainTable();
-            tableEditor.deleteTable(Context.getMainTableTree());
-        }
     }
 
     @FXML
@@ -163,8 +150,6 @@ public class MainUiController {
      * @param item
      */
     public void onTableSelect(TypedTreeItem item) {
-
-        tableEditor.clearSavedData();
         selectTable(item);
     }
 
@@ -180,6 +165,15 @@ public class MainUiController {
         } else if (!show) {
             explorerSplitPane.getItems().remove(tabPane);
         }
+    }
+
+    /**
+     * Clear main table
+     */
+    public void clearMainTable() {
+
+        showTabPane(false);
+        mainTabPaneController.clearTabs();
     }
 
     @FXML
@@ -200,8 +194,6 @@ public class MainUiController {
      * Init on startup
      */
     private void init() {
-
-        tableEditor = TableEditor.getInstance();
         databaseManager = DatabaseManager.getInstance();
     }
 
@@ -214,19 +206,6 @@ public class MainUiController {
 
         if (driver.equals(Settings.DEFAULT_DRIVER)) {
             Context.setCurrentDbms(Dbms.H2);
-        }
-    }
-
-    /**
-     * @param event
-     */
-    public void checkIsDataStored(Event event) {
-
-        if (tableEditor.hasNotSavedData()) {
-            Optional<ButtonType> result = new ConfirmationDialog("You have unsaved data. Continue?").showAndWait();
-            if (result.get() != ButtonType.OK) {
-                event.consume();
-            }
         }
     }
 
@@ -317,15 +296,6 @@ public class MainUiController {
      */
     private void setBusy(boolean show) {
        mainTableTreeController.setBusy(show);
-    }
-
-    /**
-     * Clear main table
-     */
-    private void clearMainTable() {
-
-        showTabPane(false);
-        mainTabPaneController.clearTabs();
     }
 
     /**

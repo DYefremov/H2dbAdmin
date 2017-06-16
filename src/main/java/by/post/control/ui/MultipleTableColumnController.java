@@ -34,6 +34,17 @@ public class MultipleTableColumnController {
 
     }
 
+    public void setTableEditor(TableEditor tableEditor) {
+        this.tableEditor = tableEditor;
+    }
+
+    public void setHasContextMenu(boolean has) {
+
+        if (!has) {
+            tableColumn.setContextMenu(null);
+        }
+    }
+
     /**
      * On context  menu actions
      */
@@ -115,6 +126,7 @@ public class MultipleTableColumnController {
     }
 
     public void setIsKey(boolean isKey) {
+
         if (isKey) {
             this.type.getStyleClass().add("key");
         }
@@ -122,7 +134,7 @@ public class MultipleTableColumnController {
 
     @FXML
     private void initialize() {
-        tableEditor = TableEditor.getInstance();
+
     }
 
     /**

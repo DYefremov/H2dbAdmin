@@ -57,6 +57,10 @@ public class MainTableController {
 
     }
 
+    public TableEditor getTableEditor() {
+        return tableEditor;
+    }
+
     /**
      * Actions for selections in the table
      */
@@ -123,7 +127,7 @@ public class MainTableController {
         clearMainTable();
         setTableType(table.getType());
 
-        TableDataResolver resolver = new TableDataResolver(table);
+        TableDataResolver resolver = new TableDataResolver(table, tableEditor);
 
         if (!resolver.getTableColumns().isEmpty()) {
             mainTable.getColumns().addAll(resolver.getTableColumns());
@@ -166,9 +170,7 @@ public class MainTableController {
     @FXML
     private void initialize() {
 
-        tableEditor = TableEditor.getInstance();
-        tableEditor.setTable(mainTable);
-
+        tableEditor = new TableEditor(mainTable);
         tableNotEmpty = new SimpleBooleanProperty();
         isTableType = new SimpleBooleanProperty();
         //disabling editing in system tables and views

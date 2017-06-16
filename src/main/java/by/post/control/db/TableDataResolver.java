@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 public class TableDataResolver {
 
     private Table table;
+    private TableEditor tableEditor;
     private ObservableList tableColumns;
     private ObservableList<Row> items;
     private static ColumnDataType columnDataType;
@@ -42,6 +43,13 @@ public class TableDataResolver {
     public TableDataResolver(Table table) {
         this();
         this.table = table;
+        resolve();
+    }
+
+    public TableDataResolver(Table table, TableEditor tableEditor) {
+        this();
+        this.table = table;
+        this.tableEditor = tableEditor;
         resolve();
     }
 
@@ -125,6 +133,9 @@ public class TableDataResolver {
             columnController.setName(column.getColumnName());
             columnController.setType(column.getType());
             columnController.setIsKey(column.isPrimaryKey());
+            columnController.setTableEditor(tableEditor);
+            //Has context menu only if TableEditor is not null
+            columnController.setHasContextMenu(tableEditor != null);
         } catch (IOException e) {
             logger.error("TableDataResolver error in getColumn: " + e);
         }

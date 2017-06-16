@@ -1,16 +1,15 @@
 package by.post.control.db;
 
 import by.post.control.Context;
-import by.post.control.ui.TypedTreeItem;
-import by.post.data.*;
+import by.post.data.Cell;
+import by.post.data.Column;
+import by.post.data.Row;
 import by.post.data.type.ColumnDataType;
 import by.post.ui.ColumnDialog;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TreeView;
-import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,140 +28,22 @@ public class TableEditor {
     private NavigableMap<Row, Row> changedRows;
     private ColumnDataType columnDataType;
 
-    private static TableEditor instance = new TableEditor();
-
     private static final String DEFAULT_CELL_VALUE = "value";
     private static final String DEFAULT_NUM_CELL_VALUE = "0";
 
     private static final Logger logger = LogManager.getLogger(TableEditor.class);
 
-    private TableEditor() {
-        dbControl = DbController.getInstance();
-        rows = new ArrayDeque<>();
-        changedRows = new TreeMap<>((o1, o2) -> {
-            int num1 = o1.getNum();
-            int num2 = o2.getNum();
-
-            if (num1 == num2) {
-                return o1.getCells() != null && o1.getCells().equals(o2.getCells()) ? 0 : -1;
-            }
-
-            return num1 > num2 ? 1 : -1;
-        });
-        columnDataType = Context.getCurrentDataType();
+    public TableEditor() {
+        init();
     }
 
-    public static TableEditor getInstance() {
-        return instance;
+    public TableEditor(TableView mainTable) {
+        this();
+        this.mainTable = mainTable;
     }
 
     public void setTable(TableView mainTable) {
         this.mainTable = mainTable;
-    }
-
-    /**
-     * Add table in the tree
-     *
-     * @param tableTree
-     */
-    public void addTable(TreeView tableTree, Table table, ImageView icon) {
-
-        try {
-            dbControl.update(Queries.createTable(table));
-            String name = table.getName();
-            addTableTreeItem(tableTree, icon, TableType.TABLE, name);
-            logger.info("Added new  table: " + name);
-        } catch (SQLException e) {
-            logger.error("Table editor error[addTable]: " + e);
-            new Alert(Alert.AlertType.ERROR, "Failure to add  the table.\nSee more info in console!").showAndWait();
-        }
-    }
-
-    /**
-     * @param tableTree
-     * @param view
-     * @param icon
-     */
-    public void addView(TreeView tableTree, View view, ImageView icon) {
-
-        if (view.getTables() == null) {
-            new Alert(Alert.AlertType.INFORMATION, "No table is present!").showAndWait();
-            return;
-        }
-
-        if (view.getTables().size() > 1) {
-            new Alert(Alert.AlertType.INFORMATION, "Not implemented yet for more than one table!").showAndWait();
-            return;
-        }
-
-        try {
-            dbControl.update(Queries.createView(view));
-            String name = view.getName();
-            addTableTreeItem(tableTree, icon, TableType.VIEW, name);
-            logger.info("Added new  view: " + name);
-        } catch (SQLException e) {
-            logger.error("Table editor error[addTable]: " + e);
-            new Alert(Alert.AlertType.ERROR, "Failure to add  the table.\nSee more info in console!").showAndWait();
-        }
-    }
-
-    /**
-     * Add new item into tables tree
-     *
-     * @param tableTree
-     * @param icon
-     * @param type
-     * @param name
-     */
-    private void addTableTreeItem(TreeView tableTree, ImageView icon, TableType type, String name) {
-
-        TypedTreeItem treeItem = new TypedTreeItem(name.toUpperCase(), icon, type, false);
-        ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
-
-        for (TypedTreeItem item : items) {
-            if (item.getType().equals(type)) {
-                item.getChildren().add(treeItem);
-            }
-        }
-
-        tableTree.getSelectionModel().select(treeItem);
-        tableTree.scrollTo(tableTree.getSelectionModel().getSelectedIndex());
-        tableTree.refresh();
-    }
-
-    /**
-     * Delete table from the tree
-     *
-     * @param tableTree
-     */
-    public void deleteTable(TreeView tableTree) {
-
-        try {
-            TypedTreeItem itemToDelete = (TypedTreeItem) tableTree.getSelectionModel().getSelectedItem();
-            String name = itemToDelete.getValue().toString();
-
-            TableType type = itemToDelete.getType();
-
-            if (type.equals(TableType.TABLE)) {
-                dbControl.update(Queries.deleteTable(name));
-            } else if (type.equals(TableType.VIEW)) {
-                dbControl.update(Queries.deleteView(name));
-            }
-
-            ObservableList<TypedTreeItem> items = tableTree.getRoot().getChildren();
-
-            for (TypedTreeItem item : items) {
-                if (item.getType().equals(type)) {
-                    item.getChildren().remove(itemToDelete);
-                }
-            }
-
-            tableTree.refresh();
-            logger.info("Deleted table: " + name);
-        } catch (Exception e) {
-            logger.error("Table editor error[deleteTable]: " + e);
-            new Alert(Alert.AlertType.ERROR, "Failure to remove the table.\nSee more info in console!").showAndWait();
-        }
     }
 
     /**
@@ -176,7 +57,7 @@ public class TableEditor {
         try {
             dbControl.update(Queries.changeColumn(oldColumn, newColumn));
         } catch (SQLException e) {
-            logger.error("Table editor error[addColumn]: " + e);
+            logger.error("Table editor error[changeColumnProperties]: " + e);
             new Alert(Alert.AlertType.ERROR, "Failed to change the column.\nSee more info in console!").showAndWait();
         }
 
@@ -475,6 +356,27 @@ public class TableEditor {
         }
 
         return new Cell(dataType, column.getColumnName(), value);
+    }
+
+    /**
+     * Initialize
+     */
+    private void init() {
+
+        dbControl = DbController.getInstance();
+        rows = new ArrayDeque<>();
+        columnDataType = Context.getCurrentDataType();
+
+        changedRows = new TreeMap<>((o1, o2) -> {
+            int num1 = o1.getNum();
+            int num2 = o2.getNum();
+
+            if (num1 == num2) {
+                return o1.getCells() != null && o1.getCells().equals(o2.getCells()) ? 0 : -1;
+            }
+
+            return num1 > num2 ? 1 : -1;
+        });
     }
 
 }
