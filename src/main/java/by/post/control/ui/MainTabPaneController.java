@@ -80,7 +80,7 @@ public class MainTabPaneController {
         controller.selectTable(tableName, tableType);
 
         Tab tab = new Tab(tableName, node);
-        
+
         tab.setOnCloseRequest(event -> {
             if (controller.hasNotSavedData()) {
                 Optional<ButtonType> result = new ConfirmationDialog("You have unsaved data. Continue?").showAndWait();
