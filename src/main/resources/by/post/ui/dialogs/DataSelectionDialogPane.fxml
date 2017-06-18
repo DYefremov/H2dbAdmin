@@ -76,10 +76,6 @@
         </VBox>
     </header>
     <content>
-        <BorderPane fx:id="conditionPane" prefHeight="200.0">
-         <center>
-            <Label text="Not implemented yet!" BorderPane.alignment="CENTER" />
-         </center>
-      </BorderPane>
+        <fx:include fx:id="conditionListPane" source="ConditionListPane.fxml" />
     </content>
 </DialogPane>

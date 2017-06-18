@@ -3,8 +3,8 @@ package by.post.control.ui.dialogs;
 import by.post.data.Table;
 import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,11 +25,13 @@ public class DataSelectionDialogController {
     @FXML
     private ChoiceBox whereBox;
     @FXML
-    private BorderPane conditionPane;
+    private Node conditionListPane;
     @FXML
     private DialogPane dialogPane;
     @FXML
     private ListView columnsListView;
+    @FXML
+    ConditionListPaneController conditionListPaneController;
 
     private Table table;
 
@@ -46,11 +48,11 @@ public class DataSelectionDialogController {
     @FXML
     public void columnsBoxOnHidden() {
 
-        List<CheckBox> filtered = (List<CheckBox>) columnsListView.getItems().stream()
-                .filter(c -> ((CheckBox) c).isSelected()).collect(Collectors.toList());
+        List<String> filtered = getSelectedColumns();
 
         if (table.getColumns().size() == filtered.size()) {
             columnsBox.setValue("*");
+            updateConditionList();
             return;
         }
 
@@ -58,11 +60,12 @@ public class DataSelectionDialogController {
 
         int lastIndex = filtered.size() - 1;
 
-        for (CheckBox checkBox : filtered) {
-            value += checkBox.getText() + (filtered.indexOf(checkBox) == lastIndex ? "": ",");
+        for (String name : filtered) {
+            value += name + (filtered.indexOf(name) == lastIndex ? "": ",");
         }
 
         columnsBox.setValue(value);
+        updateConditionList();
     }
 
     @FXML
@@ -79,8 +82,8 @@ public class DataSelectionDialogController {
         } );
 
         whereBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
-            dialogPane.setContent(String.valueOf(observable.getValue()).equals("WHERE") ? conditionPane : null);
+            dialogPane.setContent(String.valueOf(observable.getValue()).equals("WHERE") ? conditionListPane : null);
+            updateConditionList();
             dialogPane.getScene().getWindow().sizeToScene();
         });
     }
@@ -98,5 +101,22 @@ public class DataSelectionDialogController {
             checkBox.setSelected(true);
             columnsListView.getItems().add(checkBox);
         });
+    }
+
+    private void updateConditionList() {
+
+        List<String> filtered = getSelectedColumns();
+        conditionListPaneController.setColumnNames(filtered);
+        dialogPane.getScene().getWindow().sizeToScene();
+    }
+
+    /**
+     * @return selected columns
+     */
+    private List<String> getSelectedColumns() {
+
+        return (List<String>) columnsListView.getItems().stream()
+                .filter(c -> ((CheckBox) c).isSelected()).map(c -> ((CheckBox) c).getText())
+                .collect(Collectors.toList());
     }
 }
