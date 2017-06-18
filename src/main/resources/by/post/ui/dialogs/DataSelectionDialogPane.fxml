@@ -1,20 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<DialogPane minHeight="-Infinity" prefHeight="320.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
-   <buttonTypes>
-      <ButtonType fx:constant="OK" />
-      <ButtonType fx:constant="CANCEL" />
-   </buttonTypes>
-   <content>
-      <BorderPane>
+<DialogPane fx:id="dialogPane" minWidth="-Infinity" prefHeight="120.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.DataSelectionDialogController">
+    <buttonTypes>
+        <ButtonType fx:constant="OK" />
+        <ButtonType fx:constant="CANCEL" />
+    </buttonTypes>
+    <header>
+        <VBox alignment="CENTER">
+            <children>
+                <Label prefHeight="30.0" text="Set the conditions for data selection">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                </Label>
+                <HBox alignment="CENTER" prefWidth="100.0" spacing="2.0">
+                    <children>
+                        <ChoiceBox fx:id="choiceBox" prefWidth="80.0" value="SELECT">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="SELECT" />
+                                </FXCollections>
+                            </items>
+                        </ChoiceBox>
+                        <ComboBox fx:id="columnsBox" onHidden="#columnsBoxOnHidden" prefWidth="100.0" value="*">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <ListView fx:id="columnsListView" prefHeight="150" prefWidth="100">
+                                        <!---->
+                                    </ListView>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <ChoiceBox fx:id="fromToBox" prefWidth="80.0" value="FROM">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="FROM" />
+                                </FXCollections>
+                            </items>
+                        </ChoiceBox>
+                        <ComboBox fx:id="tablesListBox" prefWidth="100.0">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                   <!---->
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <ChoiceBox fx:id="whereBox" prefWidth="80.0" value="*">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="*" />
+                                    <String fx:value="WHERE" />
+                                </FXCollections>
+                            </items>
+                        </ChoiceBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </VBox.margin>
+                </HBox>
+            </children>
+        </VBox>
+    </header>
+    <content>
+        <BorderPane fx:id="conditionPane" prefHeight="200.0">
          <center>
             <Label text="Not implemented yet!" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
-   </content>
+    </content>
 </DialogPane>

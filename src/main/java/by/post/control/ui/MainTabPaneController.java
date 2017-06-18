@@ -5,8 +5,6 @@ import by.post.control.db.TableType;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.MainUiForm;
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
