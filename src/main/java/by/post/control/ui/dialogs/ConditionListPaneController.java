@@ -38,6 +38,7 @@ public class ConditionListPaneController {
     @FXML
     private void initialize() {
 
+        conditionColumn.setCellFactory(ConditionCell.forTableColumn());
     }
 
     private void updateColumns() {
