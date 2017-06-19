@@ -1,6 +1,10 @@
 package by.post.control.ui.dialogs;
 
+import by.post.data.Column;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 import java.util.List;
 
@@ -12,20 +16,37 @@ import java.util.List;
  */
 public class ConditionListPaneController {
 
-    List<String> columnNames;
+    @FXML
+    private TableView tableView;
+    @FXML
+    private TableColumn<Column, String> namesColumn;
+    @FXML
+    private TableColumn<Column, String> conditionColumn;
+
+    List<Column> columns;
 
     public ConditionListPaneController() {
 
     }
 
-    public void setColumnNames(List<String> columnNames) {
+    public void setColumns(List<Column> columns) {
 
-        this.columnNames = columnNames;
+        this.columns = columns;
+        updateColumns();
     }
 
     @FXML
     private void initialize() {
 
+    }
 
+    private void updateColumns() {
+
+        tableView.getItems().clear();
+        tableView.setItems(FXCollections.observableArrayList(columns));
+
+        int columnsSize = columns.size();
+        double cellSize = tableView.getFixedCellSize();
+        tableView.setMinHeight(columnsSize > 0 ? ++columnsSize * cellSize : cellSize * 2);
     }
 }

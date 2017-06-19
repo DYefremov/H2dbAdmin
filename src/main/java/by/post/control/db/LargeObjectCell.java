@@ -16,7 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 /**
+ * Custom implementation for working with LOB from table cell
  *
+ *@author Dmitriy V.Yefremov
  */
 class LargeObjectCell extends TableCell {
 
@@ -25,6 +27,7 @@ class LargeObjectCell extends TableCell {
     private ImageView imageView;
 
     public LargeObjectCell(Table table) {
+
         this.table = table;
         imageView = new ImageView(new Image("img/file.png"));
         imageView.setFitHeight(16);
@@ -118,6 +121,7 @@ class LargeObjectCell extends TableCell {
      * @param update
      */
     private void updateItem(boolean update) {
+
         if (update) {
             updateItem(getItem() != null ? getItem() : "", false);
         }

@@ -9,7 +9,6 @@
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -36,7 +35,7 @@
                                 </FXCollections>
                             </items>
                         </ChoiceBox>
-                        <ComboBox fx:id="columnsBox" onHidden="#columnsBoxOnHidden" prefWidth="100.0" value="*">
+                        <ComboBox fx:id="columnsBox" onHidden="#columnsBoxOnHidden" prefWidth="105.0" value="*">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <ListView fx:id="columnsListView" prefHeight="150" prefWidth="100">
@@ -52,7 +51,7 @@
                                 </FXCollections>
                             </items>
                         </ChoiceBox>
-                        <ComboBox fx:id="tablesListBox" prefWidth="100.0">
+                        <ComboBox fx:id="tablesListBox" prefWidth="105.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                    <!---->

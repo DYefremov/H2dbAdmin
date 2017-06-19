@@ -1,5 +1,6 @@
 package by.post.control.ui.dialogs;
 
+import by.post.data.Column;
 import by.post.data.Table;
 import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.fxml.FXML;
@@ -48,7 +49,7 @@ public class DataSelectionDialogController {
     @FXML
     public void columnsBoxOnHidden() {
 
-        List<String> filtered = getSelectedColumns();
+        List<String> filtered = getSelectedColumnNames();
 
         if (table.getColumns().size() == filtered.size()) {
             columnsBox.setValue("*");
@@ -105,15 +106,22 @@ public class DataSelectionDialogController {
 
     private void updateConditionList() {
 
-        List<String> filtered = getSelectedColumns();
-        conditionListPaneController.setColumnNames(filtered);
+        List<Column> filtered = getSelectedColumns();
+        conditionListPaneController.setColumns(filtered);
         dialogPane.getScene().getWindow().sizeToScene();
     }
 
     /**
      * @return selected columns
      */
-    private List<String> getSelectedColumns() {
+    private List<Column> getSelectedColumns() {
+
+        List<String> selected = getSelectedColumnNames();
+
+        return table.getColumns().stream().filter(c -> selected.contains(c.getColumnName())).collect(Collectors.toList());
+    }
+
+    private List<String> getSelectedColumnNames() {
 
         return (List<String>) columnsListView.getItems().stream()
                 .filter(c -> ((CheckBox) c).isSelected()).map(c -> ((CheckBox) c).getText())
