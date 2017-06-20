@@ -65,7 +65,6 @@ public class TableBuilder {
     }
 
     /**
-     *
      * @param name
      * @param type
      * @param connection

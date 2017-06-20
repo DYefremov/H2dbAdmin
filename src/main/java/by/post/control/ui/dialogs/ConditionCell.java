@@ -1,8 +1,14 @@
 package by.post.control.ui.dialogs;
 
+import by.post.ui.MainUiForm;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+
+import java.io.IOException;
 
 /**
  * Custom implementation of Table Cell for condition construction
@@ -11,9 +17,11 @@ import javafx.util.Callback;
  */
 public class ConditionCell extends TableCell {
 
+    private HBox mainHbox;
+    private ConditionBoxController conditionBoxController;
 
     public ConditionCell() {
-
+        initGraphic();
     }
 
     @Override
@@ -41,5 +49,20 @@ public class ConditionCell extends TableCell {
 
     public static <S> Callback<TableColumn<S,String>, TableCell<S,String>> forTableColumn() {
         return list -> new ConditionCell();
+    }
+
+    private void initGraphic() {
+
+        FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("dialogs/ConditionBox.fxml"));
+        setAlignment(Pos.CENTER_LEFT);
+
+        try {
+            mainHbox = loader.load();
+            conditionBoxController = loader.getController();
+            setGraphic(mainHbox);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

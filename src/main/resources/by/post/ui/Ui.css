@@ -94,8 +94,8 @@
 
  /* Styles for main table view tool bar elements */
  .bar .button{
-    -fx-background-repeat: stretch;
-    -fx-background-position: center center;
-    -fx-background-size: 16px;
+     -fx-background-repeat: stretch;
+     -fx-background-position: center center;
+     -fx-background-size: 16px;
      -fx-pref-width: 24px;
  }
