@@ -14,12 +14,12 @@
                 <Label style="-fx-text-fill: red" text="No columns selected!" />
             </placeholder>
             <columns>
-                <TableColumn fx:id="namesColumn" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Columns">
+                <TableColumn fx:id="namesColumn" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" sortable="false" text="Columns">
                     <cellValueFactory>
                         <PropertyValueFactory property="columnName" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="conditionColumn" text="Conditions">
+                <TableColumn fx:id="conditionColumn" onEditCommit="#onEditCommit" sortable="false" text="Conditions">
                     <cellValueFactory>
                         <PropertyValueFactory property="condition" />
                     </cellValueFactory>

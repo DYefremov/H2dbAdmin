@@ -22,7 +22,7 @@ public class Column {
     private boolean signed;
     private int index;
     private int length;
-    //It's used in view creation
+    //It's used in view creation and data selection
     private String condition;
 
     public Column() {

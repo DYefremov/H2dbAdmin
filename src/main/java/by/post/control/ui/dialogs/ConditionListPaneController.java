@@ -41,6 +41,11 @@ public class ConditionListPaneController {
     }
 
     @FXML
+    public void onEditCommit() {
+        updateConsole();
+    }
+
+    @FXML
     private void initialize() {
 
         conditionColumn.setCellFactory(ConditionCell.forTableColumn());
@@ -87,6 +92,9 @@ public class ConditionListPaneController {
     }
 
     private String getConditionsForQuery() {
+
+        columns.forEach(c -> System.out.println(conditionColumn.getCellObservableValue(c).getValue()));
+
         return "";
     }
 }

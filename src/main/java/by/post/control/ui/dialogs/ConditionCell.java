@@ -1,5 +1,6 @@
 package by.post.control.ui.dialogs;
 
+import by.post.data.Column;
 import by.post.ui.MainUiForm;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -15,7 +16,7 @@ import java.io.IOException;
  *
  * @author Dmitriy V.Yefremov
  */
-public class ConditionCell extends TableCell {
+public class ConditionCell extends TableCell<Column, String> {
 
     private HBox mainHbox;
     private ConditionBoxController conditionBoxController;
@@ -25,29 +26,16 @@ public class ConditionCell extends TableCell {
     }
 
     @Override
-    public void updateItem(Object item, boolean empty) {
-
-        super.updateItem(item, empty);
-    }
-
-    @Override
     public void startEdit() {
-
-        if (!isEditable() || !getTableView().isEditable() || !getTableColumn().isEditable()) {
-            return;
-        }
-
         super.startEdit();
-        setText(null);
     }
 
     @Override
-    public void cancelEdit() {
-
-        super.cancelEdit();
+    public void commitEdit(String value) {
+        super.commitEdit(value);
     }
 
-    public static <S> Callback<TableColumn<S,String>, TableCell<S,String>> forTableColumn() {
+    public static Callback<TableColumn<Column, String>, TableCell<Column, String>> forTableColumn() {
         return list -> new ConditionCell();
     }
 
@@ -59,6 +47,7 @@ public class ConditionCell extends TableCell {
         try {
             mainHbox = loader.load();
             conditionBoxController = loader.getController();
+            conditionBoxController.setCell(this);
             setGraphic(mainHbox);
         } catch (IOException e) {
             e.printStackTrace();
