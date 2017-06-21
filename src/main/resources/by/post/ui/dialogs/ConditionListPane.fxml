@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.BorderPane?>
 
-<?import javafx.scene.control.Label?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="by.post.control.ui.dialogs.ConditionListPaneController">
+<BorderPane stylesheets="@../Ui.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.ConditionListPaneController">
     <center>
-        <TableView fx:id="tableView" editable="true" fixedCellSize="30.0" BorderPane.alignment="CENTER">
+        <TableView fx:id="tableView" editable="true" fixedCellSize="30.0" prefHeight="240.0" prefWidth="320.0" BorderPane.alignment="CENTER">
             <placeholder>
-                <Label text="No columns selected!" style="-fx-text-fill: red"/>
+                <Label style="-fx-text-fill: red" text="No columns selected!" />
             </placeholder>
             <columns>
-                <TableColumn fx:id="namesColumn" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0"
-                             text="Columns">
+                <TableColumn fx:id="namesColumn" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Columns">
                     <cellValueFactory>
-                        <PropertyValueFactory property="columnName"/>
+                        <PropertyValueFactory property="columnName" />
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn fx:id="conditionColumn" text="Conditions">
                     <cellValueFactory>
-                        <PropertyValueFactory property="condition"/>
+                        <PropertyValueFactory property="condition" />
                     </cellValueFactory>
                 </TableColumn>
             </columns>
             <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
         </TableView>
     </center>
+   <bottom>
+      <TextArea fx:id="console" editable="false" prefHeight="100.0" prefWidth="320.0" styleClass="console" wrapText="true" BorderPane.alignment="CENTER" />
+   </bottom>
 </BorderPane>

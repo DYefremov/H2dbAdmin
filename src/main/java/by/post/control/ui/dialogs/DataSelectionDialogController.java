@@ -35,6 +35,7 @@ public class DataSelectionDialogController {
     ConditionListPaneController conditionListPaneController;
 
     private Table table;
+    private int fullColumnsSize;
 
     public DataSelectionDialogController() {
 
@@ -96,6 +97,7 @@ public class DataSelectionDialogController {
 
         tablesListBox.getItems().add(table.getName());
         tablesListBox.setValue(table.getName());
+        fullColumnsSize = table.getColumns().size();
 
         table.getColumns().forEach(c -> {
             CheckBox checkBox = new CheckBox(c.getColumnName());
@@ -107,7 +109,7 @@ public class DataSelectionDialogController {
     private void updateConditionList() {
 
         List<Column> filtered = getSelectedColumns();
-        conditionListPaneController.setColumns(filtered);
+        conditionListPaneController.setColumns(filtered, fullColumnsSize);
         dialogPane.getScene().getWindow().sizeToScene();
     }
 

@@ -63,6 +63,5 @@ public class ConditionCell extends TableCell {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
