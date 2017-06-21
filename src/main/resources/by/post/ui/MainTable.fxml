@@ -14,76 +14,82 @@
 <?import javafx.scene.layout.Pane?>
 
 <BorderPane stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.MainTableController">
-   <center>
-        <TableView fx:id="mainTable" editable="true" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked" stylesheets="@Ui.css">
+    <center>
+        <TableView fx:id="mainTable" editable="true" onKeyReleased="#onKeyReleased" onMouseClicked="#onMouseClicked"
+                   stylesheets="@Ui.css">
             <placeholder>
-                <Label text="" />
+                <Label text=""/>
             </placeholder>
             <contextMenu>
                 <ContextMenu>
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onAddRow" text="%AddNewRow" />
-                        <MenuItem mnemonicParsing="false" onAction="#onRemoveRow" text="%DeleteRow" />
+                        <MenuItem mnemonicParsing="false" onAction="#onAddRow" text="%AddNewRow"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onRemoveRow" text="%DeleteRow"/>
                     </items>
                 </ContextMenu>
             </contextMenu>
         </TableView>
-   </center>
-   <bottom>
-        <HBox fx:id="tableViewToolBar" alignment="BOTTOM_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" spacing="5.0" styleClass="bar" BorderPane.alignment="CENTER">
+    </center>
+    <bottom>
+        <HBox fx:id="tableViewToolBar" alignment="BOTTOM_LEFT" maxHeight="-Infinity" minHeight="-Infinity"
+              prefHeight="30.0" spacing="5.0" styleClass="bar" BorderPane.alignment="CENTER">
             <children>
                 <HBox fx:id="toolBarButtonsHBox" alignment="CENTER_LEFT">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#onAddRow" style="-fx-background-image: url(/img/list-add.png);">
+                        <Button mnemonicParsing="false" onAction="#onAddRow"
+                                style="-fx-background-image: url(/img/list-add.png);">
                             <tooltip>
-                                <Tooltip text="%AddNewRow" />
+                                <Tooltip text="%AddNewRow"/>
                             </tooltip>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
-                     <HBox.margin>
-                        <Insets bottom="2.0" left="2.0" top="2.0" />
-                     </HBox.margin>
+                            <HBox.margin>
+                                <Insets bottom="2.0" left="2.0" top="2.0"/>
+                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onRemoveRow" style="-fx-background-image: url(/img/list-remove.png);">
+                        <Button mnemonicParsing="false" onAction="#onRemoveRow"
+                                style="-fx-background-image: url(/img/list-remove.png);">
                             <tooltip>
-                                <Tooltip text="%DeleteRow" />
+                                <Tooltip text="%DeleteRow"/>
                             </tooltip>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
-                     <HBox.margin>
-                        <Insets bottom="2.0" left="2.0" top="2.0" />
-                     </HBox.margin>
+                            <HBox.margin>
+                                <Insets bottom="2.0" left="2.0" top="2.0"/>
+                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onSaveRow" style="-fx-background-image: url(/img/enter.png);">
+                        <Button mnemonicParsing="false" onAction="#onSaveRow"
+                                style="-fx-background-image: url(/img/enter.png);">
                             <tooltip>
-                                <Tooltip text="%SaveChanges" />
+                                <Tooltip text="%SaveChanges"/>
                             </tooltip>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
-                     <HBox.margin>
-                        <Insets bottom="2.0" left="2.0" top="2.0" />
-                     </HBox.margin>
+                            <HBox.margin>
+                                <Insets bottom="2.0" left="2.0" top="2.0"/>
+                            </HBox.margin>
                         </Button>
                     </children>
                 </HBox>
-                <Pane prefHeight="26.0" prefWidth="60.0" HBox.hgrow="SOMETIMES" />
+                <Pane prefHeight="26.0" prefWidth="60.0" HBox.hgrow="SOMETIMES"/>
                 <HBox fx:id="filterBox" alignment="CENTER_LEFT" spacing="5.0">
                     <children>
-                        <Button mnemonicParsing="false" style="-fx-background-image: url(/img/filter.png);" />
-                        <TextField fx:id="filterTextField" onKeyReleased="#onFilter" prefHeight="26.0" prefWidth="150.0" />
+                        <Button mnemonicParsing="false" style="-fx-background-image: url(/img/filter.png);"/>
+                        <TextField fx:id="filterTextField" onKeyReleased="#onFilter" prefHeight="26.0"
+                                   prefWidth="150.0"/>
                     </children>
                     <padding>
-                        <Insets left="5.0" />
+                        <Insets left="5.0"/>
                     </padding>
                 </HBox>
-                <Pane prefHeight="30.0" prefWidth="165.0" HBox.hgrow="SOMETIMES" />
+                <Pane prefHeight="30.0" prefWidth="165.0" HBox.hgrow="SOMETIMES"/>
             </children>
-         <padding>
-            <Insets left="5.0" />
-         </padding>
+            <padding>
+                <Insets left="5.0"/>
+            </padding>
         </HBox>
-   </bottom>
+    </bottom>
 </BorderPane>

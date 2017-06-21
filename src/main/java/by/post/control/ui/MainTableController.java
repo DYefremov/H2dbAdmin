@@ -41,6 +41,7 @@ public class MainTableController {
     private HBox filterBox;
 
     private TableEditor tableEditor;
+    ObservableList<Row> data;
     //Used to disable the filter field for empty tables
     private SimpleBooleanProperty tableNotEmpty;
     //Indicate if running filter data process
@@ -50,6 +51,7 @@ public class MainTableController {
     //Used to delay before filtering begins
     private PauseTransition filterPause;
     private static final double FILTER_TIMEOUT = 1;
+
 
     private static final Logger logger = LogManager.getLogger(MainTableController.class);
 
@@ -132,7 +134,7 @@ public class MainTableController {
         if (!resolver.getTableColumns().isEmpty()) {
             mainTable.getColumns().addAll(resolver.getTableColumns());
             ObservableList<Row> items = resolver.getItems();
-            Context.setCurrentData(items);
+            data.addAll(items);
             mainTable.setItems(items);
             tableNotEmpty.set(!items.isEmpty());
         }
@@ -149,6 +151,8 @@ public class MainTableController {
 
         mainTable.getItems().clear();
         mainTable.getItems().addAll(data);
+        data.clear();
+        data.addAll(data);
         mainTable.refresh();
     }
 
@@ -173,9 +177,9 @@ public class MainTableController {
         tableEditor = new TableEditor(mainTable);
         tableNotEmpty = new SimpleBooleanProperty();
         isTableType = new SimpleBooleanProperty();
+        data = FXCollections.observableArrayList();
         //disabling editing in system tables and views
         mainTable.editableProperty().bind(isTableType);
-
         filterBox.visibleProperty().bind(tableNotEmpty);
         //Disable field if load data in progress
         filterTextField.disableProperty().bind(Context.getIsLoadDataProperty());
@@ -183,12 +187,8 @@ public class MainTableController {
         filterPause.setOnFinished(event -> filterData());
         //Set multiple selection in table view
         mainTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        //Show toolbar only if any table selected
-//        tableViewToolBar.visibleProperty().bind(currentTableName.textProperty().isNotEmpty());
         //Show buttons only if no system table or view selected
         toolBarButtonsHBox.visibleProperty().bind(isTableType);
-
-        Context.setMainTableView(mainTable);
     }
 
     /**
@@ -203,9 +203,7 @@ public class MainTableController {
      */
     private void filterData() {
 
-        ObservableList<Row> data = Context.getCurrentData();
-
-        if (inFiltering || data == null || data.isEmpty()) {
+        if (inFiltering || data.isEmpty()) {
             return;
         }
 

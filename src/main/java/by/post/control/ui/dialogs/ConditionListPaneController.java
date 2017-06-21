@@ -7,6 +7,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class ConditionListPaneController {
     private TextArea console;
 
     private int fullColumnsSize;
-    List<Column> columns;
+    private List<Column> columns;
 
     public ConditionListPaneController() {
 
@@ -41,7 +42,11 @@ public class ConditionListPaneController {
     }
 
     @FXML
-    public void onEditCommit() {
+    public void onEditCommit(TableColumn.CellEditEvent<Column, String> event) {
+
+        int index =  event.getTablePosition().getRow();
+        Column column = columns.get(index);
+        column.setCondition(event.getNewValue());
         updateConsole();
     }
 
@@ -51,6 +56,9 @@ public class ConditionListPaneController {
         conditionColumn.setCellFactory(ConditionCell.forTableColumn());
     }
 
+    /**
+     * Update columns after set new list
+     */
     private void updateColumns() {
 
         tableView.getItems().clear();
@@ -62,6 +70,9 @@ public class ConditionListPaneController {
         tableView.setMinHeight(columnsSize > 0 ? ++columnsSize * cellSize : cellSize * 2);
     }
 
+    /**
+     * Updating output for console
+     */
     private void updateConsole() {
 
         if (columns.isEmpty()) {
@@ -73,17 +84,7 @@ public class ConditionListPaneController {
 
         int columnsSize = columns.size();
 
-        if (columnsSize == fullColumnsSize) {
-            sb.append("* ");
-        } else {
-            int lastColumnIndex = columns.size() - 1;
-
-            for (Column column : columns) {
-                int index = columns.indexOf(column);
-                sb.append(index == lastColumnIndex ? column.getColumnName() : column.getColumnName() + ",");
-            }
-        }
-
+        sb.append(columnsSize == fullColumnsSize ? "* " : getColumnNamesList(columns));
         sb.append(" FROM " + columns.get(0).getTableName());
         sb.append(getConditionsForQuery());
         sb.append(";");
@@ -91,10 +92,31 @@ public class ConditionListPaneController {
         console.setText(sb.toString());
     }
 
+    /**
+     * @return String with constructed condition for columns
+     */
     private String getConditionsForQuery() {
 
-        columns.forEach(c -> System.out.println(conditionColumn.getCellObservableValue(c).getValue()));
+        columns.forEach(c -> System.out.println("Name = " + c.getColumnName() + " Condition = " + c.getCondition()));
 
         return "";
     }
+
+    /**
+     * @return String from column names separated with ','
+     */
+    private String getColumnNamesList(Collection<Column> collection) {
+
+        StringBuilder sb = new StringBuilder();
+
+        int lastColumnIndex = collection.size() - 1;
+
+        for (Column column : collection) {
+            int index = columns.indexOf(column);
+            sb.append(index == lastColumnIndex ? column.getColumnName() : column.getColumnName() + ",");
+        }
+
+        return sb.toString();
+    }
+
 }

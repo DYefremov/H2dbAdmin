@@ -1,9 +1,8 @@
 package by.post.control.ui.dialogs;
 
 import by.post.control.Context;
-import by.post.control.ui.TypedTreeItem;
-import by.post.data.Row;
 import by.post.control.search.SearchProvider;
+import by.post.control.ui.TypedTreeItem;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -44,7 +43,6 @@ public class SearchToolDialogController {
     private SearchProvider searchProvider;
     private TypedTreeItem tablesTreeItem;
     private TreeView mainTableTree;
-    private TableView mainTableView;
     //It is used to display the time spent on search
     private Timeline timeline;
     private long startSearchTime;
@@ -105,7 +103,6 @@ public class SearchToolDialogController {
     private void initialize() {
 
         tablesTreeItem = Context.getTablesTreeItem();
-        mainTableView = Context.getMainTableView();
         mainTableTree = Context.getMainTableTree();
 
         searchProvider = new SearchProvider();
@@ -205,6 +202,8 @@ public class SearchToolDialogController {
      */
     private void scrollToRow(String text) {
 
+        //TODO 	reconstruct!
+        /*
         if (mainTableView == null || mainTableView.getItems().isEmpty()) {
             return;
         }
@@ -217,6 +216,7 @@ public class SearchToolDialogController {
                 break;
             }
         }
+        */
     }
 
     /**
@@ -225,11 +225,11 @@ public class SearchToolDialogController {
     private void select(int index) {
 
         Platform.runLater(() -> {
-            mainTableView.layout();
-            mainTableView.scrollTo(index);
-            mainTableView.getSelectionModel().clearSelection();
-            mainTableView.getSelectionModel().select(index);
-            mainTableView.getFocusModel().focus(index);
+//            mainTableView.layout();
+//            mainTableView.scrollTo(index);
+//            mainTableView.getSelectionModel().clearSelection();
+//            mainTableView.getSelectionModel().select(index);
+//            mainTableView.getFocusModel().focus(index);
         });
     }
 
