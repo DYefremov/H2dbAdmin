@@ -19,7 +19,7 @@ import java.util.List;
 public class ConditionListPaneController {
 
     @FXML
-    private TableView tableView;
+    private TableView<Column> tableView;
     @FXML
     private TableColumn<Column, String> namesColumn;
     @FXML
@@ -44,9 +44,6 @@ public class ConditionListPaneController {
     @FXML
     public void onEditCommit(TableColumn.CellEditEvent<Column, String> event) {
 
-        int index =  event.getTablePosition().getRow();
-        Column column = columns.get(index);
-        column.setCondition(event.getNewValue());
         updateConsole();
     }
 
@@ -97,7 +94,7 @@ public class ConditionListPaneController {
      */
     private String getConditionsForQuery() {
 
-        columns.forEach(c -> System.out.println("Name = " + c.getColumnName() + " Condition = " + c.getCondition()));
+        tableView.getItems().forEach(c -> System.out.println("Name = " + c.getColumnName() + " Condition = " + c.getCondition()));
 
         return "";
     }

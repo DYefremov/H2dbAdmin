@@ -22,14 +22,15 @@ public class ConditionBoxController {
     @FXML
     public void onAdd() {
 
+        cell.getTableRow().getTableView().getSelectionModel().select(cell.getIndex());
+
         TextField textField = new TextField();
         textField.setOnKeyReleased(event -> {
-
             if (event.getCode().equals(KeyCode.ENTER)) {
                 Platform.runLater(() -> {
                     cell.startEdit();
                     cell.commitEdit(textField.getText());
-                    mainHBox.requestFocus();
+                    cell.requestFocus();
                 });
             }
         });
@@ -40,10 +41,13 @@ public class ConditionBoxController {
     @FXML
     public void onDelete() {
 
+        cell.getTableRow().getTableView().getSelectionModel().select(cell.getIndex());
+        mainHBox.getChildren().remove(2, mainHBox.getChildren().size());
+
         Platform.runLater(() -> {
-            mainHBox.getChildren().remove(2, mainHBox.getChildren().size());
             cell.startEdit();
             cell.commitEdit(null);
+            cell.requestFocus();
         });
     }
 
