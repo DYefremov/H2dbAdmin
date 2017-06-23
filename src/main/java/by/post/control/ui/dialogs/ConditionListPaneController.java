@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Used with ConditionListPane as helper
@@ -44,6 +45,9 @@ public class ConditionListPaneController {
     @FXML
     public void onEditCommit(TableColumn.CellEditEvent<Column, String> event) {
 
+        int index = tableView.getSelectionModel().getSelectedIndex();
+        Column column = columns.get(index);
+        column.setCondition(event.getNewValue());
         updateConsole();
     }
 
@@ -94,9 +98,23 @@ public class ConditionListPaneController {
      */
     private String getConditionsForQuery() {
 
-        tableView.getItems().forEach(c -> System.out.println("Name = " + c.getColumnName() + " Condition = " + c.getCondition()));
+        StringBuilder sb = new StringBuilder();
 
-        return "";
+        List<Column> withConditions = columns.stream().filter(c -> c.getCondition() != null).collect(Collectors.toList());
+
+        if (withConditions.isEmpty()) {
+            return "";
+        }
+
+        int lastIndex = withConditions.size() - 1;
+
+        for (Column column : withConditions) {
+            int index = withConditions.indexOf(column);
+            String value = column.getColumnName() + " = " + column.getCondition();
+            sb.append(lastIndex == index ? value : value + " AND ");
+        }
+
+        return "WHERE " + sb.toString();
     }
 
     /**

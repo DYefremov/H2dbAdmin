@@ -2,9 +2,12 @@ package by.post.control.ui.dialogs;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+
+import java.util.List;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -19,6 +22,10 @@ public class ConditionBoxController {
 
     }
 
+    public void setCell(ConditionCell cell) {
+        this.cell = cell;
+    }
+
     @FXML
     public void onAdd() {
 
@@ -26,12 +33,16 @@ public class ConditionBoxController {
 
         TextField textField = new TextField();
         textField.setOnKeyReleased(event -> {
+
+            textField.setStyle(null);
+
             if (event.getCode().equals(KeyCode.ENTER)) {
-                Platform.runLater(() -> {
-                    cell.startEdit();
-                    cell.commitEdit(textField.getText());
-                    cell.requestFocus();
-                });
+                if (textField.getText().isEmpty()) {
+                    textField.setStyle("-fx-border-color: red;" );
+                    event.consume();
+                    return;
+                }
+                Platform.runLater(() -> setCellValue(getCondition()));
             }
         });
 
@@ -43,12 +54,7 @@ public class ConditionBoxController {
 
         cell.getTableRow().getTableView().getSelectionModel().select(cell.getIndex());
         mainHBox.getChildren().remove(2, mainHBox.getChildren().size());
-
-        Platform.runLater(() -> {
-            cell.startEdit();
-            cell.commitEdit(null);
-            cell.requestFocus();
-        });
+        Platform.runLater(() -> setCellValue(null));
     }
 
     @FXML
@@ -56,7 +62,30 @@ public class ConditionBoxController {
 
     }
 
-    public void setCell(ConditionCell cell) {
-        this.cell = cell;
+    private void setCellValue(String value) {
+
+        cell.startEdit();
+        cell.commitEdit(value);
+        cell.getTableRow().getTableView().getSelectionModel().select(cell.getIndex());
+        cell.requestFocus();
     }
+
+    private String getCondition() {
+
+        StringBuilder sb = new StringBuilder();
+        List<Node> nodes = mainHBox.getChildren();
+
+        int lastIndex = nodes.size() - 1;
+
+        for (Node node : nodes) {
+            if (node instanceof TextField) {
+                int index = nodes.indexOf(node);
+                String value = ((TextField) node).getText();
+                sb.append(index == lastIndex ? value : value + " OR ");
+            }
+        }
+
+        return sb.toString();
+    }
+
 }
