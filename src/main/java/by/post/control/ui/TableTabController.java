@@ -7,11 +7,15 @@ import by.post.control.db.TableType;
 import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.DataSelectionDialog;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -26,6 +30,8 @@ public class TableTabController {
     @FXML
     private Label typeLabel;
     @FXML
+    private Label dataSizeLabel;
+    @FXML
     private TextField maxRowsTextField;
     @FXML
     private Button prevButton;
@@ -33,6 +39,8 @@ public class TableTabController {
     private Button nextButton;
     @FXML
     private MainTableController mainTableController;
+    @FXML
+    private Node mainTable;
 
     private int offset;
     private int rowsLimit;
@@ -40,6 +48,7 @@ public class TableTabController {
     private Table table;
     private DbControl dbControl;
     private TableEditor tableEditor;
+    private SimpleStringProperty sizeProperty;
 
     public TableTabController() {
 
@@ -64,23 +73,26 @@ public class TableTabController {
     }
 
     @FXML
-    public void onMaxRowsChanged() {
+    public void onMaxRowsChanged(KeyEvent event) {
 
         String value = maxRowsTextField.getText();
 
         if (value == "" || !value.matches("\\d+")) {
-            maxRowsTextField.setStyle("-fx-border-color: red; -fx-border-width: 2px; -fx-border-radius: 3px");
+            maxRowsTextField.setStyle("-fx-border-color: red; -fx-border-radius: 3px");
             return;
         }
 
         maxRowsTextField.setStyle(null);
         rowsLimit = Integer.valueOf(value);
+
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            updateData();
+        }
     }
 
     @FXML
     public void onRefresh() {
-
-        new Alert(Alert.AlertType.INFORMATION, "Not implemented yet").showAndWait();
+       updateData();
     }
 
     public boolean hasNotSavedData() {
@@ -97,7 +109,7 @@ public class TableTabController {
         typeLabel.setText(tableType != null ? tableType.name() : "");
         table = dbControl.getTable(tableName, tableType);
         mainTableController.setTable(table);
-        dataSize = table.getData() != null ? table.getData().size() : 0;
+        updateData();
         updateNavigationButtons();
     }
 
@@ -107,6 +119,8 @@ public class TableTabController {
         dbControl = DbController.getInstance();
         rowsLimit = Integer.valueOf(maxRowsTextField.getText());
         tableEditor = mainTableController.getTableEditor();
+        sizeProperty = new SimpleStringProperty(String.valueOf(dataSize));
+        dataSizeLabel.textProperty().bind(sizeProperty);
     }
 
     /**
@@ -114,14 +128,30 @@ public class TableTabController {
      */
     private void updateData() {
 
-        Collection<Row> data = (Collection<Row>) dbControl.getTableData(table.getName(), table.getType(), rowsLimit, offset);
+        //TODO Possible temporary implementation
+        Thread thread = new Thread(() -> {
+            mainTable.setDisable(true);
+            Collection<Row> data = (Collection<Row>) dbControl.getTableData(table.getName(), table.getType(), rowsLimit, offset);
 
-        dataSize = data.size();
-        updateNavigationButtons();
+            dataSize = data.size();
+            Platform.runLater(() -> {
+                updateNavigationButtons();
 
-        if (!data.isEmpty()) {
-            mainTableController.setData(data);
-        }
+                if (!data.isEmpty()) {
+                    mainTableController.setData(data);
+                }
+
+                Platform.runLater(() -> {
+                    mainTable.setDisable(false);
+                    sizeProperty.setValue(String.valueOf(dataSize));
+                });
+
+            });
+
+        });
+
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**

@@ -58,7 +58,7 @@ public class SqlConsoleController {
 
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
-        String query = console.getText().toUpperCase();
+        String query = console.getText();
 
         if (result.get() == ButtonType.OK) {
             logger.info("Execute query: \n" + query);

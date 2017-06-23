@@ -6,7 +6,10 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -49,9 +52,17 @@
                         <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevious" style="-fx-background-image: url(/img/go-previous.png);" />
                         <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNext" style="-fx-background-image: url(/img/go-next.png);" />
                         <Separator orientation="VERTICAL" prefHeight="22.0" prefWidth="0.0" />
-                        <Button disable="true" mnemonicParsing="false" onAction="#onRefresh" style="-fx-background-image: url(/img/refresh.png);" />
+                        <Button mnemonicParsing="false" onAction="#onRefresh" style="-fx-background-image: url(/img/refresh.png);">
+                            <tooltip>
+                                <Tooltip text="Refresh table data" />
+                            </tooltip>
+                        </Button>
                         <Separator orientation="VERTICAL" prefHeight="200.0" />
                         <Button mnemonicParsing="false" onAction="#onSearch" style="-fx-background-image: url(/img/search.png);" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label text="Data size:" />
+                  <Label fx:id="dataSizeLabel" text="size" />
+                  <Label text="records" />
                     </items>
                 </ToolBar>
             </children>
