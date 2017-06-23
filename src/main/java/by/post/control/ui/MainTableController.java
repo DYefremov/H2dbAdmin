@@ -12,8 +12,15 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
@@ -41,17 +48,17 @@ public class MainTableController {
     private HBox filterBox;
 
     private TableEditor tableEditor;
-    ObservableList<Row> data;
+    private ObservableList<Row> data;
     //Used to disable the filter field for empty tables
     private SimpleBooleanProperty tableNotEmpty;
     //Indicate if running filter data process
     private boolean inFiltering;
     //Indicate if table type is selected (for disabling editing in system tables and views)
     private SimpleBooleanProperty isTableType;
+    private FilterService filterService;
     //Used to delay before filtering begins
     private PauseTransition filterPause;
     private static final double FILTER_TIMEOUT = 1;
-
 
     private static final Logger logger = LogManager.getLogger(MainTableController.class);
 
@@ -116,10 +123,19 @@ public class MainTableController {
     }
 
     @FXML
-    public void onFilter() {
+    public void onFilter(KeyEvent event) {
+
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            filterData();
+            return;
+        }
+
         filterPause.playFromStart();
     }
 
+    /**
+     * @param table
+     */
     public void setTable(Table table) {
 
         logger.info("Select table: " + table.getName());
@@ -143,17 +159,13 @@ public class MainTableController {
     /**
      * @param data
      */
-    public void addData(Collection<Row> data) {
-        mainTable.getItems().addAll(data);
-    }
-
     public void setData(Collection<Row> data) {
 
         mainTable.getItems().clear();
         mainTable.getItems().addAll(data);
-        data.clear();
-        data.addAll(data);
-        mainTable.refresh();
+        this.data.clear();
+        this.data.addAll(data);
+        Platform.runLater(() -> mainTable.refresh());
     }
 
     /**
@@ -183,6 +195,7 @@ public class MainTableController {
         filterBox.visibleProperty().bind(tableNotEmpty);
         //Disable field if load data in progress
         filterTextField.disableProperty().bind(Context.getIsLoadDataProperty());
+        filterService = new FilterService();
         filterPause = new PauseTransition(Duration.seconds(FILTER_TIMEOUT));
         filterPause.setOnFinished(event -> filterData());
         //Set multiple selection in table view
@@ -202,26 +215,32 @@ public class MainTableController {
      * Filter data without default sorting replacement
      */
     private void filterData() {
+        filterService.restart();
+    }
 
-        if (inFiltering || data.isEmpty()) {
-            return;
+    /**
+     * Service for filtering data
+     */
+    private class FilterService extends Service<Void> {
+
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    String searchText = filterTextField.getText().toUpperCase();
+
+                    List<Row> filtered = data.stream()
+                            .filter(row -> row.getCells().toString().toUpperCase().contains(searchText))
+                            .collect(Collectors.toList());
+
+                    if (!filtered.isEmpty()) {
+                        mainTable.setItems(FXCollections.observableArrayList(filtered));
+                    }
+                    return null;
+                }
+            };
         }
-
-        inFiltering = true;
-
-        String searchText = filterTextField.getText();
-
-        Platform.runLater(() -> {
-            List<Row> filtered = data.stream()
-                    .filter(row -> row.toString().toUpperCase().contains(searchText.toUpperCase()))
-                    .collect(Collectors.toList());
-
-            if (!filtered.isEmpty()) {
-                mainTable.setItems(FXCollections.observableArrayList(filtered));
-            }
-
-            inFiltering = false;
-        });
     }
 
 }

@@ -9,6 +9,8 @@ import by.post.data.Table;
 import by.post.ui.DataSelectionDialog;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -49,6 +51,7 @@ public class TableTabController {
     private DbControl dbControl;
     private TableEditor tableEditor;
     private SimpleStringProperty sizeProperty;
+    private DataLoadService loadService;
 
     public TableTabController() {
 
@@ -121,37 +124,14 @@ public class TableTabController {
         tableEditor = mainTableController.getTableEditor();
         sizeProperty = new SimpleStringProperty(String.valueOf(dataSize));
         dataSizeLabel.textProperty().bind(sizeProperty);
+        loadService = new DataLoadService();
     }
 
     /**
      * Receiving and updating table data while navigating
      */
     private void updateData() {
-
-        //TODO Possible temporary implementation
-        Thread thread = new Thread(() -> {
-            mainTable.setDisable(true);
-            Collection<Row> data = (Collection<Row>) dbControl.getTableData(table.getName(), table.getType(), rowsLimit, offset);
-
-            dataSize = data.size();
-            Platform.runLater(() -> {
-                updateNavigationButtons();
-
-                if (!data.isEmpty()) {
-                    mainTableController.setData(data);
-                }
-
-                Platform.runLater(() -> {
-                    mainTable.setDisable(false);
-                    sizeProperty.setValue(String.valueOf(dataSize));
-                });
-
-            });
-
-        });
-
-        thread.setDaemon(true);
-        thread.start();
+        loadService.restart();
     }
 
     /**
@@ -161,6 +141,39 @@ public class TableTabController {
 
         prevButton.setDisable(offset == 0);
         nextButton.setDisable(dataSize < rowsLimit);
+    }
+
+    /**
+     * Service for data load
+     */
+    class DataLoadService extends Service<Void> {
+
+        @Override
+        protected Task<Void> createTask() {
+
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    mainTable.setDisable(true);
+
+                    Collection<Row> data = (Collection<Row>) dbControl.getTableData(table.getName(), table.getType(), rowsLimit, offset);
+                    dataSize = data.size();
+                    Platform.runLater(() -> mainTableController.setData(data));
+
+                    return null;
+                }
+            };
+
+            task.setOnSucceeded(event -> {
+                Platform.runLater(() -> {
+                    updateNavigationButtons();
+                    sizeProperty.setValue(String.valueOf(dataSize));
+                    mainTable.setDisable(false);
+                });
+            });
+
+            return task;
+        }
     }
 
 }
