@@ -5,6 +5,7 @@ import by.post.control.db.TableType;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.MainUiForm;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -81,7 +83,7 @@ public class MainTabPaneController {
 
         tab.setOnCloseRequest(event -> {
             if (controller.hasNotSavedData()) {
-                Optional<ButtonType> result = new ConfirmationDialog("You have unsaved data. Continue?").showAndWait();
+                Optional<ButtonType> result = new ConfirmationDialog("You have tabs with unsaved data. Close everyone?").showAndWait();
                 if (result.get() != ButtonType.OK) {
                     event.consume();
                 }
@@ -97,8 +99,16 @@ public class MainTabPaneController {
         MenuItem item = new MenuItem("Close all");
         item.setOnAction(event ->
                 Platform.runLater(() -> {
-                    tabPane.getTabs().clear();
-                    Platform.runLater(() -> mainController.showTabPane(false));
+                    tabPane.getTabs().removeAll(tabPane.getTabs().stream()
+                            .filter(t -> {
+                                Event closeEvent = new Event(Tab.TAB_CLOSE_REQUEST_EVENT);
+                                t.getOnCloseRequest().handle(closeEvent);
+                                return !closeEvent.isConsumed();
+                            }).collect(Collectors.toList()));
+
+                    if (tabPane.getTabs().isEmpty()) {
+                        Platform.runLater(() -> mainController.showTabPane(false));
+                    }
                 }));
 
         tab.setContextMenu(new ContextMenu(item));
