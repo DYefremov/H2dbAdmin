@@ -131,6 +131,11 @@ public class MainUiController {
     }
 
     @FXML
+    public void onUsers() {
+       new UsersDialog().showAndWait();
+    }
+
+    @FXML
     public void onSearchTool() {
         onExplorer();
         showSearchTool();

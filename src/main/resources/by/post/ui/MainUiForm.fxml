@@ -30,7 +30,7 @@
                                     <items>
                                         <MenuItem mnemonicParsing="false" onAction="#onNewDbAdd" text="%Database">
                                             <graphic>
-                                                <ImageView fitHeight="12.0" fitWidth="12.0">
+                                                <ImageView fitHeight="14.0" fitWidth="14.0">
                                                     <image>
                                                         <Image url="/img/database.png" />
                                                     </image>
@@ -39,7 +39,7 @@
                                         </MenuItem>
                                         <MenuItem mnemonicParsing="false" onAction="#onAddNewTable" text="%Table">
                                             <graphic>
-                                                <ImageView fitHeight="12.0" fitWidth="12.0">
+                                                <ImageView fitHeight="14.0" fitWidth="14.0">
                                                     <image>
                                                         <Image url="/img/table.png" />
                                                     </image>
@@ -48,9 +48,18 @@
                                         </MenuItem>
                                         <MenuItem mnemonicParsing="false" onAction="#onAddNewView" text="%View">
                                             <graphic>
-                                                <ImageView fitHeight="12.0" fitWidth="12.0">
+                                                <ImageView fitHeight="14.0" fitWidth="14.0">
                                                     <image>
                                                         <Image url="/img/view.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </MenuItem>
+                                        <MenuItem mnemonicParsing="false" onAction="#onUsers" text="%User">
+                                            <graphic>
+                                                <ImageView fitHeight="14.0" fitWidth="14.0">
+                                                    <image>
+                                                        <Image url="/img/user-add.png" />
                                                     </image>
                                                 </ImageView>
                                             </graphic>
@@ -59,7 +68,7 @@
                                 </Menu>
                                 <MenuItem mnemonicParsing="false" onAction="#onOpenDb" text="%Open">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="14.0" fitWidth="14.0">
                                             <image>
                                                 <Image url="/img/folder.png" />
                                             </image>
@@ -69,7 +78,7 @@
                                 <SeparatorMenuItem mnemonicParsing="false" />
                                 <Menu mnemonicParsing="false" text="%Delete">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="14.0" fitWidth="14.0">
                                             <image>
                                                 <Image url="/img/trash.png" />
                                             </image>
@@ -83,7 +92,7 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem mnemonicParsing="false" onAction="#onSettings" text="%Settings">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="14.0" fitWidth="14.0">
                                             <image>
                                                 <Image url="/img/preferences.png" />
                                             </image>
@@ -93,7 +102,7 @@
                                 <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem mnemonicParsing="false" onAction="#onExit" text="%Exit">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="14.0" fitWidth="14.0">
                                             <image>
                                                 <Image url="/img/exit.png" />
                                             </image>
@@ -106,7 +115,7 @@
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#onSqlConsole" text="%SqlConsole">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="14.0" fitWidth="14.0">
                                             <image>
                                                 <Image url="/img/terminal.png" />
                                             </image>
@@ -115,7 +124,7 @@
                                 </MenuItem>
                                 <MenuItem mnemonicParsing="false" onAction="#onSearchTool" text="%SearchTool">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="14.0" fitWidth="14.0">
                                             <image>
                                                 <Image url="/img/search.png" />
                                             </image>
@@ -124,7 +133,7 @@
                                 </MenuItem>
                                 <MenuItem fx:id="itemRecovery" mnemonicParsing="false" onAction="#onRecoveryTool" text="%RecoveryTool">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="14.0" fitWidth="14.0">
                                             <image>
                                                 <Image url="/img/recovery.png" />
                                             </image>
@@ -137,7 +146,7 @@
                             <items>
                                 <MenuItem fx:id="itemAbout" mnemonicParsing="false" onAction="#onAbout" text="%About">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="14.0" fitWidth="14.0">
                                             <image>
                                                 <Image url="/img/info.png" />
                                             </image>
@@ -157,7 +166,7 @@
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#onNewDbAdd" text="%Database">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="16.0" fitWidth="16.0">
                                             <image>
                                                 <Image url="/img/database.png" />
                                             </image>
@@ -166,7 +175,7 @@
                                 </MenuItem>
                                 <MenuItem mnemonicParsing="false" onAction="#onAddNewTable" text="%Table">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="16.0" fitWidth="16.0">
                                             <image>
                                                 <Image url="/img/table.png" />
                                             </image>
@@ -175,9 +184,18 @@
                                 </MenuItem>
                                 <MenuItem mnemonicParsing="false" onAction="#onAddNewView" text="%View">
                                     <graphic>
-                                        <ImageView fitHeight="12.0" fitWidth="12.0">
+                                        <ImageView fitHeight="16.0" fitWidth="16.0">
                                             <image>
                                                 <Image url="/img/view.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#onUsers" text="%User">
+                                    <graphic>
+                                        <ImageView fitHeight="16.0" fitWidth="16.0">
+                                            <image>
+                                                <Image url="/img/user-add.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
@@ -194,6 +212,11 @@
                         <Separator orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onSqlConsole" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/terminal.png);" stylesheets="@Ui.css">
                              <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></Button>
+                        <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
+                        <Button mnemonicParsing="false" onAction="#onUsers" prefHeight="24.0" prefWidth="24.0" style="-fx-background-image: url(/img/users.png);" stylesheets="@Ui.css">
+                            <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor></Button>
                         <Separator layoutX="10.0" layoutY="10.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="5.0" visible="false" />
