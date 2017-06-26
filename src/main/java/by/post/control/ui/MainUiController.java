@@ -131,8 +131,14 @@ public class MainUiController {
     }
 
     @FXML
-    public void onUsers() {
-       new UsersDialog().showAndWait();
+    public void onUsersTool() throws IOException {
+        setCenter(FXMLLoader.load(MainUiForm.class.getResource("tools/UsersToolPane.fxml")));
+    }
+
+    @FXML
+    public void onAddUser() throws IOException {
+        onUsersTool();
+        new UsersDialog().showAndWait();
     }
 
     @FXML

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<BorderPane style="-fx-background-color: lightgray;" styleClass="bar" stylesheets="@../Ui.css"
+            xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="by.post.control.ui.tools.UsersToolController">
+    <bottom>
+        <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0"
+                 BorderPane.alignment="CENTER">
+            <items>
+                <Button mnemonicParsing="false" onAction="#onUserAdd" style="-fx-background-image: url(/img/user-add.png);"/>
+                <Button mnemonicParsing="false" onAction="#onUserDelete" style="-fx-background-image: url(/img/trash.png);"/>
+            </items>
+        </ToolBar>
+    </bottom>
+    <center>
+        <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn prefWidth="75.0" text="User name" >
+                    <cellValueFactory>
+                        <PropertyValueFactory property="name" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn prefWidth="75.0" text="Admin" />
+                <TableColumn prefWidth="75.0" text="ID" >
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <contextMenu>
+                <ContextMenu>
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Add" >
+                            <graphic>
+                                <ImageView fitHeight="14.0" fitWidth="14.0" style="-fx-image: url(/img/user-add.png)" />
+                            </graphic>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" text="Delete" >
+                            <graphic>
+                                <ImageView fitHeight="14.0" fitWidth="14.0" style="-fx-image: url(/img/trash.png)" />
+                            </graphic>
+                        </MenuItem>
+                    </items>
+                </ContextMenu>
+            </contextMenu>
+        </TableView>
+    </center>
+    <right>
+        <HBox alignment="CENTER" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0"
+              BorderPane.alignment="CENTER">
+            <children>
+                <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true" style="-fx-image: url(img/avatar.png)"/>
+            </children>
+        </HBox>
+    </right>
+    <top>
+        <ToolBar>
+            <items>
+                <Label text="User management tool">
+                    <font>
+                        <Font name="System Bold" size="13.0"/>
+                    </font>
+                </Label>
+            </items>
+        </ToolBar>
+    </top>
+</BorderPane>

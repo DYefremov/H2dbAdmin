@@ -8,4 +8,8 @@ public class UsersDialogController {
     public UsersDialogController() {
 
     }
+
+    private void initialize() {
+
+    }
 }
