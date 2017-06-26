@@ -1,7 +1,5 @@
 package by.post.data;
 
-import javafx.fxml.FXML;
-
 import java.util.List;
 
 /**
@@ -35,11 +33,6 @@ public class View {
 
     public void setTables(List<Table> tables) {
         this.tables = tables;
-    }
-
-    @FXML
-    private void initialize() {
-
     }
 
     @Override

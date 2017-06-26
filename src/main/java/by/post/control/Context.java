@@ -5,7 +5,6 @@ import by.post.data.type.ColumnDataType;
 import by.post.data.type.DataTypeFactory;
 import by.post.data.type.Dbms;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TreeView;
 
 import java.util.Locale;
@@ -18,7 +17,6 @@ import java.util.Locale;
 public class Context {
 
     private static TypedTreeItem tablesTreeItem;
-    private static TableView mainTableView;
     private static TreeView mainTableTree;
     private static Locale locale;
     //Data types for database columns
@@ -35,14 +33,6 @@ public class Context {
 
     public static synchronized void setTablesTreeItem(TypedTreeItem tablesTreeItem) {
         Context.tablesTreeItem = tablesTreeItem;
-    }
-
-    public static TableView getMainTableView() {
-        return mainTableView;
-    }
-
-    public static synchronized void setMainTableView(TableView mainTableView) {
-        Context.mainTableView = mainTableView;
     }
 
     public static TreeView getMainTableTree() {
