@@ -19,11 +19,11 @@ public class Cell implements Data {
         this.value = value;
     }
 
-    public String getName() {
+    public String getColumnName() {
         return columnName;
     }
 
-    public void setName(String name) {
+    public void setColumnName(String name) {
         this.columnName = name;
     }
 

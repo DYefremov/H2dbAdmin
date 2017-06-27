@@ -166,7 +166,7 @@ public class MultipleTableColumnController {
     private Row getKeyRow(Row row) {
 
         List<Cell> cells = new ArrayList<>();
-        row.getCells().forEach(c -> cells.add(new Cell(c.getType(), c.getName(), c.getValue())));
+        row.getCells().forEach(c -> cells.add(new Cell(c.getType(), c.getColumnName(), c.getValue())));
         Row keyRow = new Row(row.getNum(), row.getTableName(), cells);
 
         return keyRow;

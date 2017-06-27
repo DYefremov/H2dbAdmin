@@ -304,7 +304,7 @@ public class TableEditor {
         List<Cell> cells = rowItem.getCells();
         columns.forEach(c -> {
             Column column = (Column) c.getUserData();
-            cells.get(columns.indexOf(c)).setName(column.getColumnName());
+            cells.get(columns.indexOf(c)).setColumnName(column.getColumnName());
         });
 
         rowItem.setTableName(mainTable.getId());

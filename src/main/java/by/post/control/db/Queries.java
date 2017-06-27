@@ -228,7 +228,7 @@ public class Queries {
         int lastIndex = cells.size() - 1;
 
         StringBuilder sb = new StringBuilder("INSERT INTO " + row.getTableName() + " (");
-        cells.forEach(c -> sb.append(cells.indexOf(c) != lastIndex ? c.getName() + ", " : c.getName()));
+        cells.forEach(c -> sb.append(cells.indexOf(c) != lastIndex ? c.getColumnName() + ", " : c.getColumnName()));
 
         sb.append(")\nVALUES (");
 
@@ -263,7 +263,7 @@ public class Queries {
 
         cells.forEach(c -> {
             boolean isNull = c.getValue() == null;
-            String value = c.getName() + (isNull ? " IS NULL" : "='" + c.getValue() + "'");
+            String value = c.getColumnName() + (isNull ? " IS NULL" : "='" + c.getValue() + "'");
             sb.append(cells.indexOf(c) != lastIndex ? value + " AND " : value + ";");
         });
 
@@ -292,7 +292,7 @@ public class Queries {
 
         changedCells.forEach(cc -> {
             String data = cc.getValue();
-            String value = cc.getName() + "=" + (data.equals("null") || data.equals("NULL") ? "NULL" : "'" + cc.getValue() + "'");
+            String value = cc.getColumnName() + "=" + (data.equals("null") || data.equals("NULL") ? "NULL" : "'" + cc.getValue() + "'");
             sb.append(changedCells.indexOf(cc) != lastChangedIndex ? value + "," : value + " \nWHERE ");
         });
         ColumnDataType dataType = Context.getCurrentDataType();
@@ -302,7 +302,7 @@ public class Queries {
         int lastOldIndex = oldCells.size() - 1;
 
         oldCells.forEach(c -> {
-            String columnName = c.getName();
+            String columnName = c.getColumnName();
             String value = c.getValue();
             value = value == null ? "(" + columnName + " IS NULL OR " + columnName + "='')" : columnName + "='" + value + "'";
             sb.append(oldCells.indexOf(c) != lastOldIndex ? value + " AND " : value + ";");

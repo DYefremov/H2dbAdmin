@@ -1,5 +1,7 @@
 package by.post.data;
 
+import javafx.beans.property.SimpleBooleanProperty;
+
 /**
  * @author Dmitriy V.Yefremov
  */
@@ -7,13 +9,14 @@ public class User {
 
     private final String name;
     private final String id;
-    private final boolean admin;
+    private final SimpleBooleanProperty admin;
 
     public User(String name, String id, boolean admin) {
         this.name = name;
         this.id = id;
-        this.admin = admin;
+        this.admin = new SimpleBooleanProperty(admin);
     }
+
 
     public String getName() {
         return name;
@@ -24,6 +27,10 @@ public class User {
     }
 
     public boolean isAdmin() {
+        return admin.get();
+    }
+
+    public SimpleBooleanProperty adminProperty() {
         return admin;
     }
 

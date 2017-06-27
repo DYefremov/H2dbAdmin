@@ -52,7 +52,6 @@
                         </Label>
                         <CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <ImageView fitHeight="70.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-image: url(img/avatar.png)" />
-
                     </children>
                 </GridPane>
             </center>
