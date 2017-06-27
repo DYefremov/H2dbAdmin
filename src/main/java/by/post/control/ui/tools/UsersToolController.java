@@ -86,7 +86,7 @@ public class UsersToolController {
             return userList;
         }
 
-        Collection<Row> data = (Collection<Row>) dbControl.getTableData(tableName, TableType.SYSTEM_TABLE, 0, 100);
+        Collection<Row> data = (Collection<Row>) dbControl.getTableData(tableName, TableType.SYSTEM_TABLE, 0, Integer.MAX_VALUE);
 
         if (data != null && !data.isEmpty()) {
             for (Row row : data) {

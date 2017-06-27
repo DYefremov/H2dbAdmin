@@ -6,7 +6,7 @@ import by.post.control.db.Queries;
 import by.post.control.db.TableType;
 import by.post.control.ui.CheckedIntegerStringConverter;
 import by.post.data.Cell;
-import by.post.data.Table;
+import by.post.data.Row;
 import by.post.data.Trigger;
 import by.post.ui.ConfirmationDialog;
 import javafx.collections.FXCollections;
@@ -159,24 +159,24 @@ public class TriggersToolController {
     private void initData() {
 
         dbControl = DbController.getInstance();
-        Table data = dbControl.getTable("Triggers", TableType.SYSTEM_TABLE);
-        tableView.setItems(FXCollections.observableArrayList(getTriggers(data)));
+        List<Row> rows = (List<Row>) dbControl.getTableData("Triggers", TableType.SYSTEM_TABLE, 0, Integer.MAX_VALUE);
+        tableView.setItems(FXCollections.observableArrayList(getTriggers(rows)));
     }
 
     /**
      * @param data
      * @return collection of triggers received from the system table
      */
-    private Collection<Trigger> getTriggers(Table data) {
+    private Collection<Trigger> getTriggers(List<Row> data) {
 
         List<Trigger> triggers = new ArrayList<>();
 
-        if (data == null || data.getRows() == null) {
+        if (data == null) {
             return triggers;
         }
         //TODO Maybe temporarily. To think up more universally.
         try {
-            data.getRows().forEach(r -> {
+           data.forEach(r -> {
                 Trigger trigger = new Trigger();
                 List<Cell> cells = r.getCells();
 
