@@ -74,11 +74,6 @@
     -fx-padding: 0;
 }
 
-/* Style for condition button in condition cell */
-.condition-cell-choice-box {
-    -fx-background-color: transparent;
-}
-
 /* Style for Status bar */
 .status-bar {
     -fx-border-insets: 1;
