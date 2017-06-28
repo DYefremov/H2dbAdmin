@@ -14,7 +14,7 @@
                 <Label style="-fx-text-fill: red" text="No columns selected!" />
             </placeholder>
             <columns>
-                <TableColumn fx:id="namesColumn" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" sortable="false" text="Columns">
+                <TableColumn fx:id="namesColumn" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" sortable="false" text="Columns" style="-fx-alignment: center-left">
                     <cellValueFactory>
                         <PropertyValueFactory property="columnName" />
                     </cellValueFactory>

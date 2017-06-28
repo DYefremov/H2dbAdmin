@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.layout.HBox?>
 
 <HBox fx:id="mainHBox" alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="26.0" spacing="5.0" style="-fx-background-color: lightgray;" styleClass="bar" stylesheets="@../Ui.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.ConditionBoxController">
-   <children>
-      <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#onAdd" style="-fx-background-image: url(/img/list-add.png);" />
-      <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#onDelete" style="-fx-background-image: url(/img/clear.png);" />
-   </children>
+    <children>
+        <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#onAdd" style="-fx-background-image: url(/img/list-add.png);" />
+        <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#onDelete" style="-fx-background-image: url(/img/clear.png);" />
+        <ChoiceBox minWidth="-Infinity" prefHeight="26.0" prefWidth="60.0" styleClass="condition-cell-choice-box" value="AND">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="AND" />
+                    <String fx:value="OR" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+    </children>
 </HBox>

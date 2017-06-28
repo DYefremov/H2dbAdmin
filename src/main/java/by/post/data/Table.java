@@ -2,13 +2,12 @@ package by.post.data;
 
 import by.post.control.db.TableType;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
  * @author Dmitriy V.Yefremov
  */
-public class Table implements Data {
+public class Table {
 
     private String name;
     private TableType type;
@@ -77,10 +76,5 @@ public class Table implements Data {
                 ", columns=" + columns +
                 ", rows=" + rows +
                 '}';
-    }
-
-    @Override
-    public Collection getData() {
-        return rows;
     }
 }
