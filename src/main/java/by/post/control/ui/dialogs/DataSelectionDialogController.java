@@ -32,7 +32,7 @@ public class DataSelectionDialogController {
     @FXML
     private ListView columnsListView;
     @FXML
-    ConditionListPaneController conditionListPaneController;
+    private ConditionListPaneController conditionListPaneController;
 
     private Table table;
     private int fullColumnsSize;
@@ -45,6 +45,10 @@ public class DataSelectionDialogController {
 
         this.table = table;
         updateBoxes(table);
+    }
+
+    public String getQuery() {
+        return String.valueOf(whereBox.getValue()).equals("*") ? getDefaultQuery() : conditionListPaneController.getQuery();
     }
 
     @FXML
@@ -129,4 +133,9 @@ public class DataSelectionDialogController {
                 .filter(c -> ((CheckBox) c).isSelected()).map(c -> ((CheckBox) c).getText())
                 .collect(Collectors.toList());
     }
+
+    private String getDefaultQuery() {
+        return "SELECT " + columnsBox.getValue() + " FROM " + table.getName() + ";";
+    }
+
 }

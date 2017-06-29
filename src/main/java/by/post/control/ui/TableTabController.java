@@ -58,7 +58,10 @@ public class TableTabController {
     }
 
     public void onSearch() {
-        Optional<Table> result =  new DataSelectionDialog(table).showAndWait();
+        Optional<String> result =  new DataSelectionDialog(table).showAndWait();
+        if (result.isPresent()) {
+            System.out.println(result.get());
+        }
     }
 
     @FXML

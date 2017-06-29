@@ -18,9 +18,6 @@ import java.io.IOException;
  */
 public class ConditionCell extends TableCell<Column, String> {
 
-    private HBox mainHbox;
-    private ConditionBoxController conditionBoxController;
-
     public ConditionCell() {
         initGraphic();
     }
@@ -45,8 +42,8 @@ public class ConditionCell extends TableCell<Column, String> {
         setAlignment(Pos.CENTER_LEFT);
 
         try {
-            mainHbox = loader.load();
-            conditionBoxController = loader.getController();
+            HBox mainHbox = loader.load();
+            ConditionBoxController conditionBoxController = loader.getController();
             conditionBoxController.setCell(this);
             setGraphic(mainHbox);
         } catch (IOException e) {

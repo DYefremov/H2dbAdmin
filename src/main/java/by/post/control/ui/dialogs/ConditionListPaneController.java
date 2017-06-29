@@ -42,6 +42,10 @@ public class ConditionListPaneController {
         updateColumns();
     }
 
+    public String getQuery() {
+        return console.getText();
+    }
+
     @FXML
     public void onEditCommit(TableColumn.CellEditEvent<Column, String> event) {
 
@@ -106,15 +110,12 @@ public class ConditionListPaneController {
             return "";
         }
 
-        int lastIndex = withConditions.size() - 1;
-
         for (Column column : withConditions) {
-            int index = withConditions.indexOf(column);
-            String value = column.getColumnName() + " = " + column.getCondition();
-            sb.append(lastIndex == index ? value : value + " AND ");
+            String value = column.getCondition();
+            sb.append(value);
         }
 
-        return "WHERE " + sb.toString();
+        return " WHERE " + sb.toString();
     }
 
     /**

@@ -3,6 +3,7 @@ package by.post.control.ui.dialogs;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -53,7 +54,7 @@ public class ConditionBoxController {
     public void onDelete() {
 
         cell.getTableRow().getTableView().getSelectionModel().select(cell.getIndex());
-        mainHBox.getChildren().remove(2, mainHBox.getChildren().size());
+        mainHBox.getChildren().remove(3, mainHBox.getChildren().size());
         Platform.runLater(() -> setCellValue(null));
     }
 
@@ -63,7 +64,6 @@ public class ConditionBoxController {
     }
 
     private void setCellValue(String value) {
-
         cell.startEdit();
         cell.commitEdit(value);
         cell.getTableRow().getTableView().getSelectionModel().select(cell.getIndex());
@@ -72,16 +72,25 @@ public class ConditionBoxController {
 
     private String getCondition() {
 
+        String column = cell.getTableView().getItems().get(cell.getIndex()).getColumnName() + " = '";
         StringBuilder sb = new StringBuilder();
         List<Node> nodes = mainHBox.getChildren();
 
         int lastIndex = nodes.size() - 1;
 
         for (Node node : nodes) {
+
+            if (node instanceof ChoiceBox) {
+                ChoiceBox choiceBox = (ChoiceBox) node;
+                sb.append(" " + choiceBox.getValue() + " ");
+            }
+
             if (node instanceof TextField) {
                 int index = nodes.indexOf(node);
                 String value = ((TextField) node).getText();
-                sb.append(index == lastIndex ? value : value + " OR ");
+                sb.append(column);
+                sb.append(value + "'");
+                sb.append(index == lastIndex ? "" : " OR ");
             }
         }
 
