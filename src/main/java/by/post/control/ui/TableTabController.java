@@ -58,9 +58,11 @@ public class TableTabController {
     }
 
     public void onSearch() {
+
         Optional<String> result =  new DataSelectionDialog(table).showAndWait();
+
         if (result.isPresent()) {
-            System.out.println(result.get());
+            mainTableController.setTable(dbControl.getTableFromQuery(result.get()));
         }
     }
 

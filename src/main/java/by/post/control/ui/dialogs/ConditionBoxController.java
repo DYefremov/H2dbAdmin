@@ -72,7 +72,7 @@ public class ConditionBoxController {
 
     private String getCondition() {
 
-        String column = cell.getTableView().getItems().get(cell.getIndex()).getColumnName() + " = '";
+        String column = cell.getTableView().getItems().get(cell.getIndex()).getColumnName();
         StringBuilder sb = new StringBuilder();
         List<Node> nodes = mainHBox.getChildren();
 
@@ -89,7 +89,7 @@ public class ConditionBoxController {
                 int index = nodes.indexOf(node);
                 String value = ((TextField) node).getText();
                 sb.append(column);
-                sb.append(value + "'");
+                sb.append(value.toUpperCase().equals("NULL") ? " IS NULL" : " = '" + value + "'");
                 sb.append(index == lastIndex ? "" : " OR ");
             }
         }

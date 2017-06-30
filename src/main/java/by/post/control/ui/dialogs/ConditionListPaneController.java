@@ -112,10 +112,16 @@ public class ConditionListPaneController {
 
         for (Column column : withConditions) {
             String value = column.getCondition();
+
+            if (withConditions.indexOf(column) == 0) {
+                value = value.replaceFirst(" OR", "");
+                value = value.replaceFirst(" AND", "");
+            }
+
             sb.append(value);
         }
 
-        return " WHERE " + sb.toString();
+        return " WHERE" + sb.toString();
     }
 
     /**
