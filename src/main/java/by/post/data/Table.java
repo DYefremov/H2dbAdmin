@@ -14,6 +14,10 @@ public class Table {
     private String primaryKey;
     private List<Column> columns;
     private List<Row> rows;
+    //Indicates that the update request
+    private boolean update;
+    //Indicates whether the update request was successful
+    private boolean updated;
 
     public Table() {
     }
@@ -67,6 +71,22 @@ public class Table {
         this.rows = rows;
     }
 
+    public boolean isUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(boolean updated) {
+        this.updated = updated;
+    }
+
+    public boolean isUpdate() {
+        return update;
+    }
+
+    public void setUpdate(boolean update) {
+        this.update = update;
+    }
+
     @Override
     public String toString() {
         return "Table{" +
@@ -75,6 +95,8 @@ public class Table {
                 ", primaryKey='" + primaryKey + '\'' +
                 ", columns=" + columns +
                 ", rows=" + rows +
+                ", update=" + update +
+                ", updated=" + updated +
                 '}';
     }
 }

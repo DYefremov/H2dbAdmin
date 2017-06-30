@@ -1,6 +1,8 @@
 package by.post.control.ui.tools;
 
-import by.post.control.db.*;
+import by.post.control.db.DbControl;
+import by.post.control.db.DbController;
+import by.post.control.db.TableDataResolver;
 import by.post.data.Row;
 import by.post.data.Table;
 import by.post.ui.ConfirmationDialog;
@@ -15,10 +17,7 @@ import javafx.scene.input.KeyEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +35,6 @@ public class SqlConsoleController {
     private Label viewLabel;
 
     private DbControl dbControl;
-    private TableBuilder tableBuilder;
     private List<String> queriesHistory;
     private int historyPosition;
 
@@ -146,7 +144,6 @@ public class SqlConsoleController {
 
         dbControl = DbController.getInstance();
         queriesHistory = new ArrayList<>(HISTORY_SIZE + 1);
-        tableBuilder = new TableBuilder();
     }
 
     /**
@@ -162,31 +159,17 @@ public class SqlConsoleController {
             queriesHistory.remove(0);
         }
 
-        Table table = new Table();
         clearOutput();
+        Table table = dbControl.getTableFromQuery(query);
 
-        boolean isUpdateQuery = isUpdateQuery(query);
+        if (table.isUpdate()) {
+            String message = table.isUpdated() ? DONE_MESSAGE : ERROR_MESSAGE;
+            setOutputMessage(message);
+            return table;
+        }
 
-        try (Statement statement = isUpdateQuery ? dbControl.update(query) :  dbControl.execute(query)) {
-
-            if (isUpdateQuery) {
-                String message = statement.getUpdateCount() != -1 ? DONE_MESSAGE : ERROR_MESSAGE;
-                setOutputMessage(message);
-                return table;
-            }
-
-            if (statement == null || statement.getResultSet() == null) {
-                setOutputMessage(ERROR_MESSAGE);
-                return table;
-            }
-
-            try (ResultSet resultSet = statement.getResultSet()) {
-                ResultSetMetaData rsMetaData = resultSet.getMetaData();
-                table.setRows(tableBuilder.getRows(resultSet));
-                table.setColumns( tableBuilder.getColumns(rsMetaData));
-            }
-        } catch (SQLException e) {
-            logger.error("SqlConsoleControllerOld error in executeQuery: " + e);
+        if (table.getRows().isEmpty()) {
+            setOutputMessage(ERROR_MESSAGE);
         }
 
         return table;
@@ -214,22 +197,6 @@ public class SqlConsoleController {
             tableView.refresh();
             tableView.setVisible(false);
         });
-    }
-
-    /**
-     * @param query
-     * @return true if query has update command
-     */
-    private boolean isUpdateQuery(String query) {
-
-        UpdateCommands[] commands = UpdateCommands.values();
-
-        for (int i = 0; i < commands.length; i++) {
-            if (query.contains(commands[i].name())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

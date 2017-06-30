@@ -50,6 +50,12 @@ public interface DbControl {
     Table getTable(String name, TableType type);
 
     /**
+     * @param query
+     * @return table get table from custom query
+     */
+    Table getTableFromQuery(String query);
+
+    /**
      * @param tableName
      * @param type
      * @return data for table

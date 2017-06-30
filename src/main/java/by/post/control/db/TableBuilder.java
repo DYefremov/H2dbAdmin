@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * Helper class for retrieving data
+ *
  * @author Dmitriy V.Yefremov
  */
 public class TableBuilder {
@@ -41,7 +43,6 @@ public class TableBuilder {
         boolean isSysTable = type.equals(TableType.SYSTEM_TABLE);
 
         try (Statement st = connection.createStatement()) {
-            DatabaseMetaData dbMetaData = connection.getMetaData();
             st.setMaxRows(MAX_ROWS);
             st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTable(name));
 
@@ -51,17 +52,29 @@ public class TableBuilder {
                 table.setRows(getRows(rs));
             }
 
-            try (ResultSet keys = dbMetaData.getPrimaryKeys("", "", name)) {
-                table.setPrimaryKey(keys.next() ? keys.getString("COLUMN_NAME") : "");
-            }
-            //Sets primary key if exist
-            String pk = table.getPrimaryKey();
-            table.getColumns().forEach(c -> c.setPrimaryKey(pk != null && pk.equals(c.getColumnName())));
+            getPrimaryKey(table, connection);
         } catch (SQLException e) {
             logger.error("TableBuilder error in getTable: " + e);
         }
 
         return table;
+    }
+
+    /**
+     * @param table
+     * @param connection
+     * @throws SQLException
+     */
+    public void getPrimaryKey(Table table, Connection connection) throws SQLException {
+
+        DatabaseMetaData dbMetaData = connection.getMetaData();
+
+        try (ResultSet keys = dbMetaData.getPrimaryKeys("", "", table.getName())) {
+            table.setPrimaryKey(keys.next() ? keys.getString("COLUMN_NAME") : "");
+        }
+        //Sets primary key if exist
+        String pk = table.getPrimaryKey();
+        table.getColumns().forEach(c -> c.setPrimaryKey(pk != null && pk.equals(c.getColumnName())));
     }
 
     /**

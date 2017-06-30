@@ -140,6 +140,39 @@ public class DbController implements DbControl {
     }
 
     @Override
+    public Table getTableFromQuery(String query) {
+
+        Table table = new Table();
+
+        boolean isUpdateQuery = isUpdateQuery(query);
+
+        try (Statement statement = isUpdateQuery ? update(query) : execute(query)) {
+
+            if (isUpdateQuery) {
+                table.setUpdate(true);
+                table.setUpdated(statement.getUpdateCount() != -1);
+                return table;
+            }
+
+            if (statement == null || statement.getResultSet() == null) {
+                return table;
+            }
+
+            try (ResultSet resultSet = statement.getResultSet()) {
+                ResultSetMetaData rsMetaData = resultSet.getMetaData();
+                table.setRows(tableBuilder.getRows(resultSet));
+                table.setColumns( tableBuilder.getColumns(rsMetaData));
+                table.setName(rsMetaData.getTableName(1));
+                tableBuilder.getPrimaryKey(table, connection);
+            }
+        } catch (SQLException e) {
+            logger.error("DbController error [getTableFromQuery]: " + e);
+        }
+
+        return table;
+    }
+
+    @Override
     public Collection<?> getTableData(String tableName, TableType type, int limit, int offset) {
         return tableBuilder.getTableData(tableName, type, connection, limit, offset);
     }
@@ -207,6 +240,22 @@ public class DbController implements DbControl {
             return connection == null ? true : connection.isClosed();
         } catch (SQLException e) {
             logger.error("DbController error [isClosed]: " + e);
+        }
+        return false;
+    }
+
+    /**
+     * @param query
+     * @return true if query has update command
+     */
+    private boolean isUpdateQuery(String query) {
+
+        UpdateCommands[] commands = UpdateCommands.values();
+
+        for (int i = 0; i < commands.length; i++) {
+            if (query.contains(commands[i].name())) {
+                return true;
+            }
         }
         return false;
     }
