@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -44,13 +45,16 @@
                                 <Insets right="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <TextField fx:id="userField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="userField" onKeyReleased="#onNameKeyReleased" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <tooltip>
+                        <Tooltip text="Only unquoted or uppercase user names are allowed!" />
+                     </tooltip></TextField>
                         <Label text="%Admin" GridPane.rowIndex="3">
                             <GridPane.margin>
                                 <Insets right="5.0" />
                             </GridPane.margin>
                         </Label>
-                        <CheckBox fx:id="adminCheckBox" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <CheckBox fx:id="adminCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <ImageView fitHeight="70.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-image: url(img/avatar.png)" />
                   <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                     </children>

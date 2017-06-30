@@ -2,10 +2,15 @@ package by.post.control.ui.tools;
 
 import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
+import by.post.control.db.Queries;
 import by.post.control.db.TableType;
 import by.post.data.*;
+import by.post.ui.ConfirmationDialog;
 import by.post.ui.UsersDialog;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -13,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -41,14 +47,38 @@ public class UsersToolController {
         Optional<User> result = new UsersDialog().showAndWait();
 
         if (result.isPresent()) {
-            System.out.println(result.get());
+            try {
+                dbControl.update(Queries.createUser(result.get()));
+                refreshUsers();
+            } catch (SQLException e) {
+                logger.error("UsersToolController error [onUserAdd]: " + e);
+                new Alert(Alert.AlertType.ERROR, "Failure creating user.\n" + e.getMessage()).showAndWait();
+            }
         }
 
     }
 
     @FXML
-    public void onUserDelete() {
+    private void onUserDelete() {
 
+        User user = tableView.getSelectionModel().getSelectedItem();
+
+        if (user == null) {
+            new Alert(Alert.AlertType.ERROR, "No user is selected!").showAndWait();
+            return;
+        }
+
+        Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            try {
+                dbControl.update(Queries.dropUser(user));
+                refreshUsers();
+            } catch (SQLException e) {
+                logger.error("UsersToolController error [onUserDelete]: " + e);
+                new Alert(Alert.AlertType.ERROR, "Failure to delete the user.\n" + e.getMessage()).showAndWait();
+            }
+        }
     }
 
     @FXML
@@ -105,4 +135,17 @@ public class UsersToolController {
 
         return userList;
     }
+
+    /**
+     * Refresh users list
+     */
+    private void refreshUsers() {
+
+        Platform.runLater(() -> {
+            tableView.getItems().clear();
+            tableView.getItems().addAll(getUsers());
+            tableView.refresh();
+        });
+    }
+
 }

@@ -375,6 +375,28 @@ public class Queries {
     }
 
     /**
+     * For compatibility, only unquoted or uppercase user names are allowed!
+     *@see "http://www.h2database.com/html/grammar.html"
+     *
+     * @param user
+     * @return
+     */
+    public static String createUser(User user) {
+        return "CREATE USER " + user.getName().toUpperCase() + " PASSWORD '" + user.getPassword() + "'" + (user.isAdmin() ? " ADMIN;" : ";") ;
+    }
+
+    /**
+     * The current user cannot be dropped!
+     * @see "http://www.h2database.com/html/grammar.html"
+     *
+     * @param user
+     * @return
+     */
+    public static String dropUser(User user) {
+        return "DROP USER " + user.getName().toUpperCase() + ";";
+    }
+
+    /**
      * @return true if type in black list
      */
     private static boolean typeInBlackList(ColumnDataType dataType, int columnType) {

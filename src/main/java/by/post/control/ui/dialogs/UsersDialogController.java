@@ -27,4 +27,12 @@ public class UsersDialogController {
         return new User(userField.getText(), passwordField.getText(), "", adminCheckBox.isSelected());
     }
 
+    @FXML
+    private void onNameKeyReleased() {
+        String value = userField.getText();
+        //For compatibility, only unquoted or uppercase user names are allowed!
+        userField.setText(value.toUpperCase());
+        userField.positionCaret(value.length());
+    }
+
 }
