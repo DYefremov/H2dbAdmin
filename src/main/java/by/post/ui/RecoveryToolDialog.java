@@ -8,8 +8,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -19,26 +17,20 @@ import java.util.ResourceBundle;
  */
 public class RecoveryToolDialog extends Dialog {
 
-    private static final Logger logger = LogManager.getLogger(RecoveryToolDialog.class);
-
-    public RecoveryToolDialog() {
+    public RecoveryToolDialog() throws IOException {
         init();
     }
 
-    private void init() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/RecoveryDialogPane.fxml"));
-            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-            this.setDialogPane(loader.load());
-            Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image(Resources.LOGO_PATH));
+    private void init() throws IOException {
 
-            //Setting translation
-            boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
-            Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
-            cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
-        } catch (IOException e) {
-            logger.error("RecoveryToolDialog error[init]: " + e);
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/RecoveryDialogPane.fxml"));
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
+        this.setDialogPane(loader.load());
+        Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Resources.LOGO_PATH));
+        //Setting translation
+        boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
+        Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
     }
 }

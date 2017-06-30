@@ -14,8 +14,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -36,8 +34,6 @@ public class MainUiForm extends Application {
     private BorderPane mainPane;
     private Properties properties;
 
-    private static final Logger logger = LogManager.getLogger(MainUiForm.class);
-
     public static void main(String[] args) {
         // Checking that the application is already running
         if (new AppRunChecker().isRunning()) {
@@ -53,23 +49,19 @@ public class MainUiForm extends Application {
      * @throws IOException
      */
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
 
         this.mainStage = stage;
         this.mainStage.setTitle("H2dbAdmin");
         this.mainStage.getIcons().add(new Image(Resources.LOGO_PATH));
 
-        try {
-            initApp();
-        } catch (Exception e) {
-            logger.error("MainUiForm error [start]: " + e);
-        }
+        initApp();
     }
 
     /**
      * Initializing main ui elements
      */
-    private void initApp() throws Exception {
+    private void initApp() throws IOException {
 
         properties = PropertiesController.getProperties();
 

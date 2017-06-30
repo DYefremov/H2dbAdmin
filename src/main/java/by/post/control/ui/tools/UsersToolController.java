@@ -12,9 +12,11 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -26,17 +28,22 @@ public class UsersToolController {
     @FXML
     private TableColumn<User, Boolean> adminColumn;
 
-    private static final Logger logger = LogManager.getLogger(UsersToolController.class);
-
     private DbControl dbControl;
+    private static final Logger logger = LogManager.getLogger(UsersToolController.class);
 
     public UsersToolController() {
 
     }
 
     @FXML
-    public void onUserAdd() {
-        new UsersDialog().showAndWait();
+    public void onUserAdd() throws IOException {
+
+        Optional<User> result = new UsersDialog().showAndWait();
+
+        if (result.isPresent()) {
+            System.out.println(result.get());
+        }
+
     }
 
     @FXML
@@ -91,7 +98,7 @@ public class UsersToolController {
         if (data != null && !data.isEmpty()) {
             for (Row row : data) {
                 List<Cell> cells = row.getCells();
-                userList.add(new User(cells.get(nameIndex).getValue(), cells.get(idIndex).getValue(),
+                userList.add(new User(cells.get(nameIndex).getValue(), null, cells.get(idIndex).getValue(),
                         Boolean.valueOf(cells.get(adminIndex).getValue())));
             }
         }

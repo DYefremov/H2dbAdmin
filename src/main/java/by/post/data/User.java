@@ -8,11 +8,13 @@ import javafx.beans.property.SimpleBooleanProperty;
 public class User {
 
     private final String name;
+    private final String password;
     private final String id;
     private final SimpleBooleanProperty admin;
 
-    public User(String name, String id, boolean admin) {
+    public User(String name, String password, String id, boolean admin) {
         this.name = name;
+        this.password = password;
         this.id = id;
         this.admin = new SimpleBooleanProperty(admin);
     }
@@ -20,6 +22,10 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getId() {

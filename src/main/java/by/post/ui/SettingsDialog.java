@@ -26,22 +26,20 @@ public class SettingsDialog extends Dialog {
 
     private static final Logger logger = LogManager.getLogger(SettingsDialog.class);
 
-    public SettingsDialog() {
+    public SettingsDialog() throws IOException {
         init();
     }
 
-    private void init() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("dialogs/SettingsDialogPane.fxml"));
-            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-            this.setDialogPane(loader.load());
-            controller = loader.getController();
-            Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image(Resources.LOGO_PATH));
-        } catch (IOException e) {
-            logger.error("RecoveryToolDialog error[init]: " + e);
-        }
+    private void init() throws IOException {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("dialogs/SettingsDialogPane.fxml"));
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
+        this.setDialogPane(loader.load());
+        controller = loader.getController();
+
+        Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Resources.LOGO_PATH));
         //Consume apply button event if canceled in confirmation dialog
         final Button applyButton = (Button) getDialogPane().lookupButton(ButtonType.APPLY);
         applyButton.addEventFilter(ActionEvent.ACTION, event -> {

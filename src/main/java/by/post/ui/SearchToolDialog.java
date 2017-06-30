@@ -12,8 +12,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -25,39 +23,34 @@ public class SearchToolDialog extends Dialog {
 
     private SearchToolDialogController controller;
 
-    private static final Logger logger = LogManager.getLogger(SearchToolDialog.class);
-
-    public SearchToolDialog() {
+    public SearchToolDialog() throws IOException {
         init();
     }
 
-    private void init() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("dialogs/SearchToolDialog.fxml"));
-            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-            this.setDialogPane(loader.load());
-            controller = loader.getController();
+    private void init() throws IOException {
 
-            Stage stage = (Stage) this.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image(Resources.LOGO_PATH));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("dialogs/SearchToolDialog.fxml"));
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
+        this.setDialogPane(loader.load());
+        controller = loader.getController();
 
-            this.initModality(Modality.NONE);
-            this.setOnCloseRequest(event -> controller.onCloseRequest());
+        Stage stage = (Stage) this.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Resources.LOGO_PATH));
 
-            final Button cancelButton = (Button) this.getDialogPane().lookupButton(ButtonType.CANCEL);
-            cancelButton.addEventFilter(ActionEvent.ACTION, event -> {
-                controller.onCloseRequest();
-                event.consume();
-            });
-            //Setting translation for Cancel button
-            boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
-            cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
-            //Sets not resizable after click on details
-            this.getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) ->
-                    Platform.runLater(() -> this.setResizable(false)));
-        } catch (IOException e) {
-            logger.error("RecoveryToolDialog error[init]: " + e);
-        }
+        this.initModality(Modality.NONE);
+        this.setOnCloseRequest(event -> controller.onCloseRequest());
+
+        final Button cancelButton = (Button) this.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.addEventFilter(ActionEvent.ACTION, event -> {
+            controller.onCloseRequest();
+            event.consume();
+        });
+        //Setting translation for Cancel button
+        boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
+        cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
+        //Sets not resizable after click on details
+        this.getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) ->
+                Platform.runLater(() -> this.setResizable(false)));
     }
 }

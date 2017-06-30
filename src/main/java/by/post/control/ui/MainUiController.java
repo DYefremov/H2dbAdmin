@@ -4,6 +4,7 @@ import by.post.control.Context;
 import by.post.control.PropertiesController;
 import by.post.control.Settings;
 import by.post.control.db.DatabaseManager;
+import by.post.control.ui.tools.UsersToolController;
 import by.post.data.Table;
 import by.post.data.View;
 import by.post.data.type.Dbms;
@@ -107,12 +108,8 @@ public class MainUiController {
     }
 
     @FXML
-    public void onAbout() {
-        try {
-            new AboutDialog(mainUiForm.getHostServices()).showAndWait();
-        } catch (Exception e) {
-            logger.error("MainUiController error onItemAbout: " + e);
-        }
+    public void onAbout() throws IOException {
+        new AboutDialog(mainUiForm.getHostServices()).showAndWait();
     }
 
     @FXML
@@ -132,23 +129,22 @@ public class MainUiController {
 
     @FXML
     public void onUsersTool() throws IOException {
-        setCenter(FXMLLoader.load(MainUiForm.class.getResource("tools/UsersToolPane.fxml")));
+        showUsersTool(false);
     }
 
     @FXML
     public void onAddUser() throws IOException {
-        onUsersTool();
-        new UsersDialog().showAndWait();
+       showUsersTool(true);
     }
 
     @FXML
-    public void onSearchTool() {
+    public void onSearchTool() throws IOException {
         onExplorer();
         showSearchTool();
     }
 
     @FXML
-    public void onRecoveryTool() {
+    public void onRecoveryTool() throws IOException {
         new RecoveryToolDialog().showAndWait();
     }
 
@@ -299,7 +295,7 @@ public class MainUiController {
     /**
      * Show and work with search tool
      */
-    private void showSearchTool() {
+    private void showSearchTool() throws IOException {
         new SearchToolDialog().show();
     }
 
@@ -333,6 +329,23 @@ public class MainUiController {
                     logger.error("MainUiController error [databaseDelete]: " + e);
                 }
             }).start();
+        }
+    }
+
+    /**
+     * Shows tool for working with users
+     *
+     * @param withAddDialog
+     * @throws IOException
+     */
+    private void showUsersTool(boolean withAddDialog) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("tools/UsersToolPane.fxml"));
+        setCenter(loader.load());
+        //Shows dialog for user add if necessary
+        if (withAddDialog) {
+            UsersToolController controller = loader.getController();
+            controller.onUserAdd();
         }
     }
 
