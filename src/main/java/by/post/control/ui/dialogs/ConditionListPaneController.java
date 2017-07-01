@@ -58,6 +58,7 @@ public class ConditionListPaneController {
     @FXML
     private void initialize() {
 
+
         conditionColumn.setCellFactory(ConditionCell.forTableColumn());
     }
 
@@ -66,6 +67,7 @@ public class ConditionListPaneController {
      */
     private void updateColumns() {
 
+        clearPreviousConditions();
         tableView.getItems().clear();
         tableView.setItems(FXCollections.observableArrayList(columns));
 
@@ -73,6 +75,16 @@ public class ConditionListPaneController {
         double cellSize = tableView.getFixedCellSize();
         updateConsole();
         tableView.setMinHeight(columnsSize > 0 ? ++columnsSize * cellSize : cellSize * 2);
+    }
+
+    /**
+     * Clear previous values of conditions
+     */
+    private void clearPreviousConditions() {
+
+        if (columns != null) {
+            columns.forEach(c -> c.setCondition(null));
+        }
     }
 
     /**
@@ -140,5 +152,5 @@ public class ConditionListPaneController {
 
         return sb.toString();
     }
-
+    
 }

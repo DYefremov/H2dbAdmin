@@ -19,22 +19,18 @@ public class DataSelectionDialog extends Dialog<String> {
     private Table table;
     private DataSelectionDialogController controller;
 
-    public DataSelectionDialog(Table table) {
+    public DataSelectionDialog(Table table) throws IOException {
         this.table = table;
         init();
     }
 
-    private void init() {
+    private void init() throws IOException {
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/DataSelectionDialogPane.fxml"));
-            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-            setDialogPane(loader.load());
-            controller = loader.getController();
-            controller.setTable(table);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/DataSelectionDialogPane.fxml"));
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
+        setDialogPane(loader.load());
+        controller = loader.getController();
+        controller.setTable(table);
 
         setResultConverter((dialogButton) -> {
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();

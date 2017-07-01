@@ -64,6 +64,7 @@ public class ConditionBoxController {
     }
 
     private void setCellValue(String value) {
+
         cell.startEdit();
         cell.commitEdit(value);
         cell.getTableRow().getTableView().getSelectionModel().select(cell.getIndex());

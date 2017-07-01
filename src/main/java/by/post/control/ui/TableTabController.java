@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -57,7 +58,8 @@ public class TableTabController {
 
     }
 
-    public void onSearch() {
+    @FXML
+    public void onSearch() throws IOException {
 
         Optional<String> result =  new DataSelectionDialog(table).showAndWait();
 
