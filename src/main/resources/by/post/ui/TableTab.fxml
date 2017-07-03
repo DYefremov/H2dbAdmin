@@ -58,7 +58,7 @@
                             </tooltip>
                         </Button>
                         <Separator orientation="VERTICAL" prefHeight="200.0" />
-                        <Button mnemonicParsing="false" onAction="#onSearch" style="-fx-background-image: url(/img/search.png);" />
+                        <Button fx:id="dataSelectionButton" mnemonicParsing="false" onAction="#onSearch" style="-fx-background-image: url(/img/search.png);" />
                         <Pane HBox.hgrow="ALWAYS" />
                         <Label text="Data size:" />
                   <Label fx:id="dataSizeLabel" text="size" />

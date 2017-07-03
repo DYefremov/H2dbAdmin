@@ -41,6 +41,8 @@ public class TableTabController {
     @FXML
     private Button nextButton;
     @FXML
+    private Button dataSelectionButton;
+    @FXML
     private MainTableController mainTableController;
     @FXML
     private Node mainTable;
@@ -64,7 +66,9 @@ public class TableTabController {
         Optional<String> result =  new DataSelectionDialog(table).showAndWait();
 
         if (result.isPresent()) {
-            mainTableController.setTable(dbControl.getTableFromQuery(result.get()));
+            Table table = dbControl.getTableFromQuery(result.get());
+            table.setType(this.table.getType());
+            mainTableController.setTable(table);
         }
     }
 
@@ -116,6 +120,7 @@ public class TableTabController {
     public void selectTable(String tableName, TableType tableType) {
 
         tableNameLabel.setText(tableName);
+        dataSelectionButton.setDisable(!tableType.equals(TableType.TABLE));
         typeLabel.setText(tableType != null ? tableType.name() : "");
         table = dbControl.getTable(tableName, tableType);
         mainTableController.setTable(table);
