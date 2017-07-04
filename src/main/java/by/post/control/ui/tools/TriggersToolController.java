@@ -67,8 +67,7 @@ public class TriggersToolController {
         }
 
         if (addedTriggers.size() > 0) {
-            Optional<ButtonType> result = new ConfirmationDialog(
-                    " You have an unsaved trigger.\nSave before adding a new one?").showAndWait();
+            Optional<ButtonType> result = new ConfirmationDialog(" You have an unsaved trigger.\nSave before adding a new one?").showAndWait();
 
             if (result.get() == ButtonType.OK) {
                 saveTrigger();
@@ -142,7 +141,7 @@ public class TriggersToolController {
         tableView.setRowFactory(tv -> {
             TableRow<Trigger> row = new TableRow<>();
             row.setOnMouseEntered(event -> {
-               tableView.setEditable(false);
+                tableView.setEditable(false);
 
                 if (addedTriggers != null && addedTriggers.contains(row.getItem())) {
                     tableView.setEditable(true);
@@ -176,7 +175,7 @@ public class TriggersToolController {
         }
         //TODO Maybe temporarily. To think up more universally.
         try {
-           data.forEach(r -> {
+            data.forEach(r -> {
                 Trigger trigger = new Trigger();
                 List<Cell> cells = r.getCells();
 

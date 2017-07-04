@@ -53,4 +53,5 @@ public class ConditionCell extends TableCell<Column, String> {
             e.printStackTrace();
         }
     }
+
 }

@@ -32,22 +32,22 @@
                 </TableColumn>
                 <TableColumn text="Type">
                     <columns>
-                        <TableColumn fx:id="typeInsertColumn" prefWidth="75.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="INSERT">
+                        <TableColumn fx:id="typeInsertColumn" prefWidth="55.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="INSERT">
                             <cellValueFactory>
                                 <PropertyValueFactory property="typeInsert" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="typeUpdateColumn" prefWidth="75.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="UPDATE">
+                        <TableColumn fx:id="typeUpdateColumn" prefWidth="55.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="UPDATE">
                             <cellValueFactory>
                                 <PropertyValueFactory property="typeUpdate" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="typeDeleteColumn" prefWidth="75.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="DELETE">
+                        <TableColumn fx:id="typeDeleteColumn" prefWidth="55.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="DELETE">
                             <cellValueFactory>
                                 <PropertyValueFactory property="typeDelete" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="typeSelectColumn" prefWidth="75.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="SELECT">
+                        <TableColumn fx:id="typeSelectColumn" prefWidth="55.0" style="-fx-alignment: center; -fx-font-size: 10px;" text="SELECT">
                             <cellValueFactory>
                                 <PropertyValueFactory property="typeSelect" />
                             </cellValueFactory>

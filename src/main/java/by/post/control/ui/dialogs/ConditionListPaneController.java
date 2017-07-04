@@ -58,7 +58,6 @@ public class ConditionListPaneController {
     @FXML
     private void initialize() {
 
-
         conditionColumn.setCellFactory(ConditionCell.forTableColumn());
     }
 
@@ -69,6 +68,7 @@ public class ConditionListPaneController {
 
         clearPreviousConditions();
         tableView.getItems().clear();
+        tableView.refresh();
         tableView.setItems(FXCollections.observableArrayList(columns));
 
         int columnsSize = columns.size();

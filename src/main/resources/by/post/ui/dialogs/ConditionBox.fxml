@@ -10,11 +10,11 @@
     <children>
         <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#onAdd" style="-fx-background-image: url(/img/list-add.png);" />
         <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#onDelete" style="-fx-background-image: url(/img/clear.png);" />
-        <ChoiceBox disable="true" minWidth="-Infinity" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: transparent;" value="OR">
+        <ChoiceBox minWidth="-Infinity" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: transparent;" value="OR">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="OR" />
-                    <String fx:value="AND" />
+                    <!--<String fx:value="AND" />-->
                 </FXCollections>
             </items>
         </ChoiceBox>
