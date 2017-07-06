@@ -66,9 +66,8 @@ public class TableTabController {
         Optional<String> result =  new DataSelectionDialog(table).showAndWait();
 
         if (result.isPresent()) {
-            Table table = dbControl.getTableFromQuery(result.get());
-            table.setType(this.table.getType());
-            mainTableController.setTable(table);
+            String query = result.get().replace(";", "") + " LIMIT " + maxRowsTextField.getText();
+            new DataSelectionService(query, table.getType()).start();
         }
     }
 
@@ -156,9 +155,9 @@ public class TableTabController {
     }
 
     /**
-     * Service for data load
+     * Service for updating table data
      */
-    class DataLoadService extends Service<Void> {
+    private class DataLoadService extends Service<Void> {
 
         @Override
         protected Task<Void> createTask() {
@@ -176,16 +175,55 @@ public class TableTabController {
                 }
             };
 
-            task.setOnSucceeded(event -> {
-                Platform.runLater(() -> {
-                    updateNavigationButtons();
-                    sizeProperty.setValue(String.valueOf(dataSize));
-                    mainTable.setDisable(false);
-                });
-            });
+            task.setOnSucceeded(event -> updateUi());
 
             return task;
         }
+    }
+
+    /**
+     * Service for data load by custom query
+     */
+    private class DataSelectionService extends Service<Void> {
+
+        private final String query;
+        private final TableType tableType;
+
+        public DataSelectionService(String query, TableType tableType) {
+            this.query = query;
+            this.tableType = tableType;
+            this.setOnSucceeded(event -> updateUi());
+        }
+
+        @Override
+        protected Task<Void> createTask() {
+
+            Task<Void> task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    mainTable.setDisable(true);
+                    Table table = dbControl.getTableFromQuery(query);
+                    table.setType(tableType);
+                    dataSize = table.getRows() == null ? 0 : table.getRows().size();
+                    Platform.runLater(() -> mainTableController.setTable(table));
+
+                    return null;
+                }
+            };
+            return task;
+        }
+    }
+
+    /**
+     * Update ui elements after data changes
+     */
+    private void updateUi() {
+
+        Platform.runLater(() -> {
+            updateNavigationButtons();
+            sizeProperty.setValue(String.valueOf(dataSize));
+            mainTable.setDisable(false);
+        });
     }
 
 }
