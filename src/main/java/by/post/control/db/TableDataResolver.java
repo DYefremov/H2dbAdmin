@@ -69,6 +69,10 @@ public class TableDataResolver {
      * Resolve data from table
      */
     private void resolve() {
+
+        if (table == null) {
+            return;
+        }
         // Add columns
         tableColumns = getColumns(table.getColumns() != null ? table.getColumns() : new ArrayList<>());
         // Add data

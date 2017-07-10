@@ -72,7 +72,7 @@ public class TableEditor {
             column.setTableName(mainTable.getId());
             dbControl.update(Queries.addColumn(column));
 
-            TableColumn tableColumn = new TableDataResolver().getColumn(column);
+            TableColumn tableColumn = new TableDataResolver(null, this).getColumn(column);
             mainTable.getColumns().add(tableColumn);
 
             ObservableList<Row> items = mainTable.getItems();
