@@ -28,7 +28,6 @@ public class TableEditor {
     private NavigableMap<Row, Row> changedRows;
     private ColumnDataType columnDataType;
 
-    private static final String DEFAULT_CELL_VALUE = "value";
     private static final String DEFAULT_NUM_CELL_VALUE = "0";
 
     private static final Logger logger = LogManager.getLogger(TableEditor.class);
@@ -83,7 +82,6 @@ public class TableEditor {
                 items.parallelStream().forEach(item -> {
                     //Get default cell  for this column
                     Cell cell = getCell(column);
-                    column.setDefaultValue(cell.getValue());
                     item.getCells().add(cell);
                 });
                 mainTable.setItems(items);
@@ -352,7 +350,7 @@ public class TableEditor {
         } else if (columnDataType.isNumericType(dataType)) {
             value = isNotNull ? DEFAULT_NUM_CELL_VALUE : null;
         } else {
-            value = isNotNull ? DEFAULT_CELL_VALUE : null;
+            value = column.getDefaultValue();
         }
 
         return new Cell(dataType, column.getColumnName(), value);

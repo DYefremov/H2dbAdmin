@@ -19,11 +19,11 @@ public class ColumnDialogController {
     @FXML
     private ComboBox type;
     @FXML
+    private TextField defaultValue;
+    @FXML
     private CheckBox isKey;
     @FXML
     private CheckBox isNotNull;
-
-    private Column column;
 
     public ColumnDialogController() {
 
@@ -37,6 +37,10 @@ public class ColumnDialogController {
         return String.valueOf(type.getSelectionModel().getSelectedItem());
     }
 
+    public String getDefaultValue() {
+        return defaultValue.getText();
+    }
+
     public boolean isKey() {
         return isKey.isSelected();
     }
@@ -45,16 +49,20 @@ public class ColumnDialogController {
         return isNotNull.isSelected();
     }
 
-    public Column getColumn() {
-        return column;
-    }
-
-    public void setColumn(Column column) {
-        this.column = column;
+    public void setColumnProperties(Column column) {
         name.setText(column.getColumnName());
         isKey.setSelected(column.isPrimaryKey());
         isNotNull.setSelected(column.isNotNull());
         type.getSelectionModel().select(column != null ? column.getType() : DefaultColumnDataType.VARCHAR);
+        defaultValue.setText(column.getDefaultValue());
+    }
+
+    @FXML
+    private void onNotNullChange() {
+
+        if (isNotNull.isSelected() && defaultValue.getText() == null) {
+            defaultValue.setText("value");
+        }
     }
 
     @FXML
@@ -62,4 +70,5 @@ public class ColumnDialogController {
         type.setItems(FXCollections.observableArrayList(Context.getCurrentDataType().getValues()));
         type.getSelectionModel().select(DefaultColumnDataType.VARCHAR);
     }
+
 }

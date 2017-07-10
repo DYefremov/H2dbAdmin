@@ -11,8 +11,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -30,32 +28,24 @@ public class ColumnDialog extends Dialog<Column> {
     private ColumnDialogController controller;
     private Column column;
 
-    private static final Logger logger = LogManager.getLogger(ColumnDialog.class);
-
-    public ColumnDialog() {
-        column = new Column("","New", DefaultColumnDataType.VARCHAR);
+    public ColumnDialog() throws IOException {
+        column = new Column("", "New", DefaultColumnDataType.VARCHAR);
         init();
     }
 
-    public ColumnDialog(Column column) {
+    public ColumnDialog(Column column) throws IOException {
         this.column = column;
         init();
     }
 
-    private void init() {
+    private void init() throws IOException {
 
-        try {
-            loader = new FXMLLoader(getClass().getResource("dialogs/ColumnDialog.fxml"));
-            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-            parent = loader.<DialogPane>load();
-            controller = loader.getController();
-            controller.setColumn(column);
-        } catch (IOException e) {
-            logger.error("ColumnDialog create error: " + e);
-        }
+        loader = new FXMLLoader(getClass().getResource("dialogs/ColumnDialog.fxml"));
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
+        parent = loader.load();
+        controller = loader.getController();
+        controller.setColumnProperties(column);
 
-        parent.setHeaderText("Please, set properties of column!");
-        parent.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         setDialogPane(parent);
         setTitle(Resources.TITLE);
 
@@ -71,6 +61,7 @@ public class ColumnDialog extends Dialog<Column> {
                     column.setType(controller.getType());
                     column.setPrimaryKey(controller.isKey());
                     column.setNotNull(controller.isNotNull());
+                    column.setDefaultValue(controller.getDefaultValue());
                 }
             }
 

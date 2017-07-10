@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +50,7 @@ public class MultipleTableColumnController {
      * On context  menu actions
      */
     @FXML
-    public void onAdd() {
+    public void onAdd() throws IOException {
 
         Optional<Column> result = new ColumnDialog().showAndWait();
 
@@ -64,7 +65,7 @@ public class MultipleTableColumnController {
     }
 
     @FXML
-    public void onChange() {
+    public void onChange() throws IOException {
 
         Column data = (Column) tableColumn.getUserData();
 
