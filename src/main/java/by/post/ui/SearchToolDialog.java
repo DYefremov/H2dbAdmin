@@ -1,13 +1,9 @@
 package by.post.ui;
 
 import by.post.control.Context;
-import by.post.control.Settings;
 import by.post.control.ui.dialogs.SearchToolDialogController;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
@@ -32,25 +28,16 @@ public class SearchToolDialog extends Dialog {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("dialogs/SearchToolDialog.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-        this.setDialogPane(loader.load());
+        setDialogPane(loader.load());
         controller = loader.getController();
 
-        Stage stage = (Stage) this.getDialogPane().getScene().getWindow();
+        Stage stage = (Stage) getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(Resources.LOGO_PATH));
 
-        this.initModality(Modality.NONE);
-        this.setOnCloseRequest(event -> controller.onCloseRequest());
-
-        final Button cancelButton = (Button) this.getDialogPane().lookupButton(ButtonType.CANCEL);
-        cancelButton.addEventFilter(ActionEvent.ACTION, event -> {
-            controller.onCloseRequest();
-            event.consume();
-        });
-        //Setting translation for Cancel button
-        boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
-        cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
+        initModality(Modality.NONE);
+        setOnCloseRequest(event -> controller.onCloseRequest());
         //Sets not resizable after click on details
-        this.getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) ->
+        getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) ->
                 Platform.runLater(() -> this.setResizable(false)));
     }
 }

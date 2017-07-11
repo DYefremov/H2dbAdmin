@@ -16,7 +16,7 @@
 
 <DialogPane fx:id="dialogPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.SearchToolDialogController">
     <buttonTypes>
-        <ButtonType fx:constant="CANCEL"/>
+        <ButtonType text="%Cancel" fx:id="cancelButton" buttonData="CANCEL_CLOSE" />
     </buttonTypes>
     <content>
         <GridPane alignment="CENTER" style="-fx-background-color: lightgray;">

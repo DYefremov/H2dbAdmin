@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -38,6 +39,8 @@ public class SearchToolDialogController {
     private Label timeValueLabel;
     @FXML
     private Label timeLabel;
+    @FXML
+    private ButtonType cancelButton;
 
     private boolean searchRunning;
     private SearchProvider searchProvider;
@@ -115,8 +118,11 @@ public class SearchToolDialogController {
         }),  new KeyFrame(Duration.seconds(1)));
 
         timeline.setCycleCount(Animation.INDEFINITE);
-
-
+        //Adding filter on cancel button click
+        dialogPane.lookupButton(cancelButton).addEventFilter(ActionEvent.ACTION, event -> {
+            onCloseRequest();
+            event.consume();
+        });
     }
 
     private void search() {
