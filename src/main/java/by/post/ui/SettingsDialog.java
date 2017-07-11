@@ -10,8 +10,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,8 +21,6 @@ import java.util.ResourceBundle;
 public class SettingsDialog extends Dialog {
 
     private SettingsDialogController controller;
-
-    private static final Logger logger = LogManager.getLogger(SettingsDialog.class);
 
     public SettingsDialog() throws IOException {
         init();
@@ -51,8 +47,6 @@ public class SettingsDialog extends Dialog {
         });
         //Setting translation
         boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
-        Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
         applyButton.setText(defLang ? ButtonType.APPLY.getText() : "Применить");
-        cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
     }
 }

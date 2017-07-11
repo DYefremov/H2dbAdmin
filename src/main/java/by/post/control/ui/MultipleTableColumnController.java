@@ -60,7 +60,7 @@ public class MultipleTableColumnController {
     }
 
     @FXML
-    public void onShowProperties() {
+    public void onShowProperties() throws IOException {
         new ColumnPropertiesDialog((Column) tableColumn.getUserData()).showAndWait();
     }
 

@@ -17,8 +17,8 @@
 
 <DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.UsersDialogController">
     <buttonTypes>
-        <ButtonType fx:constant="APPLY" />
-        <ButtonType fx:constant="CANCEL" />
+        <ButtonType text="%Apply" buttonData="APPLY" />
+        <ButtonType text="%Cancel" buttonData="CANCEL_CLOSE" />
     </buttonTypes>
     <content>
         <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgray;">

@@ -78,12 +78,12 @@ public class MainUiController {
     }
 
     @FXML
-    public void onAddNewTable() {
+    public void onAddNewTable() throws IOException {
         addNewTable();
     }
 
     @FXML
-    public void onAddNewView() {
+    public void onAddNewView() throws IOException {
         addNewView();
     }
 
@@ -98,7 +98,7 @@ public class MainUiController {
     }
 
     @FXML
-    public void onOpenDb() {
+    public void onOpenDb() throws IOException {
         openNewDatabase();
     }
 
@@ -219,7 +219,7 @@ public class MainUiController {
     /**
      * Open new database
      */
-    private void openNewDatabase() {
+    private void openNewDatabase() throws IOException {
 
         Optional<Map<String, String>> result = new OpenDbDialog().showAndWait();
 
@@ -254,7 +254,7 @@ public class MainUiController {
     /**
      * Add new table
      */
-    private void addNewTable() {
+    private void addNewTable() throws IOException {
 
         Optional<Table> result = new TableCreationDialog().showAndWait();
 
@@ -266,7 +266,7 @@ public class MainUiController {
     /**
      * Add new view
      */
-    private void addNewView() {
+    private void addNewView() throws IOException {
 
         Optional<View> result = new ViewCreationDialog().showAndWait();
 

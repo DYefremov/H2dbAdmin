@@ -13,7 +13,7 @@
 
 <DialogPane prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.ColumnPropertiesDialogController">
    <buttonTypes>
-      <ButtonType fx:constant="CLOSE" />
+      <ButtonType text="%Close" buttonData="CANCEL_CLOSE" />
    </buttonTypes>
    <content>
       <GridPane alignment="CENTER" style="-fx-background-color: lightgray;">

@@ -1,7 +1,6 @@
 package by.post.ui;
 
 import by.post.control.Context;
-import by.post.control.Settings;
 import by.post.control.ui.dialogs.OpenDbDialogController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Map;
@@ -26,27 +23,19 @@ public class OpenDbDialog extends Dialog<Map<String, String>> {
     private Parent parent;
     private OpenDbDialogController controller;
 
-    private static final Logger logger = LogManager.getLogger(OpenDbDialog.class);
-
-    public OpenDbDialog() {
+    public OpenDbDialog() throws IOException {
         init();
     }
 
-    private void init() {
+    private void init() throws IOException {
 
         loader = new FXMLLoader(getClass().getResource("dialogs/OpenDbDialog.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-
-        try {
-            parent = loader.<DialogPane>load();
-        } catch (IOException e) {
-            logger.error("OpenDbDialog error: " + e);
-        }
-
+        parent = loader.<DialogPane>load();
         controller = loader.getController();
 
-        this.setDialogPane((DialogPane) parent);
-        this.setTitle("Setup connection...");
+        setDialogPane((DialogPane) parent);
+        setTitle("Setup connection...");
 
         Stage stage = (Stage) getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(Resources.LOGO_PATH));
@@ -68,10 +57,6 @@ public class OpenDbDialog extends Dialog<Map<String, String>> {
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
             return data == ButtonBar.ButtonData.OK_DONE ? controller.getSettings() : null;
         });
-        //Setting translation for cancel button
-        boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
-        Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
-        cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
     }
 
 }

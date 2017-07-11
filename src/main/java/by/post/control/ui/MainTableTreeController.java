@@ -21,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,17 +62,17 @@ public class MainTableTreeController {
     }
 
     @FXML
-    public void onOpenDb() {
+    public void onOpenDb() throws IOException {
         mainController.onOpenDb();
     }
 
     @FXML
-    public void onAddNewTable() {
+    public void onAddNewTable() throws IOException {
         mainController.onAddNewTable();
     }
 
     @FXML
-    public void onAddNewView() {
+    public void onAddNewView() throws IOException {
         mainController.onAddNewView();
     }
 

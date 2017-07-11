@@ -115,6 +115,8 @@ public class SearchToolDialogController {
         }),  new KeyFrame(Duration.seconds(1)));
 
         timeline.setCycleCount(Animation.INDEFINITE);
+
+
     }
 
     private void search() {

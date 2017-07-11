@@ -21,7 +21,7 @@
 <DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.ViewCreationDialogController">
     <buttonTypes>
         <ButtonType fx:constant="OK" />
-        <ButtonType fx:constant="CANCEL" />
+        <ButtonType text="%Cancel" buttonData="CANCEL_CLOSE" />
     </buttonTypes>
     <content>
         <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgray;">

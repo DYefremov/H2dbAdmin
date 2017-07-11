@@ -15,60 +15,61 @@
 <?import javafx.scene.text.Font?>
 
 <DialogPane fx:id="dialogPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.SearchToolDialogController">
-<buttonTypes>
-   <ButtonType fx:constant="CANCEL" />
-</buttonTypes>
-<content>
-      <GridPane alignment="CENTER" style="-fx-background-color: lightgray;">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="170.0" />
-          <ColumnConstraints hgrow="SOMETIMES" prefWidth="80.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-         <Label prefHeight="17.0" text="%SearchText" GridPane.halignment="RIGHT">
-               <GridPane.margin>
-                  <Insets right="10.0" />
-               </GridPane.margin>
-         </Label>
-         <TextField fx:id="searchField" onKeyReleased="#onKeyReleased" prefWidth="170.0" GridPane.columnIndex="1" />
-         <Button mnemonicParsing="false" onAction="#onSearchButton" prefHeight="28.0" prefWidth="85.0" text="%Search" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
-         <Label fx:id="progressLabel" contentDisplay="CENTER" text="%PleaseWhite" underline="true" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
-         </Label>
-         <ProgressBar fx:id="progress" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="140.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <HBox fx:id="time" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <children>
-                  <Label fx:id="timeLabel" text="%Consumed" visible="false" />
-                  <Label fx:id="timeValueLabel" text="0s" visible="false">
-                     <HBox.margin>
-                        <Insets left="2.0" />
-                     </HBox.margin></Label>
-               </children>
-            </HBox>
-         </children>
-         <padding>
-            <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
-         </padding>
-      </GridPane>
-</content>
-<header>
-   <Label alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" prefWidth="400.0" text="%SearchHeader" textAlignment="CENTER">
-      <font>
-         <Font name="System Bold" size="13.0" />
-      </font>
-      <padding>
-         <Insets bottom="5.0" top="5.0" />
-      </padding>
-   </Label>
-</header>
-   <expandableContent>
-      <ListView fx:id="listView" maxHeight="-Infinity" onKeyReleased="#onListKeyReleased" onMouseClicked="#onListMouseClick" prefHeight="150.0" />
-   </expandableContent>
+    <buttonTypes>
+        <ButtonType fx:constant="CANCEL"/>
+    </buttonTypes>
+    <content>
+        <GridPane alignment="CENTER" style="-fx-background-color: lightgray;">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="170.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" prefWidth="80.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label prefHeight="17.0" text="%SearchText" GridPane.halignment="RIGHT">
+                    <GridPane.margin>
+                        <Insets right="10.0"/>
+                    </GridPane.margin>
+                </Label>
+                <TextField fx:id="searchField" onKeyReleased="#onKeyReleased" prefWidth="170.0" GridPane.columnIndex="1"/>
+                <Button mnemonicParsing="false" onAction="#onSearchButton" prefHeight="28.0" prefWidth="85.0" text="%Search" GridPane.columnIndex="2" GridPane.halignment="RIGHT"/>
+                <Label fx:id="progressLabel" contentDisplay="CENTER" text="%PleaseWhite" underline="true" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets right="5.0"/>
+                    </GridPane.margin>
+                </Label>
+                <ProgressBar fx:id="progress" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="140.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                <HBox fx:id="time" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <children>
+                        <Label fx:id="timeLabel" text="%Consumed" visible="false"/>
+                        <Label fx:id="timeValueLabel" text="0s" visible="false">
+                            <HBox.margin>
+                                <Insets left="2.0"/>
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="2.0" left="10.0" right="10.0" top="2.0"/>
+            </padding>
+        </GridPane>
+    </content>
+    <header>
+        <Label alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" prefWidth="400.0" text="%SearchHeader" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="13.0"/>
+            </font>
+            <padding>
+                <Insets bottom="5.0" top="5.0"/>
+            </padding>
+        </Label>
+    </header>
+    <expandableContent>
+        <ListView fx:id="listView" maxHeight="-Infinity" onKeyReleased="#onListKeyReleased" onMouseClicked="#onListMouseClick" prefHeight="150.0"/>
+    </expandableContent>
 </DialogPane>

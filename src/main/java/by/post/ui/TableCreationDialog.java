@@ -12,8 +12,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -26,24 +24,19 @@ public class TableCreationDialog extends Dialog<Table> {
 
     private TableCreationDialogController controller;
 
-    private static final Logger logger = LogManager.getLogger(TableCreationDialog.class);
-
-    public TableCreationDialog() {
+    public TableCreationDialog() throws IOException {
         init();
     }
 
-    private void init() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/TableCreationDialogPane.fxml"));
-            loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-            this.setDialogPane(loader.load());
-            controller = loader.getController();
-            Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image(Resources.LOGO_PATH));
-            initElements();
-        } catch (IOException e) {
-            logger.error("TableCreationDialog error[init]: " + e);
-        }
+    private void init() throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/TableCreationDialogPane.fxml"));
+        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
+        this.setDialogPane(loader.load());
+        controller = loader.getController();
+        Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Resources.LOGO_PATH));
+        initElements();
     }
 
     private void initElements() {
@@ -62,8 +55,6 @@ public class TableCreationDialog extends Dialog<Table> {
         });
         //Setting translation
         boolean defLang = Context.getLocale().getLanguage().equals(Settings.DEFAULT_LANG);
-        Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
         okButton.setText(defLang ? ButtonType.OK.getText() : "Создать");
-        cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
     }
 }

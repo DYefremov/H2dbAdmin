@@ -94,6 +94,6 @@
    </content>
    <buttonTypes>
       <ButtonType fx:constant="OK" />
-      <ButtonType fx:constant="CANCEL" />
+      <ButtonType text="%Cancel" buttonData="CANCEL_CLOSE" />
    </buttonTypes>
 </DialogPane>
