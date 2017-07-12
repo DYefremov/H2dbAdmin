@@ -1,15 +1,16 @@
 package by.post.control.ui.dialogs;
 
 import by.post.control.Settings;
+import by.post.ui.ConfirmationDialog;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -28,6 +29,10 @@ public class OpenDbDialogController {
     private PasswordField password;
     @FXML
     private CheckBox embedded;
+    @FXML
+    private DialogPane dialogPane;
+    @FXML
+    private ButtonType connectButton;
 
     private Map<String, String> settings;
 
@@ -90,6 +95,13 @@ public class OpenDbDialogController {
 
         settings = new HashMap<>();
         setEmbedded(embedded.isSelected());
+        //Consume ok button event if canceled in confirmation dialog
+        dialogPane.lookupButton(connectButton).addEventFilter(ActionEvent.ACTION, event -> {
+            Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+            if (result.get() != ButtonType.OK) {
+                event.consume();
+            }
+        });
     }
 
     /**

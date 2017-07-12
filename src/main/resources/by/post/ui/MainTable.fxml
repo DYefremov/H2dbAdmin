@@ -61,7 +61,7 @@
                             </HBox.margin>
                         </Button>
                         <Button mnemonicParsing="false" onAction="#onSaveRow"
-                                style="-fx-background-image: url(/img/enter.png);">
+                                style="-fx-background-image: url(/img/save.png);">
                             <tooltip>
                                 <Tooltip text="%SaveChanges"/>
                             </tooltip>

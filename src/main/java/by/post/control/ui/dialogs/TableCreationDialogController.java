@@ -5,17 +5,17 @@ import by.post.control.ui.CheckedIntegerStringConverter;
 import by.post.data.Column;
 import by.post.data.Table;
 import by.post.data.type.DefaultColumnDataType;
+import by.post.ui.ConfirmationDialog;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.util.Collection;
+import java.util.Optional;
 
 
 /**
@@ -43,6 +43,8 @@ public class TableCreationDialogController {
     private TextField tableName;
     @FXML
     private DialogPane dialogPane;
+    @FXML
+    private ButtonType createButton;
 
     public TableCreationDialogController() {
 
@@ -112,6 +114,13 @@ public class TableCreationDialogController {
     public void initialize() {
 
         initColumnsCellFactory();
+        //Consume ok button event if canceled in confirmation dialog
+        dialogPane.lookupButton(createButton).addEventFilter(ActionEvent.ACTION, event -> {
+            Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+            if (result.get() != ButtonType.OK) {
+                event.consume();
+            }
+        });
     }
 
     /**

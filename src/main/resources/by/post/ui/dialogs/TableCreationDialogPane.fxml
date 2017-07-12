@@ -17,7 +17,7 @@
 
 <DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.TableCreationDialogController">
    <buttonTypes>
-      <ButtonType fx:constant="OK" />
+      <ButtonType fx:id="createButton" text="%Create" buttonData="OK_DONE" />
       <ButtonType text="%Cancel" buttonData="CANCEL_CLOSE"/>
    </buttonTypes>
    <content>

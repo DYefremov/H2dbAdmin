@@ -2,7 +2,9 @@ package by.post.control.ui.dialogs;
 
 import by.post.control.PropertiesController;
 import by.post.control.Settings;
+import by.post.ui.ConfirmationDialog;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -12,10 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -52,6 +51,10 @@ public class SettingsDialogController {
     //Main elements
     @FXML
     StackPane stackPane;
+    @FXML
+    ButtonType applyButton;
+    @FXML
+    DialogPane dialogPane;
     @FXML
     private ListView<String> settingsList;
 
@@ -161,6 +164,15 @@ public class SettingsDialogController {
             initUiProperties();
             selectSettingsItem();
         }
+        //Consume apply button event if canceled in confirmation dialog
+        final Button button = (Button) dialogPane.lookupButton(applyButton);
+        button.addEventFilter(ActionEvent.ACTION, event -> {
+            Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
+            if (result.get() == ButtonType.OK) {
+               saveSettings();
+            }
+            event.consume();
+        });
     }
 
     /**
