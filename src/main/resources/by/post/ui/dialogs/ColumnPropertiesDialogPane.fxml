@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.ColumnPropertiesDialogController">
+<DialogPane prefWidth="400.0" stylesheets="@../Dialogs.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.ColumnPropertiesDialogController">
    <buttonTypes>
-      <ButtonType text="%Close" buttonData="CANCEL_CLOSE" />
+      <ButtonType buttonData="CANCEL_CLOSE" text="%Close" />
    </buttonTypes>
    <content>
       <GridPane alignment="CENTER" style="-fx-background-color: lightgray;">

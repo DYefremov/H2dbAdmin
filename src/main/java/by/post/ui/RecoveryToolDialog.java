@@ -1,6 +1,7 @@
 package by.post.ui;
 
 import by.post.control.Context;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
@@ -22,8 +23,12 @@ public class RecoveryToolDialog extends Dialog {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/RecoveryDialogPane.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-        this.setDialogPane(loader.load());
+        setDialogPane(loader.load());
         Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(Resources.LOGO_PATH));
+        setResizable(false);
+        //Sets not resizable after click on details
+        getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) ->
+                Platform.runLater(() -> this.setResizable(false)));
     }
 }

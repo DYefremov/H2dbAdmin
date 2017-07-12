@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<DialogPane headerText="%Header" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.ColumnDialogController">
+<DialogPane headerText="%Header" stylesheets="@../Dialogs.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.ColumnDialogController">
    <content>
       <GridPane style="-fx-background-color: lightgray;">
         <columnConstraints>
@@ -51,7 +51,7 @@
       </GridPane>
    </content>
    <buttonTypes>
-      <ButtonType text="%Cancel" buttonData="CANCEL_CLOSE" />
+      <ButtonType buttonData="CANCEL_CLOSE" text="%Cancel" />
       <ButtonType fx:constant="OK" />
    </buttonTypes>
 </DialogPane>

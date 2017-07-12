@@ -4,15 +4,16 @@ import by.post.control.db.Recovery;
 import by.post.control.db.RecoveryManager;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.file.Path;
 
 /**
@@ -34,6 +35,12 @@ public class RecoveryPaneController {
     private ProgressBar progressBar;
     @FXML
     private CheckBox isFiltered;
+    @FXML
+    private DialogPane dialogPane;
+    @FXML
+    private ButtonType startButton;
+    @FXML
+    private TextArea consoleTextArea;
 
     private static final Logger logger = LogManager.getLogger(RecoveryPaneController.class);
 
@@ -71,7 +78,10 @@ public class RecoveryPaneController {
         final String user = userField.getText();
         final String password = passwordField.getText();
 
-        setProgressVisible(true);
+        Platform.runLater(() -> {
+            dialogPane.setExpanded(true);
+            setProgressVisible(true);
+        });
 
         Task<Boolean> task = new Task<Boolean>() {
             @Override
@@ -102,6 +112,14 @@ public class RecoveryPaneController {
     @FXML
     private void initialize() {
 
+        dialogPane.lookupButton(startButton).addEventFilter(ActionEvent.ACTION, event -> {
+            event.consume();
+            onRun();
+        });
+        //Redirecting System.out to a TextArea
+        PrintStream ps = new PrintStream(new ConsoleAppender(), true);
+        System.setOut(ps);
+        System.setErr(ps);
     }
 
     /**
@@ -168,6 +186,17 @@ public class RecoveryPaneController {
         if (file != null) {
             savePath.setStyle(null);
             savePath.setText(file.getAbsolutePath());
+        }
+    }
+
+    /**
+     * Class for redirecting System.out
+     */
+    private class ConsoleAppender extends OutputStream {
+
+        @Override
+        public void write(int b) throws IOException {
+            Platform.runLater(() -> consoleTextArea.appendText(String.valueOf((char) b)));
         }
     }
 

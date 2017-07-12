@@ -1,0 +1,10 @@
+/* Styles for buttons*/
+.button {
+    -fx-border-color: gray;
+    -fx-border-radius: 3px;
+    -fx-background-color: transparent, transparent, transparent, transparent;
+}
+
+.button:hover {
+    -fx-background-color: gray, lightgray, transparent, transparent;
+}

@@ -21,10 +21,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane fx:id="dialogPane" headerText="Settings" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.SettingsDialogController">
+<DialogPane fx:id="dialogPane" headerText="Settings" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="580.0" stylesheets="@../Dialogs.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.SettingsDialogController">
    <buttonTypes>
-      <ButtonType text="%Cancel" buttonData="CANCEL_CLOSE" />
-      <ButtonType fx:id="applyButton" text="%Apply" buttonData="APPLY" />
+      <ButtonType buttonData="CANCEL_CLOSE" text="%Cancel" />
+      <ButtonType fx:id="applyButton" buttonData="APPLY" text="%Apply" />
    </buttonTypes>
    <content>
       <HBox alignment="CENTER_LEFT" spacing="2.0" style="-fx-background-color: lightgray;">
