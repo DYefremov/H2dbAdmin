@@ -22,65 +22,65 @@
     <content>
         <GridPane alignment="CENTER" prefHeight="150.0" prefWidth="480.0" style="-fx-background-color: lightgray;">
             <columnConstraints>
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="175.0" />
-                <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="165.0" />
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="175.0"/>
+                <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="165.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <opaqueInsets>
-                <Insets />
+                <Insets/>
             </opaqueInsets>
             <Label fx:id="progress" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="113.0" text="Please wait..." textAlignment="CENTER" visible="false" GridPane.rowIndex="4">
                 <GridPane.margin>
-                    <Insets />
+                    <Insets/>
                 </GridPane.margin>
                 <font>
-                    <Font size="14.0" />
+                    <Font size="14.0"/>
                 </font>
             </Label>
-            <TextField fx:id="dbPath" GridPane.columnIndex="1" />
-            <TextField fx:id="savePath" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="dbPath" GridPane.columnIndex="1"/>
+            <TextField fx:id="savePath" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             <CheckBox fx:id="isFiltered" allowIndeterminate="true" contentDisplay="CENTER" maxWidth="-Infinity" mnemonicParsing="false" selected="true" text="%ShowOnlyDbFiles" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2">
                 <GridPane.margin>
-                    <Insets left="10.0" />
+                    <Insets left="10.0"/>
                 </GridPane.margin>
             </CheckBox>
-            <TextField fx:id="userField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="userField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
             <Label text="%Login" GridPane.rowIndex="2">
                 <opaqueInsets>
-                    <Insets />
+                    <Insets/>
                 </opaqueInsets>
                 <GridPane.margin>
-                    <Insets right="5.0" />
+                    <Insets right="5.0"/>
                 </GridPane.margin>
             </Label>
             <Label text="%Password" GridPane.rowIndex="3">
                 <GridPane.margin>
-                    <Insets right="5.0" />
+                    <Insets right="5.0"/>
                 </GridPane.margin>
             </Label>
-            <Hyperlink onAction="#onDbPath" text="%DatabaseFile" />
-            <Hyperlink onAction="#onSavePath" text="%SavePath" GridPane.rowIndex="1" />
+            <Hyperlink onAction="#onDbPath" text="%DatabaseFile"/>
+            <Hyperlink onAction="#onSavePath" text="%SavePath" GridPane.rowIndex="1"/>
             <ImageView fitHeight="90.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
                 <image>
-                    <Image url="/img/logo.png" />
+                    <Image url="/img/logo.png"/>
                 </image>
                 <GridPane.margin>
-                    <Insets left="10.0" />
+                    <Insets left="10.0"/>
                 </GridPane.margin>
             </ImageView>
-            <PasswordField fx:id="passwordField" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <PasswordField fx:id="passwordField" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
             <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4">
                 <children>
                     <ProgressBar fx:id="progressBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="155.0" visible="false">
                         <opaqueInsets>
-                            <Insets />
+                            <Insets/>
                         </opaqueInsets>
                     </ProgressBar>
                 </children>
@@ -90,19 +90,20 @@
     <header>
         <Label alignment="CENTER" text="%RecoveryToolHeader">
             <font>
-                <Font name="System Bold" size="13.0" />
+                <Font name="System Bold" size="13.0"/>
             </font>
             <padding>
-                <Insets bottom="5.0" top="5.0" />
+                <Insets bottom="5.0" top="5.0"/>
             </padding>
         </Label>
     </header>
-    <ButtonType buttonData="CANCEL_CLOSE" text="%Cancel" />
-    <ButtonType fx:id="startButton" buttonData="OTHER" text="%Start" />
-   <expandableContent>
-      <TextArea fx:id="consoleTextArea" prefHeight="150.0" styleClass="console" stylesheets="@../Ui.css" wrapText="true">
-         <padding>
-            <Insets left="1.0" top="1.0" />
-         </padding></TextArea>
-   </expandableContent>
+    <expandableContent>
+        <TextArea fx:id="consoleTextArea" prefHeight="150.0" styleClass="console" stylesheets="@../Ui.css" wrapText="true">
+            <padding>
+                <Insets left="1.0" top="1.0"/>
+            </padding>
+        </TextArea>
+    </expandableContent>
+    <ButtonType text="%Cancel" buttonData="CANCEL_CLOSE"/>
+    <ButtonType fx:id="startButton" text="%Start" buttonData="OTHER"/>
 </DialogPane>

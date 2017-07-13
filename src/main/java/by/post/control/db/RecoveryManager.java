@@ -63,7 +63,7 @@ public class RecoveryManager implements Recovery {
     public boolean recover(Path dbFile, Path saveDir, String user, String password, Callback<Boolean, Boolean> done) {
 
         String dbPath = dbFile.getParent().toString();
-        String dbName =  String.valueOf(dbFile.getFileName());
+        String dbName = String.valueOf(dbFile.getFileName());
         dbName = dbName.substring(0, dbName.indexOf('.'));
 
         String savePath = saveDir + File.separator + RECOVERED_DB_NAME;

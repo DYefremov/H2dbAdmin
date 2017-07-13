@@ -3,6 +3,7 @@ package by.post.control.ui.dialogs;
 import by.post.control.db.Recovery;
 import by.post.control.db.RecoveryManager;
 import javafx.application.Platform;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,6 +42,7 @@ public class RecoveryPaneController {
     private ButtonType startButton;
     @FXML
     private TextArea consoleTextArea;
+    private RecoveryService recoveryService;
 
     private static final Logger logger = LogManager.getLogger(RecoveryPaneController.class);
 
@@ -55,6 +57,11 @@ public class RecoveryPaneController {
     public void onRun() {
 
         setProgressVisible(false);
+
+        if (true) {
+            new Alert(Alert.AlertType.INFORMATION, "Service temporary disabled!").showAndWait();
+            return;
+        }
 
         //TODO The ability to put a warning about the increased consumption of RAM
 
@@ -75,28 +82,12 @@ public class RecoveryPaneController {
             return;
         }
 
-        final String user = userField.getText();
-        final String password = passwordField.getText();
-
         Platform.runLater(() -> {
             dialogPane.setExpanded(true);
             setProgressVisible(true);
         });
 
-        Task<Boolean> task = new Task<Boolean>() {
-            @Override
-            protected Boolean call() throws Exception {
-                return recovery(file, save, user, password);
-            }
-        };
-
-        task.setOnSucceeded(event -> setProgressVisible(false));
-        task.setOnFailed(event -> setProgressVisible(false));
-        task.setOnCancelled(event -> setProgressVisible(false));
-
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
+        recoveryService.restart();
     }
 
     @FXML
@@ -116,10 +107,20 @@ public class RecoveryPaneController {
             event.consume();
             onRun();
         });
+
         //Redirecting System.out to a TextArea
         PrintStream ps = new PrintStream(new ConsoleAppender(), true);
         System.setOut(ps);
         System.setErr(ps);
+
+        recoveryService = new RecoveryService();
+    }
+
+    public void onCancel() {
+
+        if (recoveryService.isRunning()) {
+            recoveryService.cancel();
+        }
     }
 
     /**
@@ -159,7 +160,6 @@ public class RecoveryPaneController {
     private void showError(String message, TextField field) {
         field.setText(message);
         field.setStyle("-fx-border-color: red;");
-//        field.setStyle("-fx-text-fill: red; -fx-border-color: red;");
     }
 
     /**
@@ -172,7 +172,6 @@ public class RecoveryPaneController {
         if (file != null) {
             dbPath.setStyle(null);
             dbPath.setText(file.getAbsolutePath());
-
         }
     }
 
@@ -186,6 +185,33 @@ public class RecoveryPaneController {
         if (file != null) {
             savePath.setStyle(null);
             savePath.setText(file.getAbsolutePath());
+        }
+    }
+
+    private class RecoveryService extends Service<Boolean> {
+
+        private RecoveryService() {
+            setOnSucceeded(event -> setProgressVisible(false));
+            setOnFailed(event -> setProgressVisible(false));
+            setOnCancelled(event -> setProgressVisible(false));
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            Task<Boolean> task = new Task<Boolean>() {
+
+                @Override
+                protected Boolean call() throws Exception {
+
+                    final Path file = new File(dbPath.getText()).toPath();
+                    final Path save = new File(savePath.getText()).toPath();
+                    final String user = userField.getText();
+                    final String password = passwordField.getText();
+
+                    return recovery(file, save, user, password);
+                }
+            };
+            return task;
         }
     }
 

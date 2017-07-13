@@ -13,6 +13,8 @@ import javafx.stage.Stage;
  */
 public class ConfirmationDialog extends Alert {
 
+    private static final String CSS = ConfirmationDialog.class.getResource("Dialogs.css").toExternalForm();
+
     public ConfirmationDialog() {
         super(AlertType.CONFIRMATION);
         init("");
@@ -29,6 +31,7 @@ public class ConfirmationDialog extends Alert {
     }
 
     private void init(String contextText) {
+
         setContentText(contextText);
         setTitle("H2dbAdmin");
         Stage stage = (Stage) getDialogPane().getScene().getWindow();
@@ -41,5 +44,7 @@ public class ConfirmationDialog extends Alert {
         Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
         okButton.setText(defLang ? ButtonType.OK.getText() : "Да");
         cancelButton.setText(defLang ? ButtonType.CANCEL.getText() : "Отмена");
+        //Adding css file to stylesheets
+        getDialogPane().getScene().getStylesheets().add(CSS);
     }
 }
