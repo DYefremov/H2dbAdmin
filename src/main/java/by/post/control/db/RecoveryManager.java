@@ -1,6 +1,5 @@
 package by.post.control.db;
 
-import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.tools.Recover;
@@ -9,17 +8,21 @@ import org.h2.tools.RunScript;
 import java.io.File;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author Dmitriy V.Yefremov
  */
 public class RecoveryManager implements Recovery {
 
-    private boolean recoveryDone;
-
-    private final String RECOVERED_DB_NAME = "recovered";
+    private static final String RECOVERED_DB_NAME = "recovered";
 
     private static final Logger logger = LogManager.getLogger(RecoveryManager.class);
+
+    private static final ExecutorService service = Executors.newSingleThreadExecutor();
+    private Future future;
 
     public RecoveryManager() {
 
@@ -33,7 +36,7 @@ public class RecoveryManager implements Recovery {
      * @param password
      * @return
      */
-    private boolean recover(String dbPath, String dbName, String pathToSave, String user, String password) {
+    private void recover(String dbPath, String dbName, String pathToSave, String user, String password) {
 
         try {
             // Dumps the contents of a database to a SQL script file.
@@ -41,14 +44,12 @@ public class RecoveryManager implements Recovery {
             String scriptFile = dbPath + File.separator + dbName + ".h2.sql";
             String url = "jdbc:h2:" + pathToSave;
             // Executes the SQL commands in a script file.
+            System.out.println("SCRIPT DONE");
             RunScript.execute(url, user, password, scriptFile, null, true);
-            recoveryDone = true;
+            System.out.println("EXECUTE DONE");
         } catch (SQLException e) {
             logger.error("RecoveryManager error: " + e);
-            recoveryDone = false;
         }
-
-        return recoveryDone;
     }
 
     /**
@@ -56,18 +57,27 @@ public class RecoveryManager implements Recovery {
      * @param saveDir
      * @param user
      * @param password
-     * @param done
-     * @return true if done
      */
     @Override
-    public boolean recover(Path dbFile, Path saveDir, String user, String password, Callback<Boolean, Boolean> done) {
+    public void recover(Path dbFile, Path saveDir, String user, String password) {
 
-        String dbPath = dbFile.getParent().toString();
-        String dbName = String.valueOf(dbFile.getFileName());
-        dbName = dbName.substring(0, dbName.indexOf('.'));
+        final String dbPath = dbFile.getParent().toString();
+        String name = String.valueOf(dbFile.getFileName());
+        final String dbName = name.substring(0, name.indexOf('.'));
+        final String savePath = saveDir + File.separator + RECOVERED_DB_NAME;
 
-        String savePath = saveDir + File.separator + RECOVERED_DB_NAME;
+        Thread thread = new Thread(() -> recover(dbPath, dbName, savePath, user, password));
+        thread.setDaemon(true);
+        future = service.submit(thread);
+    }
 
-        return done.call(recover(dbPath, dbName, savePath, user, password));
+    @Override
+    public void cancel() {
+        future.cancel(true);
+    }
+
+    @Override
+    public boolean isRunning() {
+        return future != null && !future.isDone();
     }
 }

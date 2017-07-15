@@ -40,9 +40,8 @@ public class RecoveryToolDialog extends Dialog {
         });
 
         setOnCloseRequest(event -> {
-            if (!closeDialog()) {
-                event.consume();
-            }
+            event.consume();
+            closeDialog();
         });
         //Sets not resizable after click on details
         getDialogPane().expandedProperty().addListener((observable, oldValue, newValue) ->

@@ -43,6 +43,7 @@ public class RecoveryPaneController {
     @FXML
     private TextArea consoleTextArea;
     private RecoveryService recoveryService;
+    private Recovery recovery;
 
     private static final Logger logger = LogManager.getLogger(RecoveryPaneController.class);
 
@@ -56,12 +57,12 @@ public class RecoveryPaneController {
     @FXML
     public void onRun() {
 
-        setProgressVisible(false);
-
-        if (true) {
-            new Alert(Alert.AlertType.INFORMATION, "Service temporary disabled!").showAndWait();
+        if (recoveryService.isRunning() || recovery.isRunning()) {
+            new Alert(Alert.AlertType.ERROR, "Task is already running!").showAndWait();
             return;
         }
+
+        setProgressVisible(false);
 
         //TODO The ability to put a warning about the increased consumption of RAM
 
@@ -81,11 +82,6 @@ public class RecoveryPaneController {
                     "Not selected properly path for save recovered database file.");
             return;
         }
-
-        Platform.runLater(() -> {
-            dialogPane.setExpanded(true);
-            setProgressVisible(true);
-        });
 
         recoveryService.restart();
     }
@@ -113,34 +109,17 @@ public class RecoveryPaneController {
         System.setOut(ps);
         System.setErr(ps);
 
+        recovery = new RecoveryManager();
         recoveryService = new RecoveryService();
+
     }
 
     public void onCancel() {
 
         if (recoveryService.isRunning()) {
+            recovery.cancel();
             recoveryService.cancel();
         }
-    }
-
-    /**
-     * @param dbFile
-     * @param savePath
-     * @param user
-     * @param password
-     */
-    private boolean recovery(Path dbFile, Path savePath, String user, String password) {
-
-        Recovery recovery = new RecoveryManager();
-        recovery.recover(dbFile, savePath, user, password, param -> {
-            Platform.runLater(() -> {
-                progress.setText(param.booleanValue() ? "Done!" : "Error...");
-                progressBar.setVisible(false);
-            });
-            return param.booleanValue();
-        });
-
-        return false;
     }
 
     /**
@@ -148,9 +127,11 @@ public class RecoveryPaneController {
      */
     private void setProgressVisible(boolean visible) {
 
-        progress.setText(visible ? "Please wait..." : "");
-        progress.setVisible(visible);
-        progressBar.setVisible(visible);
+        Platform.runLater(() -> {
+            progress.setText(visible ? "Please wait..." : "");
+            progress.setVisible(visible);
+            progressBar.setVisible(visible);
+        });
     }
 
     /**
@@ -191,6 +172,7 @@ public class RecoveryPaneController {
     private class RecoveryService extends Service<Boolean> {
 
         private RecoveryService() {
+
             setOnSucceeded(event -> setProgressVisible(false));
             setOnFailed(event -> setProgressVisible(false));
             setOnCancelled(event -> setProgressVisible(false));
@@ -203,12 +185,21 @@ public class RecoveryPaneController {
                 @Override
                 protected Boolean call() throws Exception {
 
+                    setProgressVisible(true);
+                    Platform.runLater(() -> dialogPane.setExpanded(true));
+
                     final Path file = new File(dbPath.getText()).toPath();
                     final Path save = new File(savePath.getText()).toPath();
                     final String user = userField.getText();
                     final String password = passwordField.getText();
 
-                    return recovery(file, save, user, password);
+                    recovery.recover(file, save, user, password);
+
+                    while (recovery.isRunning()) {
+                        /**NOP*/
+                    }
+
+                    return false;
                 }
             };
             return task;

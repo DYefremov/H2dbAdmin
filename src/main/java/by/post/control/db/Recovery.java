@@ -1,7 +1,5 @@
 package by.post.control.db;
 
-import javafx.util.Callback;
-
 import java.nio.file.Path;
 
 /**
@@ -9,5 +7,10 @@ import java.nio.file.Path;
  */
 public interface Recovery {
 
-    boolean recover(Path dbFile, Path saveDir, String user, String password, Callback<Boolean, Boolean> done);
+   void recover(Path dbFile, Path saveDir, String user, String password);
+
+   void cancel();
+
+   boolean isRunning();
+
 }
