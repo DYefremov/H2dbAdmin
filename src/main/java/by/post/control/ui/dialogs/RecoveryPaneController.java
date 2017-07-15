@@ -1,7 +1,8 @@
 package by.post.control.ui.dialogs;
 
-import by.post.control.db.Recovery;
-import by.post.control.db.RecoveryManager;
+import by.post.control.recovery.Recovery;
+import by.post.control.recovery.RecoveryManager;
+import by.post.ui.ConfirmationDialog;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -57,11 +58,12 @@ public class RecoveryPaneController {
     @FXML
     public void onRun() {
 
-        //TODO The ability to put a warning about the increased consumption of RAM
-
-
         if (recoveryService.isRunning() || recovery.isRunning()) {
             new Alert(Alert.AlertType.ERROR, "Task is already running!").showAndWait();
+            return;
+        }
+
+        if (new ConfirmationDialog("This operation may require large resources!").showAndWait().get() != ButtonType.OK) {
             return;
         }
 

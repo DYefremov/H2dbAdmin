@@ -1,4 +1,4 @@
-package by.post.control.db;
+package by.post.control.recovery;
 
 import java.nio.file.Path;
 

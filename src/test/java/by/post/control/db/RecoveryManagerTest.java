@@ -1,8 +1,8 @@
 package by.post.control.db;
 
+import by.post.control.recovery.Recovery;
+import by.post.control.recovery.RecoveryManager;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author Dmitriy V.Yefremov

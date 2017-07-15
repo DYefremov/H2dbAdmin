@@ -1,4 +1,4 @@
-package by.post.control.db;
+package by.post.control.recovery;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +37,8 @@ public class RecoveryManager implements Recovery {
      * @return
      */
     private void recover(String dbPath, String dbName, String pathToSave, String user, String password) {
+
+        //TODO Needed creating customer recovery service based on code from Recovery.class and RunScript.class for correct cancellation of recovery !!!
 
         try {
             // Dumps the contents of a database to a SQL script file.
