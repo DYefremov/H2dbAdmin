@@ -57,14 +57,15 @@ public class RecoveryPaneController {
     @FXML
     public void onRun() {
 
+        //TODO The ability to put a warning about the increased consumption of RAM
+
+
         if (recoveryService.isRunning() || recovery.isRunning()) {
             new Alert(Alert.AlertType.ERROR, "Task is already running!").showAndWait();
             return;
         }
 
         setProgressVisible(false);
-
-        //TODO The ability to put a warning about the increased consumption of RAM
 
         Path file = new File(dbPath.getText()).toPath();
         Path save = new File(savePath.getText()).toPath();
