@@ -2,7 +2,6 @@ package by.post.control.recovery;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.h2.tools.Recover;
 import org.h2.tools.RunScript;
 
 import java.io.File;
@@ -23,9 +22,10 @@ public class RecoveryManager implements Recovery {
 
     private static final ExecutorService service = Executors.newSingleThreadExecutor();
     private Future future;
+    private Recover recover;
 
     public RecoveryManager() {
-
+        recover = new H2Recover();
     }
 
     /**
@@ -42,7 +42,7 @@ public class RecoveryManager implements Recovery {
 
         try {
             // Dumps the contents of a database to a SQL script file.
-            Recover.execute(dbPath, dbName);
+            recover.process(dbPath, dbName);
             String scriptFile = dbPath + File.separator + dbName + ".h2.sql";
             String url = "jdbc:h2:" + pathToSave;
             // Executes the SQL commands in a script file.
@@ -75,6 +75,7 @@ public class RecoveryManager implements Recovery {
 
     @Override
     public void cancel() {
+        recover.cancel();
         future.cancel(true);
     }
 
