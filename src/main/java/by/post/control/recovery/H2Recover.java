@@ -78,11 +78,11 @@ public class H2Recover implements DataHandler, Recover {
         setRunning(true);
 
         for (String fileName : list) {
-            if (fileName.endsWith(Constants.SUFFIX_PAGE_FILE)) {
+            if (running && fileName.endsWith(Constants.SUFFIX_PAGE_FILE)) {
                 dumpPageStore(fileName);
-            } else if (fileName.endsWith(Constants.SUFFIX_LOB_FILE)) {
+            } else if (running && fileName.endsWith(Constants.SUFFIX_LOB_FILE)) {
                 dumpLob(fileName, false);
-            } else if (fileName.endsWith(Constants.SUFFIX_MV_FILE)) {
+            } else if (running && fileName.endsWith(Constants.SUFFIX_MV_FILE)) {
                 String f = fileName.substring(0, fileName.length() - Constants.SUFFIX_PAGE_FILE.length());
                 PrintWriter writer = getWriter(f + ".h2.db", ".sql");
                 dumpMVStoreFile(writer, fileName);
@@ -245,8 +245,7 @@ public class H2Recover implements DataHandler, Recover {
         trace("Created file: " + outputFile);
 
         try {
-            return new PrintWriter(IOUtils.getBufferedWriter(
-                    FileUtils.newOutputStream(outputFile, false)));
+            return new PrintWriter(IOUtils.getBufferedWriter(FileUtils.newOutputStream(outputFile, false)));
         } catch (IOException e) {
             throw DbException.convertIOException(e, null);
         }
@@ -254,8 +253,7 @@ public class H2Recover implements DataHandler, Recover {
 
     private void writeDataError(PrintWriter writer, String error, byte[] data) {
 
-        writer.println("-- ERROR: " + error + " storageId: "
-                + storageId + " recordLength: " + recordLength + " valueId: " + valueId);
+        writer.println("-- ERROR: " + error + " storageId: " + storageId + " recordLength: " + recordLength + " valueId: " + valueId);
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < data.length; i++) {
@@ -502,6 +500,10 @@ public class H2Recover implements DataHandler, Recover {
         TransactionStore store = new TransactionStore(mv);
         try {
             for (String mapName : mv.getMapNames()) {
+                if (!running) {
+                    return;
+                }
+
                 if (!mapName.startsWith("table.")) {
                     continue;
                 }
@@ -514,7 +516,7 @@ public class H2Recover implements DataHandler, Recover {
                         mapName, keyType, valueType);
                 Iterator<Value> dataIt = dataMap.keyIterator(null);
                 boolean init = false;
-                while (dataIt.hasNext()) {
+                while (running && dataIt.hasNext()) {
                     Value rowId = dataIt.next();
                     Value[] values = ((ValueArray) dataMap.get(rowId)).getList();
                     recordLength = values.length;
@@ -582,6 +584,11 @@ public class H2Recover implements DataHandler, Recover {
         writer.println("CREATE TABLE IF NOT EXISTS INFORMATION_SCHEMA.LOB_BLOCKS(LOB_ID BIGINT, SEQ INT, DATA BINARY);");
 
         for (Map.Entry<Long, Object[]> e : lobMap.entrySet()) {
+
+            if (!running) {
+                return;
+            }
+
             long lobId = e.getKey();
             Object[] value = e.getValue();
             byte[] streamStoreId = (byte[]) value[0];
@@ -1068,7 +1075,7 @@ public class H2Recover implements DataHandler, Recover {
         checkParent(writer, pageId, children, entryCount);
         int empty = Integer.MAX_VALUE;
 
-        for (int i = 0; i < entryCount; i++) {
+        for (int i = 0; running && i < entryCount; i++) {
             children[i] = s.readInt();
             checkParent(writer, pageId, children, i);
             int off = s.readShortInt();
@@ -1084,7 +1091,7 @@ public class H2Recover implements DataHandler, Recover {
 
         writer.println("--   empty: " + empty);
 
-        for (int i = 0; i < entryCount; i++) {
+        for (int i = 0; running && i < entryCount; i++) {
             int off = offsets[i];
             s.setPos(off);
             long key = s.readVarLong();
@@ -1110,7 +1117,7 @@ public class H2Recover implements DataHandler, Recover {
                                  long pageCount) {
         int pagesAddressed = PageFreeList.getPagesAddressed(pageSize);
         BitField used = new BitField();
-        for (int i = 0; i < pagesAddressed; i += 8) {
+        for (int i = 0; running && i < pagesAddressed; i += 8) {
             int x = s.readByte() & 255;
             for (int j = 0; j < 8; j++) {
                 if ((x & (1 << j)) != 0) {
@@ -1119,7 +1126,7 @@ public class H2Recover implements DataHandler, Recover {
             }
         }
         int free = 0;
-        for (long i = 0, j = pageId; i < pagesAddressed && j < pageCount; i++, j++) {
+        for (long i = 0, j = pageId; running && i < pagesAddressed && j < pageCount; i++, j++) {
             if (i == 0 || j % 100 == 0) {
                 if (i > 0) {
                     writer.println();
@@ -1143,7 +1150,7 @@ public class H2Recover implements DataHandler, Recover {
                                    boolean positionOnly) {
         int[] offsets = new int[entryCount];
         int empty = Integer.MAX_VALUE;
-        for (int i = 0; i < entryCount; i++) {
+        for (int i = 0;running && i < entryCount; i++) {
             int off = s.readShortInt();
             empty = Math.min(off, empty);
             offsets[i] = off;
@@ -1151,7 +1158,7 @@ public class H2Recover implements DataHandler, Recover {
         empty = empty - s.length();
         writer.println("--   empty: " + empty);
 
-        for (int i = 0; i < entryCount; i++) {
+        for (int i = 0;running && i < entryCount; i++) {
             int off = offsets[i];
             s.setPos(off);
             long key = s.readVarLong();
@@ -1189,7 +1196,7 @@ public class H2Recover implements DataHandler, Recover {
         children[entryCount] = s.readInt();
         checkParent(writer, pageId, children, entryCount);
 
-        for (int i = 0; i < entryCount; i++) {
+        for (int i = 0;running && i < entryCount; i++) {
             children[i] = s.readInt();
             checkParent(writer, pageId, children, i);
             keys[i] = s.readVarLong();
@@ -1199,7 +1206,7 @@ public class H2Recover implements DataHandler, Recover {
             return;
         }
 
-        for (int i = 0; i < entryCount; i++) {
+        for (int i = 0;running && i < entryCount; i++) {
             writer.println("-- [" + i + "] child: " + children[i] + " key: " + keys[i]);
         }
         writer.println("-- [" + entryCount + "] child: " + children[entryCount]);
@@ -1218,7 +1225,7 @@ public class H2Recover implements DataHandler, Recover {
 
         int empty = pageSize;
 
-        for (int i = 0; i < entryCount; i++) {
+        for (int i = 0; running && i < entryCount; i++) {
             keys[i] = s.readVarLong();
             int off = s.readShortInt();
             empty = Math.min(off, empty);
@@ -1274,7 +1281,7 @@ public class H2Recover implements DataHandler, Recover {
             }
         }
 
-        for (int i = 0; i < entryCount; i++) {
+        for (int i = 0; running && i < entryCount; i++) {
             long key = keys[i];
             int off = offsets[i];
             if (trace) {
@@ -1361,7 +1368,7 @@ public class H2Recover implements DataHandler, Recover {
         StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO " + storageName + " VALUES(");
 
-        for (valueId = 0; valueId < recordLength; valueId++) {
+        for (valueId = 0;running && valueId < recordLength; valueId++) {
             try {
                 Value v = s.readValue();
                 data[valueId] = v;
@@ -1488,7 +1495,7 @@ public class H2Recover implements DataHandler, Recover {
             objectIdSet.add(storageId);
             StatementBuilder buff = new StatementBuilder("CREATE TABLE ");
             buff.append(storageName).append('(');
-            for (int i = 0; i < recordLength; i++) {
+            for (int i = 0; running && i < recordLength; i++) {
                 buff.appendExceptFirst(", ");
                 buff.append('C').append(i).append(' ');
                 String columnType = columnTypeMap.get(storageName + "." + i);

@@ -7,10 +7,29 @@ import java.nio.file.Path;
  */
 public interface Recovery {
 
-   void recover(Path dbFile, Path saveDir, String user, String password);
+    /**
+     * Start service and process new task
+     *
+     * @param dbFile
+     * @param saveDir
+     * @param user
+     * @param password
+     */
+    void recover(Path dbFile, Path saveDir, String user, String password);
 
-   void cancel();
+    /**
+     * Cancel current task
+     */
+    void cancel();
 
-   boolean isRunning();
+    /**
+     * Full service shutdown
+     */
+    void shutdown();
+
+    /**
+     * @return true if eny task is running
+     */
+    boolean isRunning();
 
 }

@@ -40,15 +40,16 @@ public class RecoveryManager implements Recovery {
 
         //TODO Needed creating customer recovery service based on code from Recovery.class and RunScript.class for correct cancellation of recovery !!!
 
+        // Dumps the contents of a database to a SQL script file.
+        recover.process(dbPath, dbName);
+        String scriptFile = dbPath + File.separator + dbName + ".h2.sql";
+        String url = "jdbc:h2:" + pathToSave;
+        // Executes the SQL commands in a script file.
+        logger.info("SCRIPT DONE");
+
         try {
-            // Dumps the contents of a database to a SQL script file.
-            recover.process(dbPath, dbName);
-            String scriptFile = dbPath + File.separator + dbName + ".h2.sql";
-            String url = "jdbc:h2:" + pathToSave;
-            // Executes the SQL commands in a script file.
-            System.out.println("SCRIPT DONE");
             RunScript.execute(url, user, password, scriptFile, null, true);
-            System.out.println("EXECUTE DONE");
+            logger.info("EXECUTE DONE");
         } catch (SQLException e) {
             logger.error("RecoveryManager error: " + e);
         }
@@ -80,7 +81,14 @@ public class RecoveryManager implements Recovery {
     }
 
     @Override
+    public void shutdown() {
+        cancel();
+        service.shutdownNow();
+    }
+
+    @Override
     public boolean isRunning() {
         return future != null && !future.isDone();
     }
+
 }
