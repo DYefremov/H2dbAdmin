@@ -1,6 +1,7 @@
 package by.post.control.ui.dialogs;
 
 import by.post.control.recovery.Recovery;
+import by.post.control.recovery.RecoveryLogAppender;
 import by.post.control.recovery.RecoveryManager;
 import by.post.ui.ConfirmationDialog;
 import javafx.application.Platform;
@@ -13,9 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.nio.file.Path;
 
 /**
@@ -46,7 +44,8 @@ public class RecoveryPaneController {
     private RecoveryService recoveryService;
     private Recovery recovery;
 
-    private static final Logger logger = LogManager.getLogger(RecoveryPaneController.class);
+    //Logging only in given appender[RecoveryLogAppender]!!!
+    private static final Logger logger = LogManager.getLogger("RecoveryLogAppender");
 
     public RecoveryPaneController() {
 
@@ -74,15 +73,13 @@ public class RecoveryPaneController {
 
         if (file == null || !file.toFile().isFile()) {
             showError("Error! Path not set!", dbPath);
-            logger.error("RecoveryPaneController error [onRun]: " +
-                    "Not selected properly database file.");
+            logger.error("RecoveryPaneController error [onRun]: Not selected properly database file.");
             return;
         }
 
         if (save == null || !save.toFile().canWrite()) {
             showError("Error! Path not set!", savePath);
-            logger.error("RecoveryPaneController error [onRun]: " +
-                    "Not selected properly path for save recovered database file.");
+            logger.error("RecoveryPaneController error [onRun]: Not selected properly path for save recovered database file.");
             return;
         }
 
@@ -106,15 +103,10 @@ public class RecoveryPaneController {
             event.consume();
             onRun();
         });
-
-        //Redirecting System.out to a TextArea
-        PrintStream ps = new PrintStream(new ConsoleAppender(), true);
-        System.setOut(ps);
-        System.setErr(ps);
-
+        //Redirecting logs
+        RecoveryLogAppender.setTextArea(consoleTextArea);
         recovery = new RecoveryManager();
         recoveryService = new RecoveryService();
-
     }
 
     public void onCancel() {
@@ -206,17 +198,6 @@ public class RecoveryPaneController {
                 }
             };
             return task;
-        }
-    }
-
-    /**
-     * Class for redirecting System.out
-     */
-    private class ConsoleAppender extends OutputStream {
-
-        @Override
-        public void write(int b) throws IOException {
-            Platform.runLater(() -> consoleTextArea.appendText(String.valueOf((char) b)));
         }
     }
 

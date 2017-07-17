@@ -17,8 +17,8 @@ import java.util.concurrent.Future;
 public class RecoveryManager implements Recovery {
 
     private static final String RECOVERED_DB_NAME = "recovered";
-
-    private static final Logger logger = LogManager.getLogger(RecoveryManager.class);
+    //Logging only in given appender[RecoveryLogAppender]!!!
+    private static final Logger logger = LogManager.getLogger("RecoveryLogAppender");
 
     private static final ExecutorService service = Executors.newSingleThreadExecutor();
     private Future future;

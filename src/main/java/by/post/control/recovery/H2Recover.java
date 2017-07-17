@@ -62,8 +62,8 @@ public class H2Recover implements DataHandler, Recover {
     private boolean lobMaps;
 
     private volatile boolean running;
-
-    private static final Logger logger = LogManager.getLogger(H2Recover.class);
+    //Logging only in given appender[RecoveryLogAppender]!!!
+    private static final Logger logger = LogManager.getLogger("RecoveryLogAppender");
 
     public void process(String dir, String db) {
 

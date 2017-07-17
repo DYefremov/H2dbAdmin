@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" packages="by.post.ui">
+<Configuration status="WARN" packages="by.post">
 	<Appenders>
 		<Console name="CONSOLE" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
-		<LogArea name="LogArea">
+		<LogArea name="LogArea" >
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</LogArea>
+		<RecoveryLogAppender name="RecoveryLogAppender" >
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</RecoveryLogAppender>
 	</Appenders>
 	<Loggers>
-		<Root level="ERROR">
+		<Root level="ERROR" additivity="false">
 			<AppenderRef ref="CONSOLE" />
 			<AppenderRef ref="LogArea" />
 		</Root>
-		<Root level="DEBUG">
+		<Root level="DEBUG" additivity="false">
 			<AppenderRef ref="CONSOLE"/>
-			<AppenderRef ref="LogArea"/>
+			<AppenderRef ref="LogArea" />
 		</Root>
+		<Logger name="RecoveryLogAppender" level="INFO" additivity="false">
+			<AppenderRef ref="RecoveryLogAppender" />
+		</Logger>
 	</Loggers>
 </Configuration>
 
