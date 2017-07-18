@@ -1,12 +1,7 @@
 package by.post.control.recovery;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.h2.tools.RunScript;
-
 import java.io.File;
 import java.nio.file.Path;
-import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -16,43 +11,14 @@ import java.util.concurrent.Future;
  */
 public class RecoveryManager implements Recovery {
 
-    private static final String RECOVERED_DB_NAME = "recovered";
-    //Logging only in given appender[RecoveryLogAppender]!!!
-    private static final Logger logger = LogManager.getLogger("RecoveryLogAppender");
-
-    private static final ExecutorService service = Executors.newSingleThreadExecutor();
     private Future future;
     private Recover recover;
 
+    private static final String RECOVERED_DB_NAME = "recovered";
+    private static final ExecutorService service = Executors.newSingleThreadExecutor();
+
     public RecoveryManager() {
         recover = new H2Recover();
-    }
-
-    /**
-     * @param dbPath
-     * @param dbName
-     * @param pathToSave
-     * @param user
-     * @param password
-     * @return
-     */
-    private void recover(String dbPath, String dbName, String pathToSave, String user, String password) {
-
-        //TODO Needed creating customer recovery service based on code from Recovery.class and RunScript.class for correct cancellation of recovery !!!
-
-        // Dumps the contents of a database to a SQL script file.
-        recover.process(dbPath, dbName);
-        String scriptFile = dbPath + File.separator + dbName + ".h2.sql";
-        String url = "jdbc:h2:" + pathToSave;
-        // Executes the SQL commands in a script file.
-        logger.info("SCRIPT DONE");
-
-        try {
-            RunScript.execute(url, user, password, scriptFile, null, true);
-            logger.info("EXECUTE DONE");
-        } catch (SQLException e) {
-            logger.error("RecoveryManager error: " + e);
-        }
     }
 
     /**
@@ -69,7 +35,7 @@ public class RecoveryManager implements Recovery {
         final String dbName = name.substring(0, name.indexOf('.'));
         final String savePath = saveDir + File.separator + RECOVERED_DB_NAME;
 
-        Thread thread = new Thread(() -> recover(dbPath, dbName, savePath, user, password));
+        Thread thread = new Thread(() -> recover.process(dbPath, dbName, savePath, user, password));
         thread.setDaemon(true);
         future = service.submit(thread);
     }

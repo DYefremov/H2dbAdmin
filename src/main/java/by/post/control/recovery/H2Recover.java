@@ -31,9 +31,9 @@ import java.util.*;
 import java.util.zip.CRC32;
 
 /**
- * This class based on code from Recovery.class and RunScript.class
- * from H2 Database Engine
- * with changes for better work from GUI
+ * This class based on code from Recovery and RunScript classes
+ * from H2 database engine  with changes for better work from GUI
+ * with  removing all unused code
  *
  * @author Dmitriy V.Yefremov
  */
@@ -42,6 +42,31 @@ public class H2Recover implements DataHandler, Recover {
     private volatile boolean running;
     //Logging only in given appender[RecoveryLogAppender]!!!
     private static final Logger logger = LogManager.getLogger("RecoveryLogAppender");
+
+    public void process(String dbPath,String dbName, String pathToSave, String user, String password) {
+
+        long time = System.currentTimeMillis();
+        logger.info("H2Recover [process]: Task started...");
+        setRunning(true);
+
+        process(dbPath, dbName);
+
+        String scriptFile = dbPath + File.separator + dbName + ".h2.sql";
+        String url = "jdbc:h2:" + pathToSave;
+
+        if (running) {
+            try {
+                processScript(url, user, password, scriptFile, null);
+            } catch (SQLException e) {
+                logger.error("H2Recover [process]: " + e);
+            }
+        }
+
+        setRunning(false);
+
+        time = System.currentTimeMillis() - time;
+        logger.info("H2Recover [processScript]: Done in " + time + " ms");
+    }
 
     /**
      *
@@ -69,17 +94,13 @@ public class H2Recover implements DataHandler, Recover {
     private Stats stat;
     private boolean lobMaps;
 
-    public void process(String dir, String db) {
-
-        logger.info("H2Recover [process]: Task started...");
+    private void process(String dir, String db) {
 
         ArrayList<String> list = FileLister.getDatabaseFiles(dir, db, true);
 
         if (list.size() == 0) {
             logger.error("H2Recover [process]: No database files found.[" + dir + ", " + db + "]");
         }
-
-        setRunning(true);
 
         for (String fileName : list) {
             if (running && fileName.endsWith(Constants.SUFFIX_PAGE_FILE)) {
@@ -97,7 +118,9 @@ public class H2Recover implements DataHandler, Recover {
             }
         }
 
-        setRunning(false);
+        if (running) {
+            logger.info("Script creation is done!");
+        }
     }
 
     public void cancel() {
@@ -1664,8 +1687,6 @@ public class H2Recover implements DataHandler, Recover {
      * ############# This is part of RunScript.class ###############
      *
      */
-    
-    private final boolean showResults = true;
 
     /**
      * Executes the SQL commands in a script file against a database.
@@ -1680,25 +1701,23 @@ public class H2Recover implements DataHandler, Recover {
 
         //if execution should be continued if an error occurs
         boolean continueOnError = true;
-        long time = System.currentTimeMillis();
 
         try {
             org.h2.Driver.load();
             Connection conn = DriverManager.getConnection(url, user, password);
-            if (charset == null) {
-                charset = Constants.UTF8;
-            }
+            charset = charset == null ? Constants.UTF8 : charset;
+
             try {
                 process(conn, fileName, continueOnError, charset);
+                if (running) {
+                    logger.info("Script execution is completed!");
+                }
             } finally {
                 conn.close();
             }
         } catch (IOException e) {
             throw DbException.convertIOException(e, fileName);
         }
-
-        time = System.currentTimeMillis() - time;
-        logger.info("H2Recover [processScript]: Done in " + time + " ms");
     }
 
     private void process(Connection conn, String fileName, boolean continueOnError, Charset charset) throws SQLException, IOException {
@@ -1744,38 +1763,7 @@ public class H2Recover implements DataHandler, Recover {
                 process(conn, sql, continueOnError, charset);
             } else {
                 try {
-                    if (showResults && !trim.startsWith("-->")) {
-                        logger.info(sql + ";");
-                    }
-
-                    if (showResults) {
-                        boolean query = stat.execute(sql);
-                        if (query) {
-                            ResultSet rs = stat.getResultSet();
-                            int columns = rs.getMetaData().getColumnCount();
-                            StringBuilder buff = new StringBuilder();
-                            while (running && rs.next()) {
-                                buff.append("\n-->");
-                                for (int i = 0; i < columns; i++) {
-                                    String s = rs.getString(i + 1);
-                                    if (s != null) {
-                                        s = StringUtils.replaceAll(s, "\r\n", "\n");
-                                        s = StringUtils.replaceAll(s, "\n", "\n-->    ");
-                                        s = StringUtils.replaceAll(s, "\r", "\r-->    ");
-                                    }
-                                    buff.append(' ').append(s);
-                                }
-                            }
-                            buff.append("\n;");
-                            String result = buff.toString();
-
-                            if (showResults) {
-                                logger.info(result);
-                            }
-                        }
-                    } else {
-                        stat.execute(sql);
-                    }
+                    stat.execute(sql);
                 } catch (Exception e) {
                     if (continueOnError) {
                         logger.error("H2Recover error [processScript]:" + e);
