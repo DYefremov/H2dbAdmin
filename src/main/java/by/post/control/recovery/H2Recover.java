@@ -31,9 +31,8 @@ import java.util.*;
 import java.util.zip.CRC32;
 
 /**
- * This class based on code from Recovery and RunScript classes
- * from H2 database engine  with changes for better work from GUI
- * with  removing all unused code
+ * This class based on code from  Recovery and RunScript classes
+ * from H2 database engine
  *
  * @author Dmitriy V.Yefremov
  */
@@ -79,8 +78,6 @@ public class H2Recover implements DataHandler, Recover {
     private String storageName;
     private int recordLength;
     private int valueId;
-    private boolean trace;
-    private boolean transactionLog;
     private ArrayList<MetaRecord> schema;
     private HashSet<Integer> objectIdSet;
     private HashMap<Integer, String> tableMap;
@@ -93,6 +90,9 @@ public class H2Recover implements DataHandler, Recover {
 
     private Stats stat;
     private boolean lobMaps;
+
+    private boolean trace;
+    private boolean transactionLog;
 
     private void process(String dir, String db) {
 
@@ -186,8 +186,7 @@ public class H2Recover implements DataHandler, Recover {
      */
     public static Value.ValueBlob readBlobDb(Connection conn, long lobId, long precision) {
         DataHandler h = ((JdbcConnection) conn).getSession().getDataHandler();
-        return ValueLobDb.create(Value.BLOB, h, LobStorageFrontend.TABLE_TEMP,
-                lobId, null, precision);
+        return ValueLobDb.create(Value.BLOB, h, LobStorageFrontend.TABLE_TEMP, lobId, null, precision);
     }
 
     /**
@@ -249,13 +248,6 @@ public class H2Recover implements DataHandler, Recover {
         return new BufferedReader(new InputStreamReader(in, Constants.UTF8));
     }
 
-    private void trace(String message) {
-
-        if (trace) {
-            logger.info("H2Recover [trace]: " + message);
-        }
-    }
-
     private void traceError(String message, Throwable t) {
 
         logger.error("H2Recover [traceError]: " + message + ": " + t.toString());
@@ -269,7 +261,7 @@ public class H2Recover implements DataHandler, Recover {
 
         fileName = fileName.substring(0, fileName.length() - 3);
         String outputFile = fileName + suffix;
-        trace("Created file: " + outputFile);
+        logger.info("Created file: " + outputFile);
 
         try {
             return new PrintWriter(IOUtils.getBufferedWriter(FileUtils.newOutputStream(outputFile, false)));
@@ -332,7 +324,7 @@ public class H2Recover implements DataHandler, Recover {
             try {
                 FileUtils.delete(n);
             } catch (Exception e) {
-                traceError(n, e);
+                logger.error("H2Recover error [dumpLob]:" + e);
             }
         }
     }
@@ -455,14 +447,10 @@ public class H2Recover implements DataHandler, Recover {
                     logFirstTrunkPage = firstTrunkPage;
                     logFirstDataPage = firstDataPage;
                 }
-                writer.println("-- head " + i +
-                        ": writeCounter: " + writeCounter +
-                        " log " + key + ":" + firstTrunkPage + "/" + firstDataPage +
-                        " crc " + got + " (" + (expected == got ?
-                        "ok" : ("expected: " + expected)) + ")");
+                writer.println("-- head " + i + ": writeCounter: " + writeCounter + " log " + key + ":" + firstTrunkPage + "/" + firstDataPage +
+                        " crc " + got + " (" + (expected == got ? "ok" : ("expected: " + expected)) + ")");
             }
-            writer.println("-- log " + logKey + ":" + logFirstTrunkPage +
-                    "/" + logFirstDataPage);
+            writer.println("-- log " + logKey + ":" + logFirstTrunkPage + "/" + logFirstDataPage);
 
             PrintWriter devNull = new PrintWriter(new OutputStream() {
                 @Override
@@ -1342,7 +1330,7 @@ public class H2Recover implements DataHandler, Recover {
                             store.write(s.getBytes(), 0, pageSize);
 
                             if (trace) {
-                                logger.info("H2Recover [dumpPageDataLeaf]: User: "  + userName );
+                                logger.info("H2Recover [dumpPageDataLeaf]: User: "  + userName);
                             }
                             remove = false;
                         }
@@ -1452,8 +1440,7 @@ public class H2Recover implements DataHandler, Recover {
                     writer.println("DELETE FROM " + name + ";");
                     writer.println("INSERT INTO " + name + " SELECT * FROM " + storageName + ";");
                     if (name.startsWith("INFORMATION_SCHEMA.LOBS")) {
-                        writer.println("UPDATE " + name + " SET TABLE = " +
-                                LobStorageFrontend.TABLE_TEMP + ";");
+                        writer.println("UPDATE " + name + " SET TABLE = " + LobStorageFrontend.TABLE_TEMP + ";");
                         deleteLobs = true;
                     }
                 }
@@ -1482,8 +1469,7 @@ public class H2Recover implements DataHandler, Recover {
         writer.println("DROP ALIAS READ_CLOB_DB;");
 
         if (deleteLobs) {
-            writer.println("DELETE FROM INFORMATION_SCHEMA.LOBS WHERE TABLE = " +
-                    LobStorageFrontend.TABLE_TEMP + ";");
+            writer.println("DELETE FROM INFORMATION_SCHEMA.LOBS WHERE TABLE = " + LobStorageFrontend.TABLE_TEMP + ";");
         }
 
         for (MetaRecord m : schema) {
@@ -1572,10 +1558,12 @@ public class H2Recover implements DataHandler, Recover {
     }
 
     private void writeError(PrintWriter writer, Throwable e) {
+
         if (writer != null) {
             writer.println("// error: " + e);
         }
-        traceError("Error", e);
+
+        logger.error("H2Recover error [writeError]: " + e);
     }
 
     /**
