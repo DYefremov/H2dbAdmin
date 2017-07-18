@@ -32,6 +32,7 @@ public class RecoveryLogAppender extends AbstractAppender {
 
     @Override
     public void append(LogEvent event) {
+
         if (textArea == null) {
             return;
         }

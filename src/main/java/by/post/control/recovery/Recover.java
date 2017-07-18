@@ -14,7 +14,7 @@ public interface Recover {
      * @param user
      * @param password
      */
-    void process(String dbPath,String dbName, String pathToSave, String user, String password);
+    void process(String dbPath, String dbName, String pathToSave, String user, String password);
 
     /**
      * Cancel current task

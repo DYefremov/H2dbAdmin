@@ -477,8 +477,7 @@ public class H2Recover implements DataHandler, Recover {
             dumpPageStore(writer, pageCount);
             writeSchema(writer);
             try {
-                dumpPageLogStream(writer, logKey, logFirstTrunkPage,
-                        logFirstDataPage, pageCount);
+                dumpPageLogStream(writer, logKey, logFirstTrunkPage, logFirstDataPage, pageCount);
             } catch (IOException e) {
                 // ignore
             }
@@ -487,11 +486,11 @@ public class H2Recover implements DataHandler, Recover {
             long total = Math.max(1, stat.pageDataRows + stat.pageDataEmpty + stat.pageDataHead);
             writer.println("-- page data bytes: head " + stat.pageDataHead + ", empty " + stat.pageDataEmpty +
                     ", rows " + stat.pageDataRows + " (" + (100 - 100L * stat.pageDataEmpty / total) + "% full)");
+
             for (int i = 0; i < stat.pageTypeCount.length; i++) {
                 int count = stat.pageTypeCount[i];
                 if (count > 0) {
-                    writer.println("-- " + getPageType(i) + " " +
-                            (100 * count / pageCount) + "%, " + count + " page(s)");
+                    writer.println("-- " + getPageType(i) + " " + (100 * count / pageCount) + "%, " + count + " page(s)");
                 }
             }
             writer.close();
@@ -506,25 +505,20 @@ public class H2Recover implements DataHandler, Recover {
     private void dumpMVStoreFile(PrintWriter writer, String fileName) {
 
         writer.println("-- MVStore");
-        writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB FOR \"" +
-                this.getClass().getName() + ".readBlob\";");
-        writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB FOR \"" +
-                this.getClass().getName() + ".readClob\";");
-        writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB_DB FOR \"" +
-                this.getClass().getName() + ".readBlobDb\";");
-        writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB_DB FOR \"" +
-                this.getClass().getName() + ".readClobDb\";");
-        writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB_MAP FOR \"" +
-                this.getClass().getName() + ".readBlobMap\";");
-        writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB_MAP FOR \"" +
-                this.getClass().getName() + ".readClobMap\";");
+        writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB FOR \"" + this.getClass().getName() + ".readBlob\";");
+        writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB FOR \"" + this.getClass().getName() + ".readClob\";");
+        writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB_DB FOR \"" + this.getClass().getName() + ".readBlobDb\";");
+        writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB_DB FOR \"" + this.getClass().getName() + ".readClobDb\";");
+        writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB_MAP FOR \"" + this.getClass().getName() + ".readBlobMap\";");
+        writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB_MAP FOR \"" + this.getClass().getName() + ".readClobMap\";");
+
         resetSchema();
-        setDatabaseName(fileName.substring(0, fileName.length() -
-                Constants.SUFFIX_MV_FILE.length()));
+        setDatabaseName(fileName.substring(0, fileName.length() - Constants.SUFFIX_MV_FILE.length()));
         MVStore mv = new MVStore.Builder().fileName(fileName).readOnly().open();
         dumpLobMaps(writer, mv);
         writer.println("-- Tables");
         TransactionStore store = new TransactionStore(mv);
+
         try {
             for (String mapName : mv.getMapNames()) {
                 if (!running) {
@@ -543,6 +537,7 @@ public class H2Recover implements DataHandler, Recover {
                         mapName, keyType, valueType);
                 Iterator<Value> dataIt = dataMap.keyIterator(null);
                 boolean init = false;
+
                 while (running && dataIt.hasNext()) {
                     Value rowId = dataIt.next();
                     Value[] values = ((ValueArray) dataMap.get(rowId)).getList();
@@ -558,8 +553,7 @@ public class H2Recover implements DataHandler, Recover {
                         init = true;
                     }
                     StringBuilder buff = new StringBuilder();
-                    buff.append("INSERT INTO O_").append(tableId)
-                            .append(" VALUES(");
+                    buff.append("INSERT INTO O_").append(tableId).append(" VALUES(");
                     for (valueId = 0; valueId < recordLength; valueId++) {
                         if (valueId > 0) {
                             buff.append(", ");
@@ -667,7 +661,7 @@ public class H2Recover implements DataHandler, Recover {
 
     private void dumpPageStore(PrintWriter writer, long pageCount) {
 
-        Data s = Data.create(this, pageSize);
+        Data s;
 
         for (long page = 3; page < pageCount; page++) {
             s = Data.create(this, pageSize);
@@ -803,10 +797,12 @@ public class H2Recover implements DataHandler, Recover {
                         throw DbException.convertToIOException(e);
                     }
                 }
+
                 String typeName = "";
                 int type = data[0];
                 boolean last = (type & Page.FLAG_LAST) != 0;
                 type &= ~Page.FLAG_LAST;
+
                 switch (type) {
                     case Page.TYPE_EMPTY:
                         typeName = "empty";
@@ -1131,11 +1127,9 @@ public class H2Recover implements DataHandler, Recover {
                     continue;
                 }
             }
-            writer.println("-- [" + i + "] child: " + children[i] +
-                    " key: " + key + " data: " + data);
+            writer.println("-- [" + i + "] child: " + children[i] + " key: " + key + " data: " + data);
         }
-        writer.println("-- [" + entryCount + "] child: " +
-                children[entryCount] + " rowCount: " + rowCount);
+        writer.println("-- [" + entryCount + "] child: " + children[entryCount] + " rowCount: " + rowCount);
     }
 
     private int dumpPageFreeList(PrintWriter writer, Data s, long pageId,
@@ -1206,11 +1200,9 @@ public class H2Recover implements DataHandler, Recover {
                              int index) {
         int child = children[index];
         if (child < 0 || child >= parents.length) {
-            writer.println("-- ERROR [" + pageId + "] child[" +
-                    index + "]: " + child + " >= page count: " + parents.length);
+            writer.println("-- ERROR [" + pageId + "] child[" + index + "]: " + child + " >= page count: " + parents.length);
         } else if (parents[child] != pageId) {
-            writer.println("-- ERROR [" + pageId + "] child[" +
-                    index + "]: " + child + " parent: " + parents[child]);
+            writer.println("-- ERROR [" + pageId + "] child[" + index + "]: " + child + " parent: " + parents[child]);
         }
     }
 
@@ -1283,8 +1275,7 @@ public class H2Recover implements DataHandler, Recover {
 
                 if (type == (Page.TYPE_DATA_OVERFLOW | Page.FLAG_LAST)) {
                     int size = s2.readShortInt();
-                    writer.println("-- chain: " + next +
-                            " type: " + type + " size: " + size);
+                    writer.println("-- chain: " + next + " type: " + type + " size: " + size);
                     s.checkCapacity(size);
                     s.write(s2.getBytes(), s2.length(), size);
                     break;
@@ -1295,8 +1286,7 @@ public class H2Recover implements DataHandler, Recover {
                         break;
                     }
                     int size = pageSize - s2.length();
-                    writer.println("-- chain: " + next + " type: " + type +
-                            " size: " + size + " next: " + next);
+                    writer.println("-- chain: " + next + " type: " + type + " size: " + size + " next: " + next);
                     s.checkCapacity(size);
                     s.write(s2.getBytes(), s2.length(), size);
                 } else {
@@ -1309,10 +1299,11 @@ public class H2Recover implements DataHandler, Recover {
         for (int i = 0; running && i < entryCount; i++) {
             long key = keys[i];
             int off = offsets[i];
+
             if (trace) {
-                writer.println("-- [" + i + "] storage: " + storageId +
-                        " key: " + key + " off: " + off);
+                writer.println("-- [" + i + "] storage: " + storageId + " key: " + key + " off: " + off);
             }
+
             s.setPos(off);
             Value[] data = createRecord(writer, s, columnCount);
 
@@ -1346,8 +1337,7 @@ public class H2Recover implements DataHandler, Recover {
                                     append(StringUtils.convertBytesToHex(passwordHash)).
                                     append('\'');
                             byte[] replacement = buff.toString().getBytes();
-                            System.arraycopy(replacement, 0, s.getBytes(),
-                                    saltIndex, replacement.length);
+                            System.arraycopy(replacement, 0, s.getBytes(), saltIndex, replacement.length);
                             seek(pageId);
                             store.write(s.getBytes(), 0, pageSize);
 
