@@ -7,6 +7,7 @@ import org.h2.compress.CompressLZF;
 import org.h2.engine.Constants;
 import org.h2.engine.DbObject;
 import org.h2.engine.MetaRecord;
+import org.h2.engine.SysProperties;
 import org.h2.jdbc.JdbcConnection;
 import org.h2.message.DbException;
 import org.h2.mvstore.MVMap;
@@ -24,22 +25,29 @@ import org.h2.util.*;
 import org.h2.value.*;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.nio.charset.Charset;
+import java.sql.*;
 import java.util.*;
 import java.util.zip.CRC32;
 
 /**
  * This class based on code from Recovery.class and RunScript.class
  * from H2 Database Engine
+ * with changes for better work from GUI
  *
  * @author Dmitriy V.Yefremov
- * @see "http://www.h2database.com"
- * with simple changes for better work from GUI with recovery
  */
 public class H2Recover implements DataHandler, Recover {
+
+    private volatile boolean running;
+    //Logging only in given appender[RecoveryLogAppender]!!!
+    private static final Logger logger = LogManager.getLogger("RecoveryLogAppender");
+
+    /**
+     *
+     * ############# This is part of Recovery.class ###############
+     *
+     */
 
     private String databaseName;
     private int storageId;
@@ -60,10 +68,6 @@ public class H2Recover implements DataHandler, Recover {
 
     private Stats stat;
     private boolean lobMaps;
-
-    private volatile boolean running;
-    //Logging only in given appender[RecoveryLogAppender]!!!
-    private static final Logger logger = LogManager.getLogger("RecoveryLogAppender");
 
     public void process(String dir, String db) {
 
@@ -837,8 +841,7 @@ public class H2Recover implements DataHandler, Recover {
                         String tableName = tableMap.get(storageId);
                         if (tableName != null) {
                             StatementBuilder buff = new StatementBuilder();
-                            buff.append("INSERT INTO ").append(tableName).
-                                    append(" VALUES(");
+                            buff.append("INSERT INTO ").append(tableName).append(" VALUES(");
                             for (int i = 0; i < row.getColumnCount(); i++) {
                                 buff.appendExceptFirst(", ");
                                 buff.append(row.getValue(i).getSQL());
@@ -852,9 +855,8 @@ public class H2Recover implements DataHandler, Recover {
                 int sessionId = in.readVarInt();
                 setStorage(in.readVarInt());
                 long key = in.readVarLong();
-                writer.println("-- session " + sessionId +
-                        " table " + storageId +
-                        " - " + key);
+                writer.println("-- session " + sessionId + " table " + storageId + " - " + key);
+
                 if (transactionLog) {
                     if (storageId == 0) {
                         int tableId = (int) key;
@@ -1654,6 +1656,135 @@ public class H2Recover implements DataHandler, Recover {
     @Override
     public JavaObjectSerializer getJavaObjectSerializer() {
         return null;
+    }
+
+
+    /**
+     *
+     * ############# This is part of RunScript.class ###############
+     *
+     */
+    
+    private final boolean showResults = true;
+
+    /**
+     * Executes the SQL commands in a script file against a database.
+     *
+     * @param url the database URL
+     * @param user the user name
+     * @param password the password
+     * @param fileName the script file
+     * @param charset the character set or null for UTF-8
+     */
+    void processScript(String url, String user, String password, String fileName, Charset charset) throws SQLException {
+
+        //if execution should be continued if an error occurs
+        boolean continueOnError = true;
+        long time = System.currentTimeMillis();
+
+        try {
+            org.h2.Driver.load();
+            Connection conn = DriverManager.getConnection(url, user, password);
+            if (charset == null) {
+                charset = Constants.UTF8;
+            }
+            try {
+                process(conn, fileName, continueOnError, charset);
+            } finally {
+                conn.close();
+            }
+        } catch (IOException e) {
+            throw DbException.convertIOException(e, fileName);
+        }
+
+        time = System.currentTimeMillis() - time;
+        logger.info("H2Recover [processScript]: Done in " + time + " ms");
+    }
+
+    private void process(Connection conn, String fileName, boolean continueOnError, Charset charset) throws SQLException, IOException {
+
+        InputStream in = FileUtils.newInputStream(fileName);
+        String path = FileUtils.getParent(fileName);
+        try {
+            in = new BufferedInputStream(in, Constants.IO_BUFFER_SIZE);
+            Reader reader = new InputStreamReader(in, charset);
+            process(conn, continueOnError, path, reader, charset);
+        } finally {
+            IOUtils.closeSilently(in);
+        }
+    }
+
+    private void process(Connection conn, boolean continueOnError, String path, Reader reader, Charset charset) throws SQLException, IOException {
+
+        Statement stat = conn.createStatement();
+        ScriptReader r = new ScriptReader(reader);
+
+        while (running) {
+
+            String sql = r.readStatement();
+
+            if (sql == null) {
+                break;
+            }
+
+            String trim = sql.trim();
+
+            if (trim.length() == 0) {
+                continue;
+            }
+
+            if (trim.startsWith("@") && StringUtils.toUpperEnglish(trim).startsWith("@INCLUDE")) {
+                sql = trim;
+                sql = sql.substring("@INCLUDE".length()).trim();
+
+                if (!FileUtils.isAbsolute(sql)) {
+                    sql = path + SysProperties.FILE_SEPARATOR + sql;
+                }
+
+                process(conn, sql, continueOnError, charset);
+            } else {
+                try {
+                    if (showResults && !trim.startsWith("-->")) {
+                        logger.info(sql + ";");
+                    }
+
+                    if (showResults) {
+                        boolean query = stat.execute(sql);
+                        if (query) {
+                            ResultSet rs = stat.getResultSet();
+                            int columns = rs.getMetaData().getColumnCount();
+                            StringBuilder buff = new StringBuilder();
+                            while (running && rs.next()) {
+                                buff.append("\n-->");
+                                for (int i = 0; i < columns; i++) {
+                                    String s = rs.getString(i + 1);
+                                    if (s != null) {
+                                        s = StringUtils.replaceAll(s, "\r\n", "\n");
+                                        s = StringUtils.replaceAll(s, "\n", "\n-->    ");
+                                        s = StringUtils.replaceAll(s, "\r", "\r-->    ");
+                                    }
+                                    buff.append(' ').append(s);
+                                }
+                            }
+                            buff.append("\n;");
+                            String result = buff.toString();
+
+                            if (showResults) {
+                                logger.info(result);
+                            }
+                        }
+                    } else {
+                        stat.execute(sql);
+                    }
+                } catch (Exception e) {
+                    if (continueOnError) {
+                        logger.error("H2Recover error [processScript]:" + e);
+                    } else {
+                        throw DbException.toSQLException(e);
+                    }
+                }
+            }
+        }
     }
 
 }
