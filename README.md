@@ -10,6 +10,8 @@ Features:
 5. Basic recovery tool.
 6. Simple SQL console.
 7. Basic functionality for working with views and triggers.
+8. Basic functionality for working with users.
+9. Basic functionality for database recovery.
 
 For correct operation requires the latest version of Java 8.
 
