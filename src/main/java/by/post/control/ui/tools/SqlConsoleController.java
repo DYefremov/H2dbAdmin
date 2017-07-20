@@ -168,7 +168,7 @@ public class SqlConsoleController {
             return table;
         }
 
-        if (table.getRows().isEmpty()) {
+        if (table.getRows() == null || table.getRows().isEmpty()) {
             setOutputMessage(ERROR_MESSAGE);
         }
 
