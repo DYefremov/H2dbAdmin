@@ -41,6 +41,8 @@ public class SearchToolDialogController {
     private Label timeLabel;
     @FXML
     private ButtonType cancelButton;
+    @FXML
+    private ButtonType searchButton;
 
     private boolean searchRunning;
     private SearchProvider searchProvider;
@@ -121,6 +123,11 @@ public class SearchToolDialogController {
         //Adding filter on cancel button click
         dialogPane.lookupButton(cancelButton).addEventFilter(ActionEvent.ACTION, event -> {
             onCloseRequest();
+            event.consume();
+        });
+
+        dialogPane.lookupButton(searchButton).addEventFilter(ActionEvent.ACTION, event -> {
+            search();
             event.consume();
         });
     }
