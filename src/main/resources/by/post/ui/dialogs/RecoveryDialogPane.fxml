@@ -105,5 +105,5 @@
         </TextArea>
     </expandableContent>
     <ButtonType text="%Cancel" buttonData="CANCEL_CLOSE"/>
-    <ButtonType fx:id="startButton" text="%Start" buttonData="OTHER"/>
+    <ButtonType fx:id="startButton" text="%Start" buttonData="YES"/>
 </DialogPane>
