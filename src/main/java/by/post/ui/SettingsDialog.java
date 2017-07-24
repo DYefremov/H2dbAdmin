@@ -20,8 +20,7 @@ public class SettingsDialog extends Dialog {
 
     private void init() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("dialogs/SettingsDialogPane.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/SettingsDialogPane.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
         setDialogPane(loader.load());
 

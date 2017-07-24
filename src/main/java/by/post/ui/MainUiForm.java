@@ -65,8 +65,7 @@ public class MainUiForm extends Application {
 
         properties = PropertiesController.getProperties();
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("MainUiForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUiForm.fxml"));
         //Set language
         Locale locale = getLocale();
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", locale));

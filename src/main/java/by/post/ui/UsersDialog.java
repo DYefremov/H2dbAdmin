@@ -25,8 +25,7 @@ public class UsersDialog extends Dialog<User> {
 
     private void init() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("dialogs/UsersDialogPane.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/UsersDialogPane.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
         setDialogPane(loader.load());
         controller = loader.getController();

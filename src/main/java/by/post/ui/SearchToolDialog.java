@@ -25,8 +25,7 @@ public class SearchToolDialog extends Dialog {
 
     private void init() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("dialogs/SearchToolDialog.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("dialogs/SearchToolDialog.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
         setDialogPane(loader.load());
         controller = loader.getController();
