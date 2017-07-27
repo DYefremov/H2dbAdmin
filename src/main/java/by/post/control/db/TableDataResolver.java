@@ -128,15 +128,12 @@ public class TableDataResolver {
         TableColumn tableColumn = null;
 
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainUiForm.class.getResource("MultipleTableColumn.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("MultipleTableColumn.fxml"));
             loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
             tableColumn = loader.load();
             MultipleTableColumnController columnController = loader.getController();
             tableColumn.setUserData(column);
-            columnController.setName(column.getColumnName());
-            columnController.setType(column.getType());
-            columnController.setIsKey(column.isPrimaryKey());
+            columnController.setColumn(column);
             columnController.setTableEditor(tableEditor);
             //Has context menu only if TableEditor is not null
             columnController.setHasContextMenu(tableEditor != null);
@@ -172,7 +169,6 @@ public class TableDataResolver {
             boolean largeObject = columnDataType.isLargeObject(columnType);
             return data != null || !largeObject ? new SimpleStringProperty(String.valueOf(data)) : null;
         };
-
     }
 
 }

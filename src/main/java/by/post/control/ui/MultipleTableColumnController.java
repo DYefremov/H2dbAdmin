@@ -35,6 +35,20 @@ public class MultipleTableColumnController {
 
     }
 
+    public void setColumn(Column column) {
+
+        if (column == null) {
+            throw new IllegalArgumentException("MultipleTableColumnController error[setColumn]: Argument can not be null!");
+        }
+
+        columnName.setText(column.getColumnName());
+        type.setText(column.getType());
+
+        if (column.isPrimaryKey()) {
+            this.type.getStyleClass().add("key");
+        }
+    }
+
     public void setTableEditor(TableEditor tableEditor) {
         this.tableEditor = tableEditor;
     }
@@ -75,8 +89,8 @@ public class MultipleTableColumnController {
 
             if (result.isPresent()) {
                 tableEditor.changeColumnProperties(oldColumn, data);
-                setType(data.getType());
-                setName(data.getColumnName());
+                type.setText(data.getType());
+                columnName.setText(data.getColumnName());
             }
         }
     }
@@ -93,7 +107,6 @@ public class MultipleTableColumnController {
             new Alert(Alert.AlertType.ERROR, "During data loading, editing is not allowed!").showAndWait();
             return;
         }
-
     }
 
     /**
@@ -116,21 +129,6 @@ public class MultipleTableColumnController {
 
     public void onDelete() {
         tableEditor.deleteColumn(tableColumn);
-    }
-
-    public void setName(String name) {
-        this.columnName.setText(name);
-    }
-
-    public void setType(String type) {
-        this.type.setText(type);
-    }
-
-    public void setIsKey(boolean isKey) {
-
-        if (isKey) {
-            this.type.getStyleClass().add("key");
-        }
     }
 
     @FXML
