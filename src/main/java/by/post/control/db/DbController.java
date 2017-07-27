@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -250,14 +251,10 @@ public class DbController implements DbControl {
      */
     private boolean isUpdateQuery(String query) {
 
-        UpdateCommands[] commands = UpdateCommands.values();
+        //Required for large strings, because the contains method does not work correctly
+        String prepared = query.length() > 20 ? query.substring(0, 20).toUpperCase() : query.toUpperCase();
 
-        for (int i = 0; i < commands.length; i++) {
-            if (query.contains(commands[i].name())) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(UpdateCommands.values()).map(c -> c.name()).anyMatch(prepared::contains);
     }
 
 }

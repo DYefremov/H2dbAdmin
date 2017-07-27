@@ -3,11 +3,11 @@ package by.post.control.ui.dialogs;
 import by.post.control.Context;
 import by.post.control.search.SearchProvider;
 import by.post.control.ui.TypedTreeItem;
+import by.post.data.Table;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -150,11 +150,11 @@ public class SearchToolDialogController {
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                List<String> tablesNames = searchProvider.getSearchResult(searchText);
+                List<Table> tablesNames = searchProvider.getSearchResult(searchText);
 
                 Platform.runLater(() -> {
                     listView.getItems().clear();
-                    listView.getItems().addAll(FXCollections.observableList(tablesNames));
+                    tablesNames.forEach(t -> listView.getItems().add(t.getName()));
                 });
 
                 return !tablesNames.isEmpty();
@@ -206,46 +206,7 @@ public class SearchToolDialogController {
         //Search first element with equal table name value
         TypedTreeItem item = typedTreeItems.stream().filter(val -> tableName.equals(val.getValue())).findFirst().get();
         mainTableTree.getSelectionModel().select(item);
-
-        scrollToRow(searchField.getText());
     }
 
-    /**
-     * Go to row with text value in main table
-     *
-     * @param text
-     */
-    private void scrollToRow(String text) {
-
-        //TODO 	reconstruct!
-        /*
-        if (mainTableView == null || mainTableView.getItems().isEmpty()) {
-            return;
-        }
-
-        ObservableList<Row> rows = mainTableView.getItems();
-
-        for (Row row : rows) {
-            if (row.toString().toUpperCase().contains(text.toUpperCase())) {
-                select(rows.indexOf(row));
-                break;
-            }
-        }
-        */
-    }
-
-    /**
-     * @param index
-     */
-    private void select(int index) {
-
-        Platform.runLater(() -> {
-//            mainTableView.layout();
-//            mainTableView.scrollTo(index);
-//            mainTableView.getSelectionModel().clearSelection();
-//            mainTableView.getSelectionModel().select(index);
-//            mainTableView.getFocusModel().focus(index);
-        });
-    }
 
 }

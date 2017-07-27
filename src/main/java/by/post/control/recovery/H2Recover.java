@@ -248,15 +248,6 @@ public class H2Recover implements DataHandler, Recover {
         return new BufferedReader(new InputStreamReader(in, Constants.UTF8));
     }
 
-    private void traceError(String message, Throwable t) {
-
-        logger.error("H2Recover [traceError]: " + message + ": " + t.toString());
-
-        if (trace) {
-            logger.error("H2Recover [traceError]: " + t.getStackTrace());
-        }
-    }
-
     private PrintWriter getWriter(String fileName, String suffix) {
 
         fileName = fileName.substring(0, fileName.length() - 3);
@@ -382,14 +373,10 @@ public class H2Recover implements DataHandler, Recover {
         stat = new Stats();
         try {
             writer = getWriter(fileName, ".sql");
-            writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB FOR \"" +
-                    this.getClass().getName() + ".readBlob\";");
-            writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB FOR \"" +
-                    this.getClass().getName() + ".readClob\";");
-            writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB_DB FOR \"" +
-                    this.getClass().getName() + ".readBlobDb\";");
-            writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB_DB FOR \"" +
-                    this.getClass().getName() + ".readClobDb\";");
+            writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB FOR \"" + this.getClass().getName() + ".readBlob\";");
+            writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB FOR \"" + this.getClass().getName() + ".readClob\";");
+            writer.println("CREATE ALIAS IF NOT EXISTS READ_BLOB_DB FOR \"" + this.getClass().getName() + ".readBlobDb\";");
+            writer.println("CREATE ALIAS IF NOT EXISTS READ_CLOB_DB FOR \"" + this.getClass().getName() + ".readClobDb\";");
             resetSchema();
             store = FileStore.open(null, fileName, remove ? "rw" : "r");
             long length = store.length();
@@ -405,13 +392,13 @@ public class H2Recover implements DataHandler, Recover {
             pageSize = s.readInt();
             int writeVersion = s.readByte();
             int readVersion = s.readByte();
-            writer.println("-- pageSize: " + pageSize +
-                    " writeVersion: " + writeVersion +
-                    " readVersion: " + readVersion);
+            writer.println("-- pageSize: " + pageSize + " writeVersion: " + writeVersion + " readVersion: " + readVersion);
+
             if (pageSize < PageStore.PAGE_SIZE_MIN || pageSize > PageStore.PAGE_SIZE_MAX) {
                 pageSize = Constants.DEFAULT_PAGE_SIZE;
                 writer.println("-- ERROR: page size; using " + pageSize);
             }
+
             long pageCount = length / pageSize;
             parents = new int[(int) pageCount];
             s = Data.create(this, pageSize);
@@ -517,12 +504,9 @@ public class H2Recover implements DataHandler, Recover {
                     continue;
                 }
                 String tableId = mapName.substring("table.".length());
-                ValueDataType keyType = new ValueDataType(
-                        null, this, null);
-                ValueDataType valueType = new ValueDataType(
-                        null, this, null);
-                TransactionStore.TransactionMap<Value, Value> dataMap = store.begin().openMap(
-                        mapName, keyType, valueType);
+                ValueDataType keyType = new ValueDataType(null, this, null);
+                ValueDataType valueType = new ValueDataType(null, this, null);
+                TransactionStore.TransactionMap<Value, Value> dataMap = store.begin().openMap(mapName, keyType, valueType);
                 Iterator<Value> dataIt = dataMap.keyIterator(null);
                 boolean init = false;
 
@@ -832,9 +816,8 @@ public class H2Recover implements DataHandler, Recover {
                 int sessionId = in.readVarInt();
                 setStorage(in.readVarInt());
                 Row row = PageLog.readRow(in, s);
-                writer.println("-- session " + sessionId +
-                        " table " + storageId +
-                        " + " + row.toString());
+                writer.println("-- session " + sessionId + " table " + storageId + " + " + row.toString());
+
                 if (transactionLog) {
                     if (storageId == 0 && row.getColumnCount() >= 4) {
                         int tableId = (int) row.getKey();
@@ -1010,8 +993,7 @@ public class H2Recover implements DataHandler, Recover {
                 int t = page.readByte();
                 page.readShortInt();
                 if (t != Page.TYPE_STREAM_TRUNK) {
-                    writer.println("-- log eof " + trunkPage + " type: " + t +
-                            " expected type: " + Page.TYPE_STREAM_TRUNK);
+                    writer.println("-- log eof " + trunkPage + " type: " + t + " expected type: " + Page.TYPE_STREAM_TRUNK);
                     endOfFile = true;
                     return;
                 }
@@ -1022,9 +1004,9 @@ public class H2Recover implements DataHandler, Recover {
                     writer.println("-- log eof " + trunkPage + " type: " + t + " expected key: " + logKey + " got: " + key);
                 }
                 nextTrunkPage = page.readInt();
-                writer.println("-- log " + key + ":" + trunkPage +
-                        " next: " + nextTrunkPage);
+                writer.println("-- log " + key + ":" + trunkPage + " next: " + nextTrunkPage);
                 int pageCount = page.readShortInt();
+
                 for (int i = 0; i < pageCount; i++) {
                     int d = page.readInt();
                     if (dataPage != 0) {
