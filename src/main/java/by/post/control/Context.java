@@ -1,11 +1,11 @@
 package by.post.control;
 
+import by.post.control.ui.MainTabController;
 import by.post.control.ui.TypedTreeItem;
 import by.post.data.type.ColumnDataType;
 import by.post.data.type.DataTypeFactory;
 import by.post.data.type.Dbms;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.control.TreeView;
 
 import java.util.Locale;
 
@@ -17,8 +17,8 @@ import java.util.Locale;
 public class Context {
 
     private static TypedTreeItem tablesTreeItem;
-    private static TreeView mainTableTree;
     private static Locale locale;
+    private static MainTabController mainTabController;
     //Data types for database columns
     private static ColumnDataType currentDataType;
     private static Dbms CURRENT_DBMS = Dbms.DEFAULT;
@@ -35,15 +35,7 @@ public class Context {
         Context.tablesTreeItem = tablesTreeItem;
     }
 
-    public static TreeView getMainTableTree() {
-        return mainTableTree;
-    }
-
-    public static synchronized void setMainTableTree(TreeView mainTableTree) {
-        Context.mainTableTree = mainTableTree;
-    }
-
-    public static Locale getLocale() {
+    public static synchronized Locale getLocale() {
         return locale == null ? new Locale(Settings.DEFAULT_LANG) : locale;
     }
 
@@ -51,7 +43,15 @@ public class Context {
         Context.locale = locale;
     }
 
-    public static Dbms getCurrentDbms() {
+    public static synchronized MainTabController getMainTabController() {
+        return mainTabController;
+    }
+
+    public static synchronized void setMainTabController(MainTabController mainTabController) {
+        Context.mainTabController = mainTabController;
+    }
+
+    public static synchronized Dbms getCurrentDbms() {
         return CURRENT_DBMS;
     }
 
@@ -64,7 +64,7 @@ public class Context {
         Context.currentDataType = currentDataType;
     }
 
-    public static ColumnDataType getCurrentDataType() {
+    public static synchronized ColumnDataType getCurrentDataType() {
 
         if (currentDataType == null) {
             currentDataType = new DataTypeFactory().getColumnDataType(getCurrentDbms());
@@ -73,7 +73,7 @@ public class Context {
         return currentDataType;
     }
 
-    public static boolean isLoadData() {
+    public static synchronized boolean isLoadData() {
         return isLoadData;
     }
 
@@ -89,5 +89,4 @@ public class Context {
     private Context() {
 
     }
-
 }

@@ -2,6 +2,7 @@ package by.post.control.ui;
 
 import by.post.control.Context;
 import by.post.control.db.TableType;
+import by.post.data.Table;
 import by.post.ui.ConfirmationDialog;
 import by.post.ui.MainUiForm;
 import javafx.application.Platform;
@@ -19,14 +20,14 @@ import java.util.stream.Collectors;
 /**
  * @author Dmitriy V.Yefremov
  */
-public class MainTabPaneController {
+public class MainTabController {
 
     @FXML
     TabPane tabPane;
 
     private MainUiController mainController;
 
-    public MainTabPaneController() {
+    public MainTabController() {
 
     }
 
@@ -43,6 +44,19 @@ public class MainTabPaneController {
      */
     public void clearTabs() {
 
+    }
+
+    /**
+     * @param table
+     */
+    public void selectTable(Table table) throws IOException {
+
+        if (table == null) {
+            throw new IllegalArgumentException("MainTabController error[selectTable]: Argument can not be null!");
+        }
+
+        mainController.showTabPane(true);
+        selectTable(table.getName(), table.getType());
     }
 
     /**
@@ -114,6 +128,11 @@ public class MainTabPaneController {
         tab.setContextMenu(new ContextMenu(item));
 
         return tab;
+    }
+
+    @FXML
+    private void initialize() {
+        Context.setMainTabController(this);
     }
 
 }

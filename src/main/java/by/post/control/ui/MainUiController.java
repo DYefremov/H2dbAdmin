@@ -43,7 +43,7 @@ public class MainUiController {
     @FXML
     private MainTableTreeController mainTableTreeController;
     @FXML
-    private MainTabPaneController mainTabPaneController;
+    private MainTabController mainTabPaneController;
 
     private TabPane tabPane;
     private MainUiForm mainUiForm;
@@ -166,12 +166,14 @@ public class MainUiController {
      */
     public void showTabPane(boolean show) {
 
-        if (show && !explorerSplitPane.getItems().contains(tabPane)) {
-            explorerSplitPane.getItems().add(tabPane);
-            explorerSplitPane.setDividerPosition(0, 0.3);
-        } else if (!show) {
-            explorerSplitPane.getItems().remove(tabPane);
-        }
+        Platform.runLater(() -> {
+            if (show && !explorerSplitPane.getItems().contains(tabPane)) {
+                explorerSplitPane.getItems().add(tabPane);
+                explorerSplitPane.setDividerPosition(0, 0.3);
+            } else if (!show) {
+                explorerSplitPane.getItems().remove(tabPane);
+            }
+        });
     }
 
     /**

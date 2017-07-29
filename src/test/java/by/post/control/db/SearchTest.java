@@ -1,6 +1,7 @@
 package by.post.control.db;
 
 import by.post.control.PropertiesController;
+import by.post.data.Table;
 import by.post.data.type.ColumnDataType;
 import by.post.data.type.H2Type;
 import by.post.control.search.SearchProvider;
@@ -78,7 +79,7 @@ public class SearchTest {
         final String searchValue = "сиг".toUpperCase();
 
         long start = System.currentTimeMillis();
-        List<String> names = new SearchProvider().getSearchResult(searchValue);
+        List<Table> names = new SearchProvider().getSearchResult(searchValue);
         System.out.println(names);
 
         long stop = System.currentTimeMillis();

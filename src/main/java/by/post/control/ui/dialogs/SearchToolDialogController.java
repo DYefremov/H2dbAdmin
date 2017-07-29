@@ -1,14 +1,14 @@
 package by.post.control.ui.dialogs;
 
 import by.post.control.Context;
+import by.post.control.db.TableType;
 import by.post.control.search.SearchProvider;
-import by.post.control.ui.TypedTreeItem;
+import by.post.control.ui.MainTabController;
 import by.post.data.Table;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +18,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -46,11 +49,11 @@ public class SearchToolDialogController {
 
     private boolean searchRunning;
     private SearchProvider searchProvider;
-    private TypedTreeItem tablesTreeItem;
-    private TreeView mainTableTree;
     //It is used to display the time spent on search
     private Timeline timeline;
     private long startSearchTime;
+    private Map<String, Table> tables;
+    private MainTabController mainTabController;
 
     public SearchToolDialogController() {
 
@@ -76,20 +79,12 @@ public class SearchToolDialogController {
     }
 
     /**
-     * Action for Search button
-     */
-    @FXML
-    public void onSearchButton() {
-        search();
-    }
-
-    /**
      * ListView actions for found tables
      *
      * @param event
      */
     @FXML
-    public void onListMouseClick(MouseEvent event) {
+    public void onListMouseClick(MouseEvent event) throws IOException {
 
         if (event.getClickCount() == 2) {
             selectItem();
@@ -97,7 +92,7 @@ public class SearchToolDialogController {
     }
 
     @FXML
-    public void onListKeyReleased(KeyEvent event) {
+    public void onListKeyReleased(KeyEvent event) throws IOException {
 
         if (event.getCode() == KeyCode.ENTER) {
             selectItem();
@@ -107,9 +102,8 @@ public class SearchToolDialogController {
     @FXML
     private void initialize() {
 
-        tablesTreeItem = Context.getTablesTreeItem();
-        mainTableTree = Context.getMainTableTree();
-
+        tables = new HashMap<>();
+        mainTabController = Context.getMainTabController();
         searchProvider = new SearchProvider();
         dialogPane.setExpandableContent(null);
 
@@ -117,7 +111,7 @@ public class SearchToolDialogController {
             if (searchRunning) {
                 timeValueLabel.setText((System.currentTimeMillis() - startSearchTime) / 1000 + "s");
             }
-        }),  new KeyFrame(Duration.seconds(1)));
+        }), new KeyFrame(Duration.seconds(1)));
 
         timeline.setCycleCount(Animation.INDEFINITE);
         //Adding filter on cancel button click
@@ -150,14 +144,17 @@ public class SearchToolDialogController {
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                List<Table> tablesNames = searchProvider.getSearchResult(searchText);
-
+                List<Table> founded = searchProvider.getSearchResult(searchText);
+                tables.clear();
                 Platform.runLater(() -> {
                     listView.getItems().clear();
-                    tablesNames.forEach(t -> listView.getItems().add(t.getName()));
+                    founded.forEach(t -> {
+                        listView.getItems().add(t.getName());
+                        tables.put(t.getName(), t);
+                    });
                 });
 
-                return !tablesNames.isEmpty();
+                return !tables.isEmpty();
             }
         };
 
@@ -189,24 +186,18 @@ public class SearchToolDialogController {
         //For first run
         timeLabel.setVisible(visible ? visible : !visible);
         timeValueLabel.setVisible(visible ? visible : !visible);
-
     }
 
     /**
      * Select item in table tree by table name
      */
-    private void selectItem() {
+    private void selectItem() throws IOException {
 
-        if (tablesTreeItem == null || mainTableTree == null) {
-            return;
+        Table table = tables.get(String.valueOf(listView.getSelectionModel().getSelectedItem()));
+
+        if (table != null) {
+            table.setType(TableType.TABLE);
+            mainTabController.selectTable(table);
         }
-
-        String tableName = String.valueOf(listView.getSelectionModel().getSelectedItem());
-        ObservableList<TypedTreeItem> typedTreeItems = tablesTreeItem.getChildren();
-        //Search first element with equal table name value
-        TypedTreeItem item = typedTreeItems.stream().filter(val -> tableName.equals(val.getValue())).findFirst().get();
-        mainTableTree.getSelectionModel().select(item);
     }
-
-
 }

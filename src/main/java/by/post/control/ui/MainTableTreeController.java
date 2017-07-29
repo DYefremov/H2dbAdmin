@@ -181,8 +181,6 @@ public class MainTableTreeController {
         //Initialization of selection property
         tableTree.getSelectionModel().selectedItemProperty().addListener(getChangeListener());
         init();
-        //Set context
-        Context.setMainTableTree(tableTree);
     }
 
     /**

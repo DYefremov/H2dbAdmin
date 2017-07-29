@@ -166,7 +166,6 @@ public class TableTabController {
                 @Override
                 protected Void call() throws Exception {
                     mainTable.setDisable(true);
-
                     Collection<Row> data = (Collection<Row>) dbControl.getTableData(table.getName(), table.getType(), rowsLimit, offset);
                     dataSize = data.size();
                     Platform.runLater(() -> mainTableController.setData(data));
