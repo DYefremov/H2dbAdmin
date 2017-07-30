@@ -6,28 +6,31 @@ import by.post.control.db.TableEditor;
 import by.post.control.db.TableType;
 import by.post.data.Row;
 import by.post.data.Table;
+import by.post.ui.ConfirmationDialog;
 import by.post.ui.DataSelectionDialog;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy V.Yefremov
  */
 public class TableTabController {
 
+    @FXML
+    private Tab tab;
     @FXML
     private Label tableNameLabel;
     @FXML
@@ -55,9 +58,19 @@ public class TableTabController {
     private TableEditor tableEditor;
     private SimpleStringProperty sizeProperty;
     private DataLoadService loadService;
+    private TabPane tabPane;
+    private MainUiController mainUiController;
 
     public TableTabController() {
 
+    }
+
+    public void setTabPane(TabPane tabPane) {
+        this.tabPane = tabPane;
+    }
+
+    public void setMainUiController(MainUiController mainUiController) {
+        this.mainUiController = mainUiController;
     }
 
     @FXML
@@ -108,7 +121,46 @@ public class TableTabController {
        updateData();
     }
 
-    public boolean hasNotSavedData() {
+    @FXML
+    private void onCloseRequest(Event event) {
+
+        if (hasNotSavedData()) {
+            Optional<ButtonType> result = new ConfirmationDialog("You have tabs with unsaved data. Close everyone?").showAndWait();
+            if (result.get() != ButtonType.OK) {
+                event.consume();
+            }
+        }
+    }
+
+    @FXML
+    private void onClosed() {
+
+        if (tabPane.getTabs().isEmpty()) {
+            Platform.runLater(() -> mainUiController.showTabPane(false));
+        }
+    }
+
+    @FXML
+    private void onCloseMenuItem() {
+
+        Platform.runLater(() -> {
+            if (closeTab(tab)) {
+                tabPane.getTabs().remove(tab);
+                onClosed();
+            }
+        });
+    }
+
+    @FXML
+    private void onCloseAllMenuItem() {
+
+        Platform.runLater(() -> {
+            tabPane.getTabs().removeAll(tabPane.getTabs().stream().filter(t -> closeTab(t)).collect(Collectors.toList()));
+            onClosed();
+        });
+    }
+
+    private boolean hasNotSavedData() {
         return tableEditor.hasNotSavedData();
     }
 
@@ -223,6 +275,19 @@ public class TableTabController {
             sizeProperty.setValue(String.valueOf(dataSize));
             mainTable.setDisable(false);
         });
+    }
+
+    /**
+     *
+     * @param tab
+     * @return true if closed
+     */
+    private boolean closeTab(Tab tab) {
+
+        Event closeEvent = new Event(Tab.TAB_CLOSE_REQUEST_EVENT);
+        tab.getOnCloseRequest().handle(closeEvent);
+
+        return !closeEvent.isConsumed();
     }
 
 }

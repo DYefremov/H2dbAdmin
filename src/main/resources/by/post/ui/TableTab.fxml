@@ -2,8 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
@@ -13,66 +16,78 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane stylesheets="@Ui.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableTabController">
-    <top>
-        <VBox BorderPane.alignment="CENTER">
-            <children>
-                <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0">
+<Tab fx:id="tab" onCloseRequest="#onCloseRequest" onClosed="#onClosed" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.TableTabController">
+    <content>
+        <BorderPane stylesheets="@Ui.css">
+            <top>
+                <VBox BorderPane.alignment="CENTER">
                     <children>
-                        <Label fx:id="tableNameLabel" text="Table name">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Label>
-                        <Label fx:id="typeLabel" text="Type">
-                            <font>
-                                <Font size="10.0" />
-                            </font>
-                        </Label>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                    <padding>
-                        <Insets bottom="2.0" top="5.0" />
-                    </padding>
-                </VBox>
-                <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" styleClass="bar">
-                    <items>
-                        <Label text="Max rows:">
+                        <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0">
+                            <children>
+                                <Label fx:id="tableNameLabel" text="Table name">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="typeLabel" text="Type">
+                                    <font>
+                                        <Font size="10.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
                             <padding>
-                                <Insets left="5.0" />
+                                <Insets bottom="2.0" top="5.0" />
                             </padding>
-                        </Label>
-                        <TextField fx:id="maxRowsTextField" onKeyReleased="#onMaxRowsChanged" prefHeight="26.0" prefWidth="75.0" text="100" />
-                        <Separator orientation="VERTICAL" prefHeight="200.0" />
-                        <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevious" style="-fx-background-image: url(/img/go-previous.png);" />
-                        <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNext" style="-fx-background-image: url(/img/go-next.png);" />
-                        <Separator orientation="VERTICAL" prefHeight="22.0" prefWidth="0.0" />
-                        <Button mnemonicParsing="false" onAction="#onRefresh" style="-fx-background-image: url(/img/refresh.png);">
-                            <tooltip>
-                                <Tooltip text="Refresh table data" />
-                            </tooltip>
-                        </Button>
-                        <Separator orientation="VERTICAL" prefHeight="200.0" />
-                        <Button fx:id="dataSelectionButton" mnemonicParsing="false" onAction="#onSearch" style="-fx-background-image: url(/img/search.png);" />
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Label text="Data size:" />
-                  <Label fx:id="dataSizeLabel" text="size" />
-                  <Label text="records" />
-                    </items>
-                </ToolBar>
-            </children>
-            <BorderPane.margin>
-                <Insets />
-            </BorderPane.margin>
-        </VBox>
-    </top>
-    <center>
-        <!--Include main table for working with a data -->
-        <fx:include fx:id="mainTable" source="MainTable.fxml" />
-    </center>
-</BorderPane>
+                        </VBox>
+                        <ToolBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" styleClass="bar">
+                            <items>
+                                <Label text="Max rows:">
+                                    <padding>
+                                        <Insets left="5.0" />
+                                    </padding>
+                                </Label>
+                                <TextField fx:id="maxRowsTextField" onKeyReleased="#onMaxRowsChanged" prefHeight="26.0" prefWidth="75.0" text="100" />
+                                <Separator orientation="VERTICAL" prefHeight="200.0" />
+                                <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevious" style="-fx-background-image: url(/img/go-previous.png);" />
+                                <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNext" style="-fx-background-image: url(/img/go-next.png);" />
+                                <Separator orientation="VERTICAL" prefHeight="22.0" prefWidth="0.0" />
+                                <Button mnemonicParsing="false" onAction="#onRefresh" style="-fx-background-image: url(/img/refresh.png);">
+                                    <tooltip>
+                                        <Tooltip text="Refresh table data" />
+                                    </tooltip>
+                                </Button>
+                                <Separator orientation="VERTICAL" prefHeight="200.0" />
+                                <Button fx:id="dataSelectionButton" mnemonicParsing="false" onAction="#onSearch" style="-fx-background-image: url(/img/search.png);" />
+                                <Pane HBox.hgrow="ALWAYS" />
+                                <Label text="Data size:" />
+                                <Label fx:id="dataSizeLabel" text="size" />
+                                <Label text="records" />
+                            </items>
+                        </ToolBar>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets />
+                    </BorderPane.margin>
+                </VBox>
+            </top>
+            <center>
+                <!--Include main table for working with a data -->
+                <fx:include fx:id="mainTable" source="MainTable.fxml" />
+            </center>
+        </BorderPane>
+    </content>
+   <contextMenu>
+      <ContextMenu>
+        <items>
+            <MenuItem mnemonicParsing="false" onAction="#onCloseMenuItem" text="%Close" />
+          <MenuItem mnemonicParsing="false" onAction="#onCloseAllMenuItem" text="%CloseAll" />
+        </items>
+      </ContextMenu>
+   </contextMenu>
+</Tab>
