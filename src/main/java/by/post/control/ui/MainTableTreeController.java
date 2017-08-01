@@ -90,7 +90,7 @@ public class MainTableTreeController {
         Optional<ButtonType> result = new ConfirmationDialog().showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            mainController.clearMainTable();
+            mainController.deleteTab(((TypedTreeItem) tableTree.getSelectionModel().getSelectedItem()).getValue().toString());
             tablesCommander.deleteTable(tableTree);
         }
     }

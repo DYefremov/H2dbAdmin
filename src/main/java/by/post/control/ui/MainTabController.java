@@ -4,6 +4,8 @@ import by.post.control.Context;
 import by.post.control.db.TableType;
 import by.post.data.Table;
 import by.post.ui.MainUiForm;
+import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
@@ -11,6 +13,7 @@ import javafx.scene.control.TabPane;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -35,10 +38,50 @@ public class MainTabController {
     }
 
     /**
-     * Clear all tabs
+     * Closing tab by table name
+     *
+     * @param tableName
      */
-    public void clearTabs() {
+    void closeTab(String tableName) {
 
+        Tab tab = getTabByName(tableName);
+
+        if (tab != null) {
+            closeTab(tab);
+        }
+    }
+
+    /**
+     *Closing tab
+     *
+     * @param tab
+     */
+    void closeTab(Tab tab) {
+
+        Platform.runLater(() -> {
+            if (tryCloseTab(tab)) {
+                tabPane.getTabs().remove(tab);
+                onClosedTab();
+            }
+        });
+    }
+
+    /**
+     * Closing all tabs
+     */
+    void closeAllTabs() {
+
+        Platform.runLater(() -> {
+            tabPane.getTabs().removeAll(tabPane.getTabs().stream().filter(t -> tryCloseTab(t)).collect(Collectors.toList()));
+            onClosedTab();
+        });
+    }
+
+    void onClosedTab() {
+
+        if (tabPane.getTabs().isEmpty()) {
+            Platform.runLater(() -> mainController.showTabPane(false));
+        }
     }
 
     /**
@@ -86,8 +129,7 @@ public class MainTabController {
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
         Tab tab = loader.load();
         TableTabController controller = loader.getController();
-        controller.setMainUiController(mainController);
-        controller.setTabPane(tabPane);
+        controller.setMainTabController(this);
         controller.selectTable(tableName, tableType);
         tab.setText(tableName);
 
@@ -99,4 +141,24 @@ public class MainTabController {
         Context.setMainTabController(this);
     }
 
+
+    /**
+     * @param tab
+     * @return true if closed
+     */
+    private boolean tryCloseTab(Tab tab) {
+
+        Event closeEvent = new Event(Tab.TAB_CLOSE_REQUEST_EVENT);
+        tab.getOnCloseRequest().handle(closeEvent);
+
+        return !closeEvent.isConsumed();
+    }
+
+    /**
+     * @param tableName
+     * @return found tab or null if not found
+     */
+    private Tab getTabByName(String tableName) {
+        return tabPane.getTabs().stream().filter(t -> t.getText().equals(tableName)).findAny().orElse(null);
+    }
 }

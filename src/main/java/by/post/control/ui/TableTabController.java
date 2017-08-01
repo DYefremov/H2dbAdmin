@@ -22,7 +22,6 @@ import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -58,19 +57,14 @@ public class TableTabController {
     private TableEditor tableEditor;
     private SimpleStringProperty sizeProperty;
     private DataLoadService loadService;
-    private TabPane tabPane;
-    private MainUiController mainUiController;
+    private MainTabController mainTabController;
 
     public TableTabController() {
 
     }
 
-    public void setTabPane(TabPane tabPane) {
-        this.tabPane = tabPane;
-    }
-
-    public void setMainUiController(MainUiController mainUiController) {
-        this.mainUiController = mainUiController;
+    public void setMainTabController(MainTabController mainUiController) {
+        this.mainTabController = mainUiController;
     }
 
     @FXML
@@ -134,34 +128,36 @@ public class TableTabController {
 
     @FXML
     private void onClosed() {
-
-        if (tabPane.getTabs().isEmpty()) {
-            Platform.runLater(() -> mainUiController.showTabPane(false));
-        }
+        mainTabController.onClosedTab();
     }
 
     @FXML
     private void onCloseMenuItem() {
-
-        Platform.runLater(() -> {
-            if (closeTab(tab)) {
-                tabPane.getTabs().remove(tab);
-                onClosed();
-            }
-        });
+       mainTabController.closeTab(tab);
     }
 
     @FXML
     private void onCloseAllMenuItem() {
-
-        Platform.runLater(() -> {
-            tabPane.getTabs().removeAll(tabPane.getTabs().stream().filter(t -> closeTab(t)).collect(Collectors.toList()));
-            onClosed();
-        });
+        mainTabController.closeAllTabs();
     }
 
     private boolean hasNotSavedData() {
         return tableEditor.hasNotSavedData();
+    }
+
+    /**
+     * @param table
+     */
+    public void selectTable(Table table) {
+
+        TableType tableType = table.getType();
+
+        tableNameLabel.setText(table.getName());
+        dataSelectionButton.setDisable(!tableType.equals(TableType.TABLE));
+        typeLabel.setText(tableType != null ? tableType.name() : "");
+        mainTableController.setTable(table);
+
+        updateNavigationButtons();
     }
 
     /**
@@ -170,13 +166,9 @@ public class TableTabController {
      */
     public void selectTable(String tableName, TableType tableType) {
 
-        tableNameLabel.setText(tableName);
-        dataSelectionButton.setDisable(!tableType.equals(TableType.TABLE));
-        typeLabel.setText(tableType != null ? tableType.name() : "");
         table = dbControl.getTable(tableName, tableType);
-        mainTableController.setTable(table);
+        selectTable(table);
         updateData();
-        updateNavigationButtons();
     }
 
     @FXML
@@ -275,19 +267,6 @@ public class TableTabController {
             sizeProperty.setValue(String.valueOf(dataSize));
             mainTable.setDisable(false);
         });
-    }
-
-    /**
-     *
-     * @param tab
-     * @return true if closed
-     */
-    private boolean closeTab(Tab tab) {
-
-        Event closeEvent = new Event(Tab.TAB_CLOSE_REQUEST_EVENT);
-        tab.getOnCloseRequest().handle(closeEvent);
-
-        return !closeEvent.isConsumed();
     }
 
 }

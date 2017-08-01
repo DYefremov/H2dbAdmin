@@ -70,7 +70,7 @@ public class MainUiController {
             new Thread(() -> {
                 databaseManager.addDatabase(result.get());
                 Platform.runLater(() -> {
-                    clearMainTable();
+                    clearTabs();
                     mainTableTreeController.init();
                 });
             }).start();
@@ -177,12 +177,19 @@ public class MainUiController {
     }
 
     /**
-     * Clear main table
+     * Clear main tab pane
      */
-    public void clearMainTable() {
+    public void clearTabs() {
+        mainTabPaneController.closeAllTabs();
+    }
 
-        showTabPane(false);
-        mainTabPaneController.clearTabs();
+    /**
+     * Closing tab by table name
+     *
+     * @param tableName
+     */
+    public void deleteTab(String tableName) {
+        mainTabPaneController.closeTab(tableName);
     }
 
     @FXML
@@ -227,7 +234,7 @@ public class MainUiController {
 
         if (result.isPresent()) {
             PropertiesController.setProperties(result.get());
-            clearMainTable();
+            clearTabs();
             mainTableTreeController.init();
         }
     }
@@ -324,7 +331,7 @@ public class MainUiController {
                 try {
                     databaseManager.deleteDatabase(dropOnly);
                     Platform.runLater(() -> {
-                        clearMainTable();
+                        clearTabs();
                         mainTableTreeController.initData();
                     });
                 } catch (SQLException e) {
