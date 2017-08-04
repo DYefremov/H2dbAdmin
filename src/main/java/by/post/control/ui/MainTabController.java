@@ -2,6 +2,8 @@ package by.post.control.ui;
 
 import by.post.control.Context;
 import by.post.control.db.TableType;
+import by.post.control.events.RootEventTarget;
+import by.post.control.events.TableSelectionHandler;
 import by.post.data.Table;
 import by.post.ui.MainUiForm;
 import javafx.application.Platform;
@@ -10,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -18,12 +22,14 @@ import java.util.stream.Collectors;
 /**
  * @author Dmitriy V.Yefremov
  */
-public class MainTabController {
+public class MainTabController implements TableSelectionHandler{
 
     @FXML
     TabPane tabPane;
 
     private MainUiController mainController;
+
+    private static final Logger logger = LogManager.getLogger(MainUiController.class);
 
     public MainTabController() {
 
@@ -87,7 +93,7 @@ public class MainTabController {
     /**
      * @param table
      */
-    public void selectTable(Table table) throws IOException {
+    public void selectTable(Table table) {
 
         if (table == null) {
             throw new IllegalArgumentException("MainTabController error[selectTable]: Argument can not be null!");
@@ -101,7 +107,7 @@ public class MainTabController {
      * @param tableName
      * @param tableType
      */
-    public void selectTable(String tableName, TableType tableType) throws IOException {
+    public void selectTable(String tableName, TableType tableType) {
 
         //Searching for whether the tab for this table is already been opened.
         Tab tab = tabPane.getTabs().isEmpty() ? null : tabPane.getTabs().stream()
@@ -113,7 +119,11 @@ public class MainTabController {
             return;
         }
 
-        tab = getTab(tableName, tableType);
+        try {
+            tab = getTab(tableName, tableType);
+        } catch (IOException e) {
+            logger.error("MainTabController error [selectTable]: " + e);
+        }
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }
@@ -138,7 +148,7 @@ public class MainTabController {
 
     @FXML
     private void initialize() {
-        Context.setMainTabController(this);
+        RootEventTarget.addTableSelectionHandler(this);
     }
 
 

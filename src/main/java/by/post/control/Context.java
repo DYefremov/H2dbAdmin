@@ -1,6 +1,5 @@
 package by.post.control;
 
-import by.post.control.ui.MainTabController;
 import by.post.control.ui.TypedTreeItem;
 import by.post.data.type.ColumnDataType;
 import by.post.data.type.DataTypeFactory;
@@ -18,7 +17,6 @@ public class Context {
 
     private static TypedTreeItem tablesTreeItem;
     private static Locale locale;
-    private static MainTabController mainTabController;
     //Data types for database columns
     private static ColumnDataType currentDataType;
     private static Dbms CURRENT_DBMS = Dbms.DEFAULT;
@@ -41,14 +39,6 @@ public class Context {
 
     public static synchronized void setLocale(Locale locale) {
         Context.locale = locale;
-    }
-
-    public static synchronized MainTabController getMainTabController() {
-        return mainTabController;
-    }
-
-    public static synchronized void setMainTabController(MainTabController mainTabController) {
-        Context.mainTabController = mainTabController;
     }
 
     public static synchronized Dbms getCurrentDbms() {

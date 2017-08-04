@@ -1,9 +1,9 @@
 package by.post.control.ui.dialogs;
 
-import by.post.control.Context;
 import by.post.control.db.TableType;
+import by.post.control.events.RootEventTarget;
+import by.post.control.events.TableSelectionEvent;
 import by.post.control.search.SearchProvider;
-import by.post.control.ui.MainTabController;
 import by.post.data.Table;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -11,6 +11,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -53,7 +54,6 @@ public class SearchToolDialogController {
     private Timeline timeline;
     private long startSearchTime;
     private Map<String, Table> tables;
-    private MainTabController mainTabController;
 
     public SearchToolDialogController() {
 
@@ -103,7 +103,6 @@ public class SearchToolDialogController {
     private void initialize() {
 
         tables = new HashMap<>();
-        mainTabController = Context.getMainTabController();
         searchProvider = new SearchProvider();
         dialogPane.setExpandableContent(null);
 
@@ -197,7 +196,7 @@ public class SearchToolDialogController {
 
         if (table != null) {
             table.setType(TableType.TABLE);
-            mainTabController.selectTable(table);
+            Event.fireEvent(RootEventTarget.TARGET, new TableSelectionEvent(table));
         }
     }
 }
