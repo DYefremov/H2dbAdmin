@@ -7,16 +7,17 @@ import by.post.control.db.DbControl;
 import by.post.control.db.DbController;
 import by.post.control.db.TableType;
 import by.post.control.db.TablesCommander;
+import by.post.control.events.RootEventTarget;
+import by.post.control.events.TableSelectionEvent;
 import by.post.data.Table;
 import by.post.data.View;
 import by.post.ui.ConfirmationDialog;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -128,17 +129,6 @@ public class MainTableTreeController {
     }
 
     /**
-     * @param show
-     */
-    public void setBusy(boolean show) {
-
-        Platform.runLater(() -> {
-            tableTree.setDisable(show);
-            tableTree.setCursor(show ? Cursor.WAIT : Cursor.DEFAULT);
-        });
-    }
-
-    /**
      * Initialization for first db opening
      */
     public void init() {
@@ -181,6 +171,9 @@ public class MainTableTreeController {
         //Initialization of selection property
         tableTree.getSelectionModel().selectedItemProperty().addListener(getChangeListener());
         init();
+        //Show/hide wait cursor and enable/disable table tree
+        tableTree.disableProperty().bind(Context.getIsLoadDataProperty());
+        tableTree.cursorProperty().bind(Context.getCursorProperty());
     }
 
     /**
@@ -243,10 +236,20 @@ public class MainTableTreeController {
                 return;
             }
 
-            mainController.onTableSelect(item);
+            onTableSelect(item);
         };
     }
 
+    /**
+     * @param item
+     */
+    private void onTableSelect(TypedTreeItem item) {
+
+        Context.setLoadData(false);
+        Table table = dbControl.getTable(String.valueOf(item.getValue()), item.getType());
+        table.setForceDataLoad(true);
+        Event.fireEvent(RootEventTarget.TARGET, new TableSelectionEvent(table));
+    }
     /**
      *Service for first db opening
      */

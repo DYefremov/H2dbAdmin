@@ -150,25 +150,19 @@ public class TableTabController {
      */
     public void selectTable(Table table) {
 
-        TableType tableType = table.getType();
+        this.table = table;
+        final TableType tableType = table.getType();
 
         tableNameLabel.setText(table.getName());
         dataSelectionButton.setDisable(!tableType.equals(TableType.TABLE));
         typeLabel.setText(tableType != null ? tableType.name() : "");
         mainTableController.setTable(table);
 
+        if (table.isForceDataLoad()) {
+            updateData();
+        }
+
         updateNavigationButtons();
-    }
-
-    /**
-     * @param tableName
-     * @param tableType
-     */
-    public void selectTable(String tableName, TableType tableType) {
-
-        table = dbControl.getTable(tableName, tableType);
-        selectTable(table);
-        updateData();
     }
 
     @FXML
@@ -194,8 +188,10 @@ public class TableTabController {
      */
     private void updateNavigationButtons() {
 
-        prevButton.setDisable(offset == 0);
-        nextButton.setDisable(dataSize < rowsLimit);
+        Platform.runLater(() -> {
+            prevButton.setDisable(offset == 0);
+            nextButton.setDisable(dataSize < rowsLimit);
+        });
     }
 
     /**

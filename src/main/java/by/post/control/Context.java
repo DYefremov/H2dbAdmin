@@ -4,7 +4,11 @@ import by.post.control.ui.TypedTreeItem;
 import by.post.data.type.ColumnDataType;
 import by.post.data.type.DataTypeFactory;
 import by.post.data.type.Dbms;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.Cursor;
 
 import java.util.Locale;
 
@@ -23,7 +27,8 @@ public class Context {
     //Indicate if running load data in table process
     private static boolean isLoadData;
     //For bind with {isLoadData} (in status bar)
-    private static SimpleBooleanProperty isLoadDataProperty = new SimpleBooleanProperty(isLoadData());
+    private static final BooleanProperty isLoadDataProperty = new SimpleBooleanProperty(isLoadData());
+    private static final ObjectProperty<Cursor> cursorProperty = new SimpleObjectProperty<>(Cursor.DEFAULT);
 
     public static TypedTreeItem getTablesTreeItem() {
         return tablesTreeItem;
@@ -70,10 +75,15 @@ public class Context {
     public static  synchronized void setLoadData(boolean loadData) {
         isLoadData = loadData;
         isLoadDataProperty.setValue(loadData);
+        cursorProperty.set(loadData ? Cursor.WAIT : Cursor.DEFAULT);
     }
 
-    public static SimpleBooleanProperty getIsLoadDataProperty() {
+    public static BooleanProperty getIsLoadDataProperty() {
         return isLoadDataProperty;
+    }
+
+    public static ObjectProperty<Cursor> getCursorProperty() {
+        return cursorProperty;
     }
 
     private Context() {

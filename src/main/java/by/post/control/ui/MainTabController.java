@@ -1,7 +1,6 @@
 package by.post.control.ui;
 
 import by.post.control.Context;
-import by.post.control.db.TableType;
 import by.post.control.events.RootEventTarget;
 import by.post.control.events.TableSelectionHandler;
 import by.post.data.Table;
@@ -99,49 +98,44 @@ public class MainTabController implements TableSelectionHandler{
             throw new IllegalArgumentException("MainTabController error[selectTable]: Argument can not be null!");
         }
 
-        selectTable(table.getName(), table.getType());
-        mainController.showTabPane(true);
-    }
-
-    /**
-     * @param tableName
-     * @param tableType
-     */
-    public void selectTable(String tableName, TableType tableType) {
-
         //Searching for whether the tab for this table is already been opened.
         Tab tab = tabPane.getTabs().isEmpty() ? null : tabPane.getTabs().stream()
-                .filter(t -> t.getText().equals(tableName))
+                .filter(t -> t.getText().equals(table.getName()))
                 .findFirst().orElse(null);
 
-        if (tab != null) {
+        if (tab != null && table.isForceDataLoad()) {
             tabPane.getSelectionModel().select(tab);
             return;
         }
 
         try {
-            tab = getTab(tableName, tableType);
+            tab = getTab(table);
         } catch (IOException e) {
             logger.error("MainTabController error [selectTable]: " + e);
         }
+
+        //Only for first tab!!!
+        if (tabPane.getTabs().isEmpty()) {
+            mainController.showTabPane(true);
+        }
+
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }
 
     /**
-     * @param tableName
-     * @param tableType
+     * @param table
      * @return new tab
      */
-    private Tab getTab(String tableName, TableType tableType) throws IOException {
+    private Tab getTab(Table table) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("TableTab.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
         Tab tab = loader.load();
         TableTabController controller = loader.getController();
         controller.setMainTabController(this);
-        controller.selectTable(tableName, tableType);
-        tab.setText(tableName);
+        controller.selectTable(table);
+        tab.setText(table.getName());
 
         return tab;
     }
@@ -150,7 +144,6 @@ public class MainTabController implements TableSelectionHandler{
     private void initialize() {
         RootEventTarget.addTableSelectionHandler(this);
     }
-
 
     /**
      * @param tab

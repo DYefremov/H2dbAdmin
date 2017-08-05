@@ -154,13 +154,6 @@ public class MainUiController {
     }
 
     /**
-     * @param item
-     */
-    public void onTableSelect(TypedTreeItem item) {
-        selectTable(item);
-    }
-
-    /**
      * Show/Hide tab pane
      * @param show
      */
@@ -240,23 +233,6 @@ public class MainUiController {
     }
 
     /**
-     * Select table by selected item
-     *
-     * @param item
-     */
-    private void selectTable(TypedTreeItem item) {
-
-        setBusy(true);
-        Context.setLoadData(false);
-
-        Platform.runLater(() -> {
-            showTabPane(true);
-            mainTabPaneController.selectTable(String.valueOf(item.getValue()), item.getType());
-            setBusy(false);
-        });
-    }
-
-    /**
      * Add new table
      */
     private void addNewTable() throws IOException {
@@ -302,16 +278,6 @@ public class MainUiController {
      */
     private void showSearchTool() throws IOException {
         new SearchToolDialog().show();
-    }
-
-    /**
-     * Show/hide wait cursor and
-     * Enable/Disable table tree
-     *
-     * @param show
-     */
-    private void setBusy(boolean show) {
-       mainTableTreeController.setBusy(show);
     }
 
     /**

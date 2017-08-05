@@ -18,6 +18,7 @@ public class Table {
     private boolean update;
     //Indicates whether the update request was successful
     private boolean updated;
+    private boolean forceDataLoad;
 
     public Table() {
     }
@@ -29,6 +30,11 @@ public class Table {
     public Table(String name, TableType type) {
         this.name = name;
         this.type = type;
+    }
+
+    public Table(String name, TableType type, boolean forceDataLoad) {
+        this(name, type);
+        this.forceDataLoad = forceDataLoad;
     }
 
     public String getName() {
@@ -87,6 +93,14 @@ public class Table {
         this.update = update;
     }
 
+    public boolean isForceDataLoad() {
+        return forceDataLoad;
+    }
+
+    public void setForceDataLoad(boolean forceDataLoad) {
+        this.forceDataLoad = forceDataLoad;
+    }
+
     @Override
     public String toString() {
         return "Table{" +
@@ -97,6 +111,7 @@ public class Table {
                 ", rows=" + rows +
                 ", update=" + update +
                 ", updated=" + updated +
+                ", forceDataLoad=" + forceDataLoad +
                 '}';
     }
 }
