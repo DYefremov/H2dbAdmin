@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -143,6 +144,12 @@ public class MainTabController implements TableSelectionHandler{
     @FXML
     private void initialize() {
         RootEventTarget.addTableSelectionHandler(this);
+        //Consuming events during data load
+        tabPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (Context.isLoadData()) {
+                event.consume();
+            }
+        });
     }
 
     /**

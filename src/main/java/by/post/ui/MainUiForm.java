@@ -75,6 +75,8 @@ public class MainUiForm extends Application {
         controller = loader.getController();
         controller.setMainUiForm(this);
         mainScene = new Scene(mainPane, Resources.MIN_WIDTH, Resources.MIN_HEIGHT);
+        //Show/hide wait cursor
+        mainScene.cursorProperty().bind(Context.getCursorProperty());
         mainStage.setScene(mainScene);
         mainStage.setMinHeight(Resources.MIN_HEIGHT);
         mainStage.setMinWidth(Resources.MIN_WIDTH);
@@ -107,6 +109,7 @@ public class MainUiForm extends Application {
      */
     private void close() {
         new Thread(() -> {
+            Context.setLoadData(false);
             closeConnection();
             Platform.exit();
             System.exit(0);

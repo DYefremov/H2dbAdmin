@@ -171,9 +171,8 @@ public class MainTableTreeController {
         //Initialization of selection property
         tableTree.getSelectionModel().selectedItemProperty().addListener(getChangeListener());
         init();
-        //Show/hide wait cursor and enable/disable table tree
+        //Enable/disable table tree
         tableTree.disableProperty().bind(Context.getIsLoadDataProperty());
-        tableTree.cursorProperty().bind(Context.getCursorProperty());
     }
 
     /**

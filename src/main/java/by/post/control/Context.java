@@ -4,6 +4,7 @@ import by.post.control.ui.TypedTreeItem;
 import by.post.data.type.ColumnDataType;
 import by.post.data.type.DataTypeFactory;
 import by.post.data.type.Dbms;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -74,8 +75,10 @@ public class Context {
 
     public static  synchronized void setLoadData(boolean loadData) {
         isLoadData = loadData;
-        isLoadDataProperty.setValue(loadData);
-        cursorProperty.set(loadData ? Cursor.WAIT : Cursor.DEFAULT);
+        Platform.runLater(() -> {
+            isLoadDataProperty.setValue(loadData);
+            cursorProperty.set(loadData ? Cursor.WAIT : Cursor.DEFAULT);
+        });
     }
 
     public static BooleanProperty getIsLoadDataProperty() {
