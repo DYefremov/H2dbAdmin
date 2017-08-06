@@ -110,14 +110,16 @@ public class MainTabController implements TableSelectionHandler{
             return;
         }
 
-        tab = getTab(table);
         //Only for first tab!!!
         if (tabPane.getTabs().isEmpty()) {
             mainController.showTabPane(true);
         }
 
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
+        Platform.runLater(() -> {
+            Tab newTab = getTab(table);
+            tabPane.getTabs().add(newTab);
+            tabPane.getSelectionModel().select(newTab);
+        });
     }
 
     /**
