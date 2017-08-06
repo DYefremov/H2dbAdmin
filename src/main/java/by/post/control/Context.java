@@ -75,10 +75,8 @@ public class Context {
 
     public static  synchronized void setLoadData(boolean loadData) {
         isLoadData = loadData;
-        Platform.runLater(() -> {
-            isLoadDataProperty.setValue(loadData);
-            cursorProperty.set(loadData ? Cursor.WAIT : Cursor.DEFAULT);
-        });
+        isLoadDataProperty.setValue(loadData);
+        cursorProperty.set(loadData ? Cursor.WAIT : Cursor.DEFAULT);
     }
 
     public static BooleanProperty getIsLoadDataProperty() {

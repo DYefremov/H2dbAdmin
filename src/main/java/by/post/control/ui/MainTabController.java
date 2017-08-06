@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
@@ -109,12 +110,7 @@ public class MainTabController implements TableSelectionHandler{
             return;
         }
 
-        try {
-            tab = getTab(table);
-        } catch (IOException e) {
-            logger.error("MainTabController error [selectTable]: " + e);
-        }
-
+        tab = getTab(table);
         //Only for first tab!!!
         if (tabPane.getTabs().isEmpty()) {
             mainController.showTabPane(true);
@@ -128,11 +124,18 @@ public class MainTabController implements TableSelectionHandler{
      * @param table
      * @return new tab
      */
-    private Tab getTab(Table table) throws IOException {
+    private Tab getTab(Table table) {
 
         FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("TableTab.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-        Tab tab = loader.load();
+        Tab tab = null;
+        try {
+            tab = loader.load();
+        } catch (IOException e) {
+            logger.error("MainTabController error [getTab]: " + e);
+            return new Tab("Error", new Label("Tab creation error. See \"More info\""));
+        }
+        
         TableTabController controller = loader.getController();
         controller.setMainTabController(this);
         controller.selectTable(table);
