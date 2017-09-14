@@ -151,7 +151,7 @@ public class TableDataResolver {
     private Callback getCellFactory(int columnType) {
 
         if (columnDataType.isLargeObject(columnType)) {
-            return LargeObjectCell.forTableColumn(table);
+            return LargeObjectCell.forTableColumn();
         }
 
         return TextFieldTableCell.forTableColumn();

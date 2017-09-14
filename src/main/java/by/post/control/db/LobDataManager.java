@@ -4,9 +4,10 @@ import by.post.control.ui.dialogs.OpenFileDialogProvider;
 import by.post.data.Cell;
 import by.post.data.Column;
 import by.post.data.Row;
-import by.post.data.Table;
 import by.post.data.type.DefaultColumnDataType;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +36,7 @@ public class LobDataManager {
      * @param column
      * @param table
      */
-    public boolean download(int rowIndex, Column column, Table table) {
+    public boolean download(int rowIndex, Column column, TableView table) {
 
         if (column == null || table == null) {
             logger.error("LobDataManager error[download]: Invalid arguments!");
@@ -75,7 +76,7 @@ public class LobDataManager {
      * @param column
      * @param table
      */
-    public boolean upload(int rowIndex, Column column, Table table) {
+    public boolean upload(int rowIndex, Column column, TableView<Row> table) {
 
         if (column == null || table == null) {
             logger.error("LobDataManager error[upload]: Invalid arguments!");
@@ -128,7 +129,7 @@ public class LobDataManager {
      * @param table
      * @return
      */
-    public boolean delete(int rowIndex, Column column, Table table) {
+    public boolean delete(int rowIndex, Column column, TableView<Row> table) {
 
         String query = getQuery(rowIndex, column, table, Commands.DELETE);
         DbControl dbControl = DbController.getInstance();
@@ -203,35 +204,33 @@ public class LobDataManager {
     /**
      * @return query string
      */
-    private String getQuery(int rowIndex, Column column, Table table, Commands command) {
+    private String getQuery(int rowIndex, Column column, TableView<Row> table, Commands command) {
 
-        Cell keyCell = null;
-        String query = null;
-        String keyColumnName = null;
-        Row row = table.getRows().get(rowIndex);
+        TableColumn keyColumn = table.getColumns().stream().filter(c -> {
+            Column cl = (Column) c.getUserData();
+            return cl.isPrimaryKey() || cl.isAutoIncrement();
+        }).findAny().orElse(null);
 
-        for (Column pKeyColumn : table.getColumns()) {
-            if (pKeyColumn.isPrimaryKey() || pKeyColumn.isAutoIncrement()) {
-                int keyIndex = table.getColumns().indexOf(pKeyColumn);
-                keyCell = row.getCells().get(keyIndex);
-                keyColumnName = pKeyColumn.getColumnName();
-                break;
-            }
-        }
-
-        if (keyCell == null) {
+        if (keyColumn == null) {
             new Alert(Alert.AlertType.INFORMATION, "Implemented only for tables with primary key!").showAndWait();
             return null;
         }
 
+        int keyIndex = table.getColumns().indexOf(keyColumn);
+        Row row = table.getItems().get(rowIndex);
+        Cell keyCell = row.getCells().get(keyIndex);
+        String keyColumnName = ((Column)keyColumn.getUserData()).getColumnName();
+
+        String query = null;
+
         if (command.equals(Commands.UPLOAD)) {
-            query = "UPDATE " + table.getName() + " SET " + column.getColumnName() + "=(?) " +
+            query = "UPDATE " + table.getId() + " SET " + column.getColumnName() + "=(?) " +
                     " WHERE " + keyColumnName + "=" + keyCell.getValue();
         } else if (command.equals(Commands.DOWNLOAD)) {
             query = "SELECT " + column.getColumnName() + " FROM " +
-                    table.getName() + " WHERE " + keyColumnName + "=" + keyCell.getValue();
+                    table.getId() + " WHERE " + keyColumnName + "=" + keyCell.getValue();
         } else if (command.equals(Commands.DELETE)) {
-            query = "UPDATE " + table.getName() + " SET " + column.getColumnName() + "=NULL " +
+            query = "UPDATE " + table.getId() + " SET " + column.getColumnName() + "=NULL " +
                     " WHERE " + keyColumnName + "=" + keyCell.getValue();
         }
 

@@ -1,12 +1,12 @@
 package by.post.control.db;
 
 import by.post.data.Column;
-import by.post.data.Table;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -23,12 +23,10 @@ import javafx.util.Callback;
 class LargeObjectCell extends TableCell {
 
     private ChoiceBox choiceBox;
-    private Table table;
     private ImageView imageView;
 
-    public LargeObjectCell(Table table) {
+    public LargeObjectCell() {
 
-        this.table = table;
         imageView = new ImageView(new Image("img/file.png"));
         imageView.setFitHeight(16);
         imageView.setFitWidth(16);
@@ -67,6 +65,7 @@ class LargeObjectCell extends TableCell {
 
             Column column = (Column) this.getTableColumn().getUserData();
             LobDataManager dataManager = LobDataManager.getInstance();
+            TableView table = this.getTableView();
 
             if (index == 0) {
                 boolean downloaded = dataManager.download(rowIndex, column, table);
@@ -102,8 +101,8 @@ class LargeObjectCell extends TableCell {
     /**
      * @return
      */
-    public static Callback<TableColumn, TableCell> forTableColumn(final Table table) {
-        return list -> new LargeObjectCell(table);
+    public static Callback<TableColumn, TableCell> forTableColumn() {
+        return list -> new LargeObjectCell();
     }
 
     /**

@@ -169,13 +169,6 @@ public class MainTableController {
     }
 
     /**
-     * @return size of items in main table
-     */
-    public int getDataSize() {
-        return mainTable.getItems().size();
-    }
-
-    /**
      * Clear main table
      */
     public void clearMainTable() {
