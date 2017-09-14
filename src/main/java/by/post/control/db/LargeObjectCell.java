@@ -1,12 +1,10 @@
 package by.post.control.db;
 
+import by.post.control.Context;
 import by.post.data.Column;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -15,10 +13,12 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
+import java.util.ResourceBundle;
+
 /**
  * Custom implementation for working with LOB from table cell
  *
- *@author Dmitriy V.Yefremov
+ * @author Dmitriy V.Yefremov
  */
 class LargeObjectCell extends TableCell {
 
@@ -55,31 +55,8 @@ class LargeObjectCell extends TableCell {
         }
 
         if (choiceBox == null) {
-            choiceBox = new ChoiceBox(FXCollections.observableArrayList("Download", "Upload", "Delete"));
+            choiceBox = getChoiceBox();
         }
-
-        choiceBox.setOnAction(event -> {
-
-            int index = choiceBox.getSelectionModel().getSelectedIndex();
-            int rowIndex = this.getIndex();
-
-            Column column = (Column) this.getTableColumn().getUserData();
-            LobDataManager dataManager = LobDataManager.getInstance();
-            TableView table = this.getTableView();
-
-            if (index == 0) {
-                boolean downloaded = dataManager.download(rowIndex, column, table);
-                setCellBackground(downloaded);
-                updateItem(downloaded);
-            } else if (index == 1) {
-                boolean uploaded = dataManager.upload(rowIndex, column, table);
-                setCellBackground(uploaded);
-                updateItem(uploaded);
-            } else {
-                setCellBackground(dataManager.delete(rowIndex, column, table));
-                setItem(null);
-            }
-        });
 
         super.startEdit();
         setText(null);
@@ -113,7 +90,6 @@ class LargeObjectCell extends TableCell {
                 CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
-
     /**
      * Update item if needed
      *
@@ -124,6 +100,42 @@ class LargeObjectCell extends TableCell {
         if (update) {
             updateItem(getItem() != null ? getItem() : "", false);
         }
+    }
+
+    /**
+     * @return
+     */
+    private ChoiceBox getChoiceBox() {
+//        FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("LobCellBox.fxml"));
+//        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
+//        choiceBox = loader.load();
+        ResourceBundle bundle = ResourceBundle.getBundle("bundles.Lang", Context.getLocale());
+        ChoiceBox choiceBox = new ChoiceBox(FXCollections.observableArrayList(
+                bundle.getString("Unload"), bundle.getString("Download"), new Separator(), bundle.getString("Delete")));
+        choiceBox.setOnAction(event -> {
+
+            int index = choiceBox.getSelectionModel().getSelectedIndex();
+            int rowIndex = this.getIndex();
+
+            Column column = (Column) this.getTableColumn().getUserData();
+            LobDataManager dataManager = LobDataManager.getInstance();
+            TableView table = this.getTableView();
+
+            if (index == 0) {
+                boolean downloaded = dataManager.unload(rowIndex, column, table);
+                setCellBackground(downloaded);
+                updateItem(downloaded);
+            } else if (index == 1) {
+                boolean uploaded = dataManager.download(rowIndex, column, table);
+                setCellBackground(uploaded);
+                updateItem(uploaded);
+            } else {
+                setCellBackground(dataManager.delete(rowIndex, column, table));
+                setItem(null);
+            }
+        });
+
+        return choiceBox;
     }
 
 }

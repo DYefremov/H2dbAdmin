@@ -4,5 +4,5 @@ package by.post.control.db;
  * @author Dmitriy V.Yefremov
  */
 public enum Commands {
-    ADD, DELETE, CHANGE, DOWNLOAD, UPLOAD
+    ADD, DELETE, CHANGE, DOWNLOAD, UNLOAD
 }

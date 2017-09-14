@@ -36,17 +36,17 @@ public class LobDataManager {
      * @param column
      * @param table
      */
-    public boolean download(int rowIndex, Column column, TableView table) {
+    public boolean unload(int rowIndex, Column column, TableView table) {
 
         if (column == null || table == null) {
-            logger.error("LobDataManager error[download]: Invalid arguments!");
+            logger.error("LobDataManager error[unload]: Invalid arguments!");
             return false;
         }
 
-        String query = getQuery(rowIndex, column, table, Commands.DOWNLOAD);
+        String query = getQuery(rowIndex, column, table, Commands.UNLOAD);
 
         if (query == null) {
-            logger.error("LobDataManager error[download]: query = null");
+            logger.error("LobDataManager error[unload]: query = null");
             return false;
         }
 
@@ -62,9 +62,9 @@ public class LobDataManager {
             try {
                 return saveData(column, query, file, connection);
             } catch (IOException e) {
-                logger.error("LobDataManager error[download]: " + e);
+                logger.error("LobDataManager error[unload]: " + e);
             } catch (SQLException e) {
-                logger.error("LobDataManager error[download]: " + e);
+                logger.error("LobDataManager error[unload]: " + e);
             }
         }
 
@@ -76,10 +76,10 @@ public class LobDataManager {
      * @param column
      * @param table
      */
-    public boolean upload(int rowIndex, Column column, TableView<Row> table) {
+    public boolean download(int rowIndex, Column column, TableView<Row> table) {
 
         if (column == null || table == null) {
-            logger.error("LobDataManager error[upload]: Invalid arguments!");
+            logger.error("LobDataManager error[download]: Invalid arguments!");
             return false;
         }
 
@@ -89,12 +89,12 @@ public class LobDataManager {
             return false;
         }
 
-        String query = getQuery(rowIndex, column, table, Commands.UPLOAD);
+        String query = getQuery(rowIndex, column, table, Commands.DOWNLOAD);
 
         Connection connection = DbController.getInstance().getCurrentConnection();
 
         if (query == null || connection == null) {
-            logger.error("LobDataManager error[upload] : query = " + query + " connection = " + connection);
+            logger.error("LobDataManager error[download] : query = " + query + " connection = " + connection);
             return false;
         }
 
@@ -113,9 +113,9 @@ public class LobDataManager {
             logger.info("File " + file + " was uploaded.");
             return true;
         } catch (SQLException e) {
-            logger.error("LobDataManager error[upload (SQL)]: " + e);
+            logger.error("LobDataManager error[download (SQL)]: " + e);
         } catch (FileNotFoundException e) {
-            logger.error("LobDataManager error[upload (FileNotFound)]: " + e);
+            logger.error("LobDataManager error[download (FileNotFound)]: " + e);
         }
 
         return false;
@@ -223,10 +223,10 @@ public class LobDataManager {
 
         String query = null;
 
-        if (command.equals(Commands.UPLOAD)) {
+        if (command.equals(Commands.DOWNLOAD)) {
             query = "UPDATE " + table.getId() + " SET " + column.getColumnName() + "=(?) " +
                     " WHERE " + keyColumnName + "=" + keyCell.getValue();
-        } else if (command.equals(Commands.DOWNLOAD)) {
+        } else if (command.equals(Commands.UNLOAD)) {
             query = "SELECT " + column.getColumnName() + " FROM " +
                     table.getId() + " WHERE " + keyColumnName + "=" + keyCell.getValue();
         } else if (command.equals(Commands.DELETE)) {

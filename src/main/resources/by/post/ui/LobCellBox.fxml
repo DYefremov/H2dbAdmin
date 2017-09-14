@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+
+<ComboBox style="-fx-background-color: transparent;" visibleRowCount="4" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <items>
+       <FXCollections fx:factory="observableArrayList">
+           <Label text="%Unload" >
+               <graphic>
+                   <ImageView fitHeight="14.0" fitWidth="14.0" style="-fx-image: url(/img/save.png) " />
+               </graphic>
+           </Label>
+           <Label text="%Download" >
+               <graphic>
+                   <ImageView fitHeight="14.0" fitWidth="14.0" style="-fx-image: url(/img/insert-object.png)" />
+               </graphic>
+           </Label>
+           <Label text="%Delete" >
+               <graphic>
+                   <ImageView fitHeight="14.0" fitWidth="14.0" style="-fx-image: url(/img/trash.png)" />
+               </graphic>
+           </Label>
+       </FXCollections>
+   </items>
+</ComboBox>
