@@ -1,18 +1,15 @@
 package by.post.control.db;
 
 import by.post.control.PropertiesController;
+import by.post.control.search.DefaultTextSearch;
 import by.post.data.Table;
 import by.post.data.type.ColumnDataType;
 import by.post.data.type.H2Type;
-import by.post.control.search.SearchProvider;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.sql.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertTrue;
 
@@ -79,7 +76,7 @@ public class SearchTest {
         final String searchValue = "сиг".toUpperCase();
 
         long start = System.currentTimeMillis();
-        List<Table> names = new SearchProvider().getSearchResult(searchValue);
+        Collection<Table> names = new DefaultTextSearch().search(searchValue);
         System.out.println(names);
 
         long stop = System.currentTimeMillis();
