@@ -3,7 +3,7 @@ package by.post.control.ui.dialogs;
 import by.post.control.db.TableType;
 import by.post.control.events.RootEventTarget;
 import by.post.control.events.TableSelectionEvent;
-import by.post.control.search.SearchProvider;
+import by.post.control.search.Search;
 import by.post.data.Table;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -20,9 +20,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 /**
  * @author Dmitriy V.Yefremov
@@ -49,7 +50,7 @@ public class SearchToolDialogController {
     private ButtonType searchButton;
 
     private boolean searchRunning;
-    private SearchProvider searchProvider;
+    private Search search;
     //It is used to display the time spent on search
     private Timeline timeline;
     private long startSearchTime;
@@ -75,7 +76,7 @@ public class SearchToolDialogController {
      */
     public void onCloseRequest() {
         setProgressVisible(false);
-        searchProvider.setTerminate(true);
+        search.cancel();
     }
 
     /**
@@ -103,7 +104,7 @@ public class SearchToolDialogController {
     private void initialize() {
 
         tables = new HashMap<>();
-        searchProvider = new SearchProvider();
+        search = ServiceLoader.load(Search.class).iterator().next();
         dialogPane.setExpandableContent(null);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0), event -> {
@@ -135,7 +136,7 @@ public class SearchToolDialogController {
             return;
         }
 
-        searchProvider.setTerminate(false);
+        search.cancel();
         setProgressVisible(true);
         dialogPane.setExpanded(false);
         dialogPane.setExpandableContent(null);
@@ -143,7 +144,7 @@ public class SearchToolDialogController {
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                List<Table> founded = searchProvider.getSearchResult(searchText);
+                Collection<Table> founded = search.search(searchText);
                 tables.clear();
                 Platform.runLater(() -> {
                     listView.getItems().clear();

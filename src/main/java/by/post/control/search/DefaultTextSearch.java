@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,21 +23,32 @@ import java.util.List;
  *
  * @author Dmitriy V.Yefremov
  */
-public class SearchProvider {
+public class DefaultTextSearch implements Search<Table> {
 
     private boolean terminate;
 
-    private static final Logger logger = LogManager.getLogger(SearchProvider.class);
+    private static final Logger logger = LogManager.getLogger(DefaultTextSearch.class);
 
-    public void setTerminate(boolean terminate) {
-        this.terminate = terminate;
+    public DefaultTextSearch() {
+
+    }
+
+    @Override
+    public Collection<Table> search(String searchValue) {
+        return getSearchResult(searchValue);
+    }
+
+    @Override
+    public void cancel() {
+        setTerminate(true);
     }
 
     /**
      * @param searchValue
      */
-    public List<Table> getSearchResult(String searchValue) {
+    private List<Table> getSearchResult(String searchValue) {
 
+        setTerminate(false);
         List<Table> tables = new ArrayList<>();
         DbControl dbControl = DbController.getInstance();
         List<String> tablesList = dbControl.getTablesList(TableType.TABLE.name());
@@ -54,7 +66,7 @@ public class SearchProvider {
                     colNames.add(colNamesRs.getNString(1));
                 }
             } catch (SQLException e) {
-                logger.error("SearchProvider error: " + e);
+                logger.error("DefaultTextSearch error: " + e);
             }
 
             if (!colNames.isEmpty()) {
@@ -65,7 +77,7 @@ public class SearchProvider {
             }
         }
 
-        logger.info(terminate ? "SearchProvider: search is canceled!" : "SearchProvider: search is done!");
+        logger.info(terminate ? "DefaultTextSearch: search is canceled!" : "DefaultTextSearch: search is done!");
 
         return tables;
     }
@@ -89,4 +101,9 @@ public class SearchProvider {
 
         return sb.toString();
     }
+
+    private void setTerminate(boolean terminate) {
+        this.terminate = terminate;
+    }
+
 }
