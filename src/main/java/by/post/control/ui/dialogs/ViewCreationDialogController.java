@@ -135,6 +135,9 @@ public class ViewCreationDialogController {
         if (item == null) {
             new Alert(Alert.AlertType.ERROR, "Please, select table from list!").showAndWait();
             return;
+        } else if (!viewsHBox.getChildren().isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "Not implemented yet for more than one table!").showAndWait();
+            return;
         }
 
         String tableName = String.valueOf(item);
@@ -181,8 +184,7 @@ public class ViewCreationDialogController {
      */
     private TableView<ConditionRow> getTableView(String tableName) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainUiForm.class.getResource("ConditionTableView.fxml"));
+        FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("ConditionTableView.fxml"));
         TableView<ConditionRow> tableView =  loader.load();
         tableView.setId(tableName);
 

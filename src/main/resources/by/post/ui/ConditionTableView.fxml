@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
@@ -7,21 +8,21 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.cell.TextFieldTableCell?>
 
-<TableView fx:id="tableView" editable="true" minWidth="-Infinity" prefHeight="183.0" prefWidth="252.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.ConditionTableViewController">
+<TableView fx:id="tableView" editable="true" prefHeight="180.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.ConditionTableViewController">
   <columns>
-      <TableColumn fx:id="mainColumn" editable="false" prefWidth="75.0" resizable="false" sortable="false" text="Table name">
+      <TableColumn fx:id="mainColumn" editable="false" sortable="false" text="Table name">
          <columns>
-            <TableColumn minWidth="100.0" prefWidth="100.0" resizable="false" text="Column name">
+            <TableColumn prefWidth="120.0" text="Column name">
                 <cellValueFactory>
                     <PropertyValueFactory property="name" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="selColumn" minWidth="-Infinity" prefWidth="50.0" resizable="false" text="Select">
+            <TableColumn fx:id="selColumn" prefWidth="75.0" text="Select">
                 <cellValueFactory>
                     <PropertyValueFactory property="selected" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn minWidth="-Infinity" prefWidth="100.0" resizable="false" text="Condition">
+            <TableColumn prefWidth="175.0" text="Condition">
                 <cellFactory>
                     <TextFieldTableCell fx:factory="forTableColumn" />
                 </cellFactory>
@@ -39,4 +40,10 @@
         </items>
       </ContextMenu>
    </contextMenu>
+   <columnResizePolicy>
+      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+   </columnResizePolicy>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
 </TableView>

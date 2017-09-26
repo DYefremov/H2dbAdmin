@@ -106,9 +106,7 @@ class LargeObjectCell extends TableCell {
      * @return
      */
     private ChoiceBox getChoiceBox() {
-//        FXMLLoader loader = new FXMLLoader(MainUiForm.class.getResource("LobCellBox.fxml"));
-//        loader.setResources(ResourceBundle.getBundle("bundles.Lang", Context.getLocale()));
-//        choiceBox = loader.load();
+
         ResourceBundle bundle = ResourceBundle.getBundle("bundles.Lang", Context.getLocale());
         ChoiceBox choiceBox = new ChoiceBox(FXCollections.observableArrayList(
                 bundle.getString("Unload"), bundle.getString("Download"), new Separator(), bundle.getString("Delete")));

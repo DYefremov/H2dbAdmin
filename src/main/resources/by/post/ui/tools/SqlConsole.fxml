@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.tools.SqlConsoleController">
+<GridPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.tools.SqlConsoleController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -24,7 +24,10 @@
    <children>
       <SplitPane dividerPositions="0.5" orientation="VERTICAL" style="-fx-background-color: black;">
          <items>
-            <TextArea fx:id="console" onKeyPressed="#onEnterKey" styleClass="console" stylesheets="@../Ui.css" />
+            <TextArea fx:id="console" onKeyPressed="#onEnterKey" styleClass="console" stylesheets="@../Ui.css">
+               <tooltip>
+                  <Tooltip text="&quot;;&quot; to end the SQL request!" />
+               </tooltip></TextArea>
              <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" visible="false">
                  <placeholder>
                      <Label fx:id="viewLabel" text=" " />

@@ -63,11 +63,6 @@ public class TablesCommander {
             return;
         }
 
-        if (view.getTables().size() > 1) {
-            new Alert(Alert.AlertType.INFORMATION, "Not implemented yet for more than one table!").showAndWait();
-            return;
-        }
-
         try {
             dbControl.update(Queries.createView(view));
             String name = view.getName();
