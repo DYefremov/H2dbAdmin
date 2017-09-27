@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -22,11 +23,19 @@
     <content>
       <VBox alignment="CENTER" style="-fx-background-color: lightgray;">
          <children>
-                <TextField fx:id="searchField" onKeyReleased="#onKeyReleased" prefWidth="170.0">
-               <VBox.margin>
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="27.0" styleClass="search-box">
+               <children>
+                  <ComboBox style="-fx-background-color: transparent; -fx-background-image: url(img/search.png); -fx-background-repeat: stretch; -fx-background-size: 20px; -fx-background-position: center center;">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </ComboBox>
+                      <TextField fx:id="searchField" onKeyReleased="#onKeyReleased" style="-fx-background-color: transparent" HBox.hgrow="SOMETIMES" />
+               </children>
+               <opaqueInsets>
                   <Insets />
-               </VBox.margin>
-            </TextField>
+               </opaqueInsets>
+            </HBox>
               <GridPane alignment="CENTER">
                   <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0" />

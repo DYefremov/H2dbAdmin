@@ -1,10 +1,19 @@
 /* Styles for buttons*/
 .button {
     -fx-border-color: gray;
-    -fx-border-radius: 3px;
+    -fx-border-radius: 3;
     -fx-background-color: transparent, transparent, transparent, transparent;
 }
 
 .button:hover {
     -fx-background-color: gray, lightgray, transparent, transparent;
+}
+/* Style for search field*/
+.search-box {
+    -fx-border-style: solid inside;
+    -fx-border-width: 1,5;
+    -fx-border-radius: 5;
+    -fx-border-color: gray;
+    -fx-background-color: white;
+    -fx-background-radius: 5;
 }

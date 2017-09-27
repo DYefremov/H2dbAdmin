@@ -24,10 +24,7 @@
    <children>
       <SplitPane dividerPositions="0.5" orientation="VERTICAL" style="-fx-background-color: black;">
          <items>
-            <TextArea fx:id="console" onKeyPressed="#onEnterKey" styleClass="console" stylesheets="@../Ui.css">
-               <tooltip>
-                  <Tooltip text="&quot;;&quot; to end the SQL request!" />
-               </tooltip></TextArea>
+            <TextArea fx:id="console" onKeyPressed="#onEnterKey" promptText="&quot;;&quot; to end the SQL request!" styleClass="console" stylesheets="@../Ui.css" />
              <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" visible="false">
                  <placeholder>
                      <Label fx:id="viewLabel" text=" " />
