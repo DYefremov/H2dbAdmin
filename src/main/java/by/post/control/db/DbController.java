@@ -161,7 +161,7 @@ public class DbController implements DbControl {
 
             try (ResultSet resultSet = statement.getResultSet()) {
                 ResultSetMetaData rsMetaData = resultSet.getMetaData();
-                table.setRows(tableBuilder.getRows(resultSet));
+                table.setRows(tableBuilder.getRows(resultSet, true));
                 table.setColumns( tableBuilder.getColumns(rsMetaData));
                 table.setName(rsMetaData.getTableName(1));
                 tableBuilder.getPrimaryKey(table, connection);

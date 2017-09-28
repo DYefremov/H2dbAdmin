@@ -49,7 +49,7 @@ public class TableBuilder {
             try (ResultSet rs = st.getResultSet()) {
                 ResultSetMetaData rsMetaData = rs.getMetaData();
                 table.setColumns(getColumns(rsMetaData));
-                table.setRows(getRows(rs));
+                table.setRows(getRows(rs, false));
             }
 
             getPrimaryKey(table, connection);
@@ -91,7 +91,7 @@ public class TableBuilder {
             st.executeQuery(isSysTable ? Queries.getSystemTable(name) : Queries.getTableWithLimit(name, limit, offset));
 
             try (ResultSet rs = st.getResultSet()) {
-                return getRows(rs);
+                return getRows(rs, false);
             }
         } catch (SQLException e) {
             logger.error("TableBuilder error in getTable: " + e);
@@ -120,14 +120,22 @@ public class TableBuilder {
 
     /**
      * @param rs
+     * @param force used to skip data loading indication
      * @return rows list for table
      * @throws SQLException
      */
-    public List<Row> getRows(ResultSet rs) throws SQLException {
-
-        Context.setLoadData(true);
+    public List<Row> getRows(ResultSet rs, boolean force) throws SQLException {
 
         List<Row> rows = new ArrayList<>();
+
+        if (force) {
+            while (rs.next()) {
+                rows.add(getRow(rs.getRow(), rs));
+            }
+            return rows;
+        }
+
+        Context.setLoadData(true);
 
         while (rs.next() && Context.isLoadData()) {
             rows.add(getRow(rs.getRow(), rs));
