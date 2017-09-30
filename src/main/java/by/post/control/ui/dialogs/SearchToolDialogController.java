@@ -48,6 +48,8 @@ public class SearchToolDialogController {
     private ButtonType cancelButton;
     @FXML
     private ButtonType searchButton;
+    @FXML
+    private ComboBox<String> comboBox;
 
     private boolean searchRunning;
     private Search search;
@@ -61,17 +63,6 @@ public class SearchToolDialogController {
     }
 
     /**
-     * Action for Enter key
-     */
-    @FXML
-    public void onKeyReleased(KeyEvent event) {
-
-        if (event.getCode() == KeyCode.ENTER) {
-            search();
-        }
-    }
-
-    /**
      * Action for close dialog request or cancel button
      */
     public void onCloseRequest() {
@@ -80,12 +71,23 @@ public class SearchToolDialogController {
     }
 
     /**
+     * Action for Enter key
+     */
+    @FXML
+    private void onKeyReleased(KeyEvent event) {
+
+        if (event.getCode() == KeyCode.ENTER) {
+            search();
+        }
+    }
+
+    /**
      * ListView actions for found tables
      *
      * @param event
      */
     @FXML
-    public void onListMouseClick(MouseEvent event) throws IOException {
+    private void onListMouseClick(MouseEvent event) throws IOException {
 
         if (event.getClickCount() == 2) {
             selectItem();
@@ -93,11 +95,21 @@ public class SearchToolDialogController {
     }
 
     @FXML
-    public void onListKeyReleased(KeyEvent event) throws IOException {
+    private void onListKeyReleased(KeyEvent event) throws IOException {
 
         if (event.getCode() == KeyCode.ENTER) {
             selectItem();
         }
+    }
+
+    @FXML
+    private void onComboBoxAction() {
+        Platform.runLater(() -> {
+            if (comboBox.getValue() != null) {
+                searchField.setText(comboBox.getValue());
+            }
+            comboBox.getSelectionModel().clearSelection();
+        });
     }
 
     @FXML
@@ -136,6 +148,7 @@ public class SearchToolDialogController {
             return;
         }
 
+        updateComboBox(searchText);
         search.cancel();
         setProgressVisible(true);
         dialogPane.setExpanded(false);
@@ -174,9 +187,20 @@ public class SearchToolDialogController {
     }
 
     /**
+     * Updating and storing search requests in combobox
+     *
+     * @param searchText
+     */
+    private void updateComboBox(String searchText) {
+
+        if (!comboBox.getItems().contains(searchText)) {
+            Platform.runLater(() -> comboBox.getItems().add(searchText));
+        }
+    }
+
+    /**
      * @param visible
      */
-
     private void setProgressVisible(boolean visible) {
 
         progress.setVisible(visible);
@@ -184,8 +208,8 @@ public class SearchToolDialogController {
         progressLabel.setVisible(visible);
         searchRunning = visible;
         //For first run
-        timeLabel.setVisible(visible ? visible : !visible);
-        timeValueLabel.setVisible(visible ? visible : !visible);
+        timeLabel.setVisible(visible);
+        timeValueLabel.setVisible(visible);
     }
 
     /**

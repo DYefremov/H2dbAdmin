@@ -1,89 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ButtonType?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DialogPane?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<DialogPane fx:id="dialogPane" stylesheets="@../Dialogs.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.post.control.ui.dialogs.SearchToolDialogController">
+<DialogPane xmlns:fx="http://javafx.com/fxml/1" fx:id="dialogPane" stylesheets="@../Dialogs.css" xmlns="http://javafx.com/javafx/8.0.121" fx:controller="by.post.control.ui.dialogs.SearchToolDialogController">
     <buttonTypes>
-        <ButtonType fx:id="cancelButton" buttonData="CANCEL_CLOSE" text="%Cancel" />
-        <ButtonType fx:id="searchButton" buttonData="APPLY" text="%Search" />
+        <ButtonType fx:id="cancelButton" buttonData="CANCEL_CLOSE" text="%Cancel"/>
+        <ButtonType fx:id="searchButton" buttonData="APPLY" text="%Search"/>
     </buttonTypes>
     <content>
-      <VBox alignment="CENTER" style="-fx-background-color: lightgray;">
-         <children>
-            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="27.0" styleClass="search-box">
-               <children>
-                  <ComboBox style="-fx-background-color: transparent; -fx-background-image: url(img/search.png); -fx-background-repeat: stretch; -fx-background-size: 20px; -fx-background-position: center center;">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </ComboBox>
-                      <TextField fx:id="searchField" onKeyReleased="#onKeyReleased" style="-fx-background-color: transparent" HBox.hgrow="SOMETIMES" />
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </HBox>
-              <GridPane alignment="CENTER">
-                  <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="150.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0" />
-                  </columnConstraints>
-                  <rowConstraints>
-                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
-                  </rowConstraints>
-                  <children>
-                      <Label fx:id="progressLabel" contentDisplay="CENTER" text="%PleaseWhite" underline="true" visible="false" GridPane.halignment="RIGHT">
-                          <GridPane.margin>
-                              <Insets right="5.0" />
-                          </GridPane.margin>
-                      </Label>
-                      <ProgressBar fx:id="progress" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="140.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                      <HBox fx:id="time" alignment="CENTER" GridPane.columnIndex="2">
-                          <children>
-                              <Label fx:id="timeLabel" text="%Consumed" visible="false" />
-                              <Label fx:id="timeValueLabel" text="0s" visible="false">
-                                  <HBox.margin>
-                                      <Insets left="2.0" />
-                                  </HBox.margin>
-                              </Label>
-                          </children>
-                      </HBox>
-                  </children>
-                  <padding>
-                      <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-                  </padding>
-              </GridPane>
-         </children>
-         <padding>
-            <Insets left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </VBox>
-    </content>
-    <header>
-        <Label alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" prefWidth="400.0" text="%SearchHeader" textAlignment="CENTER">
-            <font>
-                <Font name="System Bold" size="13.0" />
-            </font>
+        <VBox alignment="CENTER" style="-fx-background-color: lightgray;">
+            <children>
+                <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="27.0"
+                      styleClass="search-box">
+                    <children>
+                        <ComboBox fx:id="comboBox" maxWidth="-Infinity" minWidth="-Infinity" onAction="#onComboBoxAction" prefWidth="45.0"
+                                  style="-fx-background-color: transparent; -fx-background-image: url(img/search.png); -fx-background-repeat: stretch; -fx-background-size: 20px; -fx-background-position: center center;">
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <items>
+                                <FXCollections fx:factory="observableArrayList"/>
+                            </items>
+                        </ComboBox>
+                        <TextField fx:id="searchField" onKeyReleased="#onKeyReleased" promptText="%SearchHeader" style="-fx-background-color: transparent" HBox.hgrow="SOMETIMES"/>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets top="2.0"/>
+                    </VBox.margin>
+                </HBox>
+                <GridPane alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="150.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label fx:id="progressLabel" contentDisplay="CENTER" text="%PleaseWhite" underline="true" visible="false" GridPane.halignment="RIGHT">
+                            <GridPane.margin>
+                                <Insets right="5.0"/>
+                            </GridPane.margin>
+                        </Label>
+                        <ProgressBar fx:id="progress" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="140.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
+                        <HBox fx:id="time" alignment="CENTER" GridPane.columnIndex="2">
+                            <children>
+                                <Label fx:id="timeLabel" text="%Consumed" visible="false"/>
+                                <Label fx:id="timeValueLabel" text="0s" visible="false">
+                                    <HBox.margin>
+                                        <Insets left="2.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="2.0" left="5.0" right="5.0" top="2.0"/>
+                    </padding>
+                </GridPane>
+            </children>
             <padding>
-                <Insets bottom="5.0" top="5.0" />
+                <Insets left="5.0" right="5.0" top="5.0"/>
             </padding>
-        </Label>
-    </header>
+        </VBox>
+    </content>
     <expandableContent>
-        <ListView fx:id="listView" maxHeight="-Infinity" onKeyReleased="#onListKeyReleased" onMouseClicked="#onListMouseClick" prefHeight="150.0" />
+        <ListView fx:id="listView" maxHeight="-Infinity" onKeyReleased="#onListKeyReleased" onMouseClicked="#onListMouseClick" prefHeight="150.0"/>
     </expandableContent>
 </DialogPane>

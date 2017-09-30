@@ -17,3 +17,7 @@
     -fx-background-color: white;
     -fx-background-radius: 5;
 }
+
+/*.combo-box .combo-box-popup>.list-view {*/
+    /*-fx-max-height: 200;*/
+/*}*/
